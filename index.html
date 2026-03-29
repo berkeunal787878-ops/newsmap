@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>NewsMap — Dünya Haberleri</title>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f4f6f9; color: #1a1a2e; }
+
+  .header {
+    background: #fff;
+    border-bottom: 1px solid #e8eaf0;
+    padding: 14px 20px;
+    display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 1000;
+  }
+  .logo { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
+  .logo span { color: #2563eb; }
+
+  .category-bar { display: flex; gap: 8px; flex-wrap: wrap; }
+  .cat-btn {
+    font-size: 12px; padding: 5px 14px; border-radius: 20px;
+    border: 1px solid #dde1ea; background: #fff;
+    color: #555; cursor: pointer; transition: all 0.15s; font-weight: 500;
+  }
+  .cat-btn:hover { border-color: #2563eb; color: #2563eb; }
+  .cat-btn.active { background: #2563eb; color: #fff; border-color: #2563eb; }
+
+  .layout { display: flex; height: calc(100vh - 58px); }
+  #map { flex: 1; }
+
+  .sidebar {
+    width: 340px; background: #fff;
+    border-left: 1px solid #e8eaf0;
+    display: flex; flex-direction: column; overflow: hidden;
+  }
+  .sidebar-header {
+    padding: 14px 16px; border-bottom: 1px solid #e8eaf0;
+    font-size: 12px; font-weight: 600; color: #888;
+    letter-spacing: 0.5px; text-transform: uppercase;
+  }
+  .news-list { overflow-y: auto; flex: 1; }
+
+  .news-card {
+    padding: 14px 16px; border-bottom: 1px solid #f0f2f6;
+    cursor: pointer; transition: background 0.1s;
+  }
+  .news-card:hover { background: #f8f9ff; }
+  .news-card.active { background: #eff4ff; border-left: 3px solid #2563eb; }
+
+  .news-cat-badge {
+    display: inline-block; font-size: 10px; font-weight: 600;
+    padding: 2px 8px; border-radius: 10px; margin-bottom: 6px;
+    text-transform: uppercase; letter-spacing: 0.3px;
+  }
+  .news-title { font-size: 13px; font-weight: 600; line-height: 1.45; color: #1a1a2e; margin-bottom: 5px; }
+  .news-source { font-size: 11px; color: #999; }
+  .news-img { width: 100%; height: 90px; object-fit: cover; border-radius: 6px; margin-bottom: 8px; display: block; }
+
+  .loading {
+    display: flex; align-items: center; justify-content: center;
+    height: 100%; flex-direction: column; gap: 12px; color: #888;
+    padding: 40px 20px; text-align: center; line-height: 1.6;
+  }
+  .spinner {
+    width: 28px; height: 28px; border: 3px solid #e0e4ef;
+    border-top-color: #2563eb; border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .popup-title { font-size: 13px; font-weight: 600; margin-bottom: 6px; line-height: 1.4; }
+  .popup-source { font-size: 11px; color: #888; margin-bottom: 8px; }
+  .popup-link { font-size: 12px; color: #2563eb; text-decoration: none; font-weight: 500; }
+  .popup-link:hover { text-decoration: underline; }
+
+  @media (max-width: 600px) {
+    .layout { flex-direction: column; }
+    .sidebar { width: 100%; height: 260px; border-left: none; border-top: 1px solid #e8eaf0; }
+    .category-bar { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">news<span>map</span></div>
+  <div class="category-bar">
+    <button class="cat-btn active" data-q="breaking-news" data-label="DÜNYA">Dünya</button>
+    <button class="cat-btn" data-q="technology" data-label="TEKNOLOJİ">Teknoloji</button>
+    <button class="cat-btn" data-q="business" data-label="EKONOMİ">Ekonomi</button>
+    <button class="cat-btn" data-q="science" data-label="BİLİM">Bilim</button>
+    <button class="cat-btn" data-q="health" data-label="SAĞLIK">Sağlık</button>
+    <button class="cat-btn" data-q="sports" data-label="SPOR">Spor</button>
+  </div>
+</div>
+
+<div class="layout">
+  <div id="map"></div>
+  <div class="sidebar">
+    <div class="sidebar-header">Son Haberler</div>
+    <div class="news-list" id="newsList">
+      <div class="loading"><div class="spinner"></div><span>Haberler yükleniyor...</span></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const GNEWS_KEY = 'c065c9f8d930d7992008d547298d730e';
+const PROXY = 'https://api.allorigins.win/get?url=';
+
+const map = L.map('map', { zoomControl: true }).setView([20, 10], 2);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+  attribution: '&copy; CartoDB &copy; OpenStreetMap',
+  subdomains: 'abcd', maxZoom: 18
+}).addTo(map);
+
+const COORDS = {
+  us:[37,-95], gb:[55,-3], de:[51,10], fr:[46,2], jp:[36,138],
+  cn:[35,104], ru:[61,105], in:[20,78], br:[-14,-51], au:[-25,133],
+  ca:[56,-106], za:[-30,22], ng:[9,8], eg:[26,30], mx:[23,-102],
+  ar:[-38,-63], tr:[38,35], sa:[23,45], id:[-0,113], it:[41,12],
+  es:[40,-3], kr:[35,127], ua:[48,31], pl:[51,19], il:[31,34],
+  ae:[23,53], sg:[1,103], pk:[30,69], th:[15,100], nl:[52,5],
+};
+const CNAMES = {
+  us:'ABD', gb:'İngiltere', de:'Almanya', fr:'Fransa', jp:'Japonya',
+  cn:'Çin', ru:'Rusya', in:'Hindistan', br:'Brezilya', au:'Avustralya',
+  ca:'Kanada', za:'G.Afrika', ng:'Nijerya', eg:'Mısır', mx:'Meksika',
+  ar:'Arjantin', tr:'Türkiye', sa:'S.Arabistan', id:'Endonezya', it:'İtalya',
+  es:'İspanya', kr:'G.Kore', ua:'Ukrayna', pl:'Polonya', il:'İsrail',
+  ae:'BAE', sg:'Singapur', pk:'Pakistan', th:'Tayland', nl:'Hollanda',
+};
+const COLORS = {
+  'breaking-news':'#2563eb', 'technology':'#7c3aed', 'business':'#059669',
+  'science':'#0891b2', 'health':'#dc2626', 'sports':'#d97706'
+};
+
+let markers = [];
+let currentQ = 'breaking-news';
+let currentLabel = 'DÜNYA';
+
+function clearMarkers() { markers.forEach(m => map.removeLayer(m)); markers = []; }
+
+function getCoords(i) {
+  const keys = Object.keys(COORDS);
+  const k = keys[i % keys.length];
+  const b = COORDS[k];
+  return { coords: [b[0]+(Math.random()-.5)*4, b[1]+(Math.random()-.5)*4], country: CNAMES[k] };
+}
+
+function dotIcon(color) {
+  return L.divIcon({
+    className: '',
+    html: `<div style="width:13px;height:13px;border-radius:50%;background:${color};border:2px solid #fff;box-shadow:0 0 0 3px ${color}44"></div>`,
+    iconSize:[13,13], iconAnchor:[6,6]
+  });
+}
+
+function timeAgo(d) {
+  const diff = Date.now() - new Date(d).getTime();
+  const h = Math.floor(diff/3600000), m = Math.floor(diff/60000);
+  if(h>24) return Math.floor(h/24)+' gün önce';
+  if(h>0) return h+' saat önce';
+  return m+' dakika önce';
+}
+
+function renderNews(articles) {
+  const list = document.getElementById('newsList');
+  const color = COLORS[currentQ] || '#2563eb';
+  clearMarkers(); list.innerHTML = '';
+
+  if(!articles || articles.length === 0) {
+    list.innerHTML = '<div class="loading"><span>Haber bulunamadı.</span></div>'; return;
+  }
+
+  articles.slice(0,20).forEach((a, i) => {
+    if(!a.title) return;
+    const {coords, country} = getCoords(i);
+    const m = L.marker(coords, {icon: dotIcon(color)}).addTo(map);
+    m.bindPopup(`
+      <div style="max-width:220px">
+        ${a.image?`<img src="${a.image}" style="width:100%;height:75px;object-fit:cover;border-radius:5px;margin-bottom:7px" onerror="this.style.display='none'"/>`:''}
+        <div class="popup-title">${a.title}</div>
+        <div class="popup-source">${a.source?.name||''} · ${country}</div>
+        <a class="popup-link" href="${a.url}" target="_blank">Haberi oku →</a>
+      </div>
+    `, {maxWidth:240});
+    markers.push(m);
+
+    const card = document.createElement('div');
+    card.className = 'news-card';
+    card.innerHTML = `
+      ${a.image?`<img class="news-img" src="${a.image}" onerror="this.style.display='none'" alt=""/>`:''}
+      <div class="news-cat-badge" style="background:${color}22;color:${color}">${currentLabel} · ${country}</div>
+      <div class="news-title">${a.title}</div>
+      <div class="news-source">${a.source?.name||''} · ${timeAgo(a.publishedAt)}</div>
+    `;
+    card.addEventListener('click', () => {
+      document.querySelectorAll('.news-card').forEach(c => c.classList.remove('active'));
+      card.classList.add('active');
+      map.setView(coords, 4, {animate:true});
+      setTimeout(()=>m.openPopup(), 400);
+    });
+    list.appendChild(card);
+  });
+}
+
+async function fetchNews(topic) {
+  const list = document.getElementById('newsList');
+  list.innerHTML = '<div class="loading"><div class="spinner"></div><span>Yükleniyor...</span></div>';
+
+  const apiUrl = `https://gnews.io/api/v4/top-headlines?topic=${topic}&lang=en&max=20&apikey=${GNEWS_KEY}`;
+  const proxyUrl = PROXY + encodeURIComponent(apiUrl);
+
+  try {
+    const res = await fetch(proxyUrl);
+    const raw = await res.json();
+    const data = JSON.parse(raw.contents);
+
+    if(data.articles && data.articles.length > 0) {
+      renderNews(data.articles);
+    } else {
+      list.innerHTML = '<div class="loading"><span>Haber bulunamadı.</span></div>';
+    }
+  } catch(e) {
+    list.innerHTML = `<div class="loading"><span>Bağlantı hatası oluştu.<br>Lütfen internet bağlantını kontrol et ve sayfayı yenile.</span></div>`;
+  }
+}
+
+document.querySelectorAll('.cat-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    currentQ = this.dataset.q;
+    currentLabel = this.dataset.label;
+    fetchNews(currentQ);
+  });
+});
+
+fetchNews(currentQ);
+</script>
+</body>
+</html>
