@@ -11,11 +11,9 @@
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f4f6f9; color: #1a1a2e; }
 
   .header {
-    background: #fff;
-    border-bottom: 1px solid #e8eaf0;
-    padding: 14px 20px;
-    display: flex; align-items: center; justify-content: space-between;
-    position: sticky; top: 0; z-index: 1000;
+    background: #fff; border-bottom: 1px solid #e8eaf0;
+    padding: 14px 20px; display: flex; align-items: center;
+    justify-content: space-between; position: sticky; top: 0; z-index: 1000;
   }
   .logo { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
   .logo span { color: #2563eb; }
@@ -58,7 +56,6 @@
   }
   .news-title { font-size: 13px; font-weight: 600; line-height: 1.45; color: #1a1a2e; margin-bottom: 5px; }
   .news-source { font-size: 11px; color: #999; }
-  .news-img { width: 100%; height: 90px; object-fit: cover; border-radius: 6px; margin-bottom: 8px; display: block; }
 
   .loading {
     display: flex; align-items: center; justify-content: center;
@@ -89,12 +86,12 @@
 <div class="header">
   <div class="logo">news<span>map</span></div>
   <div class="category-bar">
-    <button class="cat-btn active" data-q="breaking-news" data-label="DÜNYA">Dünya</button>
+    <button class="cat-btn active" data-q="world" data-label="DÜNYA">Dünya</button>
     <button class="cat-btn" data-q="technology" data-label="TEKNOLOJİ">Teknoloji</button>
     <button class="cat-btn" data-q="business" data-label="EKONOMİ">Ekonomi</button>
     <button class="cat-btn" data-q="science" data-label="BİLİM">Bilim</button>
     <button class="cat-btn" data-q="health" data-label="SAĞLIK">Sağlık</button>
-    <button class="cat-btn" data-q="sports" data-label="SPOR">Spor</button>
+    <button class="cat-btn" data-q="sport" data-label="SPOR">Spor</button>
   </div>
 </div>
 
@@ -109,8 +106,7 @@
 </div>
 
 <script>
-const GNEWS_KEY = 'c065c9f8d930d7992008d547298d730e';
-const PROXY = 'https://api.allorigins.win/get?url=';
+const GUARDIAN_KEY = '0a321643-aaab-4c6a-9185-1762685abe3d';
 
 const map = L.map('map', { zoomControl: true }).setView([20, 10], 2);
 L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
@@ -135,21 +131,48 @@ const CNAMES = {
   ae:'BAE', sg:'Singapur', pk:'Pakistan', th:'Tayland', nl:'Hollanda',
 };
 const COLORS = {
-  'breaking-news':'#2563eb', 'technology':'#7c3aed', 'business':'#059669',
-  'science':'#0891b2', 'health':'#dc2626', 'sports':'#d97706'
+  'world':'#2563eb', 'technology':'#7c3aed', 'business':'#059669',
+  'science':'#0891b2', 'health':'#dc2626', 'sport':'#d97706'
 };
 
+// Haber içeriğinden ülke tespit et
+function detectCountry(text) {
+  const t = text.toLowerCase();
+  const map = {
+    'united states':'us', 'america':'us', ' us ':'us', 'washington':'us', 'new york':'us',
+    'united kingdom':'gb', 'britain':'gb', 'london':'gb', 'england':'gb',
+    'germany':'de', 'berlin':'de', 'france':'fr', 'paris':'fr',
+    'japan':'jp', 'tokyo':'jp', 'china':'cn', 'beijing':'cn', 'shanghai':'cn',
+    'russia':'ru', 'moscow':'ru', 'india':'in', 'delhi':'in', 'mumbai':'in',
+    'brazil':'br', 'australia':'au', 'sydney':'au', 'canada':'ca', 'toronto':'ca',
+    'south africa':'za', 'nigeria':'ng', 'egypt':'eg', 'mexico':'mx',
+    'argentina':'ar', 'turkey':'tr', 'istanbul':'tr', 'ankara':'tr',
+    'saudi':'sa', 'indonesia':'id', 'italy':'it', 'rome':'it',
+    'spain':'es', 'madrid':'es', 'korea':'kr', 'ukraine':'ua', 'kyiv':'ua',
+    'poland':'pl', 'israel':'il', 'tel aviv':'il', 'dubai':'ae', 'singapore':'sg',
+    'pakistan':'pk', 'thailand':'th', 'netherlands':'nl', 'amsterdam':'nl',
+  };
+  for(const [k,v] of Object.entries(map)) {
+    if(t.includes(k)) return v;
+  }
+  return null;
+}
+
 let markers = [];
-let currentQ = 'breaking-news';
+let currentQ = 'world';
 let currentLabel = 'DÜNYA';
 
 function clearMarkers() { markers.forEach(m => map.removeLayer(m)); markers = []; }
 
-function getCoords(i) {
+function getCoords(text, i) {
+  const code = detectCountry(text);
   const keys = Object.keys(COORDS);
-  const k = keys[i % keys.length];
-  const b = COORDS[k];
-  return { coords: [b[0]+(Math.random()-.5)*4, b[1]+(Math.random()-.5)*4], country: CNAMES[k] };
+  const k = code || keys[i % keys.length];
+  const b = COORDS[k] || COORDS['us'];
+  return {
+    coords: [b[0]+(Math.random()-.5)*3, b[1]+(Math.random()-.5)*3],
+    country: CNAMES[k] || 'Dünya'
+  };
 }
 
 function dotIcon(color) {
@@ -165,69 +188,69 @@ function timeAgo(d) {
   const h = Math.floor(diff/3600000), m = Math.floor(diff/60000);
   if(h>24) return Math.floor(h/24)+' gün önce';
   if(h>0) return h+' saat önce';
-  return m+' dakika önce';
+  return m > 0 ? m+' dakika önce' : 'Az önce';
 }
 
-function renderNews(articles) {
+function renderNews(results) {
   const list = document.getElementById('newsList');
   const color = COLORS[currentQ] || '#2563eb';
   clearMarkers(); list.innerHTML = '';
 
-  if(!articles || articles.length === 0) {
+  if(!results || results.length === 0) {
     list.innerHTML = '<div class="loading"><span>Haber bulunamadı.</span></div>'; return;
   }
 
-  articles.slice(0,20).forEach((a, i) => {
-    if(!a.title) return;
-    const {coords, country} = getCoords(i);
-    const m = L.marker(coords, {icon: dotIcon(color)}).addTo(map);
-    m.bindPopup(`
+  results.slice(0,20).forEach((a, i) => {
+    const title = a.webTitle || '';
+    if(!title) return;
+    const fullText = title + ' ' + (a.fields?.trailText || '');
+    const {coords, country} = getCoords(fullText, i);
+    const url = a.webUrl;
+    const date = a.webPublicationDate;
+
+    const marker = L.marker(coords, {icon: dotIcon(color)}).addTo(map);
+    marker.bindPopup(`
       <div style="max-width:220px">
-        ${a.image?`<img src="${a.image}" style="width:100%;height:75px;object-fit:cover;border-radius:5px;margin-bottom:7px" onerror="this.style.display='none'"/>`:''}
-        <div class="popup-title">${a.title}</div>
-        <div class="popup-source">${a.source?.name||''} · ${country}</div>
-        <a class="popup-link" href="${a.url}" target="_blank">Haberi oku →</a>
+        <div class="popup-title">${title}</div>
+        <div class="popup-source">The Guardian · ${country}</div>
+        <a class="popup-link" href="${url}" target="_blank">Haberi oku →</a>
       </div>
     `, {maxWidth:240});
-    markers.push(m);
+    markers.push(marker);
 
     const card = document.createElement('div');
     card.className = 'news-card';
     card.innerHTML = `
-      ${a.image?`<img class="news-img" src="${a.image}" onerror="this.style.display='none'" alt=""/>`:''}
       <div class="news-cat-badge" style="background:${color}22;color:${color}">${currentLabel} · ${country}</div>
-      <div class="news-title">${a.title}</div>
-      <div class="news-source">${a.source?.name||''} · ${timeAgo(a.publishedAt)}</div>
+      <div class="news-title">${title}</div>
+      <div class="news-source">The Guardian · ${timeAgo(date)}</div>
     `;
     card.addEventListener('click', () => {
       document.querySelectorAll('.news-card').forEach(c => c.classList.remove('active'));
       card.classList.add('active');
       map.setView(coords, 4, {animate:true});
-      setTimeout(()=>m.openPopup(), 400);
+      setTimeout(()=>marker.openPopup(), 400);
     });
     list.appendChild(card);
   });
 }
 
-async function fetchNews(topic) {
+async function fetchNews(section) {
   const list = document.getElementById('newsList');
   list.innerHTML = '<div class="loading"><div class="spinner"></div><span>Yükleniyor...</span></div>';
 
-  const apiUrl = `https://gnews.io/api/v4/top-headlines?topic=${topic}&lang=en&max=20&apikey=${GNEWS_KEY}`;
-  const proxyUrl = PROXY + encodeURIComponent(apiUrl);
-
   try {
-    const res = await fetch(proxyUrl);
-    const raw = await res.json();
-    const data = JSON.parse(raw.contents);
+    const url = `https://content.guardianapis.com/${section}?api-key=${GUARDIAN_KEY}&page-size=20&show-fields=trailText&order-by=newest`;
+    const res = await fetch(url);
+    const data = await res.json();
 
-    if(data.articles && data.articles.length > 0) {
-      renderNews(data.articles);
+    if(data.response && data.response.results && data.response.results.length > 0) {
+      renderNews(data.response.results);
     } else {
       list.innerHTML = '<div class="loading"><span>Haber bulunamadı.</span></div>';
     }
   } catch(e) {
-    list.innerHTML = `<div class="loading"><span>Bağlantı hatası oluştu.<br>Lütfen internet bağlantını kontrol et ve sayfayı yenile.</span></div>`;
+    list.innerHTML = '<div class="loading"><span>Bağlantı hatası oluştu.<br>Sayfayı yenileyin.</span></div>';
   }
 }
 
