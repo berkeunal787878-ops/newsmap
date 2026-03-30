@@ -5,7 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
   <title>OWLS — Global News Map</title>
 
-  <!-- Google tag (gtag.js) -->
+  <script>
+    window.onerror = function(message, source, lineno, colno, error) {
+      var err = document.createElement('div');
+      err.style = "position:fixed; top:0; left:0; width:100%; background:#ef4444; color:white; padding:15px; z-index:999999; font-weight:bold; font-family:sans-serif; box-shadow:0 4px 10px rgba(0,0,0,0.3);";
+      err.innerHTML = "SİSTEM HATASI (Bunu Kopyala):<br>" + message + "<br>Satır: " + lineno;
+      document.body.appendChild(err);
+      return false;
+    };
+  </script>
+
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-TG3Q7KX51N"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -55,14 +64,14 @@
     /* --- SPLASH EKRANI --- */
     .splash {
       position: fixed; inset: 0; background: #0d9488; display: flex; flex-direction: column;
-      align-items: center; justify-content: center; z-index: 9999; transition: opacity 0.6s ease;
+      align-items: center; justify-content: center; z-index: 9999; transition: opacity 0.5s ease;
     }
     .splash.hide { opacity: 0; pointer-events: none; }
     .splash-owl { font-size: 80px; animation: float 1.2s ease-in-out infinite alternate; filter: drop-shadow(0 10px 10px rgba(0,0,0,0.2)); }
     .splash-title { font-size: 48px; font-weight: 800; color: #fff; letter-spacing: 10px; margin-top: 15px; }
     .splash-sub { font-size: 13px; color: #ccfbf1; letter-spacing: 4px; margin-top: 6px; text-transform: uppercase; font-weight: 600; }
     .splash-bar { width: 200px; height: 4px; background: rgba(255,255,255,0.2); border-radius: 4px; margin-top: 30px; overflow: hidden; }
-    .splash-progress { height: 100%; background: #fff; border-radius: 4px; width: 0; transition: width 1s ease; }
+    .splash-progress { height: 100%; background: #fff; border-radius: 4px; width: 0; transition: width 0.8s ease; }
 
     /* --- HEADER --- */
     .header {
@@ -73,14 +82,11 @@
 
     .logo { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
     .owl-svg { width: 38px; height: 38px; animation: blink 5s infinite; filter: drop-shadow(0 2px 4px rgba(13,148,136,0.3)); }
-
     @keyframes blink { 0%,88%,100% { transform: scaleY(1); } 91%,97% { transform: scaleY(0.1); } }
-
     .logo-text { font-size: 22px; font-weight: 800; letter-spacing: 2px; color: #0d9488; }
     .logo-sub { font-size: 10px; color: #14b8a6; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-top: -3px; }
 
     .header-controls { display: flex; align-items: center; gap: 15px; }
-
     .cat-bar { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; align-items: center; }
 
     .theme-toggle {
@@ -111,7 +117,6 @@
       animation: pulseAnim linear infinite; opacity: 0.7;
     }
     .owl-icon { font-size: 16px; position: relative; z-index: 2; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.4)); animation: gentleBounce 2s ease-in-out infinite alternate; }
-    
     @keyframes pulseAnim { 0% { transform: scale(0.8); opacity: 1; } 100% { transform: scale(2.5); opacity: 0; } }
     @keyframes gentleBounce { 0% { transform: translateY(0); } 100% { transform: translateY(-3px); } }
 
@@ -121,80 +126,20 @@
       border-left: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden;
       transition: background 0.3s, border 0.3s; z-index: 10;
     }
-
     .sidebar-header {
       padding: 15px 20px; border-bottom: 1px solid var(--border);
       font-size: 12px; font-weight: 800; color: #0d9488; letter-spacing: 1.5px;
       text-transform: uppercase; display: flex; align-items: center; justify-content: space-between;
       background: var(--bg-main);
     }
-
     .live-dot { display: flex; align-items: center; gap: 6px; font-size: 11px; color: #10b981; font-weight: 700; }
     .live-dot::before { content:''; width: 8px; height: 8px; border-radius: 50%; background: #10b981; animation: livePulse 1.5s infinite; box-shadow: 0 0 8px #10b981; }
-
     @keyframes livePulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(1.5); } }
 
     .news-list { overflow-y: auto; flex: 1; scroll-behavior: smooth; }
-
     .news-card {
       border-bottom: 1px solid var(--border); cursor: pointer;
       transition: all 0.2s; animation: slideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
       overflow: hidden; position: relative;
     }
-
-    .news-thumb { width: 100%; height: 160px; object-fit: cover; display: block; transition: transform 0.5s ease; }
-    .news-card:hover .news-thumb { transform: scale(1.05); }
-    .news-card-body { padding: 15px 20px; }
-
-    @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-    .news-card:hover { background: var(--hover-bg); }
-    .news-card.active { background: var(--active-bg); border-left: 4px solid #0d9488; }
-
-    .badge-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
-    .cat-badge { font-size: 9px; font-weight: 800; padding: 3px 8px; border-radius: 12px; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-    .src-badge { font-size: 9px; color: #0d9488; font-weight: 700; background: #e6f7f5; padding: 3px 8px; border-radius: 8px; }
-    
-    .news-title { font-size: 14px; font-weight: 700; line-height: 1.5; color: var(--text-main); margin-bottom: 6px; transition: color 0.3s; }
-    .news-meta { font-size: 11px; color: var(--text-sub); transition: color 0.3s; font-weight: 500;}
-
-    /* --- DOPAMIN / CLICKBAIT POPUP --- */
-    .dopamine-popup {
-      position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(150px);
-      background: linear-gradient(135deg, #ff0055, #ffaa00); color: white;
-      padding: 15px 25px; border-radius: 30px; font-weight: 800; box-shadow: 0 10px 30px rgba(255,0,85,0.4);
-      z-index: 3000; transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      display: flex; align-items: center; gap: 15px; cursor: pointer; max-width: 90%; width: 400px;
-    }
-    .dopamine-popup.show { transform: translateX(-50%) translateY(0); }
-    .dopamine-popup:hover { transform: translateX(-50%) translateY(-5px) scale(1.02); }
-    .dopamine-icon { font-size: 24px; animation: gentleBounce 1s infinite alternate; }
-    .dopamine-text { display: flex; flex-direction: column; font-size: 13px; line-height: 1.4; }
-    .dopamine-action { font-size: 10px; color: #ffeeee; text-transform: uppercase; letter-spacing: 1px; margin-top: 3px; }
-
-    /* --- LEAFLET POPUP OVERRIDES --- */
-    .leaflet-popup-content-wrapper { border-radius: 16px !important; border: 1px solid var(--border) !important; padding: 0 !important; overflow: hidden !important; box-shadow: 0 15px 35px rgba(0,0,0,0.2) !important; background: var(--bg-card) !important; }
-    .leaflet-popup-content { margin: 0 !important; width: 260px !important; }
-    .popup-img { width: 100%; height: 140px; object-fit: cover; display: block; }
-    .popup-body { padding: 15px; font-family: 'Inter', sans-serif; }
-    .popup-title { font-size: 14px; font-weight: 700; line-height: 1.4; color: var(--text-main); margin: 6px 0; }
-    .popup-link { display: inline-block; font-size: 11px; color: #fff; background: #0d9488; padding: 6px 12px; border-radius: 15px; text-decoration: none; font-weight: 700; margin-top: 8px; transition: 0.2s; }
-    .popup-link:hover { background: #0f766e; transform: scale(1.05); }
-
-    /* --- MOBİL OPTİMİZASYONU --- */
-    @media (max-width: 900px) {
-      .header { padding: 10px 15px; border-bottom: none; }
-      .header-controls { display: none; }
-      
-      .cat-bar { 
-        position: fixed; bottom: 0; left: 0; right: 0; background: var(--bg-card); z-index: 2000; 
-        padding: 10px 5px; flex-wrap: nowrap; overflow-x: auto; border-top: 1px solid var(--border); 
-        box-shadow: 0 -4px 15px rgba(0,0,0,0.05); justify-content: flex-start;
-      }
-      .cat-bar::-webkit-scrollbar { display: none; }
-      
-      .layout { height: calc(100vh - 60px - 60px); flex-direction: column; }
-      #map { height: 40vh; min-height: 250px; flex: none; }
-      .sidebar { width: 100%; height: 60vh; border-left: none; border-top: 2px solid var(--accent); border-radius: 20px 20px 0 0; margin-top: -15px; z-index: 10; padding-bottom: 60px; }
-      
-      .cat-btn { flex-direction: column; font-size: 10px; padding: 6px 12px; border-radius: 12px; border: none; background: transparent; color: var(--text-sub); gap: 2px;}
+    .news-thumb { width: 100%; height: 160px; object-fit: cover; display: block; transition: transform 0.5s
