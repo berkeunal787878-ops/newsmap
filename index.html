@@ -340,7 +340,7 @@ function renderNews(results) {
     marker.bindPopup(`
       <div style="max-width:220px;font-family:'Inter',sans-serif">
         <div class="popup-title">${title}</div>
-        <div class="popup-source">The Guardian · ${country}</div>
+        <div class="popup-source">${currentQ === "sport" ? "BBC Sport" : "The Guardian"} · ${country}</div>
         <a class="popup-link" href="${url}" target="_blank">Haberi oku →</a>
       </div>
     `, {maxWidth:240});
@@ -352,7 +352,7 @@ function renderNews(results) {
     card.innerHTML = `
       <div class="news-cat-badge" style="background:${color}22;color:${color}">${currentLabel} · ${country}</div>
       <div class="news-title">${title}</div>
-      <div class="news-source">The Guardian · ${timeAgo(date)}</div>
+      <div class="news-source">${currentQ === "sport" ? "BBC Sport" : "The Guardian"} · ${timeAgo(date)}</div>
     `;
     card.addEventListener('click', () => {
       document.querySelectorAll('.news-card').forEach(c => c.classList.remove('active'));
