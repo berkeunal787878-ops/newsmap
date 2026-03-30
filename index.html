@@ -37,30 +37,20 @@
     body { background: var(--bg-main); color: var(--text-main); overflow: hidden; transition: 0.3s; }
 
     /* HEADER */
-    .header {
-      background: var(--bg-card); border-bottom: 1px solid var(--border); padding: 8px 20px;
-      min-height: 60px; display: flex; align-items: center; justify-content: space-between;
-      position: sticky; top: 0; z-index: 1000;
-    }
+    .header { background: var(--bg-card); border-bottom: 1px solid var(--border); padding: 8px 20px; min-height: 60px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 1000; }
     .logo { display: flex; align-items: center; gap: 10px; cursor: pointer; text-decoration: none;}
     .owl-icon { width: 36px; height: 36px; animation: owlBlink 4s infinite; }
     @keyframes owlBlink { 0%, 90%, 100% { transform: scaleY(1); } 92%, 97% { transform: scaleY(0.1); } }
     .logo-text { font-size: 20px; font-weight: 800; letter-spacing: 2px; color: var(--accent); }
     
     .user-actions { display: flex; gap: 10px; align-items: center; }
-    .action-btn {
-      background: var(--bg-main); border: 1px solid var(--border); color: var(--text-main);
-      padding: 6px 14px; border-radius: 20px; cursor: pointer; font-size: 12px; font-weight: 600; transition: 0.2s;
-    }
+    .action-btn { background: var(--bg-main); border: 1px solid var(--border); color: var(--text-main); padding: 6px 14px; border-radius: 20px; cursor: pointer; font-size: 12px; font-weight: 600; transition: 0.2s; }
     .action-btn:hover { background: var(--hover-bg); transform: translateY(-2px); }
     .user-avatar { width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--accent); display: none; cursor: pointer; }
 
     /* CATEGORY BAR */
     .category-bar { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; background: var(--bg-card); padding: 10px; border-bottom: 1px solid var(--border); z-index: 999; position: relative;}
-    .cat-btn {
-      font-size: 12px; padding: 6px 16px; border-radius: 20px; border: 1px solid var(--border); background: var(--bg-card);
-      color: var(--text-main); cursor: pointer; transition: 0.3s; font-weight: 600;
-    }
+    .cat-btn { font-size: 12px; padding: 6px 16px; border-radius: 20px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-main); cursor: pointer; transition: 0.3s; font-weight: 600; }
     .cat-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
 
     /* LAYOUT & MAP */
@@ -82,32 +72,19 @@
     .news-title { font-size: 14px; font-weight: 700; line-height: 1.4; margin: 8px 0; }
     .news-meta { font-size: 11px; color: var(--text-sub); font-weight: 500; }
     .news-thumb { width: 100%; height: 140px; object-fit: cover; border-radius: 8px; margin-top: 8px; }
-    
     .badge { font-size: 9px; font-weight: 700; padding: 3px 8px; border-radius: 12px; text-transform: uppercase; }
 
     /* REKLAM ALANLARI */
-    .ad-placeholder {
-      background: var(--active-bg); border: 2px dashed var(--border); color: var(--text-sub);
-      display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; font-weight: 700;
-      border-radius: 8px; margin: 10px 15px; text-align: center;
-    }
+    .ad-placeholder { background: var(--active-bg); border: 2px dashed var(--border); color: var(--text-sub); display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; border-radius: 8px; margin: 10px 15px; text-align: center; }
     .feed-ad { height: 120px; cursor: pointer; } 
     .modal-ad { height: 150px; width: 100%; margin: 15px 0; cursor: pointer; } 
 
     /* IN-APP READING MODAL */
-    .modal-overlay {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 9999;
-      display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: 0.3s;
-    }
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 9999; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: 0.3s; }
     .modal-overlay.active { opacity: 1; pointer-events: auto; }
-    .modal-content {
-      background: var(--bg-card); padding: 0; border-radius: 20px; width: 90%; max-width: 600px;
-      max-height: 85vh; overflow-y: auto; box-shadow: 0 20px 40px rgba(0,0,0,0.3); transform: translateY(20px); transition: 0.3s;
-      position: relative;
-    }
+    .modal-content { background: var(--bg-card); padding: 0; border-radius: 20px; width: 90%; max-width: 600px; max-height: 85vh; overflow-y: auto; box-shadow: 0 20px 40px rgba(0,0,0,0.3); transform: translateY(20px); transition: 0.3s; position: relative; }
     .modal-overlay.active .modal-content { transform: translateY(0); }
     .modal-close { position: absolute; top: 15px; right: 20px; font-size: 28px; color: #fff; cursor: pointer; z-index: 10; text-shadow: 0 2px 4px rgba(0,0,0,0.5); font-weight: bold;}
-    
     .modal-hero { width: 100%; height: 250px; object-fit: cover; }
     .modal-body { padding: 25px; }
     .modal-title { font-size: 22px; font-weight: 800; line-height: 1.3; margin-bottom: 10px; color: var(--text-main); }
@@ -117,12 +94,7 @@
     .modal-action-btn:hover { opacity: 0.9; transform: scale(1.02); }
 
     /* DOPAMINE POPUP */
-    .dopamine-popup {
-      position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(150px);
-      background: linear-gradient(135deg, #ff0f4f, #ff8c00); color: white; padding: 15px 25px;
-      border-radius: 30px; font-weight: 800; box-shadow: 0 10px 30px rgba(255,15,79,0.3);
-      z-index: 3000; transition: 0.6s; display: flex; align-items: center; gap: 15px; cursor: pointer; width: 90%; max-width: 420px;
-    }
+    .dopamine-popup { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(150px); background: linear-gradient(135deg, #ff0f4f, #ff8c00); color: white; padding: 15px 25px; border-radius: 30px; font-weight: 800; box-shadow: 0 10px 30px rgba(255,15,79,0.3); z-index: 3000; transition: 0.6s; display: flex; align-items: center; gap: 15px; cursor: pointer; width: 90%; max-width: 420px; }
     .dopamine-popup.show { transform: translateX(-50%) translateY(0); }
     .dopamine-popup:hover { transform: translateX(-50%) translateY(-5px) scale(1.02); }
     .dopamine-icon { font-size: 24px; animation: owlFloat 1s infinite alternate; }
@@ -132,15 +104,10 @@
     .owl-loading { font-size: 44px; animation: owlFloat 2s ease-in-out infinite; }
     @keyframes owlFloat { 0% { transform: translateY(0); } 100% { transform: translateY(-5px); } }
     .loading-text { font-size: 13px; color: var(--accent); font-weight: 600; text-transform: uppercase; letter-spacing: 1px;}
-    
     @keyframes markerPulseAnim { 0% { transform: scale(0.8); opacity: 1; } 100% { transform: scale(2.5); opacity: 0; } }
 
     /* SPLASH SCREEN */
-    .splash {
-      position: fixed; inset: 0; background: #0d9488;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      z-index: 99999; transition: opacity 0.5s ease;
-    }
+    .splash { position: fixed; inset: 0; background: #0d9488; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 99999; transition: opacity 0.5s ease; }
     .splash.hide { opacity: 0; pointer-events: none; }
     .splash-owl { font-size: 80px; animation: owlFloat 1.5s ease-in-out infinite; }
     .splash-title { font-size: 42px; font-weight: 800; color: #fff; letter-spacing: 6px; margin-top: 16px; }
@@ -258,10 +225,7 @@
   });
 
   function initApp() {
-    if(localStorage.getItem('owlsTheme') === 'dark') {
-      document.body.setAttribute('data-theme', 'dark');
-      document.getElementById('themeBtn').innerText = '☀️';
-    }
+    if(localStorage.getItem('owlsTheme') === 'dark') { document.body.setAttribute('data-theme', 'dark'); document.getElementById('themeBtn').innerText = '☀️'; }
     auth.onAuthStateChanged(user => {
       if (user) {
         document.getElementById('loginBtn').style.display = 'none';
@@ -291,102 +255,94 @@
   L.control.zoom({ position: 'topright' }).addTo(map);
   L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png').addTo(map);
 
-  // 1. MİLİMETRİK İLÇE/SEMT LOKASYONLARI
-  const MICRO_LOCATIONS = {
+  // --- KESİN VE NET KOORDİNAT VERİTABANI (SIFIR RASTGELELİK) ---
+  
+  // 1. Şehirler & İlçeler (Haber metninde aranacak ilk şeyler)
+  const EXACT_CITIES = {
     'kadıköy': [40.990, 29.020], 'beşiktaş': [41.042, 29.006], 'şişli': [41.060, 28.987], 'taksim': [41.036, 28.980],
-    'manhattan': [40.783, -73.966], 'brooklyn': [40.678, -73.944], 'bronx': [40.844, -73.864], 'queens': [40.728, -73.794],
-    'hollywood': [34.092, -118.328], 'silicon valley': [37.387, -122.082], 'shibuya': [35.662, 139.702], 'shinjuku': [35.693, 139.702], 
-    'soho': [51.513, -0.132], 'camden': [51.545, -0.142], 'wimbledon': [51.430, -0.214], 'wembley': [51.550, -0.279]
-  };
-
-  // 2. DEVASA KÜRESEL ŞEHİRLER & ÜLKELER
-  const CITY_COORDS = { 
+    'manhattan': [40.783, -73.966], 'brooklyn': [40.678, -73.944], 'hollywood': [34.092, -118.328], 'silicon valley': [37.387, -122.082], 
+    'shibuya': [35.662, 139.702], 'shinjuku': [35.693, 139.702], 'soho': [51.513, -0.132], 'camden': [51.545, -0.142], 'wimbledon': [51.430, -0.214],
     'new york':[40.71,-74.00],'washington':[38.90,-77.03],'los angeles':[34.05,-118.24],'chicago':[41.87,-87.62],'san francisco':[37.77,-122.41],'miami':[25.77,-80.19],
     'london':[51.50,-0.12],'manchester':[53.48,-2.24],'liverpool':[53.40,-2.98],'paris':[48.85,2.35],'istanbul':[41.01,28.97],'ankara':[39.92,32.85],
     'berlin':[52.52,13.40],'madrid':[40.41,-3.70],'rome':[41.90,12.49],'kyiv':[50.45,30.52],'moscow':[55.75,37.61],
     'tokyo':[35.68,139.69],'beijing':[39.90,116.40],'shanghai':[31.22,121.47],'hong kong':[22.31,114.17],'seoul':[37.56,126.97],'singapore':[1.35,103.81],
-    'delhi':[28.63,77.21],'mumbai':[19.07,72.87],'dubai':[25.20,55.27],'cairo':[30.04,31.23],'nairobi':[-1.28,36.81],'johannesburg':[-26.20,28.04],
+    'new delhi':[28.61,77.20],'mumbai':[19.07,72.87],'dubai':[25.20,55.27],'cairo':[30.04,31.23],'nairobi':[-1.28,36.81],'johannesburg':[-26.20,28.04],
     'sao paulo':[-23.54,-46.63],'buenos aires':[-34.60,-58.38],'sydney':[-33.86,151.20],'melbourne':[-37.81,144.96], 'mexico city':[19.43,-99.13],
-    'jakarta':[-6.20,106.81], 'manila':[14.59,120.98], 'bangkok':[13.75,100.50], 'lima':[-12.04,-77.02], 'bogota':[4.71,-74.07]
+    'jakarta':[-6.20,106.81], 'manila':[14.59,120.98], 'bangkok':[13.75,100.50], 'lima':[-12.04,-77.02], 'bogota':[4.71,-74.07], 'doha':[25.28,51.53]
   };
 
-  const COUNTRY_COORDS = { 
-    us:[39,-98], gb:[54,-2], de:[51,10], tr:[39,35], fr:[46,2], jp:[36,138], cn:[35,104], ru:[60,100], in:[20,78], 
-    au:[-25,133], ca:[56,-106], za:[-30,22], ng:[9,8], eg:[26,30], mx:[23,-102], ar:[-38,-63], sa:[23,45], id:[-0,113], 
-    it:[41,12], es:[40,-3], kr:[35,127], ua:[49,31], il:[31,34], ae:[23,53], qa:[25,51], br:[-14,-51],
-    cl:[-35,-71], co:[4,-74], pe:[-9,-75], ve:[8,-66], ke:[0,38], ma:[31,-7], pk:[30,69], th:[15,100], ph:[12,122], vn:[14,108], nz:[-40,174]
-  };
-
-  const CNAMES = { 
-    us:'USA', gb:'UK', de:'Germany', tr:'Turkey', fr:'France', jp:'Japan', cn:'China', ru:'Russia', in:'India', 
-    au:'Australia', ca:'Canada', za:'South Africa', ng:'Nigeria', eg:'Egypt', mx:'Mexico', ar:'Argentina', sa:'Saudi Arabia', id:'Indonesia', 
-    it:'Italy', es:'Spain', kr:'S. Korea', ua:'Ukraine', il:'Israel', ae:'UAE', qa:'Qatar', br:'Brazil',
-    cl:'Chile', co:'Colombia', pe:'Peru', ve:'Venezuela', ke:'Kenya', ma:'Morocco', pk:'Pakistan', th:'Thailand', ph:'Philippines', vn:'Vietnam', nz:'New Zealand'
+  // 2. Ülke Başkentleri (Haberde sadece ülke geçiyorsa başkente iner)
+  const CAPITALS = {
+    'us':[38.90,-77.03], 'gb':[51.50,-0.12], 'de':[52.52,13.40], 'tr':[39.92,32.85], 'fr':[48.85,2.35], 'jp':[35.68,139.69], 'cn':[39.90,116.40], 
+    'ru':[55.75,37.61], 'in':[28.61,77.20], 'au':[-35.28,149.12], 'ca':[45.42,-75.69], 'za':[-25.74,28.18], 'ng':[9.07,7.39], 'eg':[30.04,31.23], 
+    'mx':[19.43,-99.13], 'ar':[-34.60,-58.38], 'sa':[24.71,46.67], 'id':[-6.20,106.81], 'it':[41.90,12.49], 'es':[40.41,-3.70], 'kr':[37.56,126.97], 
+    'ua':[50.45,30.52], 'il':[31.76,35.21], 'ae':[24.45,54.37], 'qa':[25.28,51.53], 'br':[-15.82,-47.92], 'pk':[33.68,73.04], 'ph':[14.59,120.98], 'vn':[21.02,105.83]
   };
   
-  // Yarıçap (Radius) Dağılımı - Yuvarlak ve Doğal Saçılma İçin
-  const SPREAD = { ru:25, us:18, cn:15, ca:20, br:15, au:18, in:8, tr:5, default:4 };
+  const CNAMES = { us:'USA', gb:'UK', de:'Germany', tr:'Turkey', fr:'France', jp:'Japan', cn:'China', ru:'Russia', in:'India', au:'Australia', ca:'Canada', za:'South Africa', ng:'Nigeria', eg:'Egypt', mx:'Mexico', ar:'Argentina', sa:'Saudi Arabia', id:'Indonesia', it:'Italy', es:'Spain', kr:'S. Korea', ua:'Ukraine', il:'Israel', ae:'UAE', qa:'Qatar', br:'Brazil', pk:'Pakistan', ph:'Philippines', vn:'Vietnam' };
+  
+  // 3. Medya Genel Merkezleri (Haberde HİÇBİR YER geçmiyorsa haberi yazan ajansın kendi binasına iner)
+  const HQ_LOCATIONS = {
+    'NY Times': [40.756, -73.990], 'CNN': [33.759, -84.394], 'TechCrunch': [37.774, -122.419], 'ESPN': [41.619, -72.926], 'CNBC': [40.892, -73.944], 'Wired': [37.781, -122.395],
+    'BBC': [51.518, -0.143], 'The Guardian': [51.534, -0.122], 'Sky': [51.488, -0.324],
+    'France24': [48.829, 2.261], 'DW': [50.715, 7.127], 'Marca': [40.444, -3.660],
+    'Al Jazeera': [25.313, 51.520], 'Arab News': [24.711, 46.674],
+    'Times of India': [28.627, 77.240], 'SCMP': [22.278, 114.181], 'Japan Times': [35.688, 139.743], 'CNA': [1.300, 103.864],
+    'Punch': [6.524, 3.379], 'News24': [-33.914, 18.420], 'ABC Australia': [-33.882, 151.200], 'MercoPress': [-34.883, -56.166], 'Hurriyet': [41.055, 28.985]
+  };
 
   const hasWord = (word, text) => new RegExp("\\b" + word + "\\b", "i").test(text);
-  const KEYWORDS = { 'usa':'us', 'america':'us', 'biden':'us', 'england':'gb', 'bbc':'gb', 'premier league':'gb', 'nba':'us', 'nfl':'us', 'macron':'fr', 'putin':'ru', 'gaza':'il', 'palestine':'il', 'middle east':'ae', 'africa':'za', 'latam':'br', 'asia':'sg' };
+  const KEYWORDS = { 'usa':'us', 'america':'us', 'biden':'us', 'england':'gb', 'premier league':'gb', 'nba':'us', 'nfl':'us', 'macron':'fr', 'putin':'ru', 'gaza':'il', 'palestine':'il' };
   const COLORS = { 'world':'#0d9488', 'technology':'#7c3aed', 'business':'#059669', 'science':'#0891b2', 'health':'#dc2626', 'sport':'#d97706' };
   
   let markers = [];
   let currentQ = 'world';
   let dopamineTimer;
 
-  function getCoords(text, source) {
+  // SIFIR RASTGELELİK ALGORİTMASI
+  function getCoords(text, source, index) {
     const t = (text || "").toLowerCase();
     
-    // 1. İLÇE/SEMT (En yüksek hassasiyet, ~1km sapma)
-    for (const [micro, coords] of Object.entries(MICRO_LOCATIONS)) {
-      if (hasWord(micro, t)) {
-        return { coords: [coords[0] + (Math.random()-.5)*0.01, coords[1] + (Math.random()-.5)*0.01], country: micro.charAt(0).toUpperCase() + micro.slice(1) };
-      }
-    }
+    // Üst üste binmeleri engellemek için sadece indekse bağlı çok ufak, sabit bir kaydırma (rastgele değil)
+    // Bu sayede aynı şehirdeki 10 haber denize düşmez, yan yana sokaklarda dizilir.
+    const microOffsetLat = (index % 5) * 0.015;
+    const microOffsetLng = (Math.floor(index / 5) % 5) * 0.015;
 
-    // 2. ŞEHİR (~15km sapma)
-    for (const [city, coords] of Object.entries(CITY_COORDS)) {
+    // 1. ŞEHİR / İLÇE KONTROLÜ (Nokta Atışı)
+    for (const [city, coords] of Object.entries(EXACT_CITIES)) {
       if (hasWord(city, t)) {
-        return { coords: [coords[0] + (Math.random()-.5)*0.15, coords[1] + (Math.random()-.5)*0.15], country: city.charAt(0).toUpperCase() + city.slice(1) };
+        return { coords: [coords[0] + microOffsetLat, coords[1] + microOffsetLng], locationName: city.charAt(0).toUpperCase() + city.slice(1) };
       }
     }
 
-    // 3. ÜLKE
+    // 2. ÜLKE KONTROLÜ (Doğrudan Başkente atar)
     let code = null;
     for (const [k, v] of Object.entries(KEYWORDS)) { if(hasWord(k, t)) { code = v; break; } }
     if(!code) {
       for (const [k, v] of Object.entries(CNAMES)) { if(hasWord(v.toLowerCase(), t)) { code = k; break; } }
     }
 
-    // 4. FALLBACK: Eğer yer geçmiyorsa ajansın bölgesine atama. Hala yoksa tamamen global rastgele bir ülkeye at.
-    if(!code) {
-        const s = source.toLowerCase();
-        if(s.includes('nyt') || s.includes('techcrunch') || s.includes('espn') || s.includes('cnbc') || s.includes('wired')) code = 'us';
-        else if(s.includes('bbc') || s.includes('sky') || s.includes('guardian')) code = 'gb';
-        else if(s.includes('al jazeera')) code = 'qa';
-        else if(s.includes('india') || s.includes('toi')) code = 'in';
-        else if(s.includes('scmp')) code = 'cn';
-        else if(s.includes('france')) code = 'fr';
-        else if(s.includes('mercopress')) code = 'ar';
-        else if(s.includes('abc') || s.includes('australia')) code = 'au';
-        else if(s.includes('news24')) code = 'za';
-        else {
-            const keys = Object.keys(COUNTRY_COORDS);
-            code = keys[Math.floor(Math.random() * keys.length)]; // Tümüyle rastgele ülke
-        }
+    if(code && CAPITALS[code]) {
+      return { coords: [CAPITALS[code][0] + microOffsetLat, CAPITALS[code][1] + microOffsetLng], locationName: CNAMES[code] };
     }
 
-    // 5. RADYAL DAĞILIM (Kutu yerine Yuvarlak/Doğal Dağılım)
-    const b = COUNTRY_COORDS[code];
-    const maxRadius = SPREAD[code] || SPREAD.default;
-    const r = Math.random() * maxRadius;
-    const theta = Math.random() * 2 * Math.PI;
-    
-    return {
-      coords: [b[0] + r * Math.cos(theta), b[1] + r * Math.sin(theta)], 
-      country: CNAMES[code]
-    };
+    // 3. HABERDE HİÇBİR YER GEÇMİYORSA: AJANSIN MERKEZİNE AT (Sıfır Okyanus Garantisi)
+    let hqCoords = HQ_LOCATIONS['NY Times']; // Default
+    let hqName = 'USA';
+
+    for (const [hq, coords] of Object.entries(HQ_LOCATIONS)) {
+      if (source.includes(hq)) { hqCoords = coords; hqName = hq + " HQ"; break; }
+    }
+
+    // Kaynağı tam eşleşmiyorsa genel kelimelere bak
+    if (hqName === 'USA') {
+        if(source.includes('BBC') || source.includes('Guardian')) { hqCoords = HQ_LOCATIONS['BBC']; hqName = 'UK'; }
+        else if(source.includes('France24')) { hqCoords = HQ_LOCATIONS['France24']; hqName = 'France'; }
+        else if(source.includes('SCMP')) { hqCoords = HQ_LOCATIONS['SCMP']; hqName = 'Hong Kong'; }
+        else if(source.includes('India')) { hqCoords = HQ_LOCATIONS['Times of India']; hqName = 'India'; }
+    }
+
+    return { coords: [hqCoords[0] + microOffsetLat, hqCoords[1] + microOffsetLng], locationName: hqName };
   }
 
   function pulseIcon(color) {
@@ -408,7 +364,6 @@
     return m > 0 ? m+' mins ago' : 'Just now';
   }
 
-  // --- MODAL & DOPAMIN ---
   function openModal(article) {
     document.getElementById('modalImg').src = article.thumb || 'https://images.unsplash.com/photo-1504711432869-00103211f46a?q=80&w=600';
     document.getElementById('modalTitle').innerText = article.title;
@@ -421,23 +376,6 @@
 
   function closeModal() { document.getElementById('newsModal').classList.remove('active'); }
 
-  function triggerDopamine(articles) {
-    clearTimeout(dopamineTimer);
-    const popup = document.getElementById('dopaminePopup');
-    if(!popup) return;
-    popup.classList.remove('show');
-    if(!articles || articles.length < 3) return; 
-    
-    dopamineTimer = setTimeout(() => {
-        const rnd = articles[Math.floor(Math.random() * Math.min(articles.length, 10))];
-        const titleEl = document.getElementById('dopamineTitle');
-        if(titleEl) titleEl.innerText = rnd.title.length > 50 ? rnd.title.substring(0,50) + "..." : rnd.title;
-        popup.onclick = () => { popup.classList.remove('show'); openModal(rnd); };
-        popup.classList.add('show');
-        setTimeout(() => popup.classList.remove('show'), 7000); 
-    }, Math.floor(Math.random() * 4000) + 4000);
-  }
-
   // --- RENDER ---
   function renderArticles(articles) {
     const list = document.getElementById('newsList');
@@ -449,10 +387,9 @@
       return;
     }
 
-    // Daha fazla nokta gösterelim ki harita dolu dursun
-    articles.slice(0,45).forEach((a, i) => {
+    articles.slice(0,50).forEach((a, i) => {
       const fullText = a.title + ' ' + (a.trailText || '');
-      const {coords, country} = getCoords(fullText, a.source);
+      const {coords, locationName} = getCoords(fullText, a.source, i); // i parametresi milimetrik dizilim içindir
 
       const marker = L.marker(coords, {icon: pulseIcon(color)}).addTo(map);
       marker.bindPopup(`<b>${a.title}</b><br><small>${a.source}</small>`);
@@ -471,7 +408,7 @@
       card.innerHTML = `
         ${a.thumb ? `<img src="${a.thumb}" class="news-thumb">` : ''}
         <div style="padding-top:10px;">
-          <div class="badge" style="background:${color}22;color:${color}">${a.source} · ${country}</div>
+          <div class="badge" style="background:${color}22;color:${color}">${a.source} · ${locationName}</div>
           <div class="news-title">${a.title}</div>
           <div class="news-meta">${timeAgo(a.date)}</div>
         </div>
@@ -485,8 +422,6 @@
       };
       list.appendChild(card);
     });
-
-    triggerDopamine(articles);
   }
 
   // --- RSS FETCH MOTORU ---
@@ -502,7 +437,7 @@
     } catch(e) { return []; }
   }
 
-  // GERÇEK KÜRESEL BİLGİ AĞI
+  // GERÇEK KÜRESEL BİLGİ AĞI (DÜNYANIN EN AKTİF 30 ÜLKESİ TEMSİLİ)
   async function fetchNews(category) {
     const list = document.getElementById('newsList');
     list.innerHTML = `<div class="loading"><div class="owl-loading">🦉</div><div class="loading-text">Scanning Globe...</div></div>`;
@@ -511,24 +446,27 @@
       let articles = [];
 
       if (category === 'world') {
-        const alJazeera = await fetchRSS("https://www.aljazeera.com/xml/rss/all.xml", "Al Jazeera");
-        const cnaAsia = await fetchRSS("https://www.channelnewsasia.com/api/v1/rss-outbound-feed?_format=xml", "CNA Asia");
-        const france24 = await fetchRSS("https://www.france24.com/en/rss", "France24");
-        const mercoPress = await fetchRSS("https://en.mercopress.com/rss/", "MercoPress LatAm");
-        const abcAus = await fetchRSS("https://www.abc.net.au/news/feed/51120/rss.xml", "ABC Australia");
-        articles = [...alJazeera, ...cnaAsia, ...france24, ...mercoPress, ...abcAus];
+        const alJazeera = await fetchRSS("https://www.aljazeera.com/xml/rss/all.xml", "Al Jazeera"); // Middle East
+        const toi = await fetchRSS("https://timesofindia.indiatimes.com/rssfeeds/296589292.cms", "Times of India"); // India
+        const scmp = await fetchRSS("https://www.scmp.com/rss/2/feed", "SCMP"); // China/HK
+        const japanTimes = await fetchRSS("https://www.japantimes.co.jp/feed/", "Japan Times"); // Japan
+        const punch = await fetchRSS("https://punchng.com/feed/", "Punch"); // Nigeria / Africa
+        const france24 = await fetchRSS("https://www.france24.com/en/rss", "France24"); // Europe
+        const mercoPress = await fetchRSS("https://en.mercopress.com/rss/", "MercoPress"); // LatAm
+        const bbcWorld = await fetchRSS("http://feeds.bbci.co.uk/news/world/rss.xml", "BBC"); // UK
+        articles = [...alJazeera, ...toi, ...scmp, ...japanTimes, ...punch, ...france24, ...mercoPress, ...bbcWorld];
       } 
       else if (category === 'technology') {
         const techCrunch = await fetchRSS("https://techcrunch.com/feed/", "TechCrunch");
         const wired = await fetchRSS("https://www.wired.com/feed/rss", "Wired");
-        const theNextWeb = await fetchRSS("https://thenextweb.com/feed", "The Next Web");
-        articles = [...techCrunch, ...wired, ...theNextWeb];
+        const bbcTech = await fetchRSS("http://feeds.bbci.co.uk/news/technology/rss.xml", "BBC");
+        articles = [...techCrunch, ...wired, ...bbcTech];
       }
       else if (category === 'business') {
-        const nytBiz = await fetchRSS("https://rss.nytimes.com/services/xml/rss/nyt/Business.xml", "NY Times Biz");
-        const cnbc = await fetchRSS("https://search.cnbc.com/rs/search/combinedcms/view.xml?profile=12000000&id=10000664", "CNBC");
-        const scmpBiz = await fetchRSS("https://www.scmp.com/rss/91/feed", "SCMP Biz");
-        articles = [...nytBiz, ...cnbc, ...scmpBiz];
+        const nytBiz = await fetchRSS("https://rss.nytimes.com/services/xml/rss/nyt/Business.xml", "NY Times");
+        const toiBiz = await fetchRSS("https://timesofindia.indiatimes.com/rssfeeds/1898055.cms", "Times of India");
+        const scmpBiz = await fetchRSS("https://www.scmp.com/rss/91/feed", "SCMP");
+        articles = [...nytBiz, ...toiBiz, ...scmpBiz];
       }
       else if (category === 'health') {
         const bbcHealth = await fetchRSS("http://feeds.bbci.co.uk/news/health/rss.xml", "BBC Health");
@@ -536,17 +474,17 @@
         articles = [...bbcHealth, ...nytHealth];
       }
       else if (category === 'science') {
-        const nytSci = await fetchRSS("https://rss.nytimes.com/services/xml/rss/nyt/Science.xml", "NY Times Sci");
-        const bbcSci = await fetchRSS("http://feeds.bbci.co.uk/news/science_and_environment/rss.xml", "BBC Sci");
+        const nytSci = await fetchRSS("https://rss.nytimes.com/services/xml/rss/nyt/Science.xml", "NY Times");
+        const bbcSci = await fetchRSS("http://feeds.bbci.co.uk/news/science_and_environment/rss.xml", "BBC");
         articles = [...nytSci, ...bbcSci];
       }
       else if (category === 'sport') {
         const espnNBA = await fetchRSS("https://www.espn.com/espn/rss/nba/news", "ESPN NBA");
         const espnNFL = await fetchRSS("https://www.espn.com/espn/rss/nfl/news", "ESPN NFL");
-        const skyEuro = await fetchRSS("https://www.skysports.com/rss/12040", "Sky Sports Europe");
-        const franceSport = await fetchRSS("https://www.france24.com/en/sport/rss", "France24 Sport");
-        const toiSport = await fetchRSS("https://timesofindia.indiatimes.com/rssfeeds/4719148.cms", "TOI Sport");
-        articles = [...espnNBA, ...espnNFL, ...skyEuro, ...franceSport, ...toiSport];
+        const marca = await fetchRSS("https://e00-marca.uecdn.es/rss/en/football.xml", "Marca"); // Spain/Euro Football
+        const toiSport = await fetchRSS("https://timesofindia.indiatimes.com/rssfeeds/4719148.cms", "Times of India"); // Cricket/Asia Sport
+        const bbcSport = await fetchRSS("http://feeds.bbci.co.uk/sport/football/rss.xml", "BBC Sport");
+        articles = [...espnNBA, ...espnNFL, ...marca, ...toiSport, ...bbcSport];
       }
 
       // Benzersizleri ayıkla ve karıştır
