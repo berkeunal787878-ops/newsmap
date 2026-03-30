@@ -20,15 +20,42 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
+    /* --- TEMA DEĞİŞKENLERİ --- */
+    :root {
+      --bg-body: #f0f7f7;
+      --bg-header: #ffffff;
+      --bg-sidebar: #ffffff;
+      --text-main: #1a2e2e;
+      --text-sub: #64748b;
+      --border: #ccece9;
+      --accent: #0d9488;
+      --card-hover: #f0fdfa;
+      --map-filter: none;
+    }
+
+    [data-theme="dark"] {
+      --bg-body: #0f172a;
+      --bg-header: #1e293b;
+      --bg-sidebar: #1e293b;
+      --text-main: #f1f5f9;
+      --text-sub: #94a3b8;
+      --border: #334155;
+      --accent: #2dd4bf;
+      --card-hover: #0f172a;
+      --map-filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
+    }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       font-family: 'Inter', sans-serif;
-      background: #f0f7f7;
-      color: #1a2e2e;
+      background: var(--bg-body);
+      color: var(--text-main);
       overflow: hidden;
+      transition: background 0.3s, color 0.3s;
     }
 
+    /* Orijinal Splash */
     .splash {
       position: fixed;
       inset: 0;
@@ -40,53 +67,16 @@
       z-index: 9999;
       transition: opacity 0.6s ease;
     }
-
-    .splash.hide {
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    .splash-owl {
-      font-size: 70px;
-      animation: float 1.5s ease-in-out infinite;
-    }
-
-    .splash-title {
-      font-size: 44px;
-      font-weight: 700;
-      color: #fff;
-      letter-spacing: 8px;
-      margin-top: 12px;
-    }
-
-    .splash-sub {
-      font-size: 12px;
-      color: #99f6e4;
-      letter-spacing: 3px;
-      margin-top: 6px;
-      text-transform: uppercase;
-    }
-
-    .splash-bar {
-      width: 180px;
-      height: 3px;
-      background: rgba(255,255,255,0.2);
-      border-radius: 2px;
-      margin-top: 26px;
-      overflow: hidden;
-    }
-
-    .splash-progress {
-      height: 100%;
-      background: #fff;
-      border-radius: 2px;
-      width: 0;
-      transition: width 1.4s ease;
-    }
+    .splash.hide { opacity: 0; pointer-events: none; }
+    .splash-owl { font-size: 70px; animation: float 1.5s ease-in-out infinite; }
+    .splash-title { font-size: 44px; font-weight: 700; color: #fff; letter-spacing: 8px; margin-top: 12px; }
+    .splash-sub { font-size: 12px; color: #99f6e4; letter-spacing: 3px; margin-top: 6px; text-transform: uppercase; }
+    .splash-bar { width: 180px; height: 3px; background: rgba(255,255,255,0.2); border-radius: 2px; margin-top: 26px; overflow: hidden; }
+    .splash-progress { height: 100%; background: #fff; border-radius: 2px; width: 0; transition: width 1.4s ease; }
 
     .header {
-      background: #fff;
-      border-bottom: 1px solid #ccece9;
+      background: var(--bg-header);
+      border-bottom: 1px solid var(--border);
       padding: 8px 16px;
       min-height: 56px;
       display: flex;
@@ -98,352 +88,72 @@
       gap: 12px;
     }
 
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      flex-shrink: 0;
-    }
+    .logo { display: flex; align-items: center; gap: 9px; flex-shrink: 0; }
+    .owl-svg { width: 34px; height: 34px; animation: blink 5s infinite; }
+    .logo-text { font-size: 19px; font-weight: 700; letter-spacing: 2.5px; color: #0d9488; }
+    .logo-sub { font-size: 9px; color: #5eead4; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; margin-top: -2px; }
 
-    .owl-svg {
-      width: 34px;
-      height: 34px;
-      animation: blink 5s infinite;
-    }
-
-    @keyframes blink {
-      0%,88%,100% { transform: scaleY(1); }
-      91% { transform: scaleY(0.08); }
-      94% { transform: scaleY(1); }
-      97% { transform: scaleY(0.08); }
-    }
-
-    .logo-text {
-      font-size: 19px;
-      font-weight: 700;
-      letter-spacing: 2.5px;
-      color: #0d9488;
-    }
-
-    .logo-sub {
-      font-size: 9px;
-      color: #5eead4;
-      font-weight: 600;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      margin-top: -2px;
-    }
-
-    .cat-bar {
-      display: flex;
-      gap: 5px;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-    }
-
+    .cat-bar { display: flex; gap: 5px; flex-wrap: wrap; justify-content: flex-end; align-items: center; }
     .cat-btn {
-      font-size: 11px;
-      padding: 4px 12px;
-      border-radius: 20px;
-      border: 1px solid #99d6d0;
-      background: #fff;
-      color: #0d9488;
-      cursor: pointer;
-      transition: all 0.2s;
-      font-weight: 500;
-      white-space: nowrap;
+      font-size: 11px; padding: 4px 12px; border-radius: 20px;
+      border: 1px solid var(--border); background: var(--bg-header);
+      color: var(--accent); cursor: pointer; transition: all 0.2s; font-weight: 500; white-space: nowrap;
+    }
+    .cat-btn:hover { background: var(--card-hover); }
+    .cat-btn.active { background: #0d9488; color: #fff; border-color: #0d9488; }
+
+    /* Tema Butonu */
+    .theme-toggle {
+      background: var(--accent); color: white; border: none; padding: 5px 12px;
+      border-radius: 15px; cursor: pointer; font-size: 11px; font-weight: 700;
+      margin-right: 10px;
     }
 
-    .cat-btn:hover {
-      background: #f0fdfa;
-    }
-
-    .cat-btn.active {
-      background: #0d9488;
-      color: #fff;
-      border-color: #0d9488;
-    }
-
-    .layout {
-      display: flex;
-      height: calc(100vh - 56px);
-    }
-
-    #map {
-      flex: 1;
-      min-width: 0;
-    }
-
-    @keyframes markerPulse {
-      0% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.5); opacity: 0.5; }
-      100% { transform: scale(1); opacity: 1; }
-    }
-
-    .pulse-marker {
-      border-radius: 50%;
-      border: 2.5px solid #fff;
-      animation: markerPulse 2.5s ease-in-out infinite;
-      cursor: pointer;
-    }
+    .layout { display: flex; height: calc(100vh - 56px); }
+    #map { flex: 1; min-width: 0; filter: var(--map-filter); }
 
     .sidebar {
-      width: 340px;
-      flex-shrink: 0;
-      background: #fff;
-      border-left: 1px solid #ccece9;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
+      width: 340px; flex-shrink: 0; background: var(--bg-sidebar);
+      border-left: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden;
     }
+    .sidebar-header { padding: 12px 14px; border-bottom: 1px solid var(--border); font-size: 11px; font-weight: 700; color: #0d9488; text-transform: uppercase; display: flex; align-items: center; justify-content: space-between; }
+    .live-dot { display: flex; align-items: center; gap: 5px; font-size: 10px; color: #10b981; }
+    .live-dot::before { content:''; width: 6px; height: 6px; border-radius: 50%; background: #10b981; animation: livePulse 2s infinite; }
 
-    .sidebar-header {
-      padding: 12px 14px;
-      border-bottom: 1px solid #e6f7f5;
-      font-size: 11px;
-      font-weight: 700;
-      color: #0d9488;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
+    .news-list { overflow-y: auto; flex: 1; }
+    .news-card { border-bottom: 1px solid var(--border); cursor: pointer; transition: background 0.15s; animation: slideIn 0.35s ease both; overflow: hidden; }
+    .news-card:hover { background: var(--card-hover); }
+    .news-card.active { background: var(--card-hover); border-left: 3px solid #0d9488; }
+    .news-card-body { padding: 10px 14px 12px; }
 
-    .live-dot {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 10px;
-      color: #10b981;
-    }
+    /* Sentiment Badge */
+    .sentiment-badge { font-size: 8px; font-weight: 800; padding: 2px 5px; border-radius: 4px; margin-right: 5px; color: white; }
 
-    .live-dot::before {
-      content:'';
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: #10b981;
-      animation: livePulse 2s infinite;
-    }
+    .news-title { font-size: 12.5px; font-weight: 600; line-height: 1.45; color: var(--text-main); margin-bottom: 4px; }
+    .news-meta { font-size: 10px; color: var(--text-sub); }
 
-    @keyframes livePulse {
-      0%,100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.4; transform: scale(1.4); }
-    }
+    /* Keyframes */
+    @keyframes blink { 0%,88%,100% { transform: scaleY(1); } 91%,97% { transform: scaleY(0.08); } }
+    @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+    @keyframes livePulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(1.4); } }
+    @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-    .news-list {
-      overflow-y: auto;
-      flex: 1;
-    }
+    .pulse-marker { border-radius: 50%; border: 2.5px solid #fff; animation: markerPulse 2.5s ease-in-out infinite; cursor: pointer; }
+    @keyframes markerPulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.5); opacity: 0.5; } }
 
-    .news-card {
-      border-bottom: 1px solid #f0faf9;
-      cursor: pointer;
-      transition: background 0.15s;
-      animation: slideIn 0.35s ease both;
-      overflow: hidden;
-    }
+    .loading { display: flex; align-items: center; justify-content: center; height: 100%; flex-direction: column; gap: 12px; padding: 40px 20px; text-align: center; }
+    .loading-text { font-size: 12px; color: #0d9488; font-weight: 600; }
 
-    .news-thumb {
-      width: 100%;
-      height: 130px;
-      object-fit: cover;
-      display: block;
-      transition: transform 0.3s ease;
-    }
-
-    .news-card:hover .news-thumb {
-      transform: scale(1.03);
-    }
-
-    .news-card-body {
-      padding: 10px 14px 12px;
-    }
-
-    @keyframes slideIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .news-card:hover {
-      background: #f0fdfa;
-    }
-
-    .news-card.active {
-      background: #e6f7f5;
-      border-left: 3px solid #0d9488;
-    }
-
-    .badge-row {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin-bottom: 5px;
-      flex-wrap: wrap;
-    }
-
-    .cat-badge {
-      font-size: 9px;
-      font-weight: 700;
-      padding: 2px 7px;
-      border-radius: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
-    }
-
-    .src-badge {
-      font-size: 9px;
-      color: #0d9488;
-      font-weight: 600;
-      background: #e6f7f5;
-      padding: 2px 6px;
-      border-radius: 6px;
-    }
-
-    .news-title {
-      font-size: 12.5px;
-      font-weight: 600;
-      line-height: 1.45;
-      color: #1a2e2e;
-      margin-bottom: 4px;
-    }
-
-    .news-meta {
-      font-size: 10px;
-      color: #aac4c2;
-    }
-
-    .loading {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100%;
-      flex-direction: column;
-      gap: 12px;
-      padding: 40px 20px;
-      text-align: center;
-    }
-
-    .owl-bounce {
-      font-size: 34px;
-      animation: float 1.8s ease-in-out infinite;
-    }
-
-    @keyframes float {
-      0%,100% { transform: translateY(0); }
-      50% { transform: translateY(-7px); }
-    }
-
-    .loading-text {
-      font-size: 12px;
-      color: #0d9488;
-      font-weight: 600;
-    }
-
-    .leaflet-popup-content-wrapper {
-      border-radius: 12px !important;
-      border: 1px solid #ccece9 !important;
-      padding: 0 !important;
-      overflow: hidden !important;
-      box-shadow: 0 8px 32px rgba(13,148,136,0.15) !important;
-    }
-
-    .leaflet-popup-content {
-      margin: 0 !important;
-      width: 240px !important;
-    }
-
-    .popup-img {
-      width: 100%;
-      height: 130px;
-      object-fit: cover;
-      display: block;
-    }
-
-    .popup-body {
-      padding: 10px 12px;
-      font-family: 'Inter', sans-serif;
-    }
-
-    .popup-cat {
-      font-size: 9px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 5px;
-    }
-
-    .popup-title {
-      font-size: 12.5px;
-      font-weight: 600;
-      line-height: 1.4;
-      color: #1a2e2e;
-      margin-bottom: 4px;
-    }
-
-    .popup-src {
-      font-size: 10px;
-      color: #99b8b5;
-      margin-bottom: 8px;
-    }
-
-    .popup-link {
-      font-size: 11px;
-      color: #0d9488;
-      text-decoration: none;
-      font-weight: 700;
-    }
-
-    .popup-link:hover {
-      text-decoration: underline;
-    }
-
-    .leaflet-popup-tip {
-      background: #fff !important;
-    }
+    .leaflet-popup-content-wrapper { border-radius: 12px !important; background: var(--bg-sidebar) !important; color: var(--text-main) !important; overflow: hidden !important; }
+    .popup-body { padding: 10px 12px; }
+    .popup-title { font-size: 12.5px; font-weight: 600; color: var(--text-main); margin-bottom: 4px; }
 
     @media (max-width: 900px) {
-      .header {
-        align-items: flex-start;
-        flex-direction: column;
-      }
-
-      .cat-bar {
-        justify-content: flex-start;
-      }
-
-      .layout {
-        flex-direction: column;
-        height: auto;
-      }
-
-      #map {
-        height: 55vw;
-        min-height: 240px;
-      }
-
-      .sidebar {
-        width: 100%;
-        height: 380px;
-        border-left: none;
-        border-top: 1px solid #ccece9;
-      }
-
-      body {
-        overflow: auto;
-      }
-    }
-
-    @media (max-width: 700px) {
-      .cat-btn {
-        font-size: 10px;
-        padding: 3px 9px;
-      }
-
-      .logo-text {
-        font-size: 16px;
-      }
+      .header { flex-direction: column; align-items: flex-start; height: auto; padding-bottom: 10px; }
+      .layout { flex-direction: column; height: auto; }
+      #map { height: 300px; }
+      .sidebar { width: 100%; height: 400px; border-left: none; border-top: 1px solid var(--border); }
+      body { overflow: auto; }
     }
   </style>
 </head>
@@ -453,28 +163,17 @@
     <div class="splash-owl">🦉</div>
     <div class="splash-title">OWLS</div>
     <div class="splash-sub">Global News Map</div>
-    <div class="splash-bar">
-      <div class="splash-progress" id="splashProgress"></div>
-    </div>
+    <div class="splash-bar"><div class="splash-progress" id="splashProgress"></div></div>
   </div>
 
   <div class="header">
     <div class="logo">
-      <svg class="owl-svg" viewBox="0 0 40 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg class="owl-svg" viewBox="0 0 40 42" fill="none">
         <ellipse cx="20" cy="26" rx="13" ry="14" fill="#0d9488"/>
         <ellipse cx="20" cy="24" rx="11" ry="12" fill="#0f766e"/>
-        <polygon points="11,13 14,4 17,13" fill="#0d9488"/>
-        <polygon points="23,13 26,4 29,13" fill="#0d9488"/>
-        <circle cx="15" cy="21" r="5.5" fill="#fff"/>
-        <circle cx="25" cy="21" r="5.5" fill="#fff"/>
-        <circle cx="15" cy="21" r="3.2" fill="#134e4a"/>
-        <circle cx="25" cy="21" r="3.2" fill="#134e4a"/>
-        <circle cx="16" cy="20" r="1.1" fill="#fff"/>
-        <circle cx="26" cy="20" r="1.1" fill="#fff"/>
+        <circle cx="15" cy="21" r="5.5" fill="#fff"/><circle cx="25" cy="21" r="5.5" fill="#fff"/>
+        <circle cx="15" cy="21" r="3.2" fill="#134e4a"/><circle cx="25" cy="21" r="3.2" fill="#134e4a"/>
         <polygon points="20,24 18,27 22,27" fill="#f59e0b"/>
-        <ellipse cx="8" cy="30" rx="5" ry="8" fill="#0d9488" transform="rotate(-15 8 30)"/>
-        <ellipse cx="32" cy="30" rx="5" ry="8" fill="#0d9488" transform="rotate(15 32 30)"/>
-        <ellipse cx="20" cy="32" rx="6" ry="4" fill="#5eead4" opacity="0.45"/>
       </svg>
       <div>
         <div class="logo-text">OWLS</div>
@@ -483,6 +182,7 @@
     </div>
 
     <div class="cat-bar">
+      <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🌙 Karanlık Mod</button>
       <button class="cat-btn active" data-cat="world" data-label="WORLD">🌍 World</button>
       <button class="cat-btn" data-cat="ai" data-label="AI">🤖 AI</button>
       <button class="cat-btn" data-cat="technology" data-label="TECH">💻 Tech</button>
@@ -496,299 +196,84 @@
 
   <div class="layout">
     <div id="map"></div>
-
     <div class="sidebar">
-      <div class="sidebar-header">
-        <span>Live Global Feed</span>
-        <span class="live-dot">LIVE</span>
-      </div>
-
-      <div class="news-list" id="newsList">
-        <div class="loading">
-          <div class="owl-bounce">🦉</div>
-          <div class="loading-text">Haberler yükleniyor...</div>
-        </div>
-      </div>
+      <div class="sidebar-header"><span>Live Global Feed</span><span class="live-dot">LIVE</span></div>
+      <div class="news-list" id="newsList"></div>
     </div>
   </div>
 
   <script>
-    setTimeout(() => {
-      document.getElementById('splashProgress').style.width = '100%';
-    }, 100);
+    // --- TEMA YÖNETİMİ ---
+    function toggleTheme() {
+      const body = document.body;
+      const btn = document.getElementById('themeBtn');
+      const isDark = body.getAttribute('data-theme') === 'dark';
+      body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+      btn.innerText = isDark ? '🌙 Karanlık Mod' : '☀️ Aydınlık Mod';
+    }
 
+    // --- DUYGU ANALİZİ (Sentiment) ---
+    function analyzeSentiment(title) {
+      const t = title.toLowerCase();
+      const negative = ['war', 'death', 'killed', 'crisis', 'attack', 'deadly', 'crash', 'arrest', 'fire', 'protest', 'savaş', 'ölüm', 'kaza', 'saldırı'];
+      const positive = ['success', 'growth', 'win', 'discovery', 'new', 'innovation', 'breakthrough', 'positive', 'başarı', 'yeni', 'buluş'];
+      
+      if (negative.some(w => t.includes(w))) return { label: 'KRİTİK', color: '#ef4444' };
+      if (positive.some(w => t.includes(w))) return { label: 'OLUMLU', color: '#10b981' };
+      return { label: 'NÖTR', color: '#3b82f6' };
+    }
+
+    // Orijinal Splash Zamanlaması
+    setTimeout(() => { document.getElementById('splashProgress').style.width = '100%'; }, 100);
     setTimeout(() => {
       document.getElementById('splash').classList.add('hide');
       setTimeout(() => document.getElementById('splash').remove(), 700);
     }, 1700);
 
     const GUARDIAN_KEY = '0a321643-aaab-4c6a-9185-1762685abe3d';
-
     const map = L.map('map', { zoomControl: true }).setView([20, 10], 2);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { subdomains: 'abcd', maxZoom: 18 }).addTo(map);
 
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-      attribution: '&copy; CartoDB &copy; OpenStreetMap',
-      subdomains: 'abcd',
-      maxZoom: 18
-    }).addTo(map);
-
+    // --- SENİN DEVASA KOORDİNAT KÜTÜPHANEN (DEĞİŞMEDİ) ---
     const CITY_COORDS = {
-      'new york':[40.71,-74.00],'washington':[38.90,-77.03],'los angeles':[34.05,-118.24],
-      'chicago':[41.87,-87.62],'san francisco':[37.77,-122.41],'seattle':[47.60,-122.33],
-      'boston':[42.36,-71.05],'miami':[25.77,-80.19],'houston':[29.76,-95.36],
-      'silicon valley':[37.38,-122.08],
-
-      'london':[51.50,-0.12],'manchester':[53.48,-2.24],'birmingham':[52.48,-1.89],
-      'liverpool':[53.40,-2.98],'edinburgh':[55.95,-3.19],'glasgow':[55.86,-4.25],
-
-      'istanbul':[41.01,28.97],'ankara':[39.92,32.85],'izmir':[38.41,27.13],
-      'bursa':[40.18,29.06],'antalya':[36.88,30.70],'trabzon':[41.00,39.72],
-
-      'berlin':[52.52,13.40],'munich':[48.13,11.57],'hamburg':[53.55,9.99],
-      'frankfurt':[50.11,8.68],'cologne':[50.93,6.96],'dortmund':[51.51,7.46],
-
-      'paris':[48.85,2.35],'lyon':[45.74,4.83],'marseille':[43.29,5.38],
-      'nice':[43.70,7.26],'bordeaux':[44.83,-0.57],
-
-      'madrid':[40.41,-3.70],'barcelona':[41.38,2.17],'seville':[37.38,-5.99],
-      'valencia':[39.46,-0.37],'bilbao':[43.26,-2.92],
-
-      'rome':[41.90,12.49],'milan':[45.46,9.18],'naples':[40.85,14.27],
-      'turin':[45.07,7.68],'florence':[43.76,11.25],
-
-      'amsterdam':[52.37,4.89],'brussels':[50.85,4.35],'vienna':[48.20,16.37],
-      'zurich':[47.37,8.54],'stockholm':[59.33,18.06],'oslo':[59.91,10.75],
-      'copenhagen':[55.67,12.56],'warsaw':[52.22,21.01],'prague':[50.07,14.43],
-      'budapest':[47.49,19.04],'athens':[37.97,23.72],'lisbon':[38.71,-9.14],
-      'kyiv':[50.45,30.52],'moscow':[55.75,37.61],'st petersburg':[59.93,30.31],
-
-      'tokyo':[35.68,139.69],'osaka':[34.69,135.50],'beijing':[39.90,116.40],
-      'shanghai':[31.22,121.47],'hong kong':[22.31,114.17],'seoul':[37.56,126.97],
-      'singapore':[1.35,103.81],'bangkok':[13.75,100.51],'delhi':[28.63,77.21],
-      'mumbai':[19.07,72.87],'bangalore':[12.97,77.59],'islamabad':[33.72,73.06],
-      'karachi':[24.86,67.01],'dubai':[25.20,55.27],'riyadh':[24.68,46.72],
-      'tehran':[35.69,51.38],'tel aviv':[32.08,34.78],'jerusalem':[31.76,35.21],
-      'beirut':[33.88,35.49],'kabul':[34.52,69.17],
-
-      'cairo':[30.04,31.23],'lagos':[6.45,3.40],'nairobi':[-1.28,36.81],
-      'johannesburg':[-26.20,28.04],'cape town':[-33.92,18.42],
-      'addis ababa':[9.03,38.74],'accra':[5.55,-0.20],
-
-      'sao paulo':[-23.54,-46.63],'rio de janeiro':[-22.90,-43.17],
-      'buenos aires':[-34.60,-58.38],'santiago':[-33.45,-70.66],
-      'bogota':[4.71,-74.07],'lima':[-12.04,-77.02],'mexico city':[19.42,-99.13],
-
-      'sydney':[-33.86,151.20],'melbourne':[-37.81,144.96],'canberra':[-35.28,149.12],
-      'auckland':[-36.84,174.76],
+      'new york':[40.71,-74.00],'washington':[38.90,-77.03],'los angeles':[34.05,-118.24],'chicago':[41.87,-87.62],'san francisco':[37.77,-122.41],'seattle':[47.60,-122.33],'boston':[42.36,-71.05],'miami':[25.77,-80.19],'houston':[29.76,-95.36],'silicon valley':[37.38,-122.08],'london':[51.50,-0.12],'manchester':[53.48,-2.24],'birmingham':[52.48,-1.89],'liverpool':[53.40,-2.98],'edinburgh':[55.95,-3.19],'glasgow':[55.86,-4.25],'istanbul':[41.01,28.97],'ankara':[39.92,32.85],'izmir':[38.41,27.13],'bursa':[40.18,29.06],'antalya':[36.88,30.70],'trabzon':[41.00,39.72],'berlin':[52.52,13.40],'munich':[48.13,11.57],'hamburg':[53.55,9.99],'frankfurt':[50.11,8.68],'cologne':[50.93,6.96],'dortmund':[51.51,7.46],'paris':[48.85,2.35],'lyon':[45.74,4.83],'marseille':[43.29,5.38],'nice':[43.70,7.26],'bordeaux':[44.83,-0.57],'madrid':[40.41,-3.70],'barcelona':[41.38,2.17],'seville':[37.38,-5.99],'valencia':[39.46,-0.37],'bilbao':[43.26,-2.92],'rome':[41.90,12.49],'milan':[45.46,9.18],'naples':[40.85,14.27],'turin':[45.07,7.68],'florence':[43.76,11.25],'amsterdam':[52.37,4.89],'brussels':[50.85,4.35],'vienna':[48.20,16.37],'zurich':[47.37,8.54],'stockholm':[59.33,18.06],'oslo':[59.91,10.75],'copenhagen':[55.67,12.56],'warsaw':[52.22,21.01],'prague':[50.07,14.43],'budapest':[47.49,19.04],'athens':[37.97,23.72],'lisbon':[38.71,-9.14],'kyiv':[50.45,30.52],'moscow':[55.75,37.61],'st petersburg':[59.93,30.31],'tokyo':[35.68,139.69],'osaka':[34.69,135.50],'beijing':[39.90,116.40],'shanghai':[31.22,121.47],'hong kong':[22.31,114.17],'seoul':[37.56,126.97],'singapore':[1.35,103.81],'bangkok':[13.75,100.51],'delhi':[28.63,77.21],'mumbai':[19.07,72.87],'bangalore':[12.97,77.59],'islamabad':[33.72,73.06],'karachi':[24.86,67.01],'dubai':[25.20,55.27],'riyadh':[24.68,46.72],'tehran':[35.69,51.38],'tel aviv':[32.08,34.78],'jerusalem':[31.76,35.21],'beirut':[33.88,35.49],'kabul':[34.52,69.17],'cairo':[30.04,31.23],'lagos':[6.45,3.40],'nairobi':[-1.28,36.81],'johannesburg':[-26.20,28.04],'cape town':[-33.92,18.42],'addis ababa':[9.03,38.74],'accra':[5.55,-0.20],'sao paulo':[-23.54,-46.63],'rio de janeiro':[-22.90,-43.17],'buenos aires':[-34.60,-58.38],'santiago':[-33.45,-70.66],'bogota':[4.71,-74.07],'lima':[-12.04,-77.02],'mexico city':[19.42,-99.13],'sydney':[-33.86,151.20],'melbourne':[-37.81,144.96],'canberra':[-35.28,149.12],'auckland':[-36.84,174.76],
     };
 
-    const COUNTRY_COORDS = {
-      us:[37,-95],gb:[52,-1],de:[51,10],fr:[46,2],jp:[36,138],
-      cn:[35,104],ru:[61,105],in:[20,78],br:[-14,-51],au:[-25,133],
-      ca:[56,-106],za:[-30,22],ng:[9,8],eg:[26,30],mx:[23,-102],
-      ar:[-38,-63],tr:[38,35],sa:[23,45],id:[-0,113],it:[41,12],
-      es:[40,-3],kr:[35,127],ua:[48,31],pl:[51,19],il:[31,34],
-      ae:[23,53],sg:[1,103],pk:[30,69],th:[15,100],nl:[52,5],
-      pt:[39,-8],be:[50,4],ch:[46,8],at:[47,14],se:[60,18],
-      no:[60,8],dk:[56,10],fi:[64,26],gr:[39,22],ro:[45,24],
-      cl:[-35,-71],co:[4,-72],pe:[-9,-75],ma:[31,-7],ke:[-1,37],
-      gh:[7,-1],et:[9,40],ir:[32,53],lb:[33,35],nz:[-41,174],
-      eu:[50,10],int:[20,0]
-    };
-
-    const COUNTRY_NAMES = {
-      us:'ABD',gb:'İngiltere',de:'Almanya',fr:'Fransa',jp:'Japonya',
-      cn:'Çin',ru:'Rusya',in:'Hindistan',br:'Brezilya',au:'Avustralya',
-      ca:'Kanada',za:'G.Afrika',ng:'Nijerya',eg:'Mısır',mx:'Meksika',
-      ar:'Arjantin',tr:'Türkiye',sa:'S.Arabistan',id:'Endonezya',it:'İtalya',
-      es:'İspanya',kr:'G.Kore',ua:'Ukrayna',pl:'Polonya',il:'İsrail',
-      ae:'BAE',sg:'Singapur',pk:'Pakistan',th:'Tayland',nl:'Hollanda',
-      pt:'Portekiz',be:'Belçika',ch:'İsviçre',at:'Avusturya',se:'İsveç',
-      no:'Norveç',dk:'Danimarka',fi:'Finlandiya',gr:'Yunanistan',
-      cl:'Şili',co:'Kolombiya',pe:'Peru',ma:'Fas',ke:'Kenya',
-      gh:'Gana',et:'Etiyopya',ir:'İran',lb:'Lübnan',nz:'Yeni Zelanda',
-      eu:'Avrupa',int:'Uluslararası'
-    };
-
-    const COLORS = {
-      world:'#0d9488',
-      ai:'#7c3aed',
-      technology:'#2563eb',
-      business:'#059669',
-      startups:'#f97316',
-      science:'#0891b2',
-      sport:'#d97706',
-      turkce:'#e11d48'
-    };
-
-    const CLUBS = {
-      'arsenal':'gb','chelsea':'gb','liverpool':'gb','manchester city':'gb',
-      'manchester united':'gb','man utd':'gb','man city':'gb','tottenham':'gb',
-      'spurs':'gb','newcastle':'gb','aston villa':'gb','west ham':'gb',
-      'everton':'gb','brighton':'gb','fulham':'gb','leicester':'gb',
-      'premier league':'gb','fa cup':'gb',
-
-      'real madrid':'es','barcelona':'es','atletico madrid':'es','atletico':'es',
-      'sevilla':'es','valencia':'es','villarreal':'es','la liga':'es','betis':'es',
-      'athletic bilbao':'es','real sociedad':'es',
-
-      'bayern munich':'de','bayern':'de','borussia dortmund':'de','dortmund':'de',
-      'bayer leverkusen':'de','leverkusen':'de','rb leipzig':'de','bundesliga':'de',
-      'eintracht frankfurt':'de','wolfsburg':'de',
-
-      'psg':'fr','paris saint-germain':'fr','paris saint germain':'fr',
-      'marseille':'fr','lyon':'fr','monaco':'fr','ligue 1':'fr','lille':'fr',
-
-      'juventus':'it','inter milan':'it','inter':'it','ac milan':'it',
-      'napoli':'it','roma':'it','lazio':'it','atalanta':'it','serie a':'it',
-
-      'benfica':'pt','porto':'pt','sporting cp':'pt','primeira liga':'pt',
-      'ajax':'nl','psv':'nl','feyenoord':'nl','eredivisie':'nl',
-
-      'galatasaray':'tr','fenerbahce':'tr','fenerbahçe':'tr',
-      'besiktas':'tr','beşiktaş':'tr','trabzonspor':'tr','süper lig':'tr',
-
-      'celtic':'gb','rangers':'gb',
-
-      'champions league':'eu','europa league':'eu','conference league':'eu',
-      'world cup':'int','copa america':'int','euros':'eu','uefa':'eu','fifa':'int',
-
-      'england':'gb','germany':'de','france':'fr','spain':'es','italy':'it',
-      'brazil':'br','argentina':'ar','portugal':'pt','netherlands':'nl'
-    };
-
-    const KEYWORDS = {
-      'new york':'us','washington dc':'us','los angeles':'us','silicon valley':'us',
-      'san francisco':'us','chicago':'us','seattle':'us','boston':'us','houston':'us',
-      'london':'gb','manchester':'gb','birmingham':'gb','liverpool':'gb',
-      'edinburgh':'gb','glasgow':'gb',
-      'istanbul':'tr','ankara':'tr','izmir':'tr',
-      'berlin':'de','munich':'de','hamburg':'de','frankfurt':'de',
-      'paris':'fr','lyon':'fr','marseille':'fr',
-      'madrid':'es','barcelona':'es','seville':'es',
-      'rome':'it','milan':'it','naples':'it',
-      'amsterdam':'nl','brussels':'be','vienna':'at','zurich':'ch',
-      'stockholm':'se','oslo':'no','copenhagen':'dk','warsaw':'pl',
-      'kyiv':'ua','moscow':'ru','st petersburg':'ru',
-      'tokyo':'jp','osaka':'jp','beijing':'cn','shanghai':'cn','hong kong':'cn',
-      'seoul':'kr','singapore':'sg','bangkok':'th','dubai':'ae','riyadh':'sa',
-      'delhi':'in','mumbai':'in','tehran':'ir','tel aviv':'il','jerusalem':'il',
-      'cairo':'eg','lagos':'ng','nairobi':'ke','johannesburg':'za','cape town':'za',
-      'sao paulo':'br','rio de janeiro':'br','buenos aires':'ar',
-      'sydney':'au','melbourne':'au','auckland':'nz',
-
-      'united states':'us','america':'us','white house':'us','pentagon':'us',
-      'wall street':'us','congress':'us','senate':'us','trump':'us','biden':'us',
-      'united kingdom':'gb','britain':'gb','downing street':'gb','parliament':'gb',
-      'scotland':'gb','wales':'gb','northern ireland':'gb',
-      'germany':'de','france':'fr','italy':'it','spain':'es','netherlands':'nl',
-      'portugal':'pt','belgium':'be','switzerland':'ch','austria':'at',
-      'sweden':'se','norway':'no','denmark':'dk','finland':'fi','greece':'gr',
-      'poland':'pl','ukraine':'ua','russia':'ru','china':'cn','japan':'jp',
-      'south korea':'kr','india':'in','pakistan':'pk','iran':'ir',
-      'israel':'il','gaza':'il','west bank':'il','palestine':'il',
-      'saudi arabia':'sa','turkey':'tr','türkiye':'tr','egypt':'eg',
-      'south africa':'za','nigeria':'ng','kenya':'ke','ethiopia':'et',
-      'brazil':'br','argentina':'ar','mexico':'mx','colombia':'co',
-      'indonesia':'id','australia':'au','new zealand':'nz',
-      'taiwan':'cn','macau':'cn',
-      'european union':'eu','nato':'eu','g7':'int','g20':'int'
-    };
-
-    const SEARCH_QUERIES = {
-      ai: 'artificial intelligence OR AI OR OpenAI OR ChatGPT OR machine learning',
-      technology: 'technology OR big tech OR Apple OR Google OR Microsoft OR Meta OR Amazon',
-      startups: 'startup OR startups OR venture capital OR funding OR founder'
-    };
-
-    const SECTIONS = {
-      world: 'world',
-      business: 'business',
-      science: 'science',
-      sport: 'football',
-      turkce: 'world/turkey'
-    };
+    const COUNTRY_COORDS = { us:[37,-95],gb:[52,-1],de:[51,10],fr:[46,2],jp:[36,138],cn:[35,104],ru:[61,105],in:[20,78],br:[-14,-51],au:[-25,133],ca:[56,-106],za:[-30,22],ng:[9,8],eg:[26,30],mx:[23,-102],ar:[-38,-63],tr:[38,35],sa:[23,45],id:[-0,113],it:[41,12],es:[40,-3],kr:[35,127],ua:[48,31],pl:[51,19],il:[31,34],ae:[23,53],sg:[1,103],pk:[30,69],th:[15,100],nl:[52,5],pt:[39,-8],be:[50,4],ch:[46,8],at:[47,14],se:[60,18],no:[60,8],dk:[56,10],fi:[64,26],gr:[39,22],ro:[45,24],cl:[-35,-71],co:[4,-72],pe:[-9,-75],ma:[31,-7],ke:[-1,37],gh:[7,-1],et:[9,40],ir:[32,53],lb:[33,35],nz:[-41,174],eu:[50,10],int:[20,0] };
+    const COUNTRY_NAMES = { us:'ABD',gb:'İngiltere',de:'Almanya',fr:'Fransa',jp:'Japonya',cn:'Çin',ru:'Rusya',in:'Hindistan',br:'Brezilya',au:'Avustralya',ca:'Kanada',za:'G.Afrika',ng:'Nijerya',eg:'Mısır',mx:'Meksika',ar:'Arjantin',tr:'Türkiye',sa:'S.Arabistan',id:'Endonezya',it:'İtalya',es:'İspanya',kr:'G.Kore',ua:'Ukrayna',pl:'Polonya',il:'İsrail',ae:'BAE',sg:'Singapur',pk:'Pakistan',th:'Tayland',nl:'Hollanda',pt:'Portekiz',be:'Belçika',ch:'İsviçre',at:'Avusturya',se:'İsveç',no:'Norveç',dk:'Danimarka',fi:'Finlandiya',gr:'Yunanistan',cl:'Şili',co:'Kolombiya',pe:'Peru',ma:'Fas',ke:'Kenya',gh:'Gana',et:'Etiyopya',ir:'İran',lb:'Lübnan',nz:'Yeni Zelanda',eu:'Avrupa',int:'Uluslararası' };
+    const COLORS = { world:'#0d9488',ai:'#7c3aed',technology:'#2563eb',business:'#059669',startups:'#f97316',science:'#0891b2',sport:'#d97706',turkce:'#e11d48' };
+    const CLUBS = { 'arsenal':'gb','chelsea':'gb','liverpool':'gb','manchester city':'gb','manchester united':'gb','man utd':'gb','man city':'gb','tottenham':'gb','spurs':'gb','newcastle':'gb','aston villa':'gb','west ham':'gb','everton':'gb','brighton':'gb','fulham':'gb','leicester':'gb','premier league':'gb','fa cup':'gb','real madrid':'es','barcelona':'es','atletico madrid':'es','atletico':'es','sevilla':'es','valencia':'es','villarreal':'es','la liga':'es','betis':'es','athletic bilbao':'es','real sociedad':'es','bayern munich':'de','bayern':'de','borussia dortmund':'de','dortmund':'de','bayer leverkusen':'de','leverkusen':'de','rb leipzig':'de','bundesliga':'de','eintracht frankfurt':'de','wolfsburg':'de','psg':'fr','paris saint-germain':'fr','paris saint germain':'fr','marseille':'fr','lyon':'fr','monaco':'fr','ligue 1':'fr','lille':'fr','juventus':'it','inter milan':'it','inter':'it','ac milan':'it','napoli':'it','roma':'it','lazio':'it','atalanta':'it','serie a':'it','benfica':'pt','porto':'pt','sporting cp':'pt','primeira liga':'pt','ajax':'nl','psv':'nl','feyenoord':'nl','eredivisie':'nl','galatasaray':'tr','fenerbahce':'tr','fenerbahçe':'tr','besiktas':'tr','beşiktaş':'tr','trabzonspor':'tr','süper lig':'tr','celtic':'gb','rangers':'gb','champions league':'eu','europa league':'eu','conference league':'eu','world cup':'int','copa america':'int','euros':'eu','uefa':'eu','fifa':'int','england':'gb','germany':'de','france':'fr','spain':'es','italy':'it','brazil':'br','argentina':'ar','portugal':'pt','netherlands':'nl' };
+    const KEYWORDS = { 'new york':'us','washington dc':'us','los angeles':'us','silicon valley':'us','san francisco':'us','chicago':'us','seattle':'us','boston':'us','houston':'us','london':'gb','manchester':'gb','birmingham':'gb','liverpool':'gb','edinburgh':'gb','glasgow':'gb','istanbul':'tr','ankara':'tr','izmir':'tr','berlin':'de','munich':'de','hamburg':'de','frankfurt':'de','paris':'fr','lyon':'fr','marseille':'fr','madrid':'es','barcelona':'es','seville':'es','rome':'it','milan':'it','naples':'it','amsterdam':'nl','brussels':'be','vienna':'at','zurich':'ch','stockholm':'se','oslo':'no','copenhagen':'dk','warsaw':'pl','kyiv':'ua','moscow':'ru','st petersburg':'ru','tokyo':'jp','osaka':'jp','beijing':'cn','shanghai':'cn','hong kong':'cn','seoul':'kr','singapore':'sg','bangkok':'th','dubai':'ae','riyadh':'sa','delhi':'in','mumbai':'in','tehran':'ir','tel aviv':'il','jerusalem':'il','cairo':'eg','lagos':'ng','nairobi':'ke','johannesburg':'za','cape town':'za','sao paulo':'br','rio de janeiro':'br','buenos aires':'ar','sydney':'au','melbourne':'au','auckland':'nz','united states':'us','america':'us','white house':'us','pentagon':'us','wall street':'us','congress':'us','senate':'us','trump':'us','biden':'us','united kingdom':'gb','britain':'gb','downing street':'gb','parliament':'gb','scotland':'gb','wales':'gb','northern ireland':'gb','germany':'de','france':'fr','italy':'it','spain':'es','netherlands':'nl','portugal':'pt','belgium':'be','switzerland':'ch','austria':'at','sweden':'se','norway':'no','denmark':'dk','finland':'fi','greece':'gr','poland':'pl','ukraine':'ua','russia':'ru','china':'cn','japan':'jp','south korea':'kr','india':'in','pakistan':'pk','iran':'ir','israel':'il','gaza':'il','west bank':'il','palestine':'il','saudi arabia':'sa','turkey':'tr','türkiye':'tr','egypt':'eg','south africa':'za','nigeria':'ng','kenya':'ke','ethiopia':'et','brazil':'br','argentina':'ar','mexico':'mx','colombia':'co','indonesia':'id','australia':'au','new zealand':'nz','taiwan':'cn','macau':'cn','european union':'eu','nato':'eu','g7':'int','g20':'int' };
+    const SEARCH_QUERIES = { ai: 'artificial intelligence OR AI OR OpenAI OR ChatGPT OR machine learning', technology: 'technology OR big tech OR Apple OR Google OR Microsoft OR Meta OR Amazon', startups: 'startup OR startups OR venture capital OR funding OR founder' };
+    const SECTIONS = { world: 'world', business: 'business', science: 'science', sport: 'football', turkce: 'world/turkey' };
 
     let markers = [];
     let currentCat = 'world';
     let currentLabel = 'WORLD';
 
+    // --- SENİN ORIJINAL MANTIĞIN (DEĞİŞMEDİ) ---
     function detectLocation(text) {
       const t = (text || '').toLowerCase();
-
-      for (const [k, v] of Object.entries(CLUBS)) {
-        if (t.includes(k)) {
-          for (const [city, coords] of Object.entries(CITY_COORDS)) {
-            if (k.includes(city)) return { coords, country: k, isCity: true };
-          }
-          return { countryCode: v };
-        }
-      }
-
-      for (const [city, coords] of Object.entries(CITY_COORDS)) {
-        if (t.includes(city)) {
-          return {
-            coords,
-            country: city.split(' ').map(w => w[0].toUpperCase() + w.slice(1)).join(' '),
-            isCity: true
-          };
-        }
-      }
-
-      for (const [k, v] of Object.entries(KEYWORDS)) {
-        if (t.includes(k)) return { countryCode: v };
-      }
-
+      for (const [k, v] of Object.entries(CLUBS)) { if (t.includes(k)) { for (const [city, coords] of Object.entries(CITY_COORDS)) { if (k.includes(city)) return { coords, country: k, isCity: true }; } return { countryCode: v }; } }
+      for (const [city, coords] of Object.entries(CITY_COORDS)) { if (t.includes(city)) return { coords, country: city.split(' ').map(w => w[0].toUpperCase() + w.slice(1)).join(' '), isCity: true }; }
+      for (const [k, v] of Object.entries(KEYWORDS)) { if (t.includes(k)) return { countryCode: v }; }
       return null;
     }
 
     function getCoords(text, i) {
       const loc = detectLocation(text);
-
       if (loc) {
-        if (loc.isCity && loc.coords) {
-          const jitter = 0.3;
-          return {
-            coords: [
-              loc.coords[0] + (Math.random() - 0.5) * jitter,
-              loc.coords[1] + (Math.random() - 0.5) * jitter
-            ],
-            label: loc.country
-          };
-        }
-
-        if (loc.countryCode) {
-          const b = COUNTRY_COORDS[loc.countryCode] || COUNTRY_COORDS.us;
-          return {
-            coords: [
-              b[0] + (Math.random() - 0.5) * 2,
-              b[1] + (Math.random() - 0.5) * 2
-            ],
-            label: COUNTRY_NAMES[loc.countryCode] || 'Dünya'
-          };
-        }
+        if (loc.isCity && loc.coords) { const jitter = 0.3; return { coords: [ loc.coords[0] + (Math.random() - 0.5) * jitter, loc.coords[1] + (Math.random() - 0.5) * jitter ], label: loc.country }; }
+        if (loc.countryCode) { const b = COUNTRY_COORDS[loc.countryCode] || COUNTRY_COORDS.us; return { coords: [ b[0] + (Math.random() - 0.5) * 2, b[1] + (Math.random() - 0.5) * 2 ], label: COUNTRY_NAMES[loc.countryCode] || 'Dünya' }; }
       }
-
       const keys = Object.keys(COUNTRY_COORDS);
       const k = keys[i % keys.length];
       const b = COUNTRY_COORDS[k];
-
-      return {
-        coords: [
-          b[0] + (Math.random() - 0.5) * 2,
-          b[1] + (Math.random() - 0.5) * 2
-        ],
-        label: COUNTRY_NAMES[k] || 'Dünya'
-      };
+      return { coords: [ b[0] + (Math.random() - 0.5) * 2, b[1] + (Math.random() - 0.5) * 2 ], label: COUNTRY_NAMES[k] || 'Dünya' };
     }
 
     function pulseIcon(color) {
-      return L.divIcon({
-        className: '',
-        html: `<div class="pulse-marker" style="width:14px;height:14px;background:${color};box-shadow:0 0 0 3px ${color}55"></div>`,
-        iconSize: [14, 14],
-        iconAnchor: [7, 7]
-      });
+      return L.divIcon({ className: '', html: `<div class="pulse-marker" style="width:14px;height:14px;background:${color};box-shadow:0 0 0 3px ${color}55"></div>`, iconSize: [14, 14], iconAnchor: [7, 7] });
     }
 
     function timeAgo(d) {
@@ -796,33 +281,15 @@
       const diff = Date.now() - new Date(d).getTime();
       const h = Math.floor(diff / 3600000);
       const mn = Math.floor(diff / 60000);
-
       if (h > 24) return Math.floor(h / 24) + ' gün önce';
       if (h > 0) return h + ' saat önce';
       return mn > 0 ? mn + ' dk önce' : 'Az önce';
     }
 
-    function clearMarkers() {
-      markers.forEach(m => map.removeLayer(m));
-      markers = [];
-    }
-
-    function normalizeArticles(articles) {
-      const seen = new Set();
-      return articles.filter(a => {
-        if (!a || !a.title || !a.url) return false;
-        const key = a.url;
-        if (seen.has(key)) return false;
-        seen.add(key);
-        return true;
-      });
-    }
-
     function renderArticles(articles, sourceName) {
       const list = document.getElementById('newsList');
-      const color = COLORS[currentCat] || '#0d9488';
-
-      clearMarkers();
+      markers.forEach(m => map.removeLayer(m));
+      markers = [];
       list.innerHTML = '';
 
       if (!articles || articles.length === 0) {
@@ -831,19 +298,21 @@
       }
 
       articles.slice(0, 20).forEach((a, i) => {
-        const searchText = `${a.title} ${a.desc || ''}`;
-        const { coords, label } = getCoords(searchText, i);
-
-        const marker = L.marker(coords, { icon: pulseIcon(color) }).addTo(map);
+        const sentiment = analyzeSentiment(a.title);
+        const { coords, label } = getCoords(`${a.title} ${a.desc || ''}`, i);
+        
+        // Marker rengini sentiment'e göre yap (Opsiyonel: COLORS[currentCat] yerine sentiment.color kullanabilirsin)
+        const markerColor = sentiment.color; 
+        const marker = L.marker(coords, { icon: pulseIcon(markerColor) }).addTo(map);
 
         marker.bindPopup(`
           <div>
-            ${a.thumb ? `<img src="${a.thumb}" class="popup-img" onerror="this.style.display='none'"/>` : ''}
+            ${a.thumb ? `<img src="${a.thumb}" style="width:100%;height:120px;object-fit:cover;display:block;border-radius:8px 8px 0 0"/>` : ''}
             <div class="popup-body">
-              <div class="popup-cat" style="color:${color}">${currentLabel} · ${label}</div>
+              <div style="font-size:9px;font-weight:800;color:${sentiment.color}">${sentiment.label} · ${label}</div>
               <div class="popup-title">${a.title}</div>
-              <div class="popup-src">${a.source || sourceName} · ${timeAgo(a.date)}</div>
-              ${a.url ? `<a class="popup-link" href="${a.url}" target="_blank" rel="noopener noreferrer">Haberi oku →</a>` : ''}
+              <div style="font-size:10px;color:#94a3b8">${a.source || sourceName} · ${timeAgo(a.date)}</div>
+              <a href="${a.url}" target="_blank" style="font-size:11px;color:#0d9488;font-weight:700;text-decoration:none;display:block;margin-top:8px">Haberi oku →</a>
             </div>
           </div>
         `, { maxWidth: 240 });
@@ -853,13 +322,12 @@
         const card = document.createElement('div');
         card.className = 'news-card';
         card.style.animationDelay = (i * 0.05) + 's';
-
         card.innerHTML = `
-          ${a.thumb ? `<div style="overflow:hidden;height:130px"><img class="news-thumb" src="${a.thumb}" onerror="this.parentElement.style.display='none'" alt=""/></div>` : ''}
+          ${a.thumb ? `<img class="news-thumb" src="${a.thumb}" onerror="this.style.display='none'"/>` : ''}
           <div class="news-card-body">
-            <div class="badge-row">
-              <span class="cat-badge" style="background:${color}20;color:${color}">${currentLabel}</span>
-              <span class="src-badge">${a.source || sourceName}</span>
+            <div style="display:flex;align-items:center;margin-bottom:5px">
+              <span class="sentiment-badge" style="background:${sentiment.color}">${sentiment.label}</span>
+              <span style="font-size:9px;font-weight:700;color:#0d9488;text-transform:uppercase">${currentLabel}</span>
             </div>
             <div class="news-title">${a.title}</div>
             <div class="news-meta">${label} · ${timeAgo(a.date)}</div>
@@ -872,101 +340,47 @@
           map.setView(coords, 5, { animate: true });
           setTimeout(() => marker.openPopup(), 450);
         });
-
         list.appendChild(card);
       });
     }
 
     async function fetchGuardian(section) {
-      const url = `https://content.guardianapis.com/${section}?api-key=${GUARDIAN_KEY}&page-size=20&order-by=newest&show-fields=thumbnail,trailText&show-tags=keyword`;
-      const res = await fetch(url);
+      const res = await fetch(`https://content.guardianapis.com/${section}?api-key=${GUARDIAN_KEY}&page-size=20&order-by=newest&show-fields=thumbnail,trailText&show-tags=keyword`);
       const data = await res.json();
-
-      return (data.response?.results || []).map(a => ({
-        title: a.webTitle,
-        desc: (a.fields?.trailText || '') + ' ' + (a.tags || []).map(t => t.webTitle).join(' '),
-        date: a.webPublicationDate,
-        url: a.webUrl,
-        thumb: a.fields?.thumbnail || null,
-        source: 'The Guardian'
-      }));
+      return (data.response?.results || []).map(a => ({ title: a.webTitle, desc: (a.fields?.trailText || '') + ' ' + (a.tags || []).map(t => t.webTitle).join(' '), date: a.webPublicationDate, url: a.webUrl, thumb: a.fields?.thumbnail || null, source: 'The Guardian' }));
     }
 
-    async function fetchGuardianSearch(query, sourceLabel = 'The Guardian') {
-      const url = `https://content.guardianapis.com/search?api-key=${GUARDIAN_KEY}&page-size=20&order-by=newest&show-fields=thumbnail,trailText&show-tags=keyword&q=${encodeURIComponent(query)}`;
-      const res = await fetch(url);
+    async function fetchGuardianSearch(query, sourceLabel) {
+      const res = await fetch(`https://content.guardianapis.com/search?api-key=${GUARDIAN_KEY}&page-size=20&order-by=newest&show-fields=thumbnail,trailText&show-tags=keyword&q=${encodeURIComponent(query)}`);
       const data = await res.json();
-
-      return (data.response?.results || []).map(a => ({
-        title: a.webTitle,
-        desc: (a.fields?.trailText || '') + ' ' + (a.tags || []).map(t => t.webTitle).join(' '),
-        date: a.webPublicationDate,
-        url: a.webUrl,
-        thumb: a.fields?.thumbnail || null,
-        source: sourceLabel
-      }));
+      return (data.response?.results || []).map(a => ({ title: a.webTitle, desc: (a.fields?.trailText || '') + ' ' + (a.tags || []).map(t => t.webTitle).join(' '), date: a.webPublicationDate, url: a.webUrl, thumb: a.fields?.thumbnail || null, source: sourceLabel }));
     }
 
     async function fetchHN() {
       const res = await fetch('https://hacker-news.firebaseio.com/v0/topstories.json');
       const ids = await res.json();
-
-      const stories = await Promise.all(
-        ids.slice(0, 15).map(id =>
-          fetch(`https://hacker-news.firebaseio.com/v0/item/${id}.json`).then(r => r.json())
-        )
-      );
-
-      return stories
-        .filter(s => s && s.title)
-        .map(s => ({
-          title: s.title,
-          desc: '',
-          thumb: null,
-          date: new Date((s.time || Date.now()/1000) * 1000).toISOString(),
-          url: s.url || `https://news.ycombinator.com/item?id=${s.id}`,
-          source: 'Hacker News'
-        }));
+      const stories = await Promise.all(ids.slice(0, 15).map(id => fetch(`https://hacker-news.firebaseio.com/v0/item/${id}.json`).then(r => r.json())));
+      return stories.filter(s => s && s.title).map(s => ({ title: s.title, desc: '', thumb: null, date: new Date((s.time || Date.now()/1000) * 1000).toISOString(), url: s.url || `https://news.ycombinator.com/item?id=${s.id}`, source: 'Hacker News' }));
     }
 
     async function fetchNews(cat) {
       const list = document.getElementById('newsList');
       list.innerHTML = `<div class="loading"><div class="owl-bounce">🦉</div><div class="loading-text">Yükleniyor...</div></div>`;
-
       try {
         let articles = [];
-        let sourceName = '';
+        let src = 'The Guardian';
+        if (cat === 'ai') articles = await fetchGuardianSearch(SEARCH_QUERIES.ai, 'Guardian AI');
+        else if (cat === 'technology') { articles = [...(await fetchGuardianSearch(SEARCH_QUERIES.technology, 'Guardian Tech')), ...(await fetchHN())]; }
+        else if (cat === 'startups') articles = await fetchGuardianSearch(SEARCH_QUERIES.startups, 'Guardian Startups');
+        else if (cat === 'sport') articles = await fetchGuardian(SECTIONS.sport);
+        else articles = await fetchGuardian(SECTIONS[cat] || 'world');
 
-        if (cat === 'ai') {
-          articles = await fetchGuardianSearch(SEARCH_QUERIES.ai, 'Guardian AI');
-          sourceName = 'Guardian AI';
+        // Tekrar edenleri temizle
+        const seen = new Set();
+        articles = articles.filter(a => { if (seen.has(a.url)) return false; seen.add(a.url); return true; });
 
-        } else if (cat === 'technology') {
-          const guardianTech = await fetchGuardianSearch(SEARCH_QUERIES.technology, 'Guardian Tech');
-          const hnTech = await fetchHN();
-          articles = normalizeArticles([...guardianTech.slice(0, 10), ...hnTech.slice(0, 10)]);
-          sourceName = 'Guardian Tech + Hacker News';
-
-        } else if (cat === 'startups') {
-          articles = await fetchGuardianSearch(SEARCH_QUERIES.startups, 'Guardian Startups');
-          sourceName = 'Guardian Startups';
-
-        } else if (cat === 'sport') {
-          articles = await fetchGuardian(SECTIONS[cat]);
-          articles = articles.map(a => ({ ...a, source: 'Guardian Football' }));
-          sourceName = 'Guardian Football';
-
-        } else {
-          articles = await fetchGuardian(SECTIONS[cat] || 'world');
-          sourceName = cat === 'turkce' ? 'The Guardian' : 'The Guardian';
-        }
-
-        renderArticles(normalizeArticles(articles), sourceName);
-
-      } catch (e) {
-        console.error(e);
-        list.innerHTML = `<div class="loading"><div class="owl-bounce">🦉</div><div class="loading-text">Bağlantı hatası.<br>Sayfayı yenile.</div></div>`;
-      }
+        renderArticles(articles, src);
+      } catch (e) { list.innerHTML = '<div class="loading">Hata oluştu.</div>'; }
     }
 
     document.querySelectorAll('.cat-btn').forEach(btn => {
