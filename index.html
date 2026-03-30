@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
   <title>OWLS — Global News Map</title>
 
-  <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-TG3Q7KX51N"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -14,11 +13,9 @@
     gtag('config', 'G-TG3Q7KX51N');
   </script>
 
-  <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
 
-  <!-- Leaflet Harita -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 
@@ -165,7 +162,6 @@
 </head>
 <body data-theme="light">
 
-<!-- SPLASH SCREEN -->
 <div class="splash" id="splash">
   <div class="splash-owl">🦉</div>
   <div class="splash-title">OWLS</div>
@@ -205,7 +201,6 @@
   </div>
 </div>
 
-<!-- DOPAMIN POPUP -->
 <div id="dopaminePopup" class="dopamine-popup">
   <div class="dopamine-icon">🔥</div>
   <div>
@@ -214,7 +209,6 @@
   </div>
 </div>
 
-<!-- IN-APP READING MODAL -->
 <div class="modal-overlay" id="newsModal">
   <div class="modal-content">
     <span class="modal-close" onclick="closeModal()">×</span>
@@ -226,7 +220,6 @@
         <span id="modalDate"></span>
       </div>
       
-      <!-- REKLAM ALANI 1 (DETAY İÇİ) -->
       <div class="ad-placeholder modal-ad">
         <span style="font-size: 20px; margin-bottom: 5px;">💰</span>
         AdSense Display Banner Area
@@ -304,53 +297,55 @@
   L.control.zoom({ position: 'topright' }).addTo(map);
   L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png').addTo(map);
 
-  // Kapsamlı Şehir Kütüphanesi (NOKTA ATIŞI İÇİN)
+  // NOKTA ATIŞI İÇİN KAPSAMLI ŞEHİR VE ÜLKE KÜTÜPHANESİ
   const CITY_COORDS = { 'new york':[40.71,-74.00],'washington':[38.90,-77.03],'los angeles':[34.05,-118.24],'chicago':[41.87,-87.62],'san francisco':[37.77,-122.41],'seattle':[47.60,-122.33],'boston':[42.36,-71.05],'miami':[25.77,-80.19],'houston':[29.76,-95.36],'silicon valley':[37.38,-122.08],'london':[51.50,-0.12],'manchester':[53.48,-2.24],'birmingham':[52.48,-1.89],'liverpool':[53.40,-2.98],'edinburgh':[55.95,-3.19],'glasgow':[55.86,-4.25],'istanbul':[41.01,28.97],'ankara':[39.92,32.85],'izmir':[38.41,27.13],'bursa':[40.18,29.06],'antalya':[36.88,30.70],'trabzon':[41.00,39.72],'berlin':[52.52,13.40],'munich':[48.13,11.57],'hamburg':[53.55,9.99],'frankfurt':[50.11,8.68],'cologne':[50.93,6.96],'dortmund':[51.51,7.46],'paris':[48.85,2.35],'lyon':[45.74,4.83],'marseille':[43.29,5.38],'nice':[43.70,7.26],'bordeaux':[44.83,-0.57],'madrid':[40.41,-3.70],'barcelona':[41.38,2.17],'seville':[37.38,-5.99],'valencia':[39.46,-0.37],'bilbao':[43.26,-2.92],'rome':[41.90,12.49],'milan':[45.46,9.18],'naples':[40.85,14.27],'turin':[45.07,7.68],'florence':[43.76,11.25],'amsterdam':[52.37,4.89],'brussels':[50.85,4.35],'vienna':[48.20,16.37],'zurich':[47.37,8.54],'stockholm':[59.33,18.06],'oslo':[59.91,10.75],'copenhagen':[55.67,12.56],'warsaw':[52.22,21.01],'prague':[50.07,14.43],'budapest':[47.49,19.04],'athens':[37.97,23.72],'lisbon':[38.71,-9.14],'kyiv':[50.45,30.52],'moscow':[55.75,37.61],'st petersburg':[59.93,30.31],'tokyo':[35.68,139.69],'osaka':[34.69,135.50],'beijing':[39.90,116.40],'shanghai':[31.22,121.47],'hong kong':[22.31,114.17],'seoul':[37.56,126.97],'singapore':[1.35,103.81],'bangkok':[13.75,100.51],'delhi':[28.63,77.21],'mumbai':[19.07,72.87],'bangalore':[12.97,77.59],'islamabad':[33.72,73.06],'karachi':[24.86,67.01],'dubai':[25.20,55.27],'riyadh':[24.68,46.72],'tehran':[35.69,51.38],'tel aviv':[32.08,34.78],'jerusalem':[31.76,35.21],'beirut':[33.88,35.49],'kabul':[34.52,69.17],'cairo':[30.04,31.23],'lagos':[6.45,3.40],'nairobi':[-1.28,36.81],'johannesburg':[-26.20,28.04],'cape town':[-33.92,18.42],'addis ababa':[9.03,38.74],'accra':[5.55,-0.20],'sao paulo':[-23.54,-46.63],'rio de janeiro':[-22.90,-43.17],'buenos aires':[-34.60,-58.38],'santiago':[-33.45,-70.66],'bogota':[4.71,-74.07],'lima':[-12.04,-77.02],'mexico city':[19.42,-99.13],'sydney':[-33.86,151.20],'melbourne':[-37.81,144.96],'canberra':[-35.28,149.12],'auckland':[-36.84,174.76] };
-  const COUNTRY_COORDS = { us:[37,-95], gb:[54,-2], de:[51,10], tr:[38,35], fr:[46,2], jp:[36,138], cn:[35,104], ru:[61,105], in:[20,78], au:[-25,133], ca:[56,-106], za:[-30,22], ng:[9,8], eg:[26,30], mx:[23,-102], ar:[-38,-63], sa:[23,45], id:[-0,113], it:[41,12], es:[40,-3], kr:[35,127], ua:[49,31], pl:[51,19], il:[31,34] };
-  const CNAMES = { us:'USA', gb:'UK', de:'Germany', tr:'Turkey', fr:'France', jp:'Japan', cn:'China', ru:'Russia', in:'India', au:'Australia', ca:'Canada', za:'South Africa', ng:'Nigeria', eg:'Egypt', mx:'Mexico', ar:'Argentina', sa:'Saudi Arabia', id:'Indonesia', it:'Italy', es:'Spain', kr:'S. Korea', ua:'Ukraine', pl:'Poland', il:'Israel' };
+  const COUNTRY_COORDS = { us:[37,-95], gb:[54,-2], de:[51,10], tr:[38,35], fr:[46,2], jp:[36,138], cn:[35,104], ru:[61,105], in:[20,78], au:[-25,133], ca:[56,-106], za:[-30,22], ng:[9,8], eg:[26,30], mx:[23,-102], ar:[-38,-63], sa:[23,45], id:[-0,113], it:[41,12], es:[40,-3], kr:[35,127], ua:[49,31], pl:[51,19], il:[31,34], ae:[23,53], qa:[25,51] };
+  const CNAMES = { us:'USA', gb:'UK', de:'Germany', tr:'Turkey', fr:'France', jp:'Japan', cn:'China', ru:'Russia', in:'India', au:'Australia', ca:'Canada', za:'South Africa', ng:'Nigeria', eg:'Egypt', mx:'Mexico', ar:'Argentina', sa:'Saudi Arabia', id:'Indonesia', it:'Italy', es:'Spain', kr:'S. Korea', ua:'Ukraine', pl:'Poland', il:'Israel', ae:'UAE', qa:'Qatar' };
   
-  // Detaylı Kelime Havuzu
-  const KEYWORDS = { 'usa':'us', 'america':'us', 'biden':'us', 'white house':'us', 'england':'gb', 'bbc':'gb', 'premier league':'gb', 'scotland':'gb', 'macron':'fr', 'putin':'ru', 'gaza':'il', 'palestine':'il' };
+  // Regex tabanlı kelime arayıcı ("chrome" ile "rome" karışmasın diye)
+  const hasWord = (word, text) => new RegExp("\\b" + word + "\\b", "i").test(text);
+
+  const KEYWORDS = { 'usa':'us', 'america':'us', 'biden':'us', 'white house':'us', 'england':'gb', 'bbc':'gb', 'premier league':'gb', 'scotland':'gb', 'macron':'fr', 'putin':'ru', 'gaza':'il', 'palestine':'il', 'middle east':'ae' };
   const COLORS = { 'world':'#0d9488', 'technology':'#7c3aed', 'business':'#059669', 'science':'#0891b2', 'health':'#dc2626', 'sport':'#d97706' };
   
   let markers = [];
   let currentQ = 'world';
   let dopamineTimer;
 
-  // GELİŞMİŞ NOKTA ATIŞI LOKASYON BULUCU (Declustering)
-  function getCoords(text) {
+  // GELİŞMİŞ NOKTA ATIŞI VE DAĞILIM ALGORİTMASI
+  function getCoords(text, source) {
     const t = (text || "").toLowerCase();
     
-    // 1. Önce Şehirlere Bak (Nokta Atışı - En Yüksek Öncelik)
+    // 1. Şehir kontrolü (Nokta atışı, çok küçük sapma ile)
     for (const [city, coords] of Object.entries(CITY_COORDS)) {
-      if (t.includes(city)) {
+      if (hasWord(city, t)) {
         return {
-          coords: [coords[0] + (Math.random()-.5)*1.2, coords[1] + (Math.random()-.5)*1.2],
-          country: city.charAt(0).toUpperCase() + city.slice(1) // Şehir ismini döndür
+          coords: [coords[0] + (Math.random()-.5)*0.5, coords[1] + (Math.random()-.5)*0.5],
+          country: city.charAt(0).toUpperCase() + city.slice(1) // Şehir ismini yazdır
         };
       }
     }
 
-    // 2. Şehir yoksa Ülke Kelimelerine Bak
+    // 2. Ülke veya Anahtar Kelime kontrolü
     let code = null;
-    for (const [k, v] of Object.entries(KEYWORDS)) { if(t.includes(k)) { code = v; break; } }
+    for (const [k, v] of Object.entries(KEYWORDS)) { if(hasWord(k, t)) { code = v; break; } }
     if(!code) {
-      for (const [k, v] of Object.entries(CNAMES)) { if(t.includes(v.toLowerCase())) { code = k; break; } }
+      for (const [k, v] of Object.entries(CNAMES)) { if(hasWord(v.toLowerCase(), t)) { code = k; break; } }
     }
 
-    // 3. Ülke varsa Ülke içine geniş alana dağıt
-    if (code) {
-      const b = COUNTRY_COORDS[code];
-      return {
-        coords: [b[0] + (Math.random()-.5)*6, b[1] + (Math.random()-.5)*6], // Geniş Dağılım
-        country: CNAMES[code]
-      };
+    // 3. Bulunamadıysa Haber Kaynağına Göre YEDEKLEME (Fallback)
+    if(!code) {
+        if(source.includes('NYT') || source.includes('CNN') || source.includes('TechCrunch') || source.includes('The Verge') || source.includes('CNBC') || source.includes('ESPN') || source.includes('Wired')) code = 'us';
+        else if(source.includes('BBC') || source.includes('Sky') || source.includes('Guardian')) code = 'gb';
+        else if(source.includes('Al Jazeera')) code = 'qa';
+        else code = 'us'; // Son çare
     }
 
-    // 4. Hiçbir lokasyon bulunamadıysa -> "Global" olarak Okyanuslara at
+    // 4. Ülke içine mantıklı dağıtım (okyanusa taşmayı engeller)
+    const b = COUNTRY_COORDS[code];
     return {
-      coords: [(Math.random() * 80) - 40, (Math.random() * 200) - 100], // Rastgele Okyanus / Boşluk
-      country: 'Global'
+      coords: [b[0] + (Math.random()-.5)*2.5, b[1] + (Math.random()-.5)*2.5], 
+      country: CNAMES[code]
     };
   }
 
@@ -379,12 +374,16 @@
     document.getElementById('modalTitle').innerText = article.title;
     document.getElementById('modalSource').innerText = article.source;
     document.getElementById('modalDate').innerText = timeAgo(article.date);
+    
     document.getElementById('modalText').innerText = article.trailText || "Click the button below to read the full coverage of this story on the original publisher's website. We keep you on map to continue exploring.";
     document.getElementById('modalLink').href = article.url;
+    
     document.getElementById('newsModal').classList.add('active');
   }
 
-  function closeModal() { document.getElementById('newsModal').classList.remove('active'); }
+  function closeModal() {
+    document.getElementById('newsModal').classList.remove('active');
+  }
 
   // --- DOPAMIN POPUP ---
   function triggerDopamine(articles) {
@@ -403,11 +402,11 @@
         
         popup.onclick = () => { popup.classList.remove('show'); openModal(rnd); };
         popup.classList.add('show');
-        setTimeout(() => popup.classList.remove('show'), 7000);
+        setTimeout(() => popup.classList.remove('show'), 7000); 
     }, randomTime);
   }
 
-  // --- HABER ÇEKME VE LİSTELEME (ÇOKLU KAYNAK YÖNETİMİ) ---
+  // --- HABER ÇEKME VE LİSTELEME ---
   function renderArticles(articles) {
     const list = document.getElementById('newsList');
     const color = COLORS[currentQ] || '#0d9488';
@@ -420,13 +419,13 @@
 
     articles.slice(0,30).forEach((a, i) => {
       const fullText = a.title + ' ' + (a.trailText || '');
-      const {coords, country} = getCoords(fullText);
+      const {coords, country} = getCoords(fullText, a.source);
 
       const marker = L.marker(coords, {icon: pulseIcon(color)}).addTo(map);
       marker.bindPopup(`<b>${a.title}</b><br><small>${a.source}</small>`);
       markers.push(marker);
 
-      // REKLAM KARTI EKLEME (Her 4 haberde bir)
+      // REKLAM KARTI EKLEME
       if (i > 0 && i % 4 === 0) {
         const adCard = document.createElement('div');
         adCard.className = 'ad-placeholder feed-ad';
@@ -449,7 +448,7 @@
       card.onclick = () => {
         document.querySelectorAll('.news-card').forEach(c => c.classList.remove('active'));
         card.classList.add('active');
-        map.flyTo(coords, 5, { duration: 1.5, easeLinearity: 0.25 });
+        map.flyTo(coords, 6, { duration: 1.5, easeLinearity: 0.25 });
         openModal(a); 
       };
       list.appendChild(card);
@@ -458,7 +457,7 @@
     triggerDopamine(articles);
   }
 
-  // RSS Çekici
+  // RSS Haber Çekici
   async function fetchRSS(url, sourceName) {
     try {
       const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`);
@@ -471,7 +470,7 @@
     } catch(e) { return []; }
   }
 
-  // Ana Dağıtıcı (Guardian + RSS Harmanlama)
+  // Ana Dağıtıcı Algoritma
   async function fetchNews(category) {
     const list = document.getElementById('newsList');
     list.innerHTML = `<div class="loading"><div class="owl-loading">🦉</div><div class="loading-text">Scanning Globe...</div></div>`;
@@ -480,9 +479,9 @@
       let articles = [];
       const GUARDIAN_KEY = '0a321643-aaab-4c6a-9185-1762685abe3d';
 
-      // 1. Guardian API'den çekim (Eğer spor değilse)
+      // 1. Guardian API (Sağlık veya Spor değilse)
       if (category !== "sport" && category !== "health") {
-        const url = `https://content.guardianapis.com/${category}?api-key=${GUARDIAN_KEY}&page-size=20&show-fields=thumbnail,trailText&order-by=newest`;
+        const url = `https://content.guardianapis.com/${category}?api-key=${GUARDIAN_KEY}&page-size=15&show-fields=thumbnail,trailText&order-by=newest`;
         const res = await fetch(url);
         const data = await res.json();
         const gArts = (data.response?.results || []).map(a => ({
@@ -492,24 +491,32 @@
         articles = [...articles, ...gArts];
       }
 
-      // 2. RSS Ek Kaynakları (Kategoriye Göre Zenginleştirme)
+      // 2. RSS MEDYA ORDUSU
       if (category === 'world') {
         const alJazeera = await fetchRSS("https://www.aljazeera.com/xml/rss/all.xml", "Al Jazeera");
         const bbcWorld = await fetchRSS("http://feeds.bbci.co.uk/news/world/rss.xml", "BBC World");
-        articles = [...articles, ...alJazeera, ...bbcWorld];
+        const nytWorld = await fetchRSS("https://rss.nytimes.com/services/xml/rss/nyt/World.xml", "NY Times");
+        articles = [...articles, ...alJazeera, ...bbcWorld, ...nytWorld];
       } 
       else if (category === 'technology') {
         const techCrunch = await fetchRSS("https://techcrunch.com/feed/", "TechCrunch");
-        articles = [...articles, ...techCrunch];
+        const theVerge = await fetchRSS("https://www.theverge.com/rss/index.xml", "The Verge");
+        articles = [...articles, ...techCrunch, ...theVerge];
       }
       else if (category === 'business') {
         const nytBiz = await fetchRSS("https://rss.nytimes.com/services/xml/rss/nyt/Business.xml", "NY Times");
-        articles = [...articles, ...nytBiz];
+        const cnbc = await fetchRSS("https://search.cnbc.com/rs/search/combinedcms/view.xml?profile=12000000&id=10000664", "CNBC");
+        articles = [...articles, ...nytBiz, ...cnbc];
       }
       else if (category === 'health') {
         const bbcHealth = await fetchRSS("http://feeds.bbci.co.uk/news/health/rss.xml", "BBC Health");
         const nytHealth = await fetchRSS("https://rss.nytimes.com/services/xml/rss/nyt/Health.xml", "NY Times");
         articles = [...bbcHealth, ...nytHealth];
+      }
+      else if (category === 'science') {
+        const spaceCom = await fetchRSS("https://www.space.com/feeds/all", "Space.com");
+        const nytSci = await fetchRSS("https://rss.nytimes.com/services/xml/rss/nyt/Science.xml", "NY Times");
+        articles = [...articles, ...spaceCom, ...nytSci];
       }
       else if (category === 'sport') {
         const bbcSport = await fetchRSS("http://feeds.bbci.co.uk/sport/football/rss.xml", "BBC Sport");
@@ -517,11 +524,11 @@
         articles = [...bbcSport, ...espn];
       }
 
-      // Başlığa göre benzersizleri filtrele
+      // 3. Tekrar eden haberleri sil
       const seen = new Set();
       articles = articles.filter(a => { if(!a.title || seen.has(a.title)) return false; seen.add(a.title); return true; });
 
-      // Karmaşık bir şekilde karıştır
+      // 4. Rastgele karıştır ki hep aynı kaynak üstte olmasın
       articles = articles.sort(() => Math.random() - 0.5);
 
       renderArticles(articles);
@@ -530,6 +537,7 @@
     }
   }
 
+  // Kategori Butonları
   document.querySelectorAll('.cat-btn').forEach(btn => {
     btn.onclick = function() {
       document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
