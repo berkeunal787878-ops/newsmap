@@ -192,21 +192,21 @@
     </div>
   </div>
   <div class="cat-bar">
-    <button class="cat-btn active" data-cat="world" data-label="DÜNYA">🌍 Dünya</button>
-    <button class="cat-btn" data-cat="technology" data-label="TEKNOLOJİ">💻 Teknoloji</button>
-    <button class="cat-btn" data-cat="business" data-label="EKONOMİ">📈 Ekonomi</button>
-    <button class="cat-btn" data-cat="science" data-label="BİLİM">🔬 Bilim</button>
-    <button class="cat-btn" data-cat="health" data-label="SAĞLIK">❤️ Sağlık</button>
-    <button class="cat-btn" data-cat="sport" data-label="SPOR">⚽ Spor</button>
-    <button class="cat-btn" data-cat="turkce" data-label="TÜRKÇE">🇹🇷 Türkçe</button>
-  </div>
+  <button class="cat-btn active" data-cat="world" data-label="WORLD">🌍 World</button>
+  <button class="cat-btn" data-cat="ai" data-label="AI">🤖 AI</button>
+  <button class="cat-btn" data-cat="technology" data-label="TECH">💻 Tech</button>
+  <button class="cat-btn" data-cat="business" data-label="BUSINESS">📈 Business</button>
+  <button class="cat-btn" data-cat="startups" data-label="STARTUPS">🚀 Startups</button>
+  <button class="cat-btn" data-cat="science" data-label="SCIENCE">🔬 Science</button>
+  <button class="cat-btn" data-cat="turkce" data-label="TÜRKÇE">🇹🇷 Türkçe</button>
+</div>
 </div>
 
 <div class="layout">
   <div id="map"></div>
   <div class="sidebar">
     <div class="sidebar-header">
-      <span>Canlı Haberler</span>
+      <span>Live Global Feed</span>
       <span class="live-dot">CANLI</span>
     </div>
     <div class="news-list" id="newsList">
@@ -311,8 +311,14 @@ const COUNTRY_NAMES = {
 };
 
 const COLORS = {
-  world:'#0d9488', technology:'#7c3aed', business:'#059669',
-  science:'#0891b2', health:'#dc2626', sport:'#d97706', turkce:'#e11d48'
+  world:'#0d9488',
+  ai:'#7c3aed',
+  technology:'#2563eb',
+  business:'#059669',
+  startups:'#f97316',
+  science:'#0891b2',
+  turkce:'#e11d48'
+  
 };
 
 // Futbol kulüpleri
@@ -540,24 +546,40 @@ async function fetchHN() {
 }
 
 const SECTIONS = {
-  world:'world', business:'business', science:'science',
-  health:'healthcare', sport:'football', turkce:'world/turkey'
+  world:'world',
+  business:'business',
+  science:'science',
+  turkce:'world/turkey'
 };
-
+  
 async function fetchNews(cat) {
-  const list=document.getElementById('newsList');
-  list.innerHTML=`<div class="loading"><div class="owl-bounce">🦉</div><div class="loading-text">Yükleniyor...</div></div>`;
+  const list = document.getElementById('newsList');
+  list.innerHTML = `<div class="loading"><div class="owl-bounce">🦉</div><div class="loading-text">Yükleniyor...</div></div>`;
+
   try {
-    let articles=[], sourceName='';
-    if(cat==='technology') {
-      articles=await fetchHN(); sourceName='Hacker News';
+    let articles = [];
+    let sourceName = '';
+
+    if (cat === 'ai') {
+      articles = await fetchGuardianSearch(SEARCH_QUERIES.ai);
+      sourceName = 'Guardian AI';
+    } else if (cat === 'technology') {
+      const guardianTech = await fetchGuardianSearch(SEARCH_QUERIES.technology);
+      const hnTech = await fetchHN();
+      articles = [...guardianTech.slice(0, 10), ...hnTech.slice(0, 10)];
+      sourceName = 'Guardian + Hacker News';
+    } else if (cat === 'startups') {
+      articles = await fetchGuardianSearch(SEARCH_QUERIES.startups);
+      sourceName = 'Guardian Startups';
     } else {
-      articles=await fetchGuardian(SECTIONS[cat]||'world');
-      sourceName = cat==='sport' ? 'Guardian Football' : 'The Guardian';
+      articles = await fetchGuardian(SECTIONS[cat] || 'world');
+      sourceName = 'The Guardian';
     }
+
     renderArticles(articles, sourceName);
-  } catch(e) {
-    list.innerHTML=`<div class="loading"><div class="owl-bounce">🦉</div><div class="loading-text">Bağlantı hatası.<br>Sayfayı yenile.</div></div>`;
+  } catch (e) {
+    list.innerHTML = `<div class="loading"><div class="owl-bounce">🦉</div><div class="loading-text">Bağlantı hatası.<br>Sayfayı yenile.</div></div>`;
+    console.error(e);
   }
 }
 
