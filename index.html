@@ -3,109 +3,233 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>NewsMap — Dünya Haberleri</title>
+<title>OWLS — World News Map</title>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f4f6f9; color: #1a1a2e; }
+  body { font-family: 'Inter', sans-serif; background: #f0f7f7; color: #1a2e2e; }
 
+  /* HEADER */
   .header {
-    background: #fff; border-bottom: 1px solid #e8eaf0;
-    padding: 14px 20px; display: flex; align-items: center;
-    justify-content: space-between; position: sticky; top: 0; z-index: 1000;
+    background: #fff;
+    border-bottom: 1px solid #d0eaea;
+    padding: 0 20px;
+    height: 58px;
+    display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 1000;
   }
-  .logo { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
-  .logo span { color: #2563eb; }
 
-  .category-bar { display: flex; gap: 8px; flex-wrap: wrap; }
+  .logo {
+    display: flex; align-items: center; gap: 10px;
+    text-decoration: none;
+  }
+
+  .owl-icon {
+    width: 36px; height: 36px;
+    animation: owlBlink 4s infinite;
+  }
+
+  @keyframes owlBlink {
+    0%, 90%, 100% { transform: scaleY(1); }
+    92% { transform: scaleY(0.1); }
+    95% { transform: scaleY(1); }
+    97% { transform: scaleY(0.1); }
+  }
+
+  .logo-text {
+    font-size: 20px; font-weight: 700; letter-spacing: 2px;
+    color: #0d9488;
+  }
+  .logo-sub {
+    font-size: 10px; color: #5eead4; font-weight: 500;
+    letter-spacing: 1px; text-transform: uppercase;
+    margin-top: -3px;
+  }
+
+  .category-bar { display: flex; gap: 6px; flex-wrap: wrap; }
   .cat-btn {
     font-size: 12px; padding: 5px 14px; border-radius: 20px;
-    border: 1px solid #dde1ea; background: #fff;
-    color: #555; cursor: pointer; transition: all 0.15s; font-weight: 500;
+    border: 1px solid #99d6d0; background: #fff;
+    color: #0d9488; cursor: pointer; transition: all 0.2s; font-weight: 500;
   }
-  .cat-btn:hover { border-color: #2563eb; color: #2563eb; }
-  .cat-btn.active { background: #2563eb; color: #fff; border-color: #2563eb; }
+  .cat-btn:hover { background: #f0fdfa; border-color: #0d9488; }
+  .cat-btn.active { background: #0d9488; color: #fff; border-color: #0d9488; }
 
+  /* LAYOUT */
   .layout { display: flex; height: calc(100vh - 58px); }
   #map { flex: 1; }
 
+  /* SIDEBAR */
   .sidebar {
     width: 340px; background: #fff;
-    border-left: 1px solid #e8eaf0;
+    border-left: 1px solid #d0eaea;
     display: flex; flex-direction: column; overflow: hidden;
   }
   .sidebar-header {
-    padding: 14px 16px; border-bottom: 1px solid #e8eaf0;
-    font-size: 12px; font-weight: 600; color: #888;
-    letter-spacing: 0.5px; text-transform: uppercase;
+    padding: 14px 16px; border-bottom: 1px solid #e6f7f5;
+    font-size: 11px; font-weight: 700; color: #0d9488;
+    letter-spacing: 1px; text-transform: uppercase;
+    display: flex; align-items: center; gap: 6px;
   }
+  .sidebar-header::before {
+    content: ''; width: 6px; height: 6px; border-radius: 50%;
+    background: #0d9488; animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.3); }
+  }
+
   .news-list { overflow-y: auto; flex: 1; }
 
   .news-card {
-    padding: 14px 16px; border-bottom: 1px solid #f0f2f6;
-    cursor: pointer; transition: background 0.1s;
+    padding: 14px 16px; border-bottom: 1px solid #f0faf9;
+    cursor: pointer; transition: all 0.15s;
+    animation: slideIn 0.3s ease forwards;
+    opacity: 0;
   }
-  .news-card:hover { background: #f8f9ff; }
-  .news-card.active { background: #eff4ff; border-left: 3px solid #2563eb; }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(10px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  .news-card:hover { background: #f0fdfa; }
+  .news-card.active { background: #e6f7f5; border-left: 3px solid #0d9488; }
 
   .news-cat-badge {
     display: inline-block; font-size: 10px; font-weight: 600;
     padding: 2px 8px; border-radius: 10px; margin-bottom: 6px;
     text-transform: uppercase; letter-spacing: 0.3px;
   }
-  .news-title { font-size: 13px; font-weight: 600; line-height: 1.45; color: #1a1a2e; margin-bottom: 5px; }
-  .news-source { font-size: 11px; color: #999; }
+  .news-title { font-size: 13px; font-weight: 600; line-height: 1.45; color: #1a2e2e; margin-bottom: 5px; }
+  .news-source { font-size: 11px; color: #99b8b5; }
 
+  /* LOADING */
   .loading {
     display: flex; align-items: center; justify-content: center;
-    height: 100%; flex-direction: column; gap: 12px; color: #888;
-    padding: 40px 20px; text-align: center; line-height: 1.6;
+    height: 100%; flex-direction: column; gap: 14px; color: #5eead4;
+    padding: 40px 20px; text-align: center;
   }
-  .spinner {
-    width: 28px; height: 28px; border: 3px solid #e0e4ef;
-    border-top-color: #2563eb; border-radius: 50%;
-    animation: spin 0.8s linear infinite;
+  .owl-loading {
+    font-size: 40px;
+    animation: owlFloat 2s ease-in-out infinite;
   }
-  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes owlFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+  .loading-text { font-size: 13px; color: #0d9488; font-weight: 500; }
 
-  .popup-title { font-size: 13px; font-weight: 600; margin-bottom: 6px; line-height: 1.4; }
-  .popup-source { font-size: 11px; color: #888; margin-bottom: 8px; }
-  .popup-link { font-size: 12px; color: #2563eb; text-decoration: none; font-weight: 500; }
+  /* MAP POPUP */
+  .leaflet-popup-content-wrapper {
+    border-radius: 12px !important;
+    border: 1px solid #d0eaea !important;
+    box-shadow: 0 4px 20px rgba(13,148,136,0.1) !important;
+  }
+  .popup-title { font-size: 13px; font-weight: 600; margin-bottom: 6px; line-height: 1.4; color: #1a2e2e; }
+  .popup-source { font-size: 11px; color: #99b8b5; margin-bottom: 8px; }
+  .popup-link { font-size: 12px; color: #0d9488; text-decoration: none; font-weight: 600; }
   .popup-link:hover { text-decoration: underline; }
+
+  /* INTRO SPLASH */
+  .splash {
+    position: fixed; inset: 0; background: #0d9488;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    z-index: 9999; transition: opacity 0.6s ease;
+  }
+  .splash.hide { opacity: 0; pointer-events: none; }
+  .splash-owl { font-size: 80px; animation: owlFloat 1.5s ease-in-out infinite; }
+  .splash-title { font-size: 42px; font-weight: 700; color: #fff; letter-spacing: 6px; margin-top: 16px; }
+  .splash-sub { font-size: 14px; color: #99f6e4; letter-spacing: 2px; margin-top: 8px; }
+  .splash-bar {
+    width: 200px; height: 3px; background: rgba(255,255,255,0.2);
+    border-radius: 2px; margin-top: 30px; overflow: hidden;
+  }
+  .splash-bar-fill {
+    height: 100%; background: #fff; border-radius: 2px;
+    animation: loadBar 1.8s ease forwards;
+  }
+  @keyframes loadBar { from { width: 0; } to { width: 100%; } }
 
   @media (max-width: 600px) {
     .layout { flex-direction: column; }
-    .sidebar { width: 100%; height: 260px; border-left: none; border-top: 1px solid #e8eaf0; }
+    .sidebar { width: 100%; height: 260px; border-left: none; border-top: 1px solid #d0eaea; }
     .category-bar { display: none; }
   }
 </style>
 </head>
 <body>
 
+<!-- SPLASH SCREEN -->
+<div class="splash" id="splash">
+  <div class="splash-owl">🦉</div>
+  <div class="splash-title">OWLS</div>
+  <div class="splash-sub">WORLD NEWS MAP</div>
+  <div class="splash-bar"><div class="splash-bar-fill"></div></div>
+</div>
+
 <div class="header">
-  <div class="logo">news<span>map</span></div>
+  <div class="logo">
+    <!-- SVG Baykuş -->
+    <svg class="owl-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="20" cy="24" rx="13" ry="14" fill="#0d9488"/>
+      <ellipse cx="20" cy="22" rx="11" ry="12" fill="#0f766e"/>
+      <!-- Kulaklar -->
+      <polygon points="10,12 13,4 16,12" fill="#0d9488"/>
+      <polygon points="24,12 27,4 30,12" fill="#0d9488"/>
+      <!-- Gözler -->
+      <circle cx="15" cy="20" r="5" fill="#fff"/>
+      <circle cx="25" cy="20" r="5" fill="#fff"/>
+      <circle cx="15" cy="20" r="3" fill="#1a2e2e" class="eye-left"/>
+      <circle cx="25" cy="20" r="3" fill="#1a2e2e" class="eye-right"/>
+      <circle cx="16" cy="19" r="1" fill="#fff"/>
+      <circle cx="26" cy="19" r="1" fill="#fff"/>
+      <!-- Gaga -->
+      <polygon points="20,23 18,26 22,26" fill="#f59e0b"/>
+      <!-- Kanatlar -->
+      <ellipse cx="8" cy="28" rx="5" ry="8" fill="#0d9488" transform="rotate(-15 8 28)"/>
+      <ellipse cx="32" cy="28" rx="5" ry="8" fill="#0d9488" transform="rotate(15 32 28)"/>
+      <!-- Göğüs tüyleri -->
+      <ellipse cx="20" cy="30" rx="6" ry="4" fill="#5eead4" opacity="0.5"/>
+    </svg>
+    <div>
+      <div class="logo-text">OWLS</div>
+      <div class="logo-sub">World News Map</div>
+    </div>
+  </div>
+
   <div class="category-bar">
-    <button class="cat-btn active" data-q="world" data-label="DÜNYA">Dünya</button>
-    <button class="cat-btn" data-q="technology" data-label="TEKNOLOJİ">Teknoloji</button>
-    <button class="cat-btn" data-q="business" data-label="EKONOMİ">Ekonomi</button>
-    <button class="cat-btn" data-q="science" data-label="BİLİM">Bilim</button>
-    <button class="cat-btn" data-q="health" data-label="SAĞLIK">Sağlık</button>
-    <button class="cat-btn" data-q="sport" data-label="SPOR">Spor</button>
+    <button class="cat-btn active" data-q="world" data-label="DÜNYA">🌍 Dünya</button>
+    <button class="cat-btn" data-q="technology" data-label="TEKNOLOJİ">💻 Teknoloji</button>
+    <button class="cat-btn" data-q="business" data-label="EKONOMİ">📈 Ekonomi</button>
+    <button class="cat-btn" data-q="science" data-label="BİLİM">🔬 Bilim</button>
+    <button class="cat-btn" data-q="health" data-label="SAĞLIK">❤️ Sağlık</button>
+    <button class="cat-btn" data-q="sport" data-label="SPOR">⚽ Spor</button>
   </div>
 </div>
 
 <div class="layout">
   <div id="map"></div>
   <div class="sidebar">
-    <div class="sidebar-header">Son Haberler</div>
+    <div class="sidebar-header">Canlı Haberler</div>
     <div class="news-list" id="newsList">
-      <div class="loading"><div class="spinner"></div><span>Haberler yükleniyor...</span></div>
+      <div class="loading">
+        <div class="owl-loading">🦉</div>
+        <div class="loading-text">Haberler yükleniyor...</div>
+      </div>
     </div>
   </div>
 </div>
 
 <script>
+// Splash ekranını kapat
+setTimeout(() => {
+  document.getElementById('splash').classList.add('hide');
+  setTimeout(() => document.getElementById('splash').remove(), 700);
+}, 2000);
+
 const GUARDIAN_KEY = '0a321643-aaab-4c6a-9185-1762685abe3d';
 
 const map = L.map('map', { zoomControl: true }).setView([20, 10], 2);
@@ -131,26 +255,25 @@ const CNAMES = {
   ae:'BAE', sg:'Singapur', pk:'Pakistan', th:'Tayland', nl:'Hollanda',
 };
 const COLORS = {
-  'world':'#2563eb', 'technology':'#7c3aed', 'business':'#059669',
+  'world':'#0d9488', 'technology':'#7c3aed', 'business':'#059669',
   'science':'#0891b2', 'health':'#dc2626', 'sport':'#d97706'
 };
 
-// Haber içeriğinden ülke tespit et
 function detectCountry(text) {
   const t = text.toLowerCase();
   const map = {
-    'united states':'us', 'america':'us', ' us ':'us', 'washington':'us', 'new york':'us',
-    'united kingdom':'gb', 'britain':'gb', 'london':'gb', 'england':'gb',
-    'germany':'de', 'berlin':'de', 'france':'fr', 'paris':'fr',
-    'japan':'jp', 'tokyo':'jp', 'china':'cn', 'beijing':'cn', 'shanghai':'cn',
-    'russia':'ru', 'moscow':'ru', 'india':'in', 'delhi':'in', 'mumbai':'in',
-    'brazil':'br', 'australia':'au', 'sydney':'au', 'canada':'ca', 'toronto':'ca',
-    'south africa':'za', 'nigeria':'ng', 'egypt':'eg', 'mexico':'mx',
-    'argentina':'ar', 'turkey':'tr', 'istanbul':'tr', 'ankara':'tr',
-    'saudi':'sa', 'indonesia':'id', 'italy':'it', 'rome':'it',
-    'spain':'es', 'madrid':'es', 'korea':'kr', 'ukraine':'ua', 'kyiv':'ua',
-    'poland':'pl', 'israel':'il', 'tel aviv':'il', 'dubai':'ae', 'singapore':'sg',
-    'pakistan':'pk', 'thailand':'th', 'netherlands':'nl', 'amsterdam':'nl',
+    'united states':'us','america':'us',' us ':'us','washington':'us','new york':'us',
+    'united kingdom':'gb','britain':'gb','london':'gb','england':'gb',
+    'germany':'de','berlin':'de','france':'fr','paris':'fr',
+    'japan':'jp','tokyo':'jp','china':'cn','beijing':'cn','shanghai':'cn',
+    'russia':'ru','moscow':'ru','india':'in','delhi':'in','mumbai':'in',
+    'brazil':'br','australia':'au','sydney':'au','canada':'ca','toronto':'ca',
+    'south africa':'za','nigeria':'ng','egypt':'eg','mexico':'mx',
+    'argentina':'ar','turkey':'tr','istanbul':'tr','ankara':'tr',
+    'saudi':'sa','indonesia':'id','italy':'it','rome':'it',
+    'spain':'es','madrid':'es','korea':'kr','ukraine':'ua','kyiv':'ua',
+    'poland':'pl','israel':'il','tel aviv':'il','dubai':'ae','singapore':'sg',
+    'pakistan':'pk','thailand':'th','netherlands':'nl','amsterdam':'nl',
   };
   for(const [k,v] of Object.entries(map)) {
     if(t.includes(k)) return v;
@@ -178,8 +301,13 @@ function getCoords(text, i) {
 function dotIcon(color) {
   return L.divIcon({
     className: '',
-    html: `<div style="width:13px;height:13px;border-radius:50%;background:${color};border:2px solid #fff;box-shadow:0 0 0 3px ${color}44"></div>`,
-    iconSize:[13,13], iconAnchor:[6,6]
+    html: `<div style="
+      width:14px;height:14px;border-radius:50%;
+      background:${color};border:2px solid #fff;
+      box-shadow:0 0 0 4px ${color}33;
+      animation: markerPop 0.4s ease;
+    "></div>`,
+    iconSize:[14,14], iconAnchor:[7,7]
   });
 }
 
@@ -193,7 +321,7 @@ function timeAgo(d) {
 
 function renderNews(results) {
   const list = document.getElementById('newsList');
-  const color = COLORS[currentQ] || '#2563eb';
+  const color = COLORS[currentQ] || '#0d9488';
   clearMarkers(); list.innerHTML = '';
 
   if(!results || results.length === 0) {
@@ -210,7 +338,7 @@ function renderNews(results) {
 
     const marker = L.marker(coords, {icon: dotIcon(color)}).addTo(map);
     marker.bindPopup(`
-      <div style="max-width:220px">
+      <div style="max-width:220px;font-family:'Inter',sans-serif">
         <div class="popup-title">${title}</div>
         <div class="popup-source">The Guardian · ${country}</div>
         <a class="popup-link" href="${url}" target="_blank">Haberi oku →</a>
@@ -220,6 +348,7 @@ function renderNews(results) {
 
     const card = document.createElement('div');
     card.className = 'news-card';
+    card.style.animationDelay = (i * 0.05) + 's';
     card.innerHTML = `
       <div class="news-cat-badge" style="background:${color}22;color:${color}">${currentLabel} · ${country}</div>
       <div class="news-title">${title}</div>
@@ -237,20 +366,19 @@ function renderNews(results) {
 
 async function fetchNews(section) {
   const list = document.getElementById('newsList');
-  list.innerHTML = '<div class="loading"><div class="spinner"></div><span>Yükleniyor...</span></div>';
+  list.innerHTML = `<div class="loading"><div class="owl-loading">🦉</div><div class="loading-text">Yükleniyor...</div></div>`;
 
   try {
     const url = `https://content.guardianapis.com/${section}?api-key=${GUARDIAN_KEY}&page-size=20&show-fields=trailText&order-by=newest`;
     const res = await fetch(url);
     const data = await res.json();
-
-    if(data.response && data.response.results && data.response.results.length > 0) {
+    if(data.response?.results?.length > 0) {
       renderNews(data.response.results);
     } else {
       list.innerHTML = '<div class="loading"><span>Haber bulunamadı.</span></div>';
     }
   } catch(e) {
-    list.innerHTML = '<div class="loading"><span>Bağlantı hatası oluştu.<br>Sayfayı yenileyin.</span></div>';
+    list.innerHTML = '<div class="loading"><div class="owl-loading">🦉</div><div class="loading-text">Bağlantı hatası. Sayfayı yenile.</div></div>';
   }
 }
 
