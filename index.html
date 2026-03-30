@@ -159,7 +159,7 @@
     .news-title { font-size: 14px; font-weight: 700; line-height: 1.5; color: var(--text-main); margin-bottom: 6px; transition: color 0.3s; }
     .news-meta { font-size: 11px; color: var(--text-sub); transition: color 0.3s; font-weight: 500;}
 
-    /* --- DOPAMIN / CLICKBAIT POPUP --- */
+    /* --- DOPAMIN / CLICKBAIT POPUP (YENİ EKLENEN KISIM) --- */
     .dopamine-popup {
       position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(150px);
       background: linear-gradient(135deg, #ff0055, #ffaa00); color: white;
@@ -269,7 +269,7 @@
     </div>
   </div>
 
-  <!-- DOPAMINE POPUP -->
+  <!-- DOPAMINE POPUP (YENİ EKLENEN KISIM) -->
   <div id="dopaminePopup" class="dopamine-popup">
     <div class="dopamine-icon">🔥</div>
     <div class="dopamine-text">
@@ -298,9 +298,9 @@
       const negative = ['war', 'death', 'killed', 'crisis', 'crash', 'arrest', 'fire', 'protest', 'savaş', 'ölüm', 'kaza', 'saldırı', 'deadly', 'warning'];
       const positive = ['success', 'growth', 'win', 'discovery', 'new', 'innovation', 'breakthrough', 'positive', 'başarı', 'yeni', 'buluş', 'boost'];
       
-      if (negative.some(w => t.includes(w))) return { label: 'KRİTİK', color: '#ef4444', speed: '1s' }; // Kritikse hızlı nabız
-      if (positive.some(w => t.includes(w))) return { label: 'OLUMLU', color: '#10b981', speed: '2.5s' }; // Olumluysa yavaş nabız
-      return { label: 'NÖTR', color: '#3b82f6', speed: '2s' }; // Normal nabız
+      if (negative.some(w => t.includes(w))) return { label: 'KRİTİK', color: '#ef4444', speed: '1s' }; 
+      if (positive.some(w => t.includes(w))) return { label: 'OLUMLU', color: '#10b981', speed: '2.5s' }; 
+      return { label: 'NÖTR', color: '#3b82f6', speed: '2s' }; 
     }
 
     setTimeout(() => { document.getElementById('splashProgress').style.width = '100%'; }, 100);
@@ -311,7 +311,7 @@
 
     const GUARDIAN_KEY = '0a321643-aaab-4c6a-9185-1762685abe3d';
 
-    const map = L.map('map', { zoomControl: false }).setView([20, 10], 2); // Harita kontrolünü mobilde yer kaplamasın diye kapattık (istiyorsan true yapabilirsin)
+    const map = L.map('map', { zoomControl: false }).setView([20, 10], 2); 
     L.control.zoom({ position: 'topright' }).addTo(map);
 
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
@@ -320,7 +320,6 @@
       maxZoom: 18
     }).addTo(map);
 
-    // --- SENIN DEVASA KÜTÜPHANELERIN (DOKUNULMADI) ---
     const CITY_COORDS = {
       'new york':[40.71,-74.00],'washington':[38.90,-77.03],'los angeles':[34.05,-118.24],
       'chicago':[41.87,-87.62],'san francisco':[37.77,-122.41],'seattle':[47.60,-122.33],
@@ -335,254 +334,4 @@
       'barcelona':[41.38,2.17],'seville':[37.38,-5.99],'valencia':[39.46,-0.37],'bilbao':[43.26,-2.92],
       'rome':[41.90,12.49],'milan':[45.46,9.18],'naples':[40.85,14.27],'turin':[45.07,7.68],
       'florence':[43.76,11.25],'amsterdam':[52.37,4.89],'brussels':[50.85,4.35],'vienna':[48.20,16.37],
-      'zurich':[47.37,8.54],'stockholm':[59.33,18.06],'oslo':[59.91,10.75],'copenhagen':[55.67,12.56],
-      'warsaw':[52.22,21.01],'prague':[50.07,14.43],'budapest':[47.49,19.04],'athens':[37.97,23.72],
-      'lisbon':[38.71,-9.14],'kyiv':[50.45,30.52],'moscow':[55.75,37.61],'st petersburg':[59.93,30.31],
-      'tokyo':[35.68,139.69],'osaka':[34.69,135.50],'beijing':[39.90,116.40],'shanghai':[31.22,121.47],
-      'hong kong':[22.31,114.17],'seoul':[37.56,126.97],'singapore':[1.35,103.81],'bangkok':[13.75,100.51],
-      'delhi':[28.63,77.21],'mumbai':[19.07,72.87],'bangalore':[12.97,77.59],'islamabad':[33.72,73.06],
-      'karachi':[24.86,67.01],'dubai':[25.20,55.27],'riyadh':[24.68,46.72],'tehran':[35.69,51.38],
-      'tel aviv':[32.08,34.78],'jerusalem':[31.76,35.21],'beirut':[33.88,35.49],'kabul':[34.52,69.17],
-      'cairo':[30.04,31.23],'lagos':[6.45,3.40],'nairobi':[-1.28,36.81],'johannesburg':[-26.20,28.04],
-      'cape town':[-33.92,18.42],'addis ababa':[9.03,38.74],'accra':[5.55,-0.20],'sao paulo':[-23.54,-46.63],
-      'rio de janeiro':[-22.90,-43.17],'buenos aires':[-34.60,-58.38],'santiago':[-33.45,-70.66],
-      'bogota':[4.71,-74.07],'lima':[-12.04,-77.02],'mexico city':[19.42,-99.13],'sydney':[-33.86,151.20],
-      'melbourne':[-37.81,144.96],'canberra':[-35.28,149.12],'auckland':[-36.84,174.76],
-    };
-
-    const COUNTRY_COORDS = { us:[37,-95],gb:[52,-1],de:[51,10],fr:[46,2],jp:[36,138],cn:[35,104],ru:[61,105],in:[20,78],br:[-14,-51],au:[-25,133],ca:[56,-106],za:[-30,22],ng:[9,8],eg:[26,30],mx:[23,-102],ar:[-38,-63],tr:[38,35],sa:[23,45],id:[-0,113],it:[41,12],es:[40,-3],kr:[35,127],ua:[48,31],pl:[51,19],il:[31,34],ae:[23,53],sg:[1,103],pk:[30,69],th:[15,100],nl:[52,5],pt:[39,-8],be:[50,4],ch:[46,8],at:[47,14],se:[60,18],no:[60,8],dk:[56,10],fi:[64,26],gr:[39,22],ro:[45,24],cl:[-35,-71],co:[4,-72],pe:[-9,-75],ma:[31,-7],ke:[-1,37],gh:[7,-1],et:[9,40],ir:[32,53],lb:[33,35],nz:[-41,174],eu:[50,10],int:[20,0] };
-    const COUNTRY_NAMES = { us:'ABD',gb:'İngiltere',de:'Almanya',fr:'Fransa',jp:'Japonya',cn:'Çin',ru:'Rusya',in:'Hindistan',br:'Brezilya',au:'Avustralya',ca:'Kanada',za:'G.Afrika',ng:'Nijerya',eg:'Mısır',mx:'Meksika',ar:'Arjantin',tr:'Türkiye',sa:'S.Arabistan',id:'Endonezya',it:'İtalya',es:'İspanya',kr:'G.Kore',ua:'Ukrayna',pl:'Polonya',il:'İsrail',ae:'BAE',sg:'Singapur',pk:'Pakistan',th:'Tayland',nl:'Hollanda',pt:'Portekiz',be:'Belçika',ch:'İsviçre',at:'Avusturya',se:'İsveç',no:'Norveç',dk:'Danimarka',fi:'Finlandiya',gr:'Yunanistan',cl:'Şili',co:'Kolombiya',pe:'Peru',ma:'Fas',ke:'Kenya',gh:'Gana',et:'Etiyopya',ir:'İran',lb:'Lübnan',nz:'Yeni Zelanda',eu:'Avrupa',int:'Uluslararası' };
-    const COLORS = { world:'#0d9488',ai:'#7c3aed',technology:'#2563eb',business:'#059669',startups:'#f97316',science:'#0891b2',sport:'#d97706',turkce:'#e11d48' };
-    const CLUBS = { 'arsenal':'gb','chelsea':'gb','liverpool':'gb','manchester city':'gb','manchester united':'gb','man utd':'gb','man city':'gb','tottenham':'gb','spurs':'gb','newcastle':'gb','aston villa':'gb','west ham':'gb','everton':'gb','brighton':'gb','fulham':'gb','leicester':'gb','premier league':'gb','fa cup':'gb','real madrid':'es','barcelona':'es','atletico madrid':'es','atletico':'es','sevilla':'es','valencia':'es','villarreal':'es','la liga':'es','betis':'es','athletic bilbao':'es','real sociedad':'es','bayern munich':'de','bayern':'de','borussia dortmund':'de','dortmund':'de','bayer leverkusen':'de','leverkusen':'de','rb leipzig':'de','bundesliga':'de','eintracht frankfurt':'de','wolfsburg':'de','psg':'fr','paris saint-germain':'fr','paris saint germain':'fr','marseille':'fr','lyon':'fr','monaco':'fr','ligue 1':'fr','lille':'fr','juventus':'it','inter milan':'it','inter':'it','ac milan':'it','napoli':'it','roma':'it','lazio':'it','atalanta':'it','serie a':'it','benfica':'pt','porto':'pt','sporting cp':'pt','primeira liga':'pt','ajax':'nl','psv':'nl','feyenoord':'nl','eredivisie':'nl','galatasaray':'tr','fenerbahce':'tr','fenerbahçe':'tr','besiktas':'tr','beşiktaş':'tr','trabzonspor':'tr','süper lig':'tr','celtic':'gb','rangers':'gb','champions league':'eu','europa league':'eu','conference league':'eu','world cup':'int','copa america':'int','euros':'eu','uefa':'eu','fifa':'int','england':'gb','germany':'de','france':'fr','spain':'es','italy':'it','brazil':'br','argentina':'ar','portugal':'pt','netherlands':'nl' };
-    const KEYWORDS = { 'new york':'us','washington dc':'us','los angeles':'us','silicon valley':'us','san francisco':'us','chicago':'us','seattle':'us','boston':'us','houston':'us','london':'gb','manchester':'gb','birmingham':'gb','liverpool':'gb','edinburgh':'gb','glasgow':'gb','istanbul':'tr','ankara':'tr','izmir':'tr','berlin':'de','munich':'de','hamburg':'de','frankfurt':'de','paris':'fr','lyon':'fr','marseille':'fr','madrid':'es','barcelona':'es','seville':'es','rome':'it','milan':'it','naples':'it','amsterdam':'nl','brussels':'be','vienna':'at','zurich':'ch','stockholm':'se','oslo':'no','copenhagen':'dk','warsaw':'pl','kyiv':'ua','moscow':'ru','st petersburg':'ru','tokyo':'jp','osaka':'jp','beijing':'cn','shanghai':'cn','hong kong':'cn','seoul':'kr','singapore':'sg','bangkok':'th','dubai':'ae','riyadh':'sa','delhi':'in','mumbai':'in','tehran':'ir','tel aviv':'il','jerusalem':'il','cairo':'eg','lagos':'ng','nairobi':'ke','johannesburg':'za','cape town':'za','sao paulo':'br','rio de janeiro':'br','buenos aires':'ar','sydney':'au','melbourne':'au','auckland':'nz','united states':'us','america':'us','white house':'us','pentagon':'us','wall street':'us','congress':'us','senate':'us','trump':'us','biden':'us','united kingdom':'gb','britain':'gb','downing street':'gb','parliament':'gb','scotland':'gb','wales':'gb','northern ireland':'gb','germany':'de','france':'fr','italy':'it','spain':'es','netherlands':'nl','portugal':'pt','belgium':'be','switzerland':'ch','austria':'at','sweden':'se','norway':'no','denmark':'dk','finland':'fi','greece':'gr','poland':'pl','ukraine':'ua','russia':'ru','china':'cn','japan':'jp','south korea':'kr','india':'in','pakistan':'pk','iran':'ir','israel':'il','gaza':'il','west bank':'il','palestine':'il','saudi arabia':'sa','turkey':'tr','türkiye':'tr','egypt':'eg','south africa':'za','nigeria':'ng','kenya':'ke','ethiopia':'et','brazil':'br','argentina':'ar','mexico':'mx','colombia':'co','indonesia':'id','australia':'au','new zealand':'nz','taiwan':'cn','macau':'cn','european union':'eu','nato':'eu','g7':'int','g20':'int' };
-    const SEARCH_QUERIES = { ai: 'artificial intelligence OR AI OR OpenAI OR ChatGPT OR machine learning', technology: 'technology OR big tech OR Apple OR Google OR Microsoft OR Meta OR Amazon', startups: 'startup OR startups OR venture capital OR funding OR founder' };
-    const SECTIONS = { world: 'world', business: 'business', science: 'science', sport: 'football', turkce: 'world/turkey' };
-
-    let markers = [];
-    let currentCat = 'world';
-    let currentLabel = 'WORLD';
-    let dopamineTimer;
-
-    function detectLocation(text) {
-      const t = (text || '').toLowerCase();
-      for (const [k, v] of Object.entries(CLUBS)) { if (t.includes(k)) { for (const [city, coords] of Object.entries(CITY_COORDS)) { if (k.includes(city)) return { coords, country: k, isCity: true }; } return { countryCode: v }; } }
-      for (const [city, coords] of Object.entries(CITY_COORDS)) { if (t.includes(city)) return { coords, country: city.split(' ').map(w => w[0].toUpperCase() + w.slice(1)).join(' '), isCity: true }; }
-      for (const [k, v] of Object.entries(KEYWORDS)) { if (t.includes(k)) return { countryCode: v }; }
-      return null;
-    }
-
-    function getCoords(text, i) {
-      const loc = detectLocation(text);
-      if (loc) {
-        if (loc.isCity && loc.coords) {
-          const jitter = 0.3;
-          return { coords: [loc.coords[0] + (Math.random() - 0.5) * jitter, loc.coords[1] + (Math.random() - 0.5) * jitter], label: loc.country };
-        }
-        if (loc.countryCode) {
-          const b = COUNTRY_COORDS[loc.countryCode] || COUNTRY_COORDS.us;
-          return { coords: [b[0] + (Math.random() - 0.5) * 2, b[1] + (Math.random() - 0.5) * 2], label: COUNTRY_NAMES[loc.countryCode] || 'Dünya' };
-        }
-      }
-      const keys = Object.keys(COUNTRY_COORDS);
-      const k = keys[i % keys.length];
-      const b = COUNTRY_COORDS[k];
-      return { coords: [b[0] + (Math.random() - 0.5) * 2, b[1] + (Math.random() - 0.5) * 2], label: COUNTRY_NAMES[k] || 'Dünya' };
-    }
-
-    // --- YENİ BAYKUŞLU MARKER ---
-    function pulseIcon(color, speed) {
-      return L.divIcon({
-        className: '',
-        html: `
-          <div class="owl-marker-container">
-            <div class="pulse-ring" style="border-color:${color}; animation-duration:${speed}"></div>
-            <div class="owl-icon">🦉</div>
-          </div>
-        `,
-        iconSize: [28, 28],
-        iconAnchor: [14, 14]
-      });
-    }
-
-    function timeAgo(d) {
-      if (!d) return '';
-      const diff = Date.now() - new Date(d).getTime();
-      const h = Math.floor(diff / 3600000);
-      const mn = Math.floor(diff / 60000);
-      if (h > 24) return Math.floor(h / 24) + ' gün önce';
-      if (h > 0) return h + ' saat önce';
-      return mn > 0 ? mn + ' dk önce' : 'Az önce';
-    }
-
-    function clearMarkers() {
-      markers.forEach(m => map.removeLayer(m));
-      markers = [];
-    }
-
-    function normalizeArticles(articles) {
-      const seen = new Set();
-      return articles.filter(a => {
-        if (!a || !a.title || !a.url) return false;
-        const key = a.url;
-        if (seen.has(key)) return false;
-        seen.add(key);
-        return true;
-      });
-    }
-
-    // --- DOPAMİN TETİKLEYİCİ (Rastgele Şok Haber) ---
-    function triggerDopamine(articles) {
-        clearTimeout(dopamineTimer);
-        const popup = document.getElementById('dopaminePopup');
-        popup.classList.remove('show');
-
-        if(articles.length < 3) return; // Yeterli haber yoksa iptal
-        
-        // 4 ile 8 saniye arası rastgele bir sürede patlasın
-        const randomTime = Math.floor(Math.random() * 4000) + 4000;
-        
-        dopamineTimer = setTimeout(() => {
-            const randomArticle = articles[Math.floor(Math.random() * Math.min(articles.length, 10))];
-            document.getElementById('dopamineTitle').innerText = randomArticle.title.length > 55 ? randomArticle.title.substring(0,55) + "..." : randomArticle.title;
-            
-            popup.onclick = () => window.open(randomArticle.url, '_blank');
-            popup.classList.add('show');
-            
-            // 7 saniye sonra kendi kendine kapansın
-            setTimeout(() => { popup.classList.remove('show'); }, 7000);
-        }, randomTime);
-    }
-
-    function renderArticles(articles, sourceName) {
-      const list = document.getElementById('newsList');
-      const baseColor = COLORS[currentCat] || '#0d9488';
-
-      clearMarkers();
-      list.innerHTML = '';
-
-      if (!articles || articles.length === 0) {
-        list.innerHTML = '<div style="padding:40px; text-align:center;"><div style="font-size:40px; animation: gentleBounce 2s infinite alternate;">🦉</div><br><span style="font-size:12px; color:#0d9488; font-weight:700;">Haber bulunamadı.</span></div>';
-        return;
-      }
-
-      articles.slice(0, 20).forEach((a, i) => {
-        const sentiment = analyzeSentiment(a.title);
-        const { coords, label } = getCoords(`${a.title} ${a.desc || ''}`, i);
-
-        // Yeni Baykuş Markeri!
-        const marker = L.marker(coords, { icon: pulseIcon(sentiment.color, sentiment.speed) }).addTo(map);
-
-        marker.bindPopup(`
-          <div>
-            ${a.thumb ? `<img src="${a.thumb}" class="popup-img" onerror="this.style.display='none'"/>` : ''}
-            <div class="popup-body">
-              <div style="font-size:10px; font-weight:800; color:${sentiment.color}; text-transform:uppercase; margin-bottom:5px;">${sentiment.label} HABER</div>
-              <div class="popup-title">${a.title}</div>
-              <div style="font-size:10px; color:var(--text-sub);">${a.source || sourceName} · ${timeAgo(a.date)}</div>
-              ${a.url ? `<a class="popup-link" href="${a.url}" target="_blank" rel="noopener noreferrer">Habere Git 🦉</a>` : ''}
-            </div>
-          </div>
-        `);
-
-        markers.push(marker);
-
-        const card = document.createElement('div');
-        card.className = 'news-card';
-        card.style.animationDelay = (i * 0.05) + 's';
-
-        card.innerHTML = `
-          ${a.thumb ? `<div style="overflow:hidden;height:160px"><img class="news-thumb" src="${a.thumb}" onerror="this.parentElement.style.display='none'" alt=""/></div>` : ''}
-          <div class="news-card-body">
-            <div class="badge-row">
-              <span class="cat-badge" style="background:${sentiment.color}20;color:${sentiment.color}">${sentiment.label}</span>
-              <span class="cat-badge" style="background:${baseColor}20;color:${baseColor}">${currentLabel}</span>
-              <span class="src-badge">${a.source || sourceName}</span>
-            </div>
-            <div class="news-title">${a.title}</div>
-            <div class="news-meta">${label} · ${timeAgo(a.date)}</div>
-          </div>
-        `;
-
-        card.addEventListener('click', () => {
-          document.querySelectorAll('.news-card').forEach(c => c.classList.remove('active'));
-          card.classList.add('active');
-          
-          // YENİ ÖZELLİK: flyTo Animasyonu (Daha yumuşak süzülme)
-          map.flyTo(coords, 5, { duration: 1.5, easeLinearity: 0.25 });
-          setTimeout(() => marker.openPopup(), 1500);
-        });
-
-        list.appendChild(card);
-      });
-
-      // Haberler listelendikten sonra dopamin taktiğini tetikle!
-      triggerDopamine(articles);
-    }
-
-    async function fetchGuardian(section) {
-      const url = `https://content.guardianapis.com/${section}?api-key=${GUARDIAN_KEY}&page-size=20&order-by=newest&show-fields=thumbnail,trailText&show-tags=keyword`;
-      const res = await fetch(url);
-      const data = await res.json();
-      return (data.response?.results || []).map(a => ({
-        title: a.webTitle, desc: (a.fields?.trailText || '') + ' ' + (a.tags || []).map(t => t.webTitle).join(' '),
-        date: a.webPublicationDate, url: a.webUrl, thumb: a.fields?.thumbnail || null, source: 'The Guardian'
-      }));
-    }
-
-    async function fetchGuardianSearch(query, sourceLabel = 'The Guardian') {
-      const url = `https://content.guardianapis.com/search?api-key=${GUARDIAN_KEY}&page-size=20&order-by=newest&show-fields=thumbnail,trailText&show-tags=keyword&q=${encodeURIComponent(query)}`;
-      const res = await fetch(url);
-      const data = await res.json();
-      return (data.response?.results || []).map(a => ({
-        title: a.webTitle, desc: (a.fields?.trailText || '') + ' ' + (a.tags || []).map(t => t.webTitle).join(' '),
-        date: a.webPublicationDate, url: a.webUrl, thumb: a.fields?.thumbnail || null, source: sourceLabel
-      }));
-    }
-
-    async function fetchHN() {
-      const res = await fetch('https://hacker-news.firebaseio.com/v0/topstories.json');
-      const ids = await res.json();
-      const stories = await Promise.all( ids.slice(0, 15).map(id => fetch(`https://hacker-news.firebaseio.com/v0/item/${id}.json`).then(r => r.json())) );
-      return stories.filter(s => s && s.title).map(s => ({
-          title: s.title, desc: '', thumb: null, date: new Date((s.time || Date.now()/1000) * 1000).toISOString(),
-          url: s.url || `https://news.ycombinator.com/item?id=${s.id}`, source: 'Hacker News'
-        }));
-    }
-
-    async function fetchNews(cat) {
-      const list = document.getElementById('newsList');
-      list.innerHTML = `<div style="padding:40px; text-align:center;"><div style="font-size:40px; animation: float 1.5s infinite alternate;">🦉</div><br><span style="font-size:12px; color:#0d9488; font-weight:700;">Radara yakalananlar yükleniyor...</span></div>`;
-
-      try {
-        let articles = []; let sourceName = '';
-        if (cat === 'ai') { articles = await fetchGuardianSearch(SEARCH_QUERIES.ai, 'Guardian AI'); sourceName = 'Guardian AI'; } 
-        else if (cat === 'technology') {
-          const guardianTech = await fetchGuardianSearch(SEARCH_QUERIES.technology, 'Guardian Tech');
-          const hnTech = await fetchHN();
-          articles = normalizeArticles([...guardianTech.slice(0, 10), ...hnTech.slice(0, 10)]);
-          sourceName = 'Guardian Tech + Hacker News';
-        } 
-        else if (cat === 'startups') { articles = await fetchGuardianSearch(SEARCH_QUERIES.startups, 'Guardian Startups'); sourceName = 'Guardian Startups'; } 
-        else if (cat === 'sport') { articles = await fetchGuardian(SECTIONS[cat]); articles = articles.map(a => ({ ...a, source: 'Guardian Football' })); sourceName = 'Guardian Football'; } 
-        else { articles = await fetchGuardian(SECTIONS[cat] || 'world'); sourceName = cat === 'turkce' ? 'The Guardian' : 'The Guardian'; }
-
-        renderArticles(normalizeArticles(articles), sourceName);
-      } catch (e) {
-        list.innerHTML = `<div style="padding:40px; text-align:center;"><div style="font-size:40px; animation: gentleBounce 2s infinite alternate;">🦉</div><br><span style="font-size:12px; color:#ef4444; font-weight:700;">Bağlantı hatası. Sayfayı yenile.</span></div>`;
-      }
-    }
-
-    document.querySelectorAll('.cat-btn').forEach(btn => {
-      btn.addEventListener('click', function() {
-        document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
-        currentCat = this.dataset.cat;
-        currentLabel = this.dataset.label;
-        fetchNews(currentCat);
-      });
-    });
-
-    fetchNews('world');
-  </script>
-</body>
-</html>
+      'zurich':[47.37,8.54],'stockholm':[59.33,18.06],'oslo':[59.91,10.75],'copenhagen':
