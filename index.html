@@ -1,17 +1,27 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
   <title>OWLS — World News Map</title>
-  
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-TG3Q7KX51N"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-TG3Q7KX51N');
+  </script>
+
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-  
+
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Inter', sans-serif; background: #f0f7f7; color: #1a2e2e; }
+    body { font-family: 'Inter', sans-serif; background: #f0f7f7; color: #1a2e2e; overflow: hidden; }
 
     /* HEADER */
     .header {
@@ -37,7 +47,7 @@
     .cat-btn {
       font-size: 12px; padding: 5px 14px; border-radius: 20px;
       border: 1px solid #99d6d0; background: #fff;
-      color: #0d9488; cursor: pointer; transition: all 0.2s; font-weight: 500;
+      color: #0d9488; cursor: pointer; transition: all 0.2s; font-weight: 600;
     }
     .cat-btn:hover { background: #f0fdfa; border-color: #0d9488; }
     .cat-btn.active { background: #0d9488; color: #fff; border-color: #0d9488; }
@@ -48,44 +58,49 @@
 
     /* SIDEBAR */
     .sidebar {
-      width: 340px; background: #fff;
+      width: 350px; background: #fff;
       border-left: 1px solid #d0eaea;
       display: flex; flex-direction: column; overflow: hidden;
     }
     .sidebar-header {
       padding: 14px 16px; border-bottom: 1px solid #e6f7f5;
-      font-size: 11px; font-weight: 700; color: #0d9488;
+      font-size: 11px; font-weight: 800; color: #0d9488;
       letter-spacing: 1px; text-transform: uppercase;
-      display: flex; align-items: center; gap: 6px;
+      display: flex; align-items: center; justify-content: space-between;
     }
-    .sidebar-header::before {
+    .live-dot { display: flex; align-items: center; gap: 6px; font-size: 10px; color: #10b981; font-weight: 700; }
+    .live-dot::before {
       content: ''; width: 6px; height: 6px; border-radius: 50%;
-      background: #0d9488; animation: pulse 2s infinite;
+      background: #10b981; animation: pulse 2s infinite; box-shadow: 0 0 6px #10b981;
     }
     @keyframes pulse {
       0%, 100% { opacity: 1; transform: scale(1); }
       50% { opacity: 0.5; transform: scale(1.3); }
     }
+
     .news-list { overflow-y: auto; flex: 1; }
     .news-card {
-      padding: 14px 16px; border-bottom: 1px solid #f0faf9;
+      border-bottom: 1px solid #f0faf9;
       cursor: pointer; transition: all 0.15s;
-      animation: slideIn 0.3s ease forwards;
-      opacity: 0;
+      animation: slideIn 0.3s ease forwards; opacity: 0;
     }
     @keyframes slideIn {
       from { opacity: 0; transform: translateX(10px); }
       to { opacity: 1; transform: translateX(0); }
     }
     .news-card:hover { background: #f0fdfa; }
-    .news-card.active { background: #e6f7f5; border-left: 3px solid #0d9488; }
+    .news-card.active { background: #e6f7f5; border-left: 4px solid #0d9488; }
+    
+    .news-thumb { width: 100%; height: 150px; object-fit: cover; display: block; }
+    .news-card-body { padding: 14px 16px; }
+
     .news-cat-badge {
-      display: inline-block; font-size: 10px; font-weight: 600;
-      padding: 2px 8px; border-radius: 10px; margin-bottom: 6px;
+      display: inline-block; font-size: 10px; font-weight: 700;
+      padding: 3px 8px; border-radius: 10px; margin-bottom: 6px;
       text-transform: uppercase; letter-spacing: 0.3px;
     }
-    .news-title { font-size: 13px; font-weight: 600; line-height: 1.45; color: #1a2e2e; margin-bottom: 5px; }
-    .news-source { font-size: 11px; color: #99b8b5; }
+    .news-title { font-size: 14px; font-weight: 700; line-height: 1.45; color: #1a2e2e; margin-bottom: 5px; }
+    .news-source { font-size: 11px; color: #94a3b8; font-weight: 500; }
 
     /* LOADING */
     .loading {
@@ -93,23 +108,44 @@
       height: 100%; flex-direction: column; gap: 14px; color: #5eead4;
       padding: 40px 20px; text-align: center;
     }
-    .owl-loading { font-size: 40px; animation: owlFloat 2s ease-in-out infinite; }
+    .owl-loading { font-size: 44px; animation: owlFloat 2s ease-in-out infinite; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1)); }
     @keyframes owlFloat {
       0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
+      50% { transform: translateY(-10px); }
     }
-    .loading-text { font-size: 13px; color: #0d9488; font-weight: 500; }
+    .loading-text { font-size: 13px; color: #0d9488; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;}
 
     /* MAP POPUP */
     .leaflet-popup-content-wrapper {
-      border-radius: 12px !important;
-      border: 1px solid #d0eaea !important;
-      box-shadow: 0 4px 20px rgba(13,148,136,0.1) !important;
+      border-radius: 12px !important; border: 1px solid #d0eaea !important;
+      box-shadow: 0 8px 25px rgba(13,148,136,0.15) !important; padding: 0 !important; overflow: hidden !important;
     }
-    .popup-title { font-size: 13px; font-weight: 600; margin-bottom: 6px; line-height: 1.4; color: #1a2e2e; }
-    .popup-source { font-size: 11px; color: #99b8b5; margin-bottom: 8px; }
-    .popup-link { font-size: 12px; color: #0d9488; text-decoration: none; font-weight: 600; }
-    .popup-link:hover { text-decoration: underline; }
+    .leaflet-popup-content { margin: 0 !important; width: 260px !important; }
+    .popup-img { width: 100%; height: 140px; object-fit: cover; display: block; }
+    .popup-body { padding: 15px; font-family: 'Inter', sans-serif; }
+    .popup-title { font-size: 14px; font-weight: 700; margin-bottom: 6px; line-height: 1.4; color: #1a2e2e; }
+    .popup-source { font-size: 11px; color: #94a3b8; margin-bottom: 10px; font-weight: 500; }
+    .popup-link { display: inline-block; font-size: 11px; color: #fff; background: #0d9488; padding: 6px 12px; border-radius: 15px; text-decoration: none; font-weight: 700; transition: 0.2s; }
+    .popup-link:hover { background: #0f766e; }
+
+    /* --- DOPAMINE POPUP --- */
+    .dopamine-popup {
+      position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(150px);
+      background: linear-gradient(135deg, #ff0f4f, #ff8c00); color: white;
+      padding: 15px 25px; border-radius: 30px; font-weight: 800; box-shadow: 0 10px 30px rgba(255,15,79,0.3);
+      z-index: 3000; transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      display: flex; align-items: center; gap: 15px; cursor: pointer; max-width: 90%; width: 420px;
+    }
+    .dopamine-popup.show { transform: translateX(-50%) translateY(0); }
+    .dopamine-popup:hover { transform: translateX(-50%) translateY(-5px) scale(1.02); }
+    .dopamine-icon { font-size: 24px; animation: owlFloat 1s infinite alternate; }
+    .dopamine-text { display: flex; flex-direction: column; font-size: 13px; line-height: 1.4; }
+    .dopamine-action { font-size: 10px; color: #ffeeee; text-transform: uppercase; letter-spacing: 1px; margin-top: 3px; }
+
+    @keyframes markerPulseAnim {
+      0% { transform: scale(0.8); opacity: 1; }
+      100% { transform: scale(2.5); opacity: 0; }
+    }
 
     /* INTRO SPLASH */
     .splash {
@@ -119,8 +155,8 @@
     }
     .splash.hide { opacity: 0; pointer-events: none; }
     .splash-owl { font-size: 80px; animation: owlFloat 1.5s ease-in-out infinite; }
-    .splash-title { font-size: 42px; font-weight: 700; color: #fff; letter-spacing: 6px; margin-top: 16px; }
-    .splash-sub { font-size: 14px; color: #99f6e4; letter-spacing: 2px; margin-top: 8px; }
+    .splash-title { font-size: 42px; font-weight: 800; color: #fff; letter-spacing: 6px; margin-top: 16px; }
+    .splash-sub { font-size: 14px; color: #99f6e4; letter-spacing: 2px; margin-top: 8px; font-weight: 600; }
     .splash-bar {
       width: 200px; height: 3px; background: rgba(255,255,255,0.2);
       border-radius: 2px; margin-top: 30px; overflow: hidden;
@@ -131,25 +167,10 @@
     }
     @keyframes loadBar { from { width: 0; } to { width: 100%; } }
 
-    /* --- DOPAMIN POPUP STİLLERİ (YENİ EKLENDİ) --- */
-    .dopamine-popup {
-      position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(150px);
-      background: linear-gradient(135deg, #ff0055, #ffaa00); color: white;
-      padding: 15px 25px; border-radius: 30px; font-weight: 800; box-shadow: 0 10px 30px rgba(255,0,85,0.4);
-      z-index: 3000; transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      display: flex; align-items: center; gap: 15px; cursor: pointer; max-width: 90%; width: 400px;
-    }
-    .dopamine-popup.show { transform: translateX(-50%) translateY(0); }
-    .dopamine-popup:hover { transform: translateX(-50%) translateY(-5px) scale(1.02); }
-    .dopamine-icon { font-size: 24px; animation: owlFloat 1s infinite alternate; }
-    .dopamine-text { display: flex; flex-direction: column; font-size: 13px; line-height: 1.4; }
-    .dopamine-action { font-size: 10px; color: #ffeeee; text-transform: uppercase; letter-spacing: 1px; margin-top: 3px; }
-
     @media (max-width: 600px) {
       .layout { flex-direction: column; }
-      .sidebar { width: 100%; height: 260px; border-left: none; border-top: 1px solid #d0eaea; }
+      .sidebar { width: 100%; height: 300px; border-left: none; border-top: 1px solid #d0eaea; }
       .category-bar { display: none; }
-      /* Mobilde pop-up ekranın üstünden gelsin */
       .dopamine-popup { top: 70px; bottom: auto; transform: translateX(-50%) translateY(-150px); width: 90%; }
       .dopamine-popup.show { transform: translateX(-50%) translateY(0); }
     }
@@ -185,39 +206,42 @@
     </svg>
     <div>
       <div class="logo-text">OWLS</div>
-      <div class="logo-sub">World News Map</div>
+      <div class="logo-sub">Global News Map</div>
     </div>
   </div>
 
   <div class="category-bar">
-    <button class="cat-btn active" data-q="world" data-label="DÜNYA">🌍 Dünya</button>
-    <button class="cat-btn" data-q="technology" data-label="TEKNOLOJİ">💻 Teknoloji</button>
-    <button class="cat-btn" data-q="business" data-label="EKONOMİ">📈 Ekonomi</button>
-    <button class="cat-btn" data-q="science" data-label="BİLİM">🔬 Bilim</button>
-    <button class="cat-btn" data-q="health" data-label="SAĞLIK">❤️ Sağlık</button>
-    <button class="cat-btn" data-q="sport" data-label="SPOR">⚽ Spor</button>
+    <button class="cat-btn active" data-q="world" data-label="WORLD">🌍 World</button>
+    <button class="cat-btn" data-q="technology" data-label="TECH">💻 Tech</button>
+    <button class="cat-btn" data-q="business" data-label="BUSINESS">📈 Business</button>
+    <button class="cat-btn" data-q="science" data-label="SCIENCE">🔬 Science</button>
+    <button class="cat-btn" data-q="health" data-label="HEALTH">❤️ Health</button>
+    <button class="cat-btn" data-q="sport" data-label="SPORT">⚽ Sport</button>
   </div>
 </div>
 
 <div class="layout">
   <div id="map"></div>
   <div class="sidebar">
-    <div class="sidebar-header">Canlı Haberler</div>
+    <div class="sidebar-header">
+      <span>Live Global Feed</span>
+      <div class="live-dot">LIVE</div>
+    </div>
     <div class="news-list" id="newsList">
       <div class="loading">
         <div class="owl-loading">🦉</div>
-        <div class="loading-text">Haberler yükleniyor...</div>
+        <div class="loading-text">Loading news...</div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- DOPAMIN POPUP HTML (YENİ EKLENDİ) -->
+<!-- DOPAMINE POPUP -->
 <div id="dopaminePopup" class="dopamine-popup">
   <div class="dopamine-icon">🔥</div>
   <div class="dopamine-text">
-    <span id="dopamineTitle">Şok Haber Başlığı!</span>
-    <span class="dopamine-action">Hemen Tıkla ve Oku 🦉</span>
+    <span id="dopamineTitle">Breaking News!</span>
+    <span class="dopamine-action">Click here to read now 🦉</span>
   </div>
 </div>
 
@@ -231,27 +255,31 @@ setTimeout(() => {
 const GUARDIAN_KEY = '0a321643-aaab-4c6a-9185-1762685abe3d';
 
 const map = L.map('map', { zoomControl: true }).setView([20, 10], 2);
-L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-  attribution: '&copy; CartoDB &copy; OpenStreetMap',
+
+// RENKLİ HARİTA (VOYAGER TEMA)
+L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+  attribution: '&copy; CartoDB &copy; OSM',
   subdomains: 'abcd', maxZoom: 18
 }).addTo(map);
 
 const COORDS = {
-  us:[37,-95], gb:[55,-3], de:[51,10], fr:[46,2], jp:[36,138],
+  us:[37,-95], gb:[54,-2], de:[51,10], fr:[46,2], jp:[36,138],
   cn:[35,104], ru:[61,105], in:[20,78], br:[-14,-51], au:[-25,133],
   ca:[56,-106], za:[-30,22], ng:[9,8], eg:[26,30], mx:[23,-102],
   ar:[-38,-63], tr:[38,35], sa:[23,45], id:[-0,113], it:[41,12],
-  es:[40,-3], kr:[35,127], ua:[48,31], pl:[51,19], il:[31,34],
+  es:[40,-3], kr:[35,127], ua:[49,31], pl:[51,19], il:[31,34],
   ae:[23,53], sg:[1,103], pk:[30,69], th:[15,100], nl:[52,5],
 };
+
 const CNAMES = {
-  us:'ABD', gb:'İngiltere', de:'Almanya', fr:'Fransa', jp:'Japonya',
-  cn:'Çin', ru:'Rusya', in:'Hindistan', br:'Brezilya', au:'Avustralya',
-  ca:'Kanada', za:'G.Afrika', ng:'Nijerya', eg:'Mısır', mx:'Meksika',
-  ar:'Arjantin', tr:'Türkiye', sa:'S.Arabistan', id:'Endonezya', it:'İtalya',
-  es:'İspanya', kr:'G.Kore', ua:'Ukrayna', pl:'Polonya', il:'İsrail',
-  ae:'BAE', sg:'Singapur', pk:'Pakistan', th:'Tayland', nl:'Hollanda',
+  us:'USA', gb:'UK', de:'Germany', fr:'France', jp:'Japan',
+  cn:'China', ru:'Russia', in:'India', br:'Brazil', au:'Australia',
+  ca:'Canada', za:'South Africa', ng:'Nigeria', eg:'Egypt', mx:'Mexico',
+  ar:'Argentina', tr:'Turkey', sa:'Saudi Arabia', id:'Indonesia', it:'Italy',
+  es:'Spain', kr:'S. Korea', ua:'Ukraine', pl:'Poland', il:'Israel',
+  ae:'UAE', sg:'Singapore', pk:'Pakistan', th:'Thailand', nl:'Netherlands',
 };
+
 const COLORS = {
   'world':'#0d9488', 'technology':'#7c3aed', 'business':'#059669',
   'science':'#0891b2', 'health':'#dc2626', 'sport':'#d97706'
@@ -259,9 +287,9 @@ const COLORS = {
 
 function detectCountry(text) {
   const t = text.toLowerCase();
-  const map = {
-    'united states':'us','america':'us',' us ':'us','washington':'us','new york':'us',
-    'united kingdom':'gb','britain':'gb','london':'gb','england':'gb',
+  const mapKeywords = {
+    'united states':'us','usa':'us','america':'us','washington':'us','new york':'us',
+    'united kingdom':'gb','uk':'gb','u.k.':'gb','britain':'gb','london':'gb','england':'gb','bbc':'gb','premier league':'gb','scottish':'gb','scotland':'gb',
     'germany':'de','berlin':'de','france':'fr','paris':'fr',
     'japan':'jp','tokyo':'jp','china':'cn','beijing':'cn','shanghai':'cn',
     'russia':'ru','moscow':'ru','india':'in','delhi':'in','mumbai':'in',
@@ -273,7 +301,7 @@ function detectCountry(text) {
     'poland':'pl','israel':'il','tel aviv':'il','dubai':'ae','singapore':'sg',
     'pakistan':'pk','thailand':'th','netherlands':'nl','amsterdam':'nl',
   };
-  for(const [k,v] of Object.entries(map)) {
+  for(const [k,v] of Object.entries(mapKeywords)) {
     if(t.includes(k)) return v;
   }
   return null;
@@ -281,44 +309,50 @@ function detectCountry(text) {
 
 let markers = [];
 let currentQ = 'world';
-let currentLabel = 'DÜNYA';
-let dopamineTimer; // Dopamin zamanlayıcısı
+let currentLabel = 'WORLD';
+let dopamineTimer;
 
 function clearMarkers() { markers.forEach(m => map.removeLayer(m)); markers = []; }
 
-function getCoords(text, i) {
-  const code = detectCountry(text);
+function getCoords(text, i, category) {
+  let code = detectCountry(text);
+  
+  // Eğer spor haberi ise ve ülke bulunamadıysa İngiltere'ye (UK) ata. Alakasız yerlere gitmesini engeller.
+  if(!code && category === "sport") code = 'gb';
+
   const keys = Object.keys(COORDS);
   const k = code || keys[i % keys.length];
   const b = COORDS[k] || COORDS['us'];
+  
+  // Sapma oranını azalttım (1.5) ki noktalar ülkelerin içinde kalsın.
   return {
-    coords: [b[0]+(Math.random()-.5)*3, b[1]+(Math.random()-.5)*3],
-    country: CNAMES[k] || 'Dünya'
+    coords: [b[0]+(Math.random()-.5)*1.5, b[1]+(Math.random()-.5)*1.5],
+    country: CNAMES[k] || 'World'
   };
 }
 
-function dotIcon(color) {
+// Renkli ve nabız atan işaretçi
+function pulseIcon(color) {
   return L.divIcon({
     className: '',
-    html: `<div style="
-      width:14px;height:14px;border-radius:50%;
-      background:${color};border:2px solid #fff;
-      box-shadow:0 0 0 4px ${color}33;
-      animation: markerPop 0.4s ease;
-    "></div>`,
-    iconSize:[14,14], iconAnchor:[7,7]
+    html: `
+      <div style="position:relative; width:16px; height:16px;">
+        <div style="position:absolute; inset:0; border-radius:50%; border:3px solid ${color}; animation:markerPulseAnim 2s infinite; opacity:0.7;"></div>
+        <div style="position:absolute; inset:2px; border-radius:50%; background:${color}; border:2px solid #fff; box-shadow:0 1px 4px rgba(0,0,0,0.3);"></div>
+      </div>
+    `,
+    iconSize:[16,16], iconAnchor:[8,8]
   });
 }
 
 function timeAgo(d) {
   const diff = Date.now() - new Date(d).getTime();
   const h = Math.floor(diff/3600000), m = Math.floor(diff/60000);
-  if(h>24) return Math.floor(h/24)+' gün önce';
-  if(h>0) return h+' saat önce';
-  return m > 0 ? m+' dakika önce' : 'Az önce';
+  if(h>24) return Math.floor(h/24)+' days ago';
+  if(h>0) return h+' hours ago';
+  return m > 0 ? m+' mins ago' : 'Just now';
 }
 
-// --- DOPAMİN TETİKLEYİCİ (YENİ EKLENDİ) ---
 function triggerDopamine(articles) {
     clearTimeout(dopamineTimer);
     const popup = document.getElementById('dopaminePopup');
@@ -327,24 +361,22 @@ function triggerDopamine(articles) {
 
     if(!articles || articles.length < 3) return; 
     
-    // 4 ile 8 saniye arası rastgele bir sürede patlasın
     const randomTime = Math.floor(Math.random() * 4000) + 4000;
     
     dopamineTimer = setTimeout(() => {
         const randomArticle = articles[Math.floor(Math.random() * Math.min(articles.length, 10))];
         const titleEl = document.getElementById('dopamineTitle');
-        const titleText = randomArticle.webTitle || randomArticle.title;
+        const titleText = randomArticle.webTitle || randomArticle.title || "Breaking News Update!";
         
-        if(titleEl && titleText) {
+        if(titleEl) {
           titleEl.innerText = titleText.length > 55 ? titleText.substring(0,55) + "..." : titleText;
         }
         
-        const url = randomArticle.webUrl || randomArticle.url || randomArticle.link;
+        const url = randomArticle.webUrl || randomArticle.url || randomArticle.link || "#";
         popup.onclick = () => window.open(url, '_blank');
         popup.classList.add('show');
         
-        // 7 saniye sonra kendi kendine kapansın
-        setTimeout(() => { popup.classList.remove('show'); }, 7000);
+        setTimeout(() => { popup.classList.remove('show'); }, 8000);
     }, randomTime);
 }
 
@@ -354,54 +386,68 @@ function renderNews(results) {
   clearMarkers(); list.innerHTML = '';
 
   if(!results || results.length === 0) {
-    list.innerHTML = '<div class="loading"><span>Haber bulunamadı.</span></div>'; return;
+    list.innerHTML = '<div class="loading"><span>News not found.</span></div>'; return;
   }
 
   results.slice(0,20).forEach((a, i) => {
     const title = a.webTitle || a.title || '';
     if(!title) return;
-    const trail = a.fields?.trailText || a.description || '';
-    const fullText = title + ' ' + trail;
-    const {coords, country} = getCoords(fullText, i);
+    const trailText = a.fields?.trailText || a.description || '';
+    const fullText = title + ' ' + trailText;
+    
+    // Spor kategorisini gönderiyoruz ki UK kontrolü yapılsın
+    const {coords, country} = getCoords(fullText, i, currentQ);
     const url = a.webUrl || a.link;
     const date = a.webPublicationDate || a.pubDate;
 
-    const marker = L.marker(coords, {icon: dotIcon(color)}).addTo(map);
+    // Resim kontrolü (Guardian veya BBC RSS)
+    const thumbUrl = a.fields?.thumbnail || a.thumbnail || (a.enclosure && a.enclosure.link) || null;
+    const thumbHtml = thumbUrl ? `<img src="${thumbUrl}" class="news-thumb" onerror="this.style.display='none'"/>` : '';
+    const popupThumbHtml = thumbUrl ? `<img src="${thumbUrl}" class="popup-img" onerror="this.style.display='none'"/>` : '';
+
+    const marker = L.marker(coords, {icon: pulseIcon(color)}).addTo(map);
     marker.bindPopup(`
-      <div style="max-width:220px;font-family:'Inter',sans-serif">
-        <div class="popup-title">${title}</div>
-        <div class="popup-source">${currentQ === "sport" ? "BBC Sport" : "The Guardian"} · ${country}</div>
-        <a class="popup-link" href="${url}" target="_blank">Haberi oku →</a>
+      <div style="font-family:'Inter',sans-serif">
+        ${popupThumbHtml}
+        <div class="popup-body">
+          <div class="popup-title">${title}</div>
+          <div class="popup-source">${currentQ === "sport" ? "BBC Sport" : "The Guardian"} · ${country}</div>
+          <a class="popup-link" href="${url}" target="_blank">Read more →</a>
+        </div>
       </div>
-    `, {maxWidth:240});
+    `);
     markers.push(marker);
 
     const card = document.createElement('div');
     card.className = 'news-card';
     card.style.animationDelay = (i * 0.05) + 's';
+    
+    // Resim varsa karda ekle
     card.innerHTML = `
-      <div class="news-cat-badge" style="background:${color}22;color:${color}">${currentLabel} · ${country}</div>
-      <div class="news-title">${title}</div>
-      <div class="news-source">${currentQ === "sport" ? "BBC Sport" : "The Guardian"} · ${timeAgo(date)}</div>
+      ${thumbHtml}
+      <div class="news-card-body">
+        <div class="news-cat-badge" style="background:${color}22;color:${color}">${currentLabel} · ${country}</div>
+        <div class="news-title">${title}</div>
+        <div class="news-source">${currentQ === "sport" ? "BBC Sport" : "The Guardian"} · ${timeAgo(date)}</div>
+      </div>
     `;
+    
     card.addEventListener('click', () => {
       document.querySelectorAll('.news-card').forEach(c => c.classList.remove('active'));
       card.classList.add('active');
-      map.setView(coords, 4, {animate:true});
+      map.setView(coords, 5, {animate:true});
       setTimeout(()=>marker.openPopup(), 400);
     });
     list.appendChild(card);
   });
 
-  // --- POPUP BURADA ÇAĞRILIYOR ---
   triggerDopamine(results);
 }
 
 async function fetchNews(section) {
   const list = document.getElementById('newsList');
-  list.innerHTML = `<div class="loading"><div class="owl-loading">🦉</div><div class="loading-text">Yükleniyor...</div></div>`;
+  list.innerHTML = `<div class="loading"><div class="owl-loading">🦉</div><div class="loading-text">Loading news...</div></div>`;
 
-  // ⚽ SPOR → BBC FOOTBALL
   if (section === "sport") {
     try {
       const res = await fetch("https://api.rss2json.com/v1/api.json?rss_url=http://feeds.bbci.co.uk/sport/football/rss.xml");
@@ -411,33 +457,36 @@ async function fetchNews(section) {
         webTitle: item.title,
         webUrl: item.link,
         webPublicationDate: item.pubDate,
-        fields: { trailText: item.description || "" }
+        fields: { 
+          trailText: item.description || "",
+          thumbnail: item.thumbnail || (item.enclosure && item.enclosure.link) || null
+        }
       }));
 
       if (articles.length > 0) {
         renderNews(articles);
       } else {
-        list.innerHTML = '<div class="loading"><div class="loading-text">Spor haberi bulunamadı.</div></div>';
+        list.innerHTML = '<div class="loading"><div class="loading-text">No sports news found.</div></div>';
       }
     } catch (e) {
-      list.innerHTML = '<div class="loading"><div class="loading-text">Spor haberleri alınamadı.</div></div>';
+      list.innerHTML = '<div class="loading"><div class="loading-text">Could not fetch sports news.</div></div>';
     }
     return;
   }
 
-  // 🌍 DİĞER HER ŞEY → GUARDIAN
   try {
-    const url = `https://content.guardianapis.com/${section}?api-key=${GUARDIAN_KEY}&page-size=20&show-fields=trailText&order-by=newest`;
+    // Fotoğrafların (thumbnail) gelmesi için show-fields=thumbnail,trailText yapıldı.
+    const url = `https://content.guardianapis.com/${section}?api-key=${GUARDIAN_KEY}&page-size=20&show-fields=thumbnail,trailText&order-by=newest`;
     const res = await fetch(url);
     const data = await res.json();
 
     if (data.response?.results?.length > 0) {
       renderNews(data.response.results);
     } else {
-      list.innerHTML = '<div class="loading"><div class="loading-text">Haber bulunamadı.</div></div>';
+      list.innerHTML = '<div class="loading"><div class="loading-text">News not found.</div></div>';
     }
   } catch (e) {
-    list.innerHTML = '<div class="loading"><div class="loading-text">Bağlantı hatası. Sayfayı yenile.</div></div>';
+    list.innerHTML = '<div class="loading"><div class="loading-text">Connection error. Refresh the page.</div></div>';
   }
 }
 
