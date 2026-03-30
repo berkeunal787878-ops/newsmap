@@ -368,17 +368,43 @@ async function fetchNews(section) {
   const list = document.getElementById('newsList');
   list.innerHTML = `<div class="loading"><div class="owl-loading">🦉</div><div class="loading-text">Yükleniyor...</div></div>`;
 
+  // ⚽ SPOR → BBC FOOTBALL
+  if (section === "sport") {
+    try {
+      const res = await fetch("https://api.rss2json.com/v1/api.json?rss_url=http://feeds.bbci.co.uk/sport/football/rss.xml");
+      const data = await res.json();
+
+      const articles = (data.items || []).map(item => ({
+        webTitle: item.title,
+        webUrl: item.link,
+        webPublicationDate: item.pubDate,
+        fields: { trailText: item.description || "" }
+      }));
+
+      if (articles.length > 0) {
+        renderNews(articles);
+      } else {
+        list.innerHTML = '<div class="loading"><div class="loading-text">Spor haberi bulunamadı.</div></div>';
+      }
+    } catch (e) {
+      list.innerHTML = '<div class="loading"><div class="loading-text">Spor haberleri alınamadı.</div></div>';
+    }
+    return;
+  }
+
+  // 🌍 DİĞER HER ŞEY → GUARDIAN
   try {
     const url = `https://content.guardianapis.com/${section}?api-key=${GUARDIAN_KEY}&page-size=20&show-fields=trailText&order-by=newest`;
     const res = await fetch(url);
     const data = await res.json();
-    if(data.response?.results?.length > 0) {
+
+    if (data.response?.results?.length > 0) {
       renderNews(data.response.results);
     } else {
-      list.innerHTML = '<div class="loading"><span>Haber bulunamadı.</span></div>';
+      list.innerHTML = '<div class="loading"><div class="loading-text">Haber bulunamadı.</div></div>';
     }
-  } catch(e) {
-    list.innerHTML = '<div class="loading"><div class="owl-loading">🦉</div><div class="loading-text">Bağlantı hatası. Sayfayı yenile.</div></div>';
+  } catch (e) {
+    list.innerHTML = '<div class="loading"><div class="loading-text">Bağlantı hatası. Sayfayı yenile.</div></div>';
   }
 }
 
