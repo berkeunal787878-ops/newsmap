@@ -73,7 +73,7 @@
     .news-thumb { width: 100%; height: 140px; object-fit: cover; border-radius: 8px; margin-top: 8px; }
     .badge { font-size: 9px; font-weight: 700; padding: 3px 8px; border-radius: 12px; text-transform: uppercase; }
 
-    /* REKLAM ALANLARI */
+    /* AD PLACEHOLDERS */
     .ad-placeholder { background: var(--active-bg); border: 2px dashed var(--border); color: var(--text-sub); display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; border-radius: 8px; margin: 10px 15px; text-align: center; }
     .feed-ad { height: 120px; cursor: pointer; } 
     .modal-ad { height: 150px; width: 100%; margin: 15px 0; cursor: pointer; } 
@@ -98,7 +98,7 @@
     .dopamine-popup:hover { transform: translateX(-50%) translateY(-5px) scale(1.02); }
     .dopamine-icon { font-size: 24px; animation: owlFloat 1s infinite alternate; }
 
-    /* LOADER & ANIMATIONS */
+    /* LOADER */
     .loading { display: flex; align-items: center; justify-content: center; height: 100%; flex-direction: column; gap: 14px; padding: 40px 20px; text-align: center; }
     .owl-loading { font-size: 44px; animation: owlFloat 2s ease-in-out infinite; }
     @keyframes owlFloat { 0% { transform: translateY(0); } 100% { transform: translateY(-5px); } }
@@ -185,13 +185,11 @@
         <span id="modalSource" class="badge" style="background:var(--active-bg); color:var(--accent);"></span>
         <span id="modalDate"></span>
       </div>
-      
       <div class="ad-placeholder modal-ad">
         <span style="font-size: 20px; margin-bottom: 5px;">💰</span>
         AdSense Display Banner Area
         <span style="font-size: 9px; font-weight: 400; margin-top: 5px;">(Insert Google Ad Code Here)</span>
       </div>
-
       <div class="modal-text" id="modalText"></div>
       <a href="" id="modalLink" target="_blank" class="modal-action-btn">Read Full Article 🦉</a>
     </div>
@@ -254,7 +252,7 @@
   L.control.zoom({ position: 'topright' }).addTo(map);
   L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png').addTo(map);
 
-  // KÜRESEL MERKEZLER 
+  // --- KESİN LOKASYON VERİTABANI ---
   const EXACT_CITIES = {
     'new york':[40.71,-74.00],'washington':[38.90,-77.03],'los angeles':[34.05,-118.24],'chicago':[41.87,-87.62],'san francisco':[37.77,-122.41],'miami':[25.77,-80.19],
     'london':[51.50,-0.12],'manchester':[53.48,-2.24],'liverpool':[53.40,-2.98],'paris':[48.85,2.35],'istanbul':[41.01,28.97],'ankara':[39.92,32.85],
@@ -262,88 +260,76 @@
     'tokyo':[35.68,139.69],'beijing':[39.90,116.40],'shanghai':[31.22,121.47],'hong kong':[22.31,114.17],'seoul':[37.56,126.97],'singapore':[1.35,103.81],
     'new delhi':[28.61,77.20],'mumbai':[19.07,72.87],'dubai':[25.20,55.27],'cairo':[30.04,31.23],'nairobi':[-1.28,36.81],'johannesburg':[-26.20,28.04],
     'sao paulo':[-23.54,-46.63],'buenos aires':[-34.60,-58.38],'sydney':[-33.86,151.20],'melbourne':[-37.81,144.96], 'mexico city':[19.43,-99.13],
-    'jakarta':[-6.20,106.81], 'manila':[14.59,120.98], 'bangkok':[13.75,100.50], 'lima':[-12.04,-77.02], 'bogota':[4.71,-74.07], 'doha':[25.28,51.53]
+    'doha':[25.28,51.53], 'islamabad':[33.68,73.04], 'karachi':[24.86,67.00]
   };
 
   const CAPITALS = {
     'us':[38.90,-77.03], 'gb':[51.50,-0.12], 'de':[52.52,13.40], 'tr':[39.92,32.85], 'fr':[48.85,2.35], 'jp':[35.68,139.69], 'cn':[39.90,116.40], 
     'ru':[55.75,37.61], 'in':[28.61,77.20], 'au':[-35.28,149.12], 'ca':[45.42,-75.69], 'za':[-25.74,28.18], 'ng':[9.07,7.39], 'eg':[30.04,31.23], 
     'mx':[19.43,-99.13], 'ar':[-34.60,-58.38], 'sa':[24.71,46.67], 'id':[-6.20,106.81], 'it':[41.90,12.49], 'es':[40.41,-3.70], 'kr':[37.56,126.97], 
-    'ua':[50.45,30.52], 'il':[31.76,35.21], 'ae':[24.45,54.37], 'qa':[25.28,51.53], 'br':[-15.82,-47.92], 'pk':[33.68,73.04], 'ph':[14.59,120.98], 'vn':[21.02,105.83]
+    'ua':[50.45,30.52], 'il':[31.76,35.21], 'ae':[24.45,54.37], 'qa':[25.28,51.53], 'br':[-15.82,-47.92], 'pk':[33.68,73.04]
   };
   
-  const CNAMES = { us:'USA', gb:'UK', de:'Germany', tr:'Turkey', fr:'France', jp:'Japan', cn:'China', ru:'Russia', in:'India', au:'Australia', ca:'Canada', za:'South Africa', ng:'Nigeria', eg:'Egypt', mx:'Mexico', ar:'Argentina', sa:'Saudi Arabia', id:'Indonesia', it:'Italy', es:'Spain', kr:'S. Korea', ua:'Ukraine', il:'Israel', ae:'UAE', qa:'Qatar', br:'Brazil', pk:'Pakistan', ph:'Philippines', vn:'Vietnam' };
+  const CNAMES = { us:'USA', gb:'UK', de:'Germany', tr:'Turkey', fr:'France', jp:'Japan', cn:'China', ru:'Russia', in:'India', au:'Australia', ca:'Canada', za:'South Africa', ng:'Nigeria', eg:'Egypt', mx:'Mexico', ar:'Argentina', sa:'Saudi Arabia', id:'Indonesia', it:'Italy', es:'Spain', kr:'S. Korea', ua:'Ukraine', il:'Israel', ae:'UAE', qa:'Qatar', br:'Brazil', pk:'Pakistan' };
   
-  // MERKEZLERİ ÜST ÜSTE YIĞMAMAK İÇİN DAĞILIM (Kısa Mesafe Scatter)
-  // Ne okyanusa uçar, ne de tek noktada sıkışır. 
   const HQ_LOCATIONS = {
-    'Fox News': [38.90, -77.03], 'CNN': [33.75, -84.39], 'MSNBC': [40.75, -73.98], 'Bloomberg': [40.76, -73.96], 'NBC News': [40.75, -73.97],
-    'BBC': [51.51, -0.14], 'Sky News': [51.48, -0.32], 'Sky Sports': [51.48, -0.32], 'The Guardian': [51.53, -0.12],
-    'EuroNews': [45.74, 4.82], 'France24': [48.82, 2.26], 'Marca': [40.44, -3.66],
-    'Al Jazeera': [25.31, 51.52], 'Al Arabiya': [25.20, 55.27],
-    'NDTV': [28.55, 77.25], 'Times of India': [28.62, 77.24], 'Geo News': [24.86, 67.00], 'SCMP': [22.27, 114.18], 'Japan Times': [35.68, 139.74],
-    'CBC News': [43.64, -79.38], 'ABC News': [-33.88, 151.20],
-    'NTV': [41.05, 28.98]
+    'CNN': [33.75, -84.39], 'Fox News': [40.75, -73.98], 'BBC': [51.51, -0.14], 'Sky': [51.48, -0.32],
+    'EuroNews': [45.74, 4.82], 'Al Jazeera': [25.31, 51.52], 'Al Arabiya': [25.20, 55.27],
+    'NDTV': [28.55, 77.25], 'Times of India': [28.62, 77.24], 'Geo News': [24.86, 67.00], 'ABC News': [-33.88, 151.20],
+    'NTV': [41.05, 28.98], 'CBC News': [43.64, -79.38], 'WSJ': [40.71, -74.01], 'ESPN': [41.61, -72.92]
   };
 
   const hasWord = (word, text) => new RegExp("\\b" + word + "\\b", "i").test(text);
-  const KEYWORDS = { 'usa':'us', 'america':'us', 'england':'gb', 'premier league':'gb', 'nba':'us', 'nfl':'us' };
+  const KEYWORDS = { 'usa':'us', 'america':'us', 'england':'gb', 'premier league':'gb', 'nba':'us', 'nfl':'us', 'macron':'fr', 'putin':'ru' };
   const COLORS = { 'world':'#0d9488', 'technology':'#7c3aed', 'business':'#059669', 'science':'#0891b2', 'health':'#dc2626', 'sport':'#d97706' };
   
   let markers = [];
   let currentQ = 'world';
   let dopamineTimer;
 
-  // HARİKA DAĞILIM ALGORİTMASI (Üst üste binmeyi engeller ama uzağa fırlatmaz)
+  // LOKASYON TAKİPÇİSİ (Aynı noktaya düşenleri spirale dizer, sıkışmayı önler)
+  const locationCounts = {}; 
+
   function getCoords(text, source) {
     const t = (text || "").toLowerCase();
-    
-    // Rastgele ama kontrollü yayılma payı (Sıkışmayı engeller, ortalama 20-50 km sapma)
-    const scatterLat = (Math.random() - 0.5) * 1.5; 
-    const scatterLng = (Math.random() - 0.5) * 1.5;
+    let baseLat = null, baseLng = null, locName = null;
 
-    const microScatterLat = (Math.random() - 0.5) * 0.2; // Şehir içi ince dağılım
-    const microScatterLng = (Math.random() - 0.5) * 0.2;
-
-    // 1. ŞEHİR KONTROLÜ
     for (const [city, coords] of Object.entries(EXACT_CITIES)) {
-      if (hasWord(city, t)) {
-        return { coords: [coords[0] + microScatterLat, coords[1] + microScatterLng], locationName: city.charAt(0).toUpperCase() + city.slice(1) };
+      if (hasWord(city, t)) { baseLat = coords[0]; baseLng = coords[1]; locName = city.charAt(0).toUpperCase() + city.slice(1); break; }
+    }
+
+    if(!baseLat) {
+      let code = null;
+      for (const [k, v] of Object.entries(KEYWORDS)) { if(hasWord(k, t)) { code = v; break; } }
+      if(!code) {
+        for (const [k, v] of Object.entries(CNAMES)) { if(hasWord(v.toLowerCase(), t)) { code = k; break; } }
       }
+      if(code && CAPITALS[code]) { baseLat = CAPITALS[code][0]; baseLng = CAPITALS[code][1]; locName = CNAMES[code]; }
     }
 
-    // 2. ÜLKE KONTROLÜ
-    let code = null;
-    for (const [k, v] of Object.entries(KEYWORDS)) { if(hasWord(k, t)) { code = v; break; } }
-    if(!code) {
-      for (const [k, v] of Object.entries(CNAMES)) { if(hasWord(v.toLowerCase(), t)) { code = k; break; } }
+    if(!baseLat) {
+      for (const [hq, coords] of Object.entries(HQ_LOCATIONS)) {
+        if (source.includes(hq)) { baseLat = coords[0]; baseLng = coords[1]; locName = hq + " HQ"; break; }
+      }
+      if(!baseLat) { baseLat = 40.71; baseLng = -74.00; locName = "USA"; } // Mutlak Son Çare (New York)
     }
 
-    if(code && CAPITALS[code]) {
-      // Ülke bulunduysa başkentin etrafına tatlı bir alana saçılır (Okyanusa gitmez)
-      return { coords: [CAPITALS[code][0] + scatterLat, CAPITALS[code][1] + scatterLng], locationName: CNAMES[code] };
-    }
+    // SPIRAL GRID ALGORİTMASI: Aynı yere düşen haberleri yan yana dizer (Denize fırlatmaz, haritayı boğmaz)
+    const locKey = `${baseLat},${baseLng}`;
+    const count = locationCounts[locKey] || 0;
+    locationCounts[locKey] = count + 1;
 
-    // 3. HİÇBİR YER GEÇMİYORSA: AJANSIN MERKEZİNE (BÖLGESİNE) YAY
-    let hqCoords = HQ_LOCATIONS['NY Times'] || [40.71, -74.00]; 
-    let hqName = 'USA';
+    // Her yeni haberi merkezden hafifçe sağa/sola kaydırır
+    const row = Math.floor(count / 3);
+    const col = count % 3;
+    const finalLat = baseLat + (row * 0.3); // Yaklaşık 30km aralık
+    const finalLng = baseLng + (col * 0.3);
 
-    for (const [hq, coords] of Object.entries(HQ_LOCATIONS)) {
-      if (source.includes(hq)) { hqCoords = coords; hqName = hq; break; }
-    }
-    
-    // Ajans binası etrafına kontrollü yayılım
-    return { coords: [hqCoords[0] + scatterLat, hqCoords[1] + scatterLng], locationName: hqName + " Region" };
+    return { coords: [finalLat, finalLng], locationName: locName };
   }
 
   function pulseIcon(color) {
-    return L.divIcon({
-      html: `<div style="position:relative; width:16px; height:16px;">
-              <div style="position:absolute; inset:0; border-radius:50%; border:3px solid ${color}; animation:markerPulseAnim 2s infinite; opacity:0.7;"></div>
-              <div style="position:absolute; inset:2px; border-radius:50%; background:${color}; border:2px solid #fff; box-shadow:0 1px 4px rgba(0,0,0,0.3);"></div>
-            </div>`,
-      iconSize:[16,16], iconAnchor:[8,8]
-    });
+    return L.divIcon({ html: `<div style="position:relative; width:16px; height:16px;"><div style="position:absolute; inset:0; border-radius:50%; border:3px solid ${color}; animation:markerPulseAnim 2s infinite; opacity:0.7;"></div><div style="position:absolute; inset:2px; border-radius:50%; background:${color}; border:2px solid #fff; box-shadow:0 1px 4px rgba(0,0,0,0.3);"></div></div>`, iconSize:[16,16], iconAnchor:[8,8] });
   }
 
   function timeAgo(d) {
@@ -367,18 +353,38 @@
 
   function closeModal() { document.getElementById('newsModal').classList.remove('active'); }
 
-  // --- RENDER ---
+  function triggerDopamine(articles) {
+    clearTimeout(dopamineTimer);
+    const popup = document.getElementById('dopaminePopup');
+    if(!popup) return;
+    popup.classList.remove('show');
+    if(!articles || articles.length < 3) return; 
+    
+    dopamineTimer = setTimeout(() => {
+        const rnd = articles[Math.floor(Math.random() * Math.min(articles.length, 10))];
+        const titleEl = document.getElementById('dopamineTitle');
+        if(titleEl) titleEl.innerText = rnd.title.length > 50 ? rnd.title.substring(0,50) + "..." : rnd.title;
+        popup.onclick = () => { popup.classList.remove('show'); openModal(rnd); };
+        popup.classList.add('show');
+        setTimeout(() => popup.classList.remove('show'), 7000); 
+    }, 5000);
+  }
+
   function renderArticles(articles) {
     const list = document.getElementById('newsList');
     const color = COLORS[currentQ] || '#0d9488';
-    markers.forEach(m => map.removeLayer(m)); markers = []; list.innerHTML = '';
+    
+    // Haritayı temizle ve Sayaçları sıfırla
+    markers.forEach(m => map.removeLayer(m)); markers = []; 
+    for (let key in locationCounts) delete locationCounts[key];
+    list.innerHTML = '';
 
     if(!articles || articles.length === 0) {
       list.innerHTML = '<div class="loading"><div class="owl-loading">🦉</div><div class="loading-text">No News Found.</div></div>';
       return;
     }
 
-    articles.slice(0,50).forEach((a, i) => {
+    articles.slice(0,40).forEach((a, i) => {
       const fullText = a.title + ' ' + (a.trailText || '');
       const {coords, locationName} = getCoords(fullText, a.source); 
 
@@ -413,9 +419,11 @@
       };
       list.appendChild(card);
     });
+
+    triggerDopamine(articles);
   }
 
-  // --- RSS FETCH MOTORU ---
+  // --- HATA KORUMALI RSS FETCH ---
   async function fetchRSS(url, sourceName) {
     try {
       const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`);
@@ -429,74 +437,82 @@
     } catch(e) { return []; }
   }
 
-  // DEVASA BİLGİ AĞI (TAM İSTEDİĞİN LİSTE)
+  // GUARDIAN API YEDEK (RSS'ler çökerse sayfa boş kalmasın diye)
+  async function fetchGuardianFallback(category) {
+    try {
+      const GUARDIAN_KEY = '0a321643-aaab-4c6a-9185-1762685abe3d';
+      const qCat = (category === 'health' || category === 'sport') ? 'world' : category; // Health/Sport bazen boş döner
+      const res = await fetch(`https://content.guardianapis.com/${qCat}?api-key=${GUARDIAN_KEY}&page-size=10&show-fields=thumbnail,trailText`);
+      const data = await res.json();
+      return (data.response?.results || []).map(a => ({
+          title: a.webTitle, url: a.webUrl, source: 'The Guardian', date: a.webPublicationDate,
+          thumb: a.fields?.thumbnail || null, trailText: a.fields?.trailText ? a.fields.trailText.replace(/<[^>]*>?/gm, '') : ""
+      }));
+    } catch(e) { return []; }
+  }
+
+  // --- DEVASA BİLGİ AĞI ---
   async function fetchNews(category) {
     const list = document.getElementById('newsList');
     list.innerHTML = `<div class="loading"><div class="owl-loading">🦉</div><div class="loading-text">Scanning Globe...</div></div>`;
 
+    let feedConfigs = [];
+
+    if (category === 'world') {
+      feedConfigs = [
+        {url: "http://rss.cnn.com/rss/edition_world.rss", name: "CNN"},
+        {url: "http://feeds.bbci.co.uk/news/world/rss.xml", name: "BBC News"},
+        {url: "https://www.aljazeera.com/xml/rss/all.xml", name: "Al Jazeera"},
+        {url: "https://www.ntv.com.tr/dunya.rss", name: "NTV"},
+        {url: "https://www.geo.tv/rss/1/2", name: "Geo News"},
+        {url: "https://english.alarabiya.net/feed/world", name: "Al Arabiya"}
+      ];
+    } else if (category === 'technology') {
+      feedConfigs = [
+        {url: "https://techcrunch.com/feed/", name: "TechCrunch"},
+        {url: "https://www.ntv.com.tr/teknoloji.rss", name: "NTV"},
+        {url: "https://www.wired.com/feed/rss", name: "Wired"}
+      ];
+    } else if (category === 'business') {
+      feedConfigs = [
+        {url: "https://feeds.a.dj.com/rss/WSJcomUSBusiness.xml", name: "WSJ"},
+        {url: "https://rss.nytimes.com/services/xml/rss/nyt/Business.xml", "name": "NY Times"},
+        {url: "http://feeds.bbci.co.uk/news/business/rss.xml", name: "BBC Business"}
+      ];
+    } else if (category === 'health') {
+      feedConfigs = [
+        {url: "http://feeds.bbci.co.uk/news/health/rss.xml", name: "BBC News"},
+        {url: "https://www.ntv.com.tr/saglik.rss", name: "NTV"},
+        {url: "https://rss.nytimes.com/services/xml/rss/nyt/Health.xml", name: "NY Times"}
+      ];
+    } else if (category === 'science') {
+      feedConfigs = [
+        {url: "https://rss.nytimes.com/services/xml/rss/nyt/Science.xml", name: "NY Times"},
+        {url: "http://feeds.bbci.co.uk/news/science_and_environment/rss.xml", name: "BBC News"}
+      ];
+    } else if (category === 'sport') {
+      feedConfigs = [
+        {url: "https://www.espn.com/espn/rss/news", name: "ESPN"},
+        {url: "https://www.skysports.com/rss/12040", name: "Sky Sports"},
+        {url: "https://www.ntv.com.tr/sporskor.rss", name: "NTV Spor"},
+        {url: "https://e00-marca.uecdn.es/rss/en/football.xml", name: "Marca"}
+      ];
+    }
+
     try {
+      // Promise.allSettled KULLANILDI: Bir site çökerse diğerleri çalışmaya devam eder
+      const promises = feedConfigs.map(feed => fetchRSS(feed.url, feed.name));
+      const results = await Promise.allSettled(promises);
+      
       let articles = [];
+      results.forEach(res => { if(res.status === 'fulfilled') articles.push(...res.value); });
 
-      // İstediğin Liste ve Daha Fazlası Eklendi
-      if (category === 'world') {
-        const fetchPromises = [
-          fetchRSS("http://rss.cnn.com/rss/edition_world.rss", "CNN"),
-          fetchRSS("https://moxie.foxnews.com/google-publisher/world.xml", "Fox News"),
-          fetchRSS("http://feeds.bbci.co.uk/news/world/rss.xml", "BBC News"),
-          fetchRSS("https://feeds.skynews.com/feeds/rss/world.xml", "Sky News"),
-          fetchRSS("https://www.euronews.com/rss?level=theme&name=news", "EuroNews"),
-          fetchRSS("https://english.alarabiya.net/feed/world", "Al Arabiya"),
-          fetchRSS("https://feeds.feedburner.com/ndtvnews-world-news", "NDTV India"),
-          fetchRSS("https://www.aljazeera.com/xml/rss/all.xml", "Al Jazeera"),
-          fetchRSS("https://www.cbc.ca/cmlink/rss-world", "CBC News"),
-          fetchRSS("https://www.abc.net.au/news/feed/51120/rss.xml", "ABC News"),
-          fetchRSS("https://www.geo.tv/rss/1/2", "Geo News"),
-          fetchRSS("https://www.ntv.com.tr/dunya.rss", "NTV")
-        ];
-        const results = await Promise.all(fetchPromises);
-        articles = results.flat();
-      } 
-      else if (category === 'technology') {
-        articles = [
-          ...(await fetchRSS("https://techcrunch.com/feed/", "TechCrunch")),
-          ...(await fetchRSS("https://www.ntv.com.tr/teknoloji.rss", "NTV")),
-          ...(await fetchRSS("http://feeds.bbci.co.uk/news/technology/rss.xml", "BBC News"))
-        ];
-      }
-      else if (category === 'business') {
-        articles = [
-          ...(await fetchRSS("https://feeds.bloomberg.com/markets/news.rss", "Bloomberg")),
-          ...(await fetchRSS("https://search.cnbc.com/rs/search/combinedcms/view.xml?profile=12000000&id=10000664", "CNBC")),
-          ...(await fetchRSS("https://www.ntv.com.tr/ekonomi.rss", "NTV"))
-        ];
-      }
-      else if (category === 'health') {
-        articles = [
-          ...(await fetchRSS("http://feeds.bbci.co.uk/news/health/rss.xml", "BBC News")),
-          ...(await fetchRSS("https://www.ntv.com.tr/saglik.rss", "NTV")),
-          ...(await fetchRSS("http://rss.cnn.com/rss/edition_space.rss", "CNN Health/Sci"))
-        ];
-      }
-      else if (category === 'science') {
-        articles = [
-          ...(await fetchRSS("https://rss.nytimes.com/services/xml/rss/nyt/Science.xml", "NY Times")),
-          ...(await fetchRSS("http://feeds.bbci.co.uk/news/science_and_environment/rss.xml", "BBC News"))
-        ];
-      }
-      else if (category === 'sport') {
-        const fetchPromisesSport = [
-          fetchRSS("https://www.skysports.com/rss/12040", "Sky Sports"),
-          fetchRSS("https://www.espn.com/espn/rss/news", "ESPN"),
-          fetchRSS("http://feeds.bbci.co.uk/sport/rss.xml", "BBC Sport"),
-          fetchRSS("https://www.ntv.com.tr/sporskor.rss", "NTV Spor"),
-          fetchRSS("https://moxie.foxnews.com/google-publisher/sports.xml", "Fox Sports"),
-          fetchRSS("https://timesofindia.indiatimes.com/rssfeeds/4719148.cms", "NDTV/TOI Sport")
-        ];
-        const resultsSport = await Promise.all(fetchPromisesSport);
-        articles = resultsSport.flat();
+      // RSS'lerden hiçbiri çalışmazsa Guardian'ı devreye sok (Yedek)
+      if (articles.length < 5) {
+        const fallback = await fetchGuardianFallback(category);
+        articles.push(...fallback);
       }
 
-      // Benzersizleri ayıkla ve karıştır
       const seen = new Set();
       articles = articles.filter(a => { if(!a.title || seen.has(a.title)) return false; seen.add(a.title); return true; });
       articles = articles.sort(() => Math.random() - 0.5);
