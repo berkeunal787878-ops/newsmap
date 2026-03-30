@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
   <title>OWLS — Global News Map</title>
 
+  <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-TG3Q7KX51N"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -13,9 +14,11 @@
     gtag('config', 'G-TG3Q7KX51N');
   </script>
 
+  <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
 
+  <!-- Leaflet Harita -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 
@@ -234,7 +237,7 @@
 
 <script>
   // ==========================================
-  // --- FİREBASE BAĞLANTISI (DOKUNMA) ---
+  // --- FİREBASE BAĞLANTISI ---
   // ==========================================
   const firebaseConfig = {
     apiKey: "AIzaSyBf3EDUobPIaZL6Jzu5i1ITT8YRSZaCOa8",
@@ -253,26 +256,20 @@
   window.addEventListener('load', () => {
     setTimeout(() => {
       const splash = document.getElementById('splash');
-      if(splash) {
-        splash.classList.add('hide');
-        setTimeout(() => splash.remove(), 600);
-      }
+      if(splash) { splash.classList.add('hide'); setTimeout(() => splash.remove(), 600); }
     }, 1500);
   });
 
-  // --- TEMA VE USER UI ---
   function initApp() {
     if(localStorage.getItem('owlsTheme') === 'dark') {
       document.body.setAttribute('data-theme', 'dark');
       document.getElementById('themeBtn').innerText = '☀️';
     }
-
     auth.onAuthStateChanged(user => {
       if (user) {
         document.getElementById('loginBtn').style.display = 'none';
         const avatar = document.getElementById('userAvatar');
-        avatar.src = user.photoURL;
-        avatar.style.display = 'block';
+        avatar.src = user.photoURL; avatar.style.display = 'block';
         document.getElementById('userNameDisplay').innerText = `| ${user.displayName.split(' ')[0]}'s Feed`;
       } else {
         document.getElementById('loginBtn').style.display = 'block';
@@ -292,19 +289,19 @@
   function loginWithGoogle() { auth.signInWithPopup(provider).catch(e => console.log(e)); }
   function logout() { if (confirm("Log out from OWLS?")) auth.signOut(); }
 
-  // --- HARİTA AYARLARI ---
+  // --- HARİTA VE KOORDİNATLAR ---
   const map = L.map('map', { zoomControl: false }).setView([20, 10], 2);
   L.control.zoom({ position: 'topright' }).addTo(map);
   L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png').addTo(map);
 
-  // NOKTA ATIŞI İÇİN KAPSAMLI ŞEHİR VE ÜLKE KÜTÜPHANESİ
-  const CITY_COORDS = { 'new york':[40.71,-74.00],'washington':[38.90,-77.03],'los angeles':[34.05,-118.24],'chicago':[41.87,-87.62],'san francisco':[37.77,-122.41],'seattle':[47.60,-122.33],'boston':[42.36,-71.05],'miami':[25.77,-80.19],'houston':[29.76,-95.36],'silicon valley':[37.38,-122.08],'london':[51.50,-0.12],'manchester':[53.48,-2.24],'birmingham':[52.48,-1.89],'liverpool':[53.40,-2.98],'edinburgh':[55.95,-3.19],'glasgow':[55.86,-4.25],'istanbul':[41.01,28.97],'ankara':[39.92,32.85],'izmir':[38.41,27.13],'bursa':[40.18,29.06],'antalya':[36.88,30.70],'trabzon':[41.00,39.72],'berlin':[52.52,13.40],'munich':[48.13,11.57],'hamburg':[53.55,9.99],'frankfurt':[50.11,8.68],'cologne':[50.93,6.96],'dortmund':[51.51,7.46],'paris':[48.85,2.35],'lyon':[45.74,4.83],'marseille':[43.29,5.38],'nice':[43.70,7.26],'bordeaux':[44.83,-0.57],'madrid':[40.41,-3.70],'barcelona':[41.38,2.17],'seville':[37.38,-5.99],'valencia':[39.46,-0.37],'bilbao':[43.26,-2.92],'rome':[41.90,12.49],'milan':[45.46,9.18],'naples':[40.85,14.27],'turin':[45.07,7.68],'florence':[43.76,11.25],'amsterdam':[52.37,4.89],'brussels':[50.85,4.35],'vienna':[48.20,16.37],'zurich':[47.37,8.54],'stockholm':[59.33,18.06],'oslo':[59.91,10.75],'copenhagen':[55.67,12.56],'warsaw':[52.22,21.01],'prague':[50.07,14.43],'budapest':[47.49,19.04],'athens':[37.97,23.72],'lisbon':[38.71,-9.14],'kyiv':[50.45,30.52],'moscow':[55.75,37.61],'st petersburg':[59.93,30.31],'tokyo':[35.68,139.69],'osaka':[34.69,135.50],'beijing':[39.90,116.40],'shanghai':[31.22,121.47],'hong kong':[22.31,114.17],'seoul':[37.56,126.97],'singapore':[1.35,103.81],'bangkok':[13.75,100.51],'delhi':[28.63,77.21],'mumbai':[19.07,72.87],'bangalore':[12.97,77.59],'islamabad':[33.72,73.06],'karachi':[24.86,67.01],'dubai':[25.20,55.27],'riyadh':[24.68,46.72],'tehran':[35.69,51.38],'tel aviv':[32.08,34.78],'jerusalem':[31.76,35.21],'beirut':[33.88,35.49],'kabul':[34.52,69.17],'cairo':[30.04,31.23],'lagos':[6.45,3.40],'nairobi':[-1.28,36.81],'johannesburg':[-26.20,28.04],'cape town':[-33.92,18.42],'addis ababa':[9.03,38.74],'accra':[5.55,-0.20],'sao paulo':[-23.54,-46.63],'rio de janeiro':[-22.90,-43.17],'buenos aires':[-34.60,-58.38],'santiago':[-33.45,-70.66],'bogota':[4.71,-74.07],'lima':[-12.04,-77.02],'mexico city':[19.42,-99.13],'sydney':[-33.86,151.20],'melbourne':[-37.81,144.96],'canberra':[-35.28,149.12],'auckland':[-36.84,174.76] };
-  const COUNTRY_COORDS = { us:[37,-95], gb:[54,-2], de:[51,10], tr:[38,35], fr:[46,2], jp:[36,138], cn:[35,104], ru:[61,105], in:[20,78], au:[-25,133], ca:[56,-106], za:[-30,22], ng:[9,8], eg:[26,30], mx:[23,-102], ar:[-38,-63], sa:[23,45], id:[-0,113], it:[41,12], es:[40,-3], kr:[35,127], ua:[49,31], pl:[51,19], il:[31,34], ae:[23,53], qa:[25,51] };
-  const CNAMES = { us:'USA', gb:'UK', de:'Germany', tr:'Turkey', fr:'France', jp:'Japan', cn:'China', ru:'Russia', in:'India', au:'Australia', ca:'Canada', za:'South Africa', ng:'Nigeria', eg:'Egypt', mx:'Mexico', ar:'Argentina', sa:'Saudi Arabia', id:'Indonesia', it:'Italy', es:'Spain', kr:'S. Korea', ua:'Ukraine', pl:'Poland', il:'Israel', ae:'UAE', qa:'Qatar' };
+  const CITY_COORDS = { 'new york':[40.71,-74.00],'washington':[38.90,-77.03],'los angeles':[34.05,-118.24],'chicago':[41.87,-87.62],'san francisco':[37.77,-122.41],'seattle':[47.60,-122.33],'boston':[42.36,-71.05],'miami':[25.77,-80.19],'london':[51.50,-0.12],'manchester':[53.48,-2.24],'liverpool':[53.40,-2.98],'edinburgh':[55.95,-3.19],'istanbul':[41.01,28.97],'ankara':[39.92,32.85],'berlin':[52.52,13.40],'munich':[48.13,11.57],'frankfurt':[50.11,8.68],'paris':[48.85,2.35],'lyon':[45.74,4.83],'madrid':[40.41,-3.70],'barcelona':[41.38,2.17],'rome':[41.90,12.49],'milan':[45.46,9.18],'amsterdam':[52.37,4.89],'brussels':[50.85,4.35],'vienna':[48.20,16.37],'stockholm':[59.33,18.06],'oslo':[59.91,10.75],'copenhagen':[55.67,12.56],'warsaw':[52.22,21.01],'kyiv':[50.45,30.52],'moscow':[55.75,37.61],'tokyo':[35.68,139.69],'beijing':[39.90,116.40],'shanghai':[31.22,121.47],'hong kong':[22.31,114.17],'seoul':[37.56,126.97],'singapore':[1.35,103.81],'bangkok':[13.75,100.51],'delhi':[28.63,77.21],'mumbai':[19.07,72.87],'dubai':[25.20,55.27],'riyadh':[24.68,46.72],'tehran':[35.69,51.38],'tel aviv':[32.08,34.78],'cairo':[30.04,31.23],'lagos':[6.45,3.40],'nairobi':[-1.28,36.81],'johannesburg':[-26.20,28.04],'sao paulo':[-23.54,-46.63],'buenos aires':[-34.60,-58.38],'sydney':[-33.86,151.20],'melbourne':[-37.81,144.96] };
+  const COUNTRY_COORDS = { us:[37,-95], gb:[54,-2], de:[51,10], tr:[38,35], fr:[46,2], jp:[36,138], cn:[35,104], ru:[61,105], in:[20,78], au:[-25,133], ca:[56,-106], za:[-30,22], ng:[9,8], eg:[26,30], mx:[23,-102], ar:[-38,-63], sa:[23,45], id:[-0,113], it:[41,12], es:[40,-3], kr:[35,127], ua:[49,31], pl:[51,19], il:[31,34], ae:[23,53], qa:[25,51], br:[-14,-51] };
+  const CNAMES = { us:'USA', gb:'UK', de:'Germany', tr:'Turkey', fr:'France', jp:'Japan', cn:'China', ru:'Russia', in:'India', au:'Australia', ca:'Canada', za:'South Africa', ng:'Nigeria', eg:'Egypt', mx:'Mexico', ar:'Argentina', sa:'Saudi Arabia', id:'Indonesia', it:'Italy', es:'Spain', kr:'S. Korea', ua:'Ukraine', pl:'Poland', il:'Israel', ae:'UAE', qa:'Qatar', br:'Brazil' };
   
-  // Regex tabanlı kelime arayıcı ("chrome" ile "rome" karışmasın diye)
-  const hasWord = (word, text) => new RegExp("\\b" + word + "\\b", "i").test(text);
+  // Coğrafi Dağılım Limitleri (Rusya'ya atarsa geniş saçılır, İngiltere'ye atarsa dar saçılır)
+  const SPREAD = { ru:[15, 50], us:[10, 25], cn:[10, 20], ca:[10, 30], br:[10, 15], au:[10, 20], in:[8, 8], default:[3, 3] };
 
+  const hasWord = (word, text) => new RegExp("\\b" + word + "\\b", "i").test(text);
   const KEYWORDS = { 'usa':'us', 'america':'us', 'biden':'us', 'white house':'us', 'england':'gb', 'bbc':'gb', 'premier league':'gb', 'scotland':'gb', 'macron':'fr', 'putin':'ru', 'gaza':'il', 'palestine':'il', 'middle east':'ae' };
   const COLORS = { 'world':'#0d9488', 'technology':'#7c3aed', 'business':'#059669', 'science':'#0891b2', 'health':'#dc2626', 'sport':'#d97706' };
   
@@ -312,39 +309,43 @@
   let currentQ = 'world';
   let dopamineTimer;
 
-  // GELİŞMİŞ NOKTA ATIŞI VE DAĞILIM ALGORİTMASI
   function getCoords(text, source) {
     const t = (text || "").toLowerCase();
     
-    // 1. Şehir kontrolü (Nokta atışı, çok küçük sapma ile)
+    // 1. Şehir
     for (const [city, coords] of Object.entries(CITY_COORDS)) {
       if (hasWord(city, t)) {
-        return {
-          coords: [coords[0] + (Math.random()-.5)*0.5, coords[1] + (Math.random()-.5)*0.5],
-          country: city.charAt(0).toUpperCase() + city.slice(1) // Şehir ismini yazdır
-        };
+        return { coords: [coords[0] + (Math.random()-.5)*0.5, coords[1] + (Math.random()-.5)*0.5], country: city.charAt(0).toUpperCase() + city.slice(1) };
       }
     }
 
-    // 2. Ülke veya Anahtar Kelime kontrolü
+    // 2. Ülke Kelimeleri
     let code = null;
     for (const [k, v] of Object.entries(KEYWORDS)) { if(hasWord(k, t)) { code = v; break; } }
     if(!code) {
       for (const [k, v] of Object.entries(CNAMES)) { if(hasWord(v.toLowerCase(), t)) { code = k; break; } }
     }
 
-    // 3. Bulunamadıysa Haber Kaynağına Göre YEDEKLEME (Fallback)
+    // 3. Fallback (Kaynağa göre ülke atama - Okyanusa düşmemesi için)
     if(!code) {
-        if(source.includes('NYT') || source.includes('CNN') || source.includes('TechCrunch') || source.includes('The Verge') || source.includes('CNBC') || source.includes('ESPN') || source.includes('Wired')) code = 'us';
+        if(source.includes('NYT') || source.includes('TechCrunch') || source.includes('Wired') || source.includes('CNBC') || source.includes('ESPN')) code = 'us';
         else if(source.includes('BBC') || source.includes('Sky') || source.includes('Guardian')) code = 'gb';
         else if(source.includes('Al Jazeera')) code = 'qa';
-        else code = 'us'; // Son çare
+        else if(source.includes('India')) code = 'in';
+        else if(source.includes('SCMP')) code = 'cn';
+        else if(source.includes('France24')) code = 'fr';
+        else {
+            // Hiçbiri yoksa tamamen rastgele karasal bir ülkeye at
+            const keys = Object.keys(COUNTRY_COORDS);
+            code = keys[Math.floor(Math.random() * keys.length)];
+        }
     }
 
-    // 4. Ülke içine mantıklı dağıtım (okyanusa taşmayı engeller)
+    // 4. Dağılım Çarpanı (Declustering)
     const b = COUNTRY_COORDS[code];
+    const spr = SPREAD[code] || SPREAD.default;
     return {
-      coords: [b[0] + (Math.random()-.5)*2.5, b[1] + (Math.random()-.5)*2.5], 
+      coords: [b[0] + (Math.random()-.5)*spr[0], b[1] + (Math.random()-.5)*spr[1]], 
       country: CNAMES[code]
     };
   }
@@ -368,45 +369,37 @@
     return m > 0 ? m+' mins ago' : 'Just now';
   }
 
-  // --- IN-APP READING (MODAL) ---
+  // --- MODAL & DOPAMIN ---
   function openModal(article) {
     document.getElementById('modalImg').src = article.thumb || 'https://images.unsplash.com/photo-1504711432869-00103211f46a?q=80&w=600';
     document.getElementById('modalTitle').innerText = article.title;
     document.getElementById('modalSource').innerText = article.source;
     document.getElementById('modalDate').innerText = timeAgo(article.date);
-    
-    document.getElementById('modalText').innerText = article.trailText || "Click the button below to read the full coverage of this story on the original publisher's website. We keep you on map to continue exploring.";
+    document.getElementById('modalText').innerText = article.trailText || "Click the button below to read the full coverage of this story on the original publisher's website.";
     document.getElementById('modalLink').href = article.url;
-    
     document.getElementById('newsModal').classList.add('active');
   }
 
-  function closeModal() {
-    document.getElementById('newsModal').classList.remove('active');
-  }
+  function closeModal() { document.getElementById('newsModal').classList.remove('active'); }
 
-  // --- DOPAMIN POPUP ---
   function triggerDopamine(articles) {
     clearTimeout(dopamineTimer);
     const popup = document.getElementById('dopaminePopup');
     if(!popup) return;
     popup.classList.remove('show');
-
     if(!articles || articles.length < 3) return; 
-    const randomTime = Math.floor(Math.random() * 4000) + 4000; 
     
     dopamineTimer = setTimeout(() => {
         const rnd = articles[Math.floor(Math.random() * Math.min(articles.length, 10))];
         const titleEl = document.getElementById('dopamineTitle');
         if(titleEl) titleEl.innerText = rnd.title.length > 50 ? rnd.title.substring(0,50) + "..." : rnd.title;
-        
         popup.onclick = () => { popup.classList.remove('show'); openModal(rnd); };
         popup.classList.add('show');
         setTimeout(() => popup.classList.remove('show'), 7000); 
-    }, randomTime);
+    }, Math.floor(Math.random() * 4000) + 4000);
   }
 
-  // --- HABER ÇEKME VE LİSTELEME ---
+  // --- RENDER ---
   function renderArticles(articles) {
     const list = document.getElementById('newsList');
     const color = COLORS[currentQ] || '#0d9488';
@@ -417,7 +410,7 @@
       return;
     }
 
-    articles.slice(0,30).forEach((a, i) => {
+    articles.slice(0,35).forEach((a, i) => {
       const fullText = a.title + ' ' + (a.trailText || '');
       const {coords, country} = getCoords(fullText, a.source);
 
@@ -425,8 +418,7 @@
       marker.bindPopup(`<b>${a.title}</b><br><small>${a.source}</small>`);
       markers.push(marker);
 
-      // REKLAM KARTI EKLEME
-      if (i > 0 && i % 4 === 0) {
+      if (i > 0 && i % 5 === 0) {
         const adCard = document.createElement('div');
         adCard.className = 'ad-placeholder feed-ad';
         adCard.innerHTML = `<span style="font-size:18px; margin-bottom:5px;">🚀</span> In-Feed AdSense Space`;
@@ -448,7 +440,7 @@
       card.onclick = () => {
         document.querySelectorAll('.news-card').forEach(c => c.classList.remove('active'));
         card.classList.add('active');
-        map.flyTo(coords, 6, { duration: 1.5, easeLinearity: 0.25 });
+        map.flyTo(coords, 5, { duration: 1.5, easeLinearity: 0.25 });
         openModal(a); 
       };
       list.appendChild(card);
@@ -457,7 +449,7 @@
     triggerDopamine(articles);
   }
 
-  // RSS Haber Çekici
+  // --- RSS FETCH MOTORU ---
   async function fetchRSS(url, sourceName) {
     try {
       const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`);
@@ -470,7 +462,6 @@
     } catch(e) { return []; }
   }
 
-  // Ana Dağıtıcı Algoritma
   async function fetchNews(category) {
     const list = document.getElementById('newsList');
     list.innerHTML = `<div class="loading"><div class="owl-loading">🦉</div><div class="loading-text">Scanning Globe...</div></div>`;
@@ -479,7 +470,7 @@
       let articles = [];
       const GUARDIAN_KEY = '0a321643-aaab-4c6a-9185-1762685abe3d';
 
-      // 1. Guardian API (Sağlık veya Spor değilse)
+      // 1. Guardian API
       if (category !== "sport" && category !== "health") {
         const url = `https://content.guardianapis.com/${category}?api-key=${GUARDIAN_KEY}&page-size=15&show-fields=thumbnail,trailText&order-by=newest`;
         const res = await fetch(url);
@@ -491,17 +482,18 @@
         articles = [...articles, ...gArts];
       }
 
-      // 2. RSS MEDYA ORDUSU
+      // 2. KÜRESEL MEDYA ORDUSU
       if (category === 'world') {
         const alJazeera = await fetchRSS("https://www.aljazeera.com/xml/rss/all.xml", "Al Jazeera");
         const bbcWorld = await fetchRSS("http://feeds.bbci.co.uk/news/world/rss.xml", "BBC World");
-        const nytWorld = await fetchRSS("https://rss.nytimes.com/services/xml/rss/nyt/World.xml", "NY Times");
-        articles = [...articles, ...alJazeera, ...bbcWorld, ...nytWorld];
+        const france24 = await fetchRSS("https://www.france24.com/en/rss", "France24");
+        const scmp = await fetchRSS("https://www.scmp.com/rss/2/feed", "SCMP");
+        articles = [...articles, ...alJazeera, ...bbcWorld, ...france24, ...scmp];
       } 
       else if (category === 'technology') {
         const techCrunch = await fetchRSS("https://techcrunch.com/feed/", "TechCrunch");
-        const theVerge = await fetchRSS("https://www.theverge.com/rss/index.xml", "The Verge");
-        articles = [...articles, ...techCrunch, ...theVerge];
+        const wired = await fetchRSS("https://www.wired.com/feed/rss", "Wired");
+        articles = [...articles, ...techCrunch, ...wired];
       }
       else if (category === 'business') {
         const nytBiz = await fetchRSS("https://rss.nytimes.com/services/xml/rss/nyt/Business.xml", "NY Times");
@@ -514,21 +506,22 @@
         articles = [...bbcHealth, ...nytHealth];
       }
       else if (category === 'science') {
-        const spaceCom = await fetchRSS("https://www.space.com/feeds/all", "Space.com");
         const nytSci = await fetchRSS("https://rss.nytimes.com/services/xml/rss/nyt/Science.xml", "NY Times");
-        articles = [...articles, ...spaceCom, ...nytSci];
+        articles = [...articles, ...nytSci];
       }
       else if (category === 'sport') {
         const bbcSport = await fetchRSS("http://feeds.bbci.co.uk/sport/football/rss.xml", "BBC Sport");
-        const espn = await fetchRSS("https://www.espn.com/espn/rss/news", "ESPN");
-        articles = [...bbcSport, ...espn];
+        const espnNBA = await fetchRSS("https://www.espn.com/espn/rss/nba/news", "ESPN NBA");
+        const espnNFL = await fetchRSS("https://www.espn.com/espn/rss/nfl/news", "ESPN NFL");
+        const skyEuro = await fetchRSS("https://www.skysports.com/rss/12040", "Sky Sports");
+        articles = [...bbcSport, ...espnNBA, ...espnNFL, ...skyEuro];
       }
 
-      // 3. Tekrar eden haberleri sil
+      // Benzersizleri ayıkla
       const seen = new Set();
       articles = articles.filter(a => { if(!a.title || seen.has(a.title)) return false; seen.add(a.title); return true; });
 
-      // 4. Rastgele karıştır ki hep aynı kaynak üstte olmasın
+      // Karıştır
       articles = articles.sort(() => Math.random() - 0.5);
 
       renderArticles(articles);
@@ -537,7 +530,6 @@
     }
   }
 
-  // Kategori Butonları
   document.querySelectorAll('.cat-btn').forEach(btn => {
     btn.onclick = function() {
       document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
