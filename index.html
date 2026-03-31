@@ -310,10 +310,26 @@ function toggleTheme() {
 
 // GİRİŞ FONKSİYONLARI (TAMAMEN DÜZELTİLDİ)
 function loginGoogle() { 
-    auth.signInWithPopup(provider).catch(e => {
+    // Pop-up açmak yerine doğrudan Google sayfasına yönlendirir (Redirect)
+    auth.signInWithRedirect(provider).catch(e => {
         console.error(e);
-        alert("GİRİŞ HATASI: Lütfen Firebase Console -> Authentication -> Settings -> Authorized Domains kısmına 'berkeunal787878-ops.github.io' adresini eklediğinizden emin olun.\n\nHata detayı: " + e.message);
+        alert("Yönlendirme hatası: " + e.message);
     }); 
+}
+
+function doLogout() { 
+    if(confirm("Çıkış yapmak istiyor musun?")) auth.signOut(); 
+}
+
+auth.onAuthStateChanged(u=>{ 
+  document.getElementById('loginBtn').style.display=u?'none':'block'; 
+  if(u){ 
+      document.getElementById('uavatar').src=u.photoURL; 
+      document.getElementById('uavatar').style.display='block'; 
+  } else {
+      document.getElementById('uavatar').style.display='none';
+  }
+});
 }
 
 function doLogout() { 
