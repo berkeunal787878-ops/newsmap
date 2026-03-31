@@ -55,7 +55,7 @@
     .cbtn { font-size:11px; font-weight:700; padding:5px 14px; border-radius:20px; border:1px solid var(--border); background:var(--card); color:var(--text2); cursor:pointer; white-space:nowrap; }
     .cbtn.active { background:var(--accent); color:#000; border-color:var(--accent); }
 
-    /* LAYOUT - ESNEK KUTU HATASI GİDERİLDİ */
+    /* LAYOUT - ESNEK KUTU HATASI KESİN GİDERİLDİ */
     .app-wrap { display:block; width:100%; height:100%; }
     .layout { width: 100%; height: calc(100vh - 94px); display: block; position: relative; }
     
@@ -144,11 +144,20 @@
 
 <script>
 // FIREBASE
-const fbCfg = {apiKey:"AIzaSyBf3EDUobPIaZL6Jzu5i1ITT8YRSZaCOa8",authDomain:"newsmap-5d380.firebaseapp.com",projectId:"newsmap-5d380",storageBucket:"newsmap-5d380.firebasestorage.app",messagingSenderId:"270586913079",appId:"1:270586913079:web:271cb786e7195299f73ab2"};
+const fbCfg = {
+  apiKey: "AIzaSyBf3EDUobPIaZL6Jzu5i1ITT8YRSZaCOa8",
+  authDomain: "newsmap-5d380.firebaseapp.com",
+  projectId: "newsmap-5d380",
+  storageBucket: "newsmap-5d380.firebasestorage.app",
+  messagingSenderId: "270586913079",
+  appId: "1:270586913079:web:271cb786e7195299f73ab2",
+  measurementId: "G-HHK7MV2HBG"
+};
 firebase.initializeApp(fbCfg);
 const auth = firebase.auth();
+const provider = new firebase.auth.GoogleAuthProvider(); // LOGIN HATASI İÇİN DÜZELTİLDİ
 
-// HARİTA (TEMİZ KURULUM)
+// HARİTA
 const map = L.map('map',{zoomControl:false}).setView([20,10],2);
 L.control.zoom({position:'bottomright'}).addTo(map);
 let tileLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_matter/{z}/{x}/{y}{r}.png',{maxZoom:19}).addTo(map);
@@ -172,11 +181,10 @@ function getCoords(text) {
 }
 
 // ASENKRON CANLI YÜKLEME MOTORU (INCREMENTAL RENDERING)
-// Haberler listesi silinir, gelenler anında eklenir! Bekleme yok!
 let globalSeenTitles = new Set();
 let articleCount = 0;
 
-async function fetchWithTimeout(url, timeout=2000) {
+async function fetchWithTimeout(url, timeout=2500) {
   const controller = new AbortController();
   const id = setTimeout(() => controller.abort(), timeout);
   try {
@@ -189,13 +197,12 @@ async function fetchWithTimeout(url, timeout=2000) {
   }
 }
 
-// Gelen paketi anında haritaya ve listeye basan fonksiyon
 function processIncomingNews(articles, category) {
     const list = document.getElementById('newsList');
     let addedCount = 0;
 
     articles.forEach(a => {
-        if(!a.title || globalSeenTitles.has(a.title)) return; // Tekrarı engelle
+        if(!a.title || globalSeenTitles.has(a.title)) return;
         globalSeenTitles.add(a.title);
         
         const locInfo = getCoords(a.title);
@@ -224,7 +231,7 @@ function processIncomingNews(articles, category) {
     document.getElementById('scount').innerText = `${articleCount} signals acquired`;
 }
 
-// BİREYSEL KAYNAK GETİRİCİLER (KAPASİTE ARTTIRILDI)
+// BİREYSEL KAYNAK GETİRİCİLER
 async function fetchGuardianLive(cat) {
   const c = (cat==='sport'||cat==='health') ? 'world' : cat;
   const d = await fetchWithTimeout(`https://content.guardianapis.com/${c}?api-key=0a321643-aaab-4c6a-9185-1762685abe3d&page-size=15&show-fields=thumbnail`);
@@ -240,9 +247,8 @@ async function fetchRssLive(url, name, cat) {
   }
 }
 
-// ANA TETİKLEYİCİ (YÜKLEME EKRANI YOK)
+// ANA TETİKLEYİCİ
 function fetchNews(category) {
-  // Ekranı Sıfırla
   document.getElementById('newsList').innerHTML = '';
   clusterLayer.clearLayers();
   globalSeenTitles.clear();
@@ -250,7 +256,6 @@ function fetchNews(category) {
   document.getElementById('scount').innerText = `0 signals acquired`;
   document.getElementById('lStatus').innerText = 'RADAR ACTIVE';
 
-  // HİÇ BEKLEMEDEN PARALEL İSTEK AT VE GELDİKÇE ÇİZ! (Bu sayede sistem asla donmaz)
   fetchGuardianLive(category);
 
   if(category === 'world') {
@@ -274,7 +279,6 @@ function fetchNews(category) {
       fetchRssLive('https://www.ntv.com.tr/sporskor.rss', 'NTV Spor', category);
   }
   else {
-      // Health, Science vs...
       fetchRssLive('http://feeds.bbci.co.uk/news/health/rss.xml', 'BBC Health', category);
   }
 }
@@ -285,27 +289,36 @@ function cat(btn, q) {
   fetchNews(q);
 }
 
-// KARANLIK MOD - SİYAH EKRAN KESİN ÇÖZÜM (TİLE LAYER SIFIRDAN EKLENİR)
+// KARANLIK MOD - SİYAH EKRAN KESİN ÇÖZÜMÜ (sadece setUrl kullanıldı)
 function toggleTheme() {
   const isDark = document.body.getAttribute('data-theme')==='dark';
   document.body.setAttribute('data-theme', isDark ? 'light' : 'dark');
   document.getElementById('themeBtn').textContent = isDark ? '🌙' : '☀️';
   
-  // Siyah ekran/takılma hatasını engellemek için eski katmanı tamamen silip yenisini yaratıyoruz.
-  map.removeLayer(tileLayer);
   const newUrl = isDark ? 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png' : 'https://{s}.basemaps.cartocdn.com/dark_matter/{z}/{x}/{y}{r}.png';
-  tileLayer = L.tileLayer(newUrl, {maxZoom:19}).addTo(map);
-  
-  // Tarayıcıyı zorla haritayı yeniden boyutlandırmaya (Render) zorla
-  setTimeout(() => map.invalidateSize(), 100);
+  tileLayer.setUrl(newUrl);
 }
 
-function loginGoogle(){ auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()); }
-function doLogout(){ auth.signOut(); }
+// GİRİŞ FONKSİYONLARI DÜZELTİLDİ
+function loginGoogle() { 
+    auth.signInWithPopup(provider).catch(e => {
+        console.error(e);
+        alert("Giriş yapılırken bir hata oluştu: " + e.message);
+    }); 
+}
+
+function doLogout() { 
+    if(confirm("Çıkış yapmak istiyor musun?")) auth.signOut(); 
+}
+
 auth.onAuthStateChanged(u=>{ 
   document.getElementById('loginBtn').style.display=u?'none':'block'; 
-  if(u){ document.getElementById('uavatar').src=u.photoURL; document.getElementById('uavatar').style.display='block'; }
-  else document.getElementById('uavatar').style.display='none';
+  if(u){ 
+      document.getElementById('uavatar').src=u.photoURL; 
+      document.getElementById('uavatar').style.display='block'; 
+  } else {
+      document.getElementById('uavatar').style.display='none';
+  }
 });
 
 window.addEventListener('resize', () => map.invalidateSize());
