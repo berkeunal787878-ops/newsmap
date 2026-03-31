@@ -20,7 +20,7 @@
 
   <style>
     :root {
-      /* SADECE AYDINLIK & TURKUAZ MOD */
+      /* AYDINLIK & TURKUAZ MOD */
       --bg: #f4fbfc; --bg2: #e8f5f7; --bg3: #d0ebeb; --card: #ffffff;
       --border: #b8e0df; --accent: #0098a0; --accent2: #e55a20;
       --text: #0a1b24; --text2: #3a5866; --text3: #6b8a99; --saved: #d4a800;
@@ -259,7 +259,6 @@
   </div>
 </div>
 
-<!-- MOBILE BOTTOM BAR -->
 <div class="mob-bar">
   <button class="mbbtn active" id="mb-map" onclick="mobSwitch('map')">🗺️ MAP</button>
   <button class="mbbtn" id="mb-news" onclick="mobSwitch('news')">📰 NEWS</button>
@@ -307,20 +306,21 @@
 <div class="tstack" id="tstack"></div>
 
 <script>
-// ── FIREBASE ────────────────────────────────────────────
+// ── FIREBASE VE VERİTABANI BAĞLANTILARI ────────────────────────────────────────────
 const fbCfg={apiKey:"AIzaSyBf3EDUobPIaZL6Jzu5i1ITT8YRSZaCOa8",authDomain:"newsmap-5d380.firebaseapp.com",projectId:"newsmap-5d380",storageBucket:"newsmap-5d380.firebasestorage.app",messagingSenderId:"270586913079",appId:"1:270586913079:web:271cb786e7195299f73ab2"};
 firebase.initializeApp(fbCfg);
 const auth=firebase.auth();
 const db=firebase.firestore(); 
 
-// ── STATE ────────────────────────────────────────────────
-let curQ='world',curR='all';
-let allArticles=[],clusterLayer;
+// ── TEMEL DEĞİŞKENLER VE "RACE CONDITION" KORUYUCUSU ────────────────────────────────────────────────
+let curQ='world', curR='all';
+let allArticles=[], clusterLayer;
 let curModalArt=null;
 let savedArts=JSON.parse(localStorage.getItem('owls_saved')||'[]');
 let readSet=new Set(JSON.parse(localStorage.getItem('owls_read')||'[]'));
 let alerts=JSON.parse(localStorage.getItem('owls_alerts')||'[]');
 let breakingTimer=null;
+let currentFetchId = 0; // Tıklama karmaşasını engelleyen "Kimlik Kartı"
 const COLORS={world:'#00a896',technology:'#4a6880',business:'#00a896',science:'#3a5866',health:'#e55a20',climate:'#0098a0',politics:'#00a896',sport:'#e55a20'};
 
 // ── MAP INIT ─
@@ -388,15 +388,22 @@ function getCoords(text){
   return{coords:[f[0]+(Math.random()-.5)*2,f[1]+(Math.random()-.5)*2],loc:f[2]};
 }
 
-// ── FAST FETCH ──
-async function fastFetch(url, ms = 3000) {
+// ── FAST FETCH (5 Saniye Limitli - Çok daha güvenli) ──
+async function fastFetch(url, ms = 5000) {
   const controller = new AbortController();
   const id = setTimeout(() => controller.abort(), ms);
-  try { const res = await fetch(url, { signal: controller.signal }); clearTimeout(id); return res; } 
-  catch (e) { clearTimeout(id); throw e; }
+  try { 
+      const res = await fetch(url, { signal: controller.signal }); 
+      clearTimeout(id); 
+      return res; 
+  } 
+  catch (e) { 
+      clearTimeout(id); 
+      throw e; 
+  }
 }
 
-// ── 60+ RSS KAYNAĞI VE AKILLI RULET SİSTEMİ ──
+// ── 60+ RSS KAYNAĞI ──
 const RSS_FEEDS = {
   world: [
     {u:'http://rss.cnn.com/rss/edition_world.rss',n:'CNN'},
@@ -441,7 +448,7 @@ const RSS_FEEDS = {
   business: [
     {u:'https://feeds.a.dj.com/rss/WSJcomUSBusiness.xml',n:'WSJ'},
     {u:'https://rss.nytimes.com/services/xml/rss/nyt/Business.xml',n:'NY Times'},
-    {u:'https://feeds.bbci.co.uk/news/business/rss.xml',n:'BBC'},
+    {u:'https://feeds.bbci.co.uk/news/business/rss.xml',n:'BBC Biz'},
     {u:'https://search.cnbc.com/rs/search/combinedcms/view.xml?profile=12000000&id=10000664',n:'CNBC'},
     {u:'https://feeds.a.dj.com/rss/RSSMarketsMain.xml',n:'WSJ Markets'},
     {u:'https://asia.nikkei.com/rss/feed/nar',n:'Nikkei Asia'},
@@ -449,7 +456,7 @@ const RSS_FEEDS = {
   ],
   science: [
     {u:'https://rss.nytimes.com/services/xml/rss/nyt/Science.xml',n:'NY Times'},
-    {u:'https://feeds.bbci.co.uk/news/science_and_environment/rss.xml',n:'BBC'},
+    {u:'https://feeds.bbci.co.uk/news/science_and_environment/rss.xml',n:'BBC Science'},
     {u:'https://www.sciencedaily.com/rss/top/science.xml',n:'ScienceDaily'},
     {u:'https://www.newscientist.com/subject/science/feed/',n:'New Scientist'},
     {u:'https://www.livescience.com/feeds/all',n:'Live Science'},
@@ -457,7 +464,7 @@ const RSS_FEEDS = {
     {u:'https://www.space.com/feeds/all',n:'Space.com'}
   ],
   climate: [
-    {u:'https://feeds.bbci.co.uk/news/science_and_environment/rss.xml',n:'BBC'},
+    {u:'https://feeds.bbci.co.uk/news/science_and_environment/rss.xml',n:'BBC Climate'},
     {u:'https://www.theguardian.com/environment/rss',n:'Guardian'},
     {u:'https://insideclimatenews.org/feed/',n:'Inside Climate News'},
     {u:'https://rss.nytimes.com/services/xml/rss/nyt/Climate.xml',n:'NYT Climate'},
@@ -466,7 +473,7 @@ const RSS_FEEDS = {
   ],
   politics: [
     {u:'https://rss.nytimes.com/services/xml/rss/nyt/Politics.xml',n:'NY Times'},
-    {u:'https://feeds.bbci.co.uk/news/politics/rss.xml',n:'BBC'},
+    {u:'https://feeds.bbci.co.uk/news/politics/rss.xml',n:'BBC Politics'},
     {u:'https://feeds.a.dj.com/rss/RSSOpinion.xml',n:'WSJ Opinion'},
     {u:'https://www.theguardian.com/politics/rss',n:'Guardian'},
     {u:'https://www.aljazeera.com/xml/rss/all.xml',n:'Al Jazeera'},
@@ -481,7 +488,7 @@ const RSS_FEEDS = {
   ]
 };
 
-// HATA ÇÖZÜMÜ: GUARDIAN İÇİN KESİN KATEGORİ HARİTASI
+// ── KATEGORİ YÖNLENDİRİCİSİ (Guardian'ın Saçmalamasını Engeller) ──
 const GUARDIAN_MAP = {
   world: 'world',
   technology: 'technology',
@@ -502,52 +509,71 @@ function shuffleArray(array) {
     return shuffled;
 }
 
+// ── GUARDIAN ÇEKİCİ ──
 async function fetchGuardian(cat){
   try{
-    // Kategori hatası çözüldü, net olarak haritadan alıyor.
     const sec = GUARDIAN_MAP[cat] || 'world';
-    const r=await fastFetch(`https://content.guardianapis.com/${sec}?api-key=${GKEY}&page-size=15&show-fields=thumbnail,trailText`);
+    const r=await fastFetch(`https://content.guardianapis.com/${sec}?api-key=${GKEY}&page-size=15&show-fields=thumbnail,trailText`, 5000);
     const d=await r.json();
-    return(d.response?.results||[]).map(a=>({ title:a.webTitle,url:a.webUrl,source:'The Guardian',date:a.webPublicationDate,thumb:a.fields?.thumbnail||null }));
+    return(d.response?.results||[]).map(a=>({ 
+        title:a.webTitle, url:a.webUrl, source:'The Guardian', 
+        date:a.webPublicationDate, thumb:a.fields?.thumbnail||null 
+    }));
   }catch{return[];}
 }
 
-// YENİ BULLETPROOF XML PARSER (RSS ve Atom'u sorunsuz okur)
-async function fetchRSS(feed){
-  try{
-    const r=await fastFetch(`https://api.allorigins.win/get?url=${encodeURIComponent(feed.u)}`);
-    const d=await r.json();
-    if(!d.contents) return [];
-
-    const xml=new DOMParser().parseFromString(d.contents,'text/xml');
-    
-    // Hem standart RSS (<item>) hem de The Verge/NYT gibi Atom (<entry>) feed'lerini destekler
-    let items = Array.from(xml.querySelectorAll('item'));
-    if(items.length === 0) items = Array.from(xml.querySelectorAll('entry'));
-
-    return items.slice(0,12).map(it=>{
-      const title = (it.querySelector('title')?.textContent || '').replace('<![CDATA[','').replace(']]>','').trim();
-      if(!title) return null;
-
-      let url = it.querySelector('link')?.textContent;
-      if(!url || !url.startsWith('http')) {
-        const linkTag = it.querySelector('link');
-        if(linkTag) url = linkTag.getAttribute('href'); // Atom feed link yapısı
+// ── ÇOKLU RSS ÇEKİCİ (Aynı Anda Atom ve Standart RSS'leri Okur) ──
+async function fetchRSS(feed) {
+  // 1. Önce en hızlı olan rss2json motorunu dene
+  try {
+      const r = await fastFetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feed.u)}&count=10`, 4000);
+      const d = await r.json();
+      if(d.status === 'ok' && d.items && d.items.length > 0) {
+          return d.items.map(i => ({
+              title: i.title || '', url: i.link || '#', source: feed.n, date: i.pubDate,
+              thumb: i.thumbnail || (i.enclosure?.link) || null
+          })).filter(a => a.title);
       }
+  } catch(e) {}
 
-      let thumb = it.querySelector('enclosure[type^="image"]')?.getAttribute('url');
-      if(!thumb) thumb = it.querySelector('content[url^="http"]')?.getAttribute('url'); 
-      if(!thumb) thumb = it.querySelector('thumbnail')?.getAttribute('url'); 
-      
-      return { title, url: url || '#', source: feed.n, thumb };
-    }).filter(a => a && a.title);
-  }catch{return[];}
+  // 2. Yedek Plan: AllOrigins ile doğrudan XML çekip tarayıcıda analiz et (The Verge, NYT gibi Atom kaynakları için şarttır)
+  try {
+      const r = await fastFetch(`https://api.allorigins.win/get?url=${encodeURIComponent(feed.u)}`, 5000);
+      const d = await r.json();
+      if(!d.contents) return [];
+
+      const xml = new DOMParser().parseFromString(d.contents,'text/xml');
+      let items = Array.from(xml.querySelectorAll('item'));
+      if(items.length === 0) items = Array.from(xml.querySelectorAll('entry')); // Eğer Atom formatındaysa
+
+      return items.slice(0, 10).map(it => {
+          const title = (it.querySelector('title')?.textContent || '').replace('<![CDATA[','').replace(']]>','').trim();
+          if(!title) return null;
+
+          let url = it.querySelector('link')?.textContent;
+          if(!url || !url.startsWith('http')) {
+              const linkTag = it.querySelector('link');
+              if(linkTag) url = linkTag.getAttribute('href'); // Atom linki
+          }
+
+          let thumb = it.querySelector('enclosure[type^="image"]')?.getAttribute('url');
+          if(!thumb) thumb = it.querySelector('content[url^="http"]')?.getAttribute('url');
+          if(!thumb) thumb = it.querySelector('thumbnail')?.getAttribute('url');
+
+          return { title, url: url || '#', source: feed.n, thumb };
+      }).filter(a => a && a.title);
+  } catch(e) {
+      return [];
+  }
 }
 
+// ── ANA HABER TOPLAYICI (Race Condition Korumalı) ──
 async function fetchNews(cat){
+  const fetchId = ++currentFetchId; // Kullanıcı hızlı tıklarsa kimlik verir
+  
   document.getElementById('newsList').innerHTML='<div class="loader"><div class="loader-owl">🦉</div><div class="loader-txt">SCANNING GLOBE</div></div>';
   
-  // AKILLI RULET: O kategorideki tüm kaynakları al, karıştır, sadece 8 tanesini seç (Ban yememek için)
+  // AKILLI RULET: Tıklanan kategorideki kaynakları al, karıştır, en fazla 8 tanesini haritaya gönder.
   const allCatFeeds = RSS_FEEDS[cat] || RSS_FEEDS.world;
   const selectedFeeds = shuffleArray(allCatFeeds).slice(0, 8);
 
@@ -556,7 +582,11 @@ async function fetchNews(cat){
       ...selectedFeeds.map(f => fetchRSS(f))
   ];
   
-  const results=await Promise.allSettled(feeds);
+  const results = await Promise.allSettled(feeds);
+  
+  // EĞER SİSTEM BU YÜKLEMEYİ YAPARKEN KULLANICI BAŞKA YERE TIKLAMIŞSA, BU İŞLEMİ İPTAL ET VE ÇIK. (Kategori karışmasını önler)
+  if (fetchId !== currentFetchId) return;
+
   let arts=[];
   results.forEach(r=>{if(r.status==='fulfilled')arts.push(...r.value);});
   
@@ -568,7 +598,9 @@ async function fetchNews(cat){
     a._sentiment = getSentiment(a.title);
   });
   
+  arts.sort(()=>Math.random()-.5); // Haberleri harmanla (Hep aynı kaynak üstte durmasın)
   allArticles=arts;
+  
   renderFeed(arts);
   renderAnalytics(arts);
 }
@@ -585,6 +617,11 @@ function renderFeed(arts){
   const filtered=curR==='all'?arts:arts.filter(a=>a._r===curR);
   document.getElementById('scount').textContent=`${filtered.length} stories`;
   
+  if(!filtered.length){
+    list.innerHTML='<div class="loader"><div class="loader-owl">🦉</div><div class="loader-txt">No stories in this region</div></div>';
+    map.addLayer(clusterLayer);return;
+  }
+
   filtered.forEach(a=>{
     const m=L.marker(a._c,{icon:mkIcon(a._sentiment.color)});
     m.bindPopup(`<div style="font-weight:700;font-size:13px;line-height:1.4;margin-bottom:6px;">${a.title}</div><div style="font-size:10px;margin-bottom:10px;">${a.source} · <span class="${a._sentiment.class}">${a._sentiment.level}</span></div><button onclick="window._openModalById('${encodeURIComponent(a.url)}')" style="background:var(--accent);color:#fff;border:none;border-radius:8px;padding:6px 12px;font-weight:700;cursor:pointer;width:100%">Read Story</button>`,{maxWidth:220});
