@@ -66,12 +66,11 @@
     .cbtn:hover:not(.active){border-color:var(--accent);color:var(--accent);}
 
     /* ── LAYOUT: absolute positioning — works on every browser/host ── */
-    /* Desktop: bars height = 56px (two rows ~28px each) */
     #map{
       position:fixed;
       top:calc(var(--hdr) + var(--bars));
       left:0;
-      right:350px;           /* sidebar width */
+      right:350px;
       bottom:0;
       z-index:1;
     }
@@ -374,15 +373,15 @@ const COLORS={world:'#00e5c8',technology:'#7c6bff',business:'#00e676',science:'#
 // ── MAP INIT (OSM tiles — most reliable for GitHub Pages) ─
 const map=L.map('map',{zoomControl:false}).setView([20,10],2);
 L.control.zoom({position:'bottomright'}).addTo(map);
+
+// HATA ÇÖZÜMÜ: Harita teması eklerken sadece URL'i değiştiriyoruz. Çökmeyi engeller.
 let tileLayer=L.tileLayer(
-  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  'https://{s}.basemaps.cartocdn.com/dark_matter/{z}/{x}/{y}{r}.png',
   {maxZoom:19,attribution:'© OpenStreetMap'}
 ).addTo(map);
 
-// Call invalidateSize whenever the map container might have changed
 function fixMap(){ setTimeout(()=>map.invalidateSize({animate:false}),120); }
 
-// Recalculate top-bars height and set #map top accordingly
 function calcBarsHeight(){
   const tb=document.getElementById('topBars');
   if(!tb||window.innerWidth<=768) return;
@@ -391,13 +390,11 @@ function calcBarsHeight(){
 }
 
 function setTile(dark){
-  map.removeLayer(tileLayer);
-  tileLayer=L.tileLayer(
-    dark
-      ? 'https://{s}.basemaps.cartocdn.com/dark_matter/{z}/{x}/{y}{r}.png'
-      : 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-    {maxZoom:19,attribution:'© OpenStreetMap'}
-  ).addTo(map);
+  // HATA ÇÖZÜMÜ 1: map.removeLayer KULLANMIYORUZ! Doğrudan setUrl kullanıyoruz. Bembeyaz olma hatasını bitirir.
+  const newUrl = dark 
+      ? 'https://{s}.basemaps.cartocdn.com/dark_matter/{z}/{x}/{y}{r}.png' 
+      : 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+  tileLayer.setUrl(newUrl);
 }
 
 function mkIcon(color){
@@ -546,6 +543,21 @@ function getCoords(text,_src){
   return{coords:[f[0]+jit(),f[1]+jit()],loc:f[2]};
 }
 
+// ── HATA ÇÖZÜMÜ 2: "2 SANİYE KURALI" FETCH FONKSİYONU ──
+// Eğer allorigins veya rss2json çökerse/yavaşlarsa sonsuza kadar beklemez, 2 saniyede şalteri atar.
+async function fetchTimeout(url, ms = 2000) {
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), ms);
+  try {
+    const res = await fetch(url, { signal: controller.signal });
+    clearTimeout(id);
+    return res;
+  } catch (e) {
+    clearTimeout(id);
+    throw e;
+  }
+}
+
 // ── GUARDIAN + RSS ───────────────────────────────────────
 const GKEY='0a321643-aaab-4c6a-9185-1762685abe3d';
 const G_SECTIONS={
@@ -593,7 +605,7 @@ const RSS_FEEDS={
 
 async function fetchGuardian(sec){
   try{
-    const r=await fetch(`https://content.guardianapis.com/${sec}?api-key=${GKEY}&page-size=20&show-fields=thumbnail,trailText`);
+    const r=await fetchTimeout(`https://content.guardianapis.com/${sec}?api-key=${GKEY}&page-size=20&show-fields=thumbnail,trailText`, 2000);
     const d=await r.json();
     return(d.response?.results||[]).map(a=>({
       title:a.webTitle,url:a.webUrl,source:'The Guardian',
@@ -606,7 +618,7 @@ async function fetchGuardian(sec){
 
 async function fetchRSS(feed){
   try{
-    const r=await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feed.u)}&count=15`);
+    const r=await fetchTimeout(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feed.u)}&count=15`, 2000);
     const d=await r.json();
     if(d.status==='ok'&&d.items?.length)
       return d.items.map(i=>({
@@ -615,9 +627,9 @@ async function fetchRSS(feed){
         trail:(i.description||'').replace(/<[^>]*>/gm,'').slice(0,200)
       }));
   }catch{}
-  // allorigins fallback
+  // allorigins fallback (buna da 2 saniye hız limiti koyduk)
   try{
-    const r=await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(feed.u)}`);
+    const r=await fetchTimeout(`https://api.allorigins.win/get?url=${encodeURIComponent(feed.u)}`, 2000);
     const d=await r.json();
     const xml=new DOMParser().parseFromString(d.contents,'text/xml');
     return[...xml.querySelectorAll('item')].slice(0,15).map(it=>({
@@ -636,10 +648,13 @@ async function fetchNews(cat){
   document.getElementById('feedLabel').textContent=cat.toUpperCase()+' FEED';
   const secs=G_SECTIONS[cat]||['world'];
   const rssList=RSS_FEEDS[cat]||RSS_FEEDS.world;
+  
+  // Artık maksimum 2 saniye bekleyecek, gelmeyen veriyi pas geçecek.
   const results=await Promise.allSettled([
     ...secs.map(s=>fetchGuardian(s)),
     ...rssList.map(f=>fetchRSS(f))
   ]);
+  
   let arts=[];
   results.forEach(r=>{if(r.status==='fulfilled')arts.push(...r.value);});
   const seen=new Set();
