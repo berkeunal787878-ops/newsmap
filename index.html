@@ -115,7 +115,7 @@
     <div class="hdr-right">
       <button class="hbtn" onclick="toggleTheme()" id="themeBtn">☀️</button>
       <button class="hbtn" id="loginBtn" onclick="loginGoogle()">Login</button>
-      <img src="" id="uavatar" class="uavatar" onclick="doLogout()">
+      <img src="" id="uavatar" class="uavatar" onclick="doLogout()" title="Çıkış Yap">
     </div>
   </div>
 
@@ -143,7 +143,7 @@
 </div>
 
 <script>
-// FIREBASE
+// FIREBASE KURULUMU
 const fbCfg = {
   apiKey: "AIzaSyBf3EDUobPIaZL6Jzu5i1ITT8YRSZaCOa8",
   authDomain: "newsmap-5d380.firebaseapp.com",
@@ -157,7 +157,7 @@ firebase.initializeApp(fbCfg);
 const auth = firebase.auth();
 const provider = new firebase.auth.GoogleAuthProvider();
 
-// HARİTA
+// HARİTA KURULUMU
 const map = L.map('map',{zoomControl:false}).setView([20,10],2);
 L.control.zoom({position:'bottomright'}).addTo(map);
 let tileLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_matter/{z}/{x}/{y}{r}.png',{maxZoom:19}).addTo(map);
@@ -168,7 +168,7 @@ function mkIcon(color){
   return L.divIcon({ html:`<div style="width:14px;height:14px;background:${color};border-radius:50%;border:2px solid var(--card);box-shadow:0 0 12px ${color}aa;"></div>`, iconSize:[14,14], iconAnchor:[7,7], className:'' });
 }
 
-// LOKASYON BULUCU
+// LOKASYON VERİTABANI
 const CITIES = {'new york':[40.71,-74.00], 'london':[51.50,-0.12], 'paris':[48.85,2.35], 'tokyo':[35.68,139.69], 'istanbul':[41.01,28.97], 'moscow':[55.75,37.61], 'beijing':[39.90,116.40], 'dubai':[25.20,55.27], 'sydney':[-33.86,151.20]};
 const CAPS = {us:[38.90,-77.03], gb:[51.50,-0.12], tr:[39.92,32.85], de:[52.52,13.40], ru:[55.75,37.61], in:[28.61,77.20], cn:[39.90,116.40], br:[-15.82,-47.92]};
 const CNAMES = {us:'USA', gb:'UK', tr:'Turkey', de:'Germany', ru:'Russia', in:'India', cn:'China', br:'Brazil'};
@@ -180,14 +180,15 @@ function getCoords(text) {
   return {c:[40.71+(Math.random()-0.5)*2, -74.00+(Math.random()-0.5)*2], l:'USA (HQ)'};
 }
 
-// YENİ LİMİTSİZ YÜKLEME MOTORU (DOMParser + AllOrigins)
+// HIZLI VE GÜVENLİ HABER YÜKLEME MOTORU
 let globalSeenTitles = new Set();
 let articleCount = 0;
 
 function processIncomingNews(articles) {
     const list = document.getElementById('newsList');
-    let addedCount = 0;
+    if (!list) return;
 
+    let addedCount = 0;
     articles.forEach(a => {
         if(!a.title || globalSeenTitles.has(a.title)) return;
         globalSeenTitles.add(a.title);
@@ -218,23 +219,27 @@ function processIncomingNews(articles) {
     document.getElementById('scount').innerText = `${articleCount} signals acquired`;
 }
 
-// DOĞRUDAN API'DEN JSON ÇEKME
+// GUARDIAN API (DOĞRUDAN VE GÜVENLİ)
 async function fetchGuardianLive(cat) {
   const c = (cat==='sport'||cat==='health') ? 'world' : cat;
   try {
     const res = await fetch(`https://content.guardianapis.com/${c}?api-key=0a321643-aaab-4c6a-9185-1762685abe3d&page-size=15&show-fields=thumbnail`);
+    if (!res.ok) return;
     const d = await res.json();
     if(d && d.response?.results) {
         processIncomingNews(d.response.results.map(a=>({ title:a.webTitle, url:a.webUrl, source:'Guardian', thumb:a.fields?.thumbnail })));
     }
-  } catch(e) {}
+  } catch(e) { console.warn("Guardian API Hatası"); }
 }
 
-// LİMİTSİZ RAW XML PARSER (rss2json çöpe atıldı)
+// RSS LİMİTSİZ RAW ÇEKİCİ
 async function fetchRssLive(url, name) {
   try {
     const res = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`);
+    if (!res.ok) return;
     const data = await res.json();
+    if (!data || !data.contents) return;
+
     const parser = new DOMParser();
     const xml = parser.parseFromString(data.contents, "text/xml");
     const items = Array.from(xml.querySelectorAll("item")).slice(0, 10);
@@ -242,20 +247,19 @@ async function fetchRssLive(url, name) {
     const articles = items.map(i => {
         const title = i.querySelector("title")?.textContent || "";
         const link = i.querySelector("link")?.textContent || "";
-        
         let thumb = null;
         const enc = i.querySelector("enclosure");
         if(enc && enc.getAttribute("type")?.includes("image")) thumb = enc.getAttribute("url");
         const media = i.getElementsByTagNameNS("*", "content");
         if(media.length > 0 && media[0].getAttribute("url")) thumb = media[0].getAttribute("url");
-
         return {title, url:link, source:name, thumb};
-    });
+    }).filter(a => a.title);
+
     processIncomingNews(articles);
-  } catch(e) {}
+  } catch(e) { console.warn("RSS API Hatası: " + name); }
 }
 
-// ANA TETİKLEYİCİ
+// KATEGORİ TETİKLEYİCİ
 function fetchNews(category) {
   document.getElementById('newsList').innerHTML = '';
   clusterLayer.clearLayers();
@@ -266,7 +270,6 @@ function fetchNews(category) {
 
   fetchGuardianLive(category);
 
-  // Kapasite maksimize edildi, engelleme yok.
   if(category === 'world') {
       fetchRssLive('http://rss.cnn.com/rss/edition_world.rss', 'CNN');
       fetchRssLive('https://www.aljazeera.com/xml/rss/all.xml', 'Al Jazeera');
@@ -298,7 +301,7 @@ function cat(btn, q) {
   fetchNews(q);
 }
 
-// KARANLIK MOD
+// KARANLIK / AYDINLIK MOD (SIFIR KASMA)
 function toggleTheme() {
   const isDark = document.body.getAttribute('data-theme')==='dark';
   document.body.setAttribute('data-theme', isDark ? 'light' : 'dark');
@@ -308,12 +311,10 @@ function toggleTheme() {
   tileLayer.setUrl(newUrl);
 }
 
-// GİRİŞ FONKSİYONLARI (TAMAMEN DÜZELTİLDİ)
+// GİRİŞ FONKSİYONU - POP-UP ENGELLEYİCİLERİNE KARŞI REDIRECT (YÖNLENDİRME) KULLANILDI
 function loginGoogle() { 
-    // Pop-up açmak yerine doğrudan Google sayfasına yönlendirir (Redirect)
     auth.signInWithRedirect(provider).catch(e => {
-        console.error(e);
-        alert("Yönlendirme hatası: " + e.message);
+        alert("Giriş başlatılamadı: " + e.message);
     }); 
 }
 
@@ -322,39 +323,34 @@ function doLogout() {
 }
 
 auth.onAuthStateChanged(u=>{ 
-  document.getElementById('loginBtn').style.display=u?'none':'block'; 
-  if(u){ 
-      document.getElementById('uavatar').src=u.photoURL; 
-      document.getElementById('uavatar').style.display='block'; 
+  const btn = document.getElementById('loginBtn');
+  const avatar = document.getElementById('uavatar');
+  
+  if(u) {
+      btn.style.display = 'none'; 
+      avatar.src = u.photoURL; 
+      avatar.style.display = 'block'; 
   } else {
-      document.getElementById('uavatar').style.display='none';
-  }
-});
-}
-
-function doLogout() { 
-    if(confirm("Çıkış yapmak istiyor musun?")) auth.signOut(); 
-}
-
-auth.onAuthStateChanged(u=>{ 
-  document.getElementById('loginBtn').style.display=u?'none':'block'; 
-  if(u){ 
-      document.getElementById('uavatar').src=u.photoURL; 
-      document.getElementById('uavatar').style.display='block'; 
-  } else {
-      document.getElementById('uavatar').style.display='none';
+      btn.style.display = 'block';
+      avatar.style.display = 'none';
   }
 });
 
-window.addEventListener('resize', () => map.invalidateSize());
+// HARİTA YENİDEN BOYUTLANDIRMA
+window.addEventListener('resize', () => { if(map) map.invalidateSize(); });
 
-window.addEventListener('load', () => {
-  sessionStorage.clear();
-  setTimeout(() => { 
-    document.getElementById('splash').classList.add('hide'); 
-    map.invalidateSize();
-  }, 800);
-  fetchNews('world');
+// GÜVENLİ BAŞLANGIÇ (SİSTEM ÇÖKSE BİLE YÜKLEME EKRANI KAPANIR)
+document.addEventListener("DOMContentLoaded", () => {
+    setTimeout(() => {
+        const splash = document.getElementById('splash');
+        if(splash) {
+            splash.classList.add('hide');
+            setTimeout(() => splash.remove(), 500);
+        }
+        if(map) map.invalidateSize();
+    }, 1200); // Ne olursa olsun 1.2 saniye sonra site açılmaya zorlanır.
+
+    fetchNews('world');
 });
 </script>
 </body>
