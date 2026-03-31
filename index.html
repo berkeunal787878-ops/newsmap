@@ -183,6 +183,7 @@
   <div class="splash-bar"><div class="splash-fill"></div></div>
 </div>
 
+<!-- HEADER -->
 <div class="header">
   <div class="logo">
     <span class="owl-anim">🦉</span>
@@ -195,6 +196,7 @@
   </div>
 </div>
 
+<!-- TOP BARS -->
 <div class="top-bars" id="topBars">
   <div class="bar-row" id="regionBar">
     <button class="rbtn active" data-r="all">🌐 ALL REGIONS</button>
@@ -217,8 +219,10 @@
   </div>
 </div>
 
+<!-- MAP -->
 <div id="map"></div>
 
+<!-- SIDEBAR -->
 <div class="sidebar" id="sidebar">
   <div class="stabs">
     <div class="stab active" onclick="stab('feed')">📡 FEED</div>
@@ -255,6 +259,7 @@
   </div>
 </div>
 
+<!-- MOBILE BOTTOM BAR -->
 <div class="mob-bar">
   <button class="mbbtn active" id="mb-map" onclick="mobSwitch('map')">🗺️ MAP</button>
   <button class="mbbtn" id="mb-news" onclick="mobSwitch('news')">📰 NEWS</button>
@@ -267,6 +272,17 @@
   <button class="cbtn" onclick="mobCat(this,'politics')">🏛️ Politics</button>
 </div>
 
+<!-- BREAKING NEWS POPUP -->
+<div class="breaking" id="breaking">
+  <div class="breaking-icon">🔥</div>
+  <div style="flex:1;min-width:0;">
+    <div class="breaking-label">Breaking News</div>
+    <div class="breaking-title" id="breaking-title">...</div>
+  </div>
+  <div class="breaking-close" onclick="hideBreaking()">×</div>
+</div>
+
+<!-- MODAL (HABER DETAYI) -->
 <div class="moverlay" id="modal">
   <div class="mbox">
     <button class="mclose" onclick="closeModal()">×</button>
@@ -304,6 +320,8 @@ let curModalArt=null;
 let savedArts=JSON.parse(localStorage.getItem('owls_saved')||'[]');
 let readSet=new Set(JSON.parse(localStorage.getItem('owls_read')||'[]'));
 let alerts=JSON.parse(localStorage.getItem('owls_alerts')||'[]');
+let breakingTimer=null;
+const COLORS={world:'#00a896',technology:'#4a6880',business:'#00a896',science:'#3a5866',health:'#e55a20',climate:'#0098a0',politics:'#00a896',sport:'#e55a20'};
 
 // ── MAP INIT ─
 const map=L.map('map',{zoomControl:false}).setView([20,10],2);
@@ -457,10 +475,24 @@ const RSS_FEEDS = {
   sport: [
     {u:'https://www.espn.com/espn/rss/news',n:'ESPN'},
     {u:'https://feeds.bbci.co.uk/sport/rss.xml',n:'BBC Sport'}
+  ],
+  health: [
+    {u:'https://feeds.bbci.co.uk/news/health/rss.xml',n:'BBC Health'}
   ]
 };
 
-// Diziyi karıştırma fonksiyonu (Akıllı Rulet için)
+// HATA ÇÖZÜMÜ: GUARDIAN İÇİN KESİN KATEGORİ HARİTASI
+const GUARDIAN_MAP = {
+  world: 'world',
+  technology: 'technology',
+  business: 'business',
+  science: 'science',
+  health: 'society',
+  climate: 'environment',
+  politics: 'politics',
+  sport: 'sport'
+};
+
 function shuffleArray(array) {
     let shuffled = array.slice();
     for (let i = shuffled.length - 1; i > 0; i--) {
@@ -470,36 +502,57 @@ function shuffleArray(array) {
     return shuffled;
 }
 
-async function fetchGuardian(sec){
+async function fetchGuardian(cat){
   try{
-    const r=await fastFetch(`https://content.guardianapis.com/${sec}?api-key=0a321643-aaab-4c6a-9185-1762685abe3d&page-size=15&show-fields=thumbnail`);
+    // Kategori hatası çözüldü, net olarak haritadan alıyor.
+    const sec = GUARDIAN_MAP[cat] || 'world';
+    const r=await fastFetch(`https://content.guardianapis.com/${sec}?api-key=${GKEY}&page-size=15&show-fields=thumbnail,trailText`);
     const d=await r.json();
     return(d.response?.results||[]).map(a=>({ title:a.webTitle,url:a.webUrl,source:'The Guardian',date:a.webPublicationDate,thumb:a.fields?.thumbnail||null }));
   }catch{return[];}
 }
 
-// RSS GETİRİCİSİ (AllOrigins limitsiz)
+// YENİ BULLETPROOF XML PARSER (RSS ve Atom'u sorunsuz okur)
 async function fetchRSS(feed){
   try{
     const r=await fastFetch(`https://api.allorigins.win/get?url=${encodeURIComponent(feed.u)}`);
     const d=await r.json();
+    if(!d.contents) return [];
+
     const xml=new DOMParser().parseFromString(d.contents,'text/xml');
-    return[...xml.querySelectorAll('item')].slice(0,10).map(it=>({
-      title:it.querySelector('title')?.textContent||'', url:it.querySelector('link')?.textContent||'#', source:feed.n,
-      thumb:it.querySelector('enclosure')?.getAttribute('url')||null
-    })).filter(a=>a.title);
+    
+    // Hem standart RSS (<item>) hem de The Verge/NYT gibi Atom (<entry>) feed'lerini destekler
+    let items = Array.from(xml.querySelectorAll('item'));
+    if(items.length === 0) items = Array.from(xml.querySelectorAll('entry'));
+
+    return items.slice(0,12).map(it=>{
+      const title = (it.querySelector('title')?.textContent || '').replace('<![CDATA[','').replace(']]>','').trim();
+      if(!title) return null;
+
+      let url = it.querySelector('link')?.textContent;
+      if(!url || !url.startsWith('http')) {
+        const linkTag = it.querySelector('link');
+        if(linkTag) url = linkTag.getAttribute('href'); // Atom feed link yapısı
+      }
+
+      let thumb = it.querySelector('enclosure[type^="image"]')?.getAttribute('url');
+      if(!thumb) thumb = it.querySelector('content[url^="http"]')?.getAttribute('url'); 
+      if(!thumb) thumb = it.querySelector('thumbnail')?.getAttribute('url'); 
+      
+      return { title, url: url || '#', source: feed.n, thumb };
+    }).filter(a => a && a.title);
   }catch{return[];}
 }
 
 async function fetchNews(cat){
   document.getElementById('newsList').innerHTML='<div class="loader"><div class="loader-owl">🦉</div><div class="loader-txt">SCANNING GLOBE</div></div>';
   
-  // AKILLI RULET: O kategorideki tüm kaynakları al, karıştır, sadece 6 tanesini seç (Ban yememek için)
+  // AKILLI RULET: O kategorideki tüm kaynakları al, karıştır, sadece 8 tanesini seç (Ban yememek için)
   const allCatFeeds = RSS_FEEDS[cat] || RSS_FEEDS.world;
-  const selectedFeeds = shuffleArray(allCatFeeds).slice(0, 6);
+  const selectedFeeds = shuffleArray(allCatFeeds).slice(0, 8);
 
   const feeds = [
-      fetchGuardian(cat==='sport'?'world':cat),
+      fetchGuardian(cat),
       ...selectedFeeds.map(f => fetchRSS(f))
   ];
   
