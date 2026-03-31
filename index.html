@@ -3,292 +3,186 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-  <meta name="theme-color" content="#0a1628"/>
   <title>OWLS — True Global News Map</title>
-  <link rel="manifest" href="#"/>
 
-  <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-
-  <!-- Leaflet + Cluster -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css"/>
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css"/>
-
-  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --bg: #0a1628;
-      --bg2: #0f1e3a;
-      --bg3: #162444;
-      --card: #111d35;
-      --border: #1e3054;
-      --accent: #00e5c8;
-      --accent2: #ff6b35;
-      --accent3: #7c6bff;
-      --text: #e8f4f8;
-      --text2: #7a9bb5;
-      --text3: #4a6980;
-      --saved: #ffd700;
-      --danger: #ff4757;
-      --map-filter: brightness(1.1) contrast(1.05);
+      --bg:#0a1628; --bg2:#0f1e3a; --bg3:#162444; --card:#111d35;
+      --border:#1e3054; --accent:#00e5c8; --accent2:#ff6b35; --text:#e8f4f8;
+      --text2:#7a9bb5; --text3:#4a6980; --saved:#ffd700;
     }
     [data-theme="light"] {
-      --bg: #f0f5fa;
-      --bg2: #e4edf6;
-      --bg3: #d8e7f2;
-      --card: #ffffff;
-      --border: #c5d8e8;
-      --accent: #0098a0;
-      --accent2: #e55a20;
-      --accent3: #5a4be0;
-      --text: #0a1628;
-      --text2: #4a6880;
-      --text3: #8aacbf;
-      --saved: #d4a800;
-      --danger: #e0002a;
-      --map-filter: none;
+      --bg:#f0f5fa; --bg2:#e4edf6; --bg3:#d8e7f2; --card:#ffffff;
+      --border:#c5d8e8; --accent:#0098a0; --accent2:#e55a20; --text:#0a1628;
+      --text2:#4a6880; --text3:#8aacbf; --saved:#d4a800;
     }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    html, body { width:100%; height:100%; overflow:hidden; font-family:'Syne',sans-serif; background:var(--bg); color:var(--text); }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Syne', sans-serif; background: var(--bg); color: var(--text); overflow: hidden; }
-
-    /* ─── SPLASH ─── */
-    .splash {
-      position: fixed; inset: 0; background: #040d1a;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      z-index: 99999; transition: opacity 0.6s ease;
-    }
-    .splash.hide { opacity: 0; pointer-events: none; }
-    .splash-grid {
-      position: absolute; inset: 0;
-      background-image: linear-gradient(rgba(0,229,200,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,229,200,0.04) 1px, transparent 1px);
-      background-size: 40px 40px;
-    }
-    .splash-owl { font-size: 72px; animation: float 2s ease-in-out infinite; position: relative; z-index:1; }
-    .splash-title { font-size: 56px; font-weight: 800; color: var(--accent); letter-spacing: 10px; margin-top: 12px; position: relative; z-index:1; }
-    .splash-sub { font-size: 11px; color: rgba(0,229,200,0.5); letter-spacing: 4px; margin-top: 6px; font-family:'Space Mono',monospace; position: relative; z-index:1; }
-    .splash-bar { width: 180px; height: 2px; background: rgba(0,229,200,0.15); border-radius: 2px; margin-top: 32px; overflow: hidden; position: relative; z-index:1; }
-    .splash-fill { height: 100%; background: var(--accent); border-radius: 2px; animation: loadBar 1.8s ease forwards; }
+    /* SPLASH */
+    .splash { position:fixed; inset:0; background:#040d1a; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:99999; transition:opacity 0.6s; }
+    .splash.hide { opacity:0; pointer-events:none; }
+    .splash-grid { position:absolute; inset:0; background-image:linear-gradient(rgba(0,229,200,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,200,0.04) 1px,transparent 1px); background-size:40px 40px; }
+    .splash-owl { font-size:72px; animation:float 2s ease-in-out infinite; position:relative; z-index:1; }
+    .splash-title { font-size:52px; font-weight:800; color:#00e5c8; letter-spacing:10px; margin-top:12px; position:relative; z-index:1; }
+    .splash-sub { font-size:10px; color:rgba(0,229,200,0.5); letter-spacing:4px; margin-top:6px; font-family:'Space Mono',monospace; position:relative; z-index:1; }
+    .splash-bar { width:180px; height:2px; background:rgba(0,229,200,0.15); border-radius:2px; margin-top:28px; overflow:hidden; position:relative; z-index:1; }
+    .splash-fill { height:100%; background:#00e5c8; border-radius:2px; animation:loadBar 2s ease forwards; }
     @keyframes loadBar { from{width:0} to{width:100%} }
     @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
 
-    /* ─── HEADER ─── */
-    .header {
-      background: var(--card); border-bottom: 1px solid var(--border);
-      padding: 0 20px; height: 56px;
-      display: flex; align-items: center; justify-content: space-between;
-      position: sticky; top: 0; z-index: 500;
-    }
-    .logo { display: flex; align-items: center; gap: 10px; cursor: pointer; }
-    .owl-anim { font-size: 28px; animation: owlBlink 5s infinite; display:inline-block; }
+    /* HEADER */
+    .header { height:52px; background:var(--card); border-bottom:1px solid var(--border); padding:0 16px; display:flex; align-items:center; justify-content:space-between; flex-shrink:0; z-index:500; position:relative; }
+    .logo { display:flex; align-items:center; gap:8px; }
+    .owl-anim { font-size:26px; animation:owlBlink 5s infinite; display:inline-block; }
     @keyframes owlBlink { 0%,88%,100%{transform:scaleY(1)} 90%,95%{transform:scaleY(0.08)} }
-    .logo-text { font-size: 18px; font-weight: 800; letter-spacing: 3px; color: var(--accent); }
-    .logo-sub { font-size: 10px; color: var(--text3); font-family:'Space Mono',monospace; margin-top: 1px; }
+    .logo-name { font-size:17px; font-weight:800; letter-spacing:3px; color:var(--accent); }
+    .logo-sub { font-size:9px; color:var(--text3); font-family:'Space Mono',monospace; }
+    .hdr-right { display:flex; align-items:center; gap:6px; }
+    .hbtn { background:var(--bg3); border:1px solid var(--border); color:var(--text2); padding:5px 11px; border-radius:8px; cursor:pointer; font-size:11px; font-family:'Syne',sans-serif; font-weight:600; transition:all 0.2s; white-space:nowrap; }
+    .hbtn:hover { border-color:var(--accent); color:var(--accent); }
+    .bcount { background:#e03; color:#fff; border-radius:10px; padding:1px 5px; font-size:9px; margin-left:2px; }
+    .uavatar { width:28px; height:28px; border-radius:50%; border:2px solid var(--accent); display:none; cursor:pointer; }
 
-    .hdr-actions { display: flex; align-items: center; gap: 8px; }
-    .hbtn { 
-      background: var(--bg3); border: 1px solid var(--border); color: var(--text2);
-      padding: 6px 12px; border-radius: 8px; cursor: pointer; font-size: 12px;
-      font-family: 'Syne', sans-serif; font-weight: 600; transition: all 0.2s;
-      display: flex; align-items: center; gap: 5px;
-    }
-    .hbtn:hover { background: var(--bg2); color: var(--text); border-color: var(--accent); }
-    .hbtn.notify-active { color: var(--accent); border-color: var(--accent); }
-    .badge-count { background: var(--danger); color: #fff; border-radius: 10px; padding: 1px 6px; font-size: 10px; margin-left: 2px; }
-    .user-avatar { width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--accent); display:none; cursor:pointer; }
+    /* TOP BARS */
+    .top-bars { background:var(--bg2); border-bottom:1px solid var(--border); flex-shrink:0; }
+    .bar-row { display:flex; gap:4px; overflow-x:auto; padding:6px 14px; scrollbar-width:none; }
+    .bar-row::-webkit-scrollbar { display:none; }
+    .bar-row + .bar-row { border-top:1px solid var(--border); }
+    .rbtn { flex-shrink:0; font-size:9px; font-weight:700; letter-spacing:1px; padding:4px 10px; border-radius:6px; border:1px solid var(--border); background:transparent; color:var(--text3); cursor:pointer; transition:all 0.2s; font-family:'Space Mono',monospace; white-space:nowrap; }
+    .rbtn.active, .rbtn:hover { background:var(--bg3); color:var(--accent); border-color:var(--accent); }
+    .cbtn { flex-shrink:0; font-size:11px; font-weight:700; padding:5px 14px; border-radius:20px; border:1px solid var(--border); background:var(--card); color:var(--text2); cursor:pointer; transition:all 0.2s; white-space:nowrap; }
+    .cbtn.active { background:var(--accent); color:#000; border-color:var(--accent); }
+    .cbtn:hover:not(.active) { border-color:var(--accent); color:var(--accent); }
 
-    /* ─── REGION + CATEGORY BAR ─── */
-    .top-bars { background: var(--bg2); border-bottom: 1px solid var(--border); }
-    .region-bar { 
-      display: flex; gap: 4px; overflow-x: auto; padding: 8px 16px 6px;
-      scrollbar-width: none; border-bottom: 1px solid var(--border);
-    }
-    .region-bar::-webkit-scrollbar { display:none; }
-    .cat-bar { display: flex; gap: 4px; overflow-x: auto; padding: 6px 16px 8px; scrollbar-width: none; }
-    .cat-bar::-webkit-scrollbar { display:none; }
-    .rbtn {
-      flex-shrink: 0; font-size: 10px; font-weight: 700; letter-spacing: 1px;
-      padding: 4px 12px; border-radius: 6px; border: 1px solid var(--border);
-      background: transparent; color: var(--text3); cursor: pointer; transition: all 0.2s;
-      font-family: 'Space Mono', monospace; white-space: nowrap;
-    }
-    .rbtn.active, .rbtn:hover { background: var(--bg3); color: var(--accent); border-color: var(--accent); }
-    .cbtn {
-      flex-shrink: 0; font-size: 11px; font-weight: 700;
-      padding: 5px 14px; border-radius: 20px; border: 1px solid var(--border);
-      background: var(--card); color: var(--text2); cursor: pointer; transition: all 0.2s;
-      white-space: nowrap;
-    }
-    .cbtn.active { background: var(--accent); color: #000; border-color: var(--accent); }
-    .cbtn:hover:not(.active) { border-color: var(--accent); color: var(--accent); }
+    /* MAIN LAYOUT — KEY FIX: explicit flex column on body, percentage heights */
+    .app-wrap { display:flex; flex-direction:column; width:100%; height:100%; }
+    .layout { display:flex; flex:1; min-height:0; overflow:hidden; }
 
-    /* ─── LAYOUT ─── */
-    .layout { display: flex; height: calc(100vh - 112px); position: relative; }
-    #map { flex: 1; filter: var(--map-filter); }
+    /* MAP — CRITICAL: must have explicit pixel or % size, not just flex */
+    #map { flex:1; min-width:0; min-height:0; }
 
-    /* ─── SIDEBAR ─── */
-    .sidebar {
-      width: 360px; min-width: 360px; background: var(--card);
-      border-left: 1px solid var(--border);
-      display: flex; flex-direction: column; overflow: hidden;
-    }
-    .sidebar-tabs { display: flex; border-bottom: 1px solid var(--border); }
-    .stab {
-      flex: 1; padding: 10px; text-align: center; font-size: 11px; font-weight: 700;
-      color: var(--text3); cursor: pointer; border-bottom: 2px solid transparent;
-      transition: all 0.2s; letter-spacing: 1px;
-    }
-    .stab.active { color: var(--accent); border-bottom-color: var(--accent); }
-    .stab-panel { flex: 1; overflow-y: auto; display: none; }
-    .stab-panel.active { display: flex; flex-direction: column; }
-
-    /* Live indicator */
-    .live-row { padding: 8px 14px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
-    .live-dot { display: flex; align-items: center; gap: 5px; font-size: 10px; color: #00e676; font-family:'Space Mono',monospace; }
-    .live-dot::before { content:''; width:7px; height:7px; border-radius:50%; background:#00e676; animation:pulse 1.5s infinite; box-shadow:0 0 6px #00e676; }
+    /* SIDEBAR */
+    .sidebar { width:350px; min-width:350px; display:flex; flex-direction:column; background:var(--card); border-left:1px solid var(--border); overflow:hidden; }
+    .stabs { display:flex; border-bottom:1px solid var(--border); flex-shrink:0; }
+    .stab { flex:1; padding:10px 4px; text-align:center; font-size:10px; font-weight:700; color:var(--text3); cursor:pointer; border-bottom:2px solid transparent; transition:all 0.2s; letter-spacing:1px; font-family:'Space Mono',monospace; }
+    .stab.active { color:var(--accent); border-bottom-color:var(--accent); }
+    .spanel { flex:1; overflow-y:auto; display:none; flex-direction:column; min-height:0; }
+    .spanel.active { display:flex; }
+    .live-row { padding:7px 14px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); flex-shrink:0; }
+    .live-dot { display:flex; align-items:center; gap:5px; font-size:9px; color:#00e676; font-family:'Space Mono',monospace; font-weight:700; }
+    .live-dot::before { content:''; width:6px; height:6px; border-radius:50%; background:#00e676; animation:pulse 1.5s infinite; box-shadow:0 0 5px #00e676; }
     @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(1.5)} }
-    .source-count { font-size: 10px; color: var(--text3); font-family:'Space Mono',monospace; }
+    .scount { font-size:9px; color:var(--text3); font-family:'Space Mono',monospace; }
+    .news-scroll { overflow-y:auto; flex:1; }
 
-    .news-list { flex: 1; overflow-y: auto; }
-    .news-card {
-      padding: 14px; border-bottom: 1px solid var(--border);
-      cursor: pointer; transition: all 0.15s; position: relative;
-    }
-    .news-card:hover { background: var(--bg3); }
-    .news-card.active { background: var(--bg2); border-left: 3px solid var(--accent); }
-    .news-card.read { opacity: 0.6; }
-    .card-top { display: flex; gap: 10px; }
-    .card-thumb { width: 72px; height: 52px; border-radius: 6px; object-fit: cover; flex-shrink: 0; background: var(--bg3); }
-    .card-thumb-placeholder { width: 72px; height: 52px; border-radius: 6px; flex-shrink: 0; background: var(--bg3); display:flex; align-items:center; justify-content:center; font-size:20px; }
-    .card-info { flex: 1; min-width: 0; }
-    .card-source { font-size: 9px; font-weight: 700; letter-spacing: 1.5px; color: var(--accent2); font-family:'Space Mono',monospace; }
-    .card-title { font-size: 12px; font-weight: 700; line-height: 1.4; margin: 3px 0; color: var(--text); display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
-    .card-meta { font-size: 10px; color: var(--text3); display: flex; gap: 8px; align-items: center; margin-top: 4px; }
-    .region-tag { background: var(--bg3); border: 1px solid var(--border); border-radius: 4px; padding: 1px 6px; font-size: 9px; color: var(--text2); font-family:'Space Mono',monospace; }
-    .card-actions { position: absolute; right: 10px; top: 10px; display: flex; gap: 4px; opacity: 0; transition: opacity 0.2s; }
-    .news-card:hover .card-actions { opacity: 1; }
-    .card-action-btn { width: 24px; height: 24px; border-radius: 6px; border: 1px solid var(--border); background: var(--card); color: var(--text3); cursor: pointer; font-size: 12px; display:flex; align-items:center; justify-content:center; transition:all 0.2s; }
-    .card-action-btn:hover { background: var(--bg3); color: var(--text); border-color: var(--accent); }
-    .card-action-btn.saved { color: var(--saved); border-color: var(--saved); }
-    .read-indicator { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); position: absolute; left: 6px; top: 50%; transform: translateY(-50%); }
+    /* NEWS CARDS */
+    .ncard { padding:12px 14px; border-bottom:1px solid var(--border); cursor:pointer; transition:background 0.15s; position:relative; }
+    .ncard:hover { background:var(--bg3); }
+    .ncard.active { background:var(--bg2); border-left:3px solid var(--accent); }
+    .ncard.read { opacity:0.55; }
+    .ncard-row { display:flex; gap:10px; }
+    .nthumb { width:68px; height:50px; object-fit:cover; border-radius:6px; flex-shrink:0; background:var(--bg3); }
+    .nthumb-ph { width:68px; height:50px; border-radius:6px; flex-shrink:0; background:var(--bg3); display:flex; align-items:center; justify-content:center; font-size:18px; }
+    .ninfo { flex:1; min-width:0; }
+    .nsrc { font-size:9px; font-weight:700; letter-spacing:1.5px; color:var(--accent2); font-family:'Space Mono',monospace; }
+    .ntitle { font-size:12px; font-weight:700; line-height:1.4; margin:3px 0; color:var(--text); display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+    .nmeta { font-size:9px; color:var(--text3); display:flex; gap:6px; flex-wrap:wrap; margin-top:3px; }
+    .nloc { background:var(--bg3); border:1px solid var(--border); border-radius:4px; padding:1px 5px; font-family:'Space Mono',monospace; }
+    .nbookmark { position:absolute; right:10px; top:10px; background:var(--bg3); border:1px solid var(--border); border-radius:6px; width:22px; height:22px; cursor:pointer; font-size:11px; display:flex; align-items:center; justify-content:center; opacity:0; transition:opacity 0.2s; }
+    .ncard:hover .nbookmark { opacity:1; }
+    .nbookmark.on { opacity:1; color:var(--saved); border-color:var(--saved); }
+    .unread-dot { position:absolute; left:5px; top:50%; transform:translateY(-50%); width:5px; height:5px; border-radius:50%; background:var(--accent); }
 
-    /* Saved panel */
-    .saved-empty { display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; gap:12px; color:var(--text3); font-size:13px; }
+    /* ALERTS PANEL */
+    .alerts-body { padding:14px; }
+    .alert-input-row { display:flex; gap:8px; margin-bottom:10px; }
+    .alert-input { flex:1; background:var(--bg3); border:1px solid var(--border); border-radius:8px; padding:7px 10px; color:var(--text); font-size:11px; font-family:'Syne',sans-serif; outline:none; }
+    .alert-input:focus { border-color:var(--accent); }
+    .alert-add-btn { background:var(--accent); color:#000; border:none; border-radius:8px; padding:7px 12px; font-weight:700; cursor:pointer; font-size:12px; }
+    .alert-tags { display:flex; flex-wrap:wrap; gap:6px; }
+    .atag { display:flex; align-items:center; gap:5px; background:var(--bg3); border:1px solid var(--border); border-radius:6px; padding:4px 10px; font-size:10px; font-weight:700; color:var(--accent); }
+    .atag span { cursor:pointer; color:var(--text3); font-size:14px; line-height:1; }
+    .alerts-hint { margin-top:16px; font-size:10px; color:var(--text3); line-height:1.7; }
 
-    /* ─── MAP CLUSTER CUSTOM ─── */
-    .custom-cluster {
-      background: rgba(0,229,200,0.15) !important;
-      border: 2px solid var(--accent) !important;
-      border-radius: 50% !important;
-      color: var(--accent) !important;
-      font-weight: 800 !important;
-      font-family: 'Space Mono', monospace !important;
-      display: flex !important; align-items: center !important; justify-content: center !important;
-    }
+    /* SAVED EMPTY */
+    .saved-empty { display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; gap:10px; color:var(--text3); font-size:12px; padding:40px; text-align:center; }
 
-    /* ─── MODAL ─── */
-    .modal-overlay {
-      position: fixed; inset: 0; background: rgba(4,13,26,0.85);
-      z-index: 9000; display: flex; align-items: center; justify-content: center;
-      opacity: 0; pointer-events: none; transition: opacity 0.3s; backdrop-filter: blur(4px);
-    }
-    .modal-overlay.active { opacity: 1; pointer-events: auto; }
-    .modal-box {
-      background: var(--card); border: 1px solid var(--border); border-radius: 16px;
-      width: 92%; max-width: 580px; max-height: 88vh; overflow-y: auto;
-      transform: translateY(16px); transition: transform 0.3s; position: relative;
-      box-shadow: 0 24px 48px rgba(0,0,0,0.5);
-    }
-    .modal-overlay.active .modal-box { transform: translateY(0); }
-    .modal-hero { width: 100%; height: 220px; object-fit: cover; border-radius: 16px 16px 0 0; }
-    .modal-close { position: absolute; top: 12px; right: 14px; width: 32px; height: 32px; border-radius: 50%; background: rgba(4,13,26,0.7); border: none; color: #fff; font-size: 20px; cursor: pointer; display:flex; align-items:center; justify-content:center; z-index:10; transition:background 0.2s; }
-    .modal-close:hover { background: rgba(255,71,87,0.8); }
-    .modal-body { padding: 20px; }
-    .modal-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
-    .modal-tag { font-size: 10px; font-weight: 700; letter-spacing: 1px; padding: 3px 10px; border-radius: 20px; font-family:'Space Mono',monospace; }
-    .modal-title { font-size: 20px; font-weight: 800; line-height: 1.35; margin-bottom: 12px; }
-    .modal-desc { font-size: 14px; line-height: 1.65; color: var(--text2); margin-bottom: 20px; }
-    .modal-footer { display: flex; gap: 10px; flex-wrap: wrap; }
-    .modal-btn { padding: 10px 20px; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s; border: 1px solid var(--border); font-family:'Syne',sans-serif; }
-    .modal-btn.primary { background: var(--accent); color: #000; border-color: var(--accent); text-decoration:none; display:inline-flex; align-items:center; gap:6px; }
-    .modal-btn.primary:hover { opacity: 0.85; }
-    .modal-btn.secondary { background: transparent; color: var(--text2); }
-    .modal-btn.secondary:hover { background: var(--bg3); color: var(--text); }
-    .modal-btn.save-btn.saved { color: var(--saved); border-color: var(--saved); }
+    /* MODAL */
+    .moverlay { position:fixed; inset:0; background:rgba(4,13,26,0.88); z-index:9000; display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity 0.3s; backdrop-filter:blur(4px); }
+    .moverlay.on { opacity:1; pointer-events:auto; }
+    .mbox { background:var(--card); border:1px solid var(--border); border-radius:16px; width:92%; max-width:560px; max-height:88vh; overflow-y:auto; position:relative; box-shadow:0 24px 60px rgba(0,0,0,0.6); transform:translateY(14px); transition:transform 0.3s; }
+    .moverlay.on .mbox { transform:translateY(0); }
+    .mhero { width:100%; height:210px; object-fit:cover; border-radius:16px 16px 0 0; display:block; }
+    .mclose { position:absolute; top:12px; right:14px; width:30px; height:30px; background:rgba(4,13,26,0.75); border:none; color:#fff; font-size:20px; cursor:pointer; border-radius:50%; display:flex; align-items:center; justify-content:center; z-index:10; }
+    .mclose:hover { background:rgba(220,30,30,0.8); }
+    .mbody { padding:18px 20px; }
+    .mtags { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px; }
+    .mtag { font-size:9px; font-weight:700; letter-spacing:1px; padding:3px 9px; border-radius:20px; font-family:'Space Mono',monospace; }
+    .mtitle { font-size:19px; font-weight:800; line-height:1.35; margin-bottom:10px; }
+    .mdesc { font-size:13px; line-height:1.65; color:var(--text2); margin-bottom:18px; }
+    .mfooter { display:flex; gap:8px; flex-wrap:wrap; }
+    .mbtn { padding:9px 18px; border-radius:10px; font-size:11px; font-weight:700; cursor:pointer; transition:all 0.2s; border:1px solid var(--border); font-family:'Syne',sans-serif; }
+    .mbtn.pri { background:var(--accent); color:#000; border-color:var(--accent); text-decoration:none; display:inline-flex; align-items:center; gap:5px; }
+    .mbtn.pri:hover { opacity:0.85; }
+    .mbtn.sec { background:transparent; color:var(--text2); }
+    .mbtn.sec:hover { background:var(--bg3); color:var(--text); }
+    .mbtn.sv.on { color:var(--saved); border-color:var(--saved); }
 
-    /* ─── NOTIFICATION TOAST ─── */
-    .toast-stack { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 8000; display: flex; flex-direction: column; gap: 8px; align-items: center; pointer-events: none; width: 90%; max-width: 380px; }
-    .toast {
-      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
-      padding: 12px 16px; width: 100%; box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-      display: flex; align-items: center; gap: 12px; pointer-events: auto; cursor: pointer;
-      transform: translateY(80px); opacity: 0; transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1);
-    }
-    .toast.show { transform: translateY(0); opacity: 1; }
-    .toast-icon { font-size: 24px; flex-shrink: 0; }
-    .toast-label { font-size: 9px; color: var(--accent2); font-family:'Space Mono',monospace; font-weight:700; letter-spacing:1px; }
-    .toast-title { font-size: 12px; font-weight: 700; margin-top: 2px; line-height: 1.4; }
-    .toast-close { margin-left: auto; flex-shrink:0; color:var(--text3); font-size:16px; cursor:pointer; padding:4px; }
+    /* TOAST */
+    .tstack { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); z-index:8000; display:flex; flex-direction:column; gap:8px; align-items:center; pointer-events:none; width:90%; max-width:360px; }
+    .toast { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:11px 14px; width:100%; box-shadow:0 8px 24px rgba(0,0,0,0.5); display:flex; align-items:center; gap:10px; pointer-events:auto; cursor:pointer; transform:translateY(80px); opacity:0; transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1); }
+    .toast.show { transform:translateY(0); opacity:1; }
+    .t-icon { font-size:22px; flex-shrink:0; }
+    .t-label { font-size:9px; color:var(--accent2); font-family:'Space Mono',monospace; font-weight:700; letter-spacing:1px; }
+    .t-title { font-size:11px; font-weight:700; margin-top:2px; line-height:1.4; }
+    .t-close { margin-left:auto; color:var(--text3); font-size:16px; cursor:pointer; flex-shrink:0; padding:2px 4px; }
 
-    /* ─── LOADING ─── */
-    .loading-state { display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; gap:12px; padding:40px; }
-    .loading-owl { font-size:40px; animation:float 2s infinite; }
-    .loading-text { font-size:10px; color:var(--accent); font-family:'Space Mono',monospace; letter-spacing:2px; }
-    .loading-dots::after { content:' '; animation: dots 1.5s infinite steps(4, end); }
+    /* LOADING */
+    .loader { display:flex; flex-direction:column; align-items:center; justify-content:center; padding:48px 24px; gap:12px; }
+    .loader-owl { font-size:38px; animation:float 2s infinite; }
+    .loader-txt { font-size:9px; color:var(--accent); font-family:'Space Mono',monospace; letter-spacing:2px; }
+    .loader-txt::after { content:''; animation:dots 1.5s infinite steps(4,end); }
     @keyframes dots { 0%{content:''} 25%{content:'.'} 50%{content:'..'} 75%{content:'...'} }
 
-    /* ─── MOBILE ─── */
-    @media (max-width: 768px) {
-      .layout { flex-direction: column; height: calc(100vh - 56px - 56px); }
-      #map { height: 45vh; min-height: 200px; }
-      .sidebar { width: 100%; min-width: unset; height: 55vh; border-left: none; border-top: 1px solid var(--border); }
-      .top-bars { display: none; }
-      .mobile-bar {
-        position: fixed; bottom: 0; left: 0; right: 0; height: 56px;
-        background: var(--card); border-top: 1px solid var(--border);
-        display: flex; align-items: stretch; z-index: 600;
-      }
-      .mbar-btn { flex: 1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; cursor:pointer; border:none; background:transparent; color:var(--text3); transition:color 0.2s; font-size:9px; font-family:'Space Mono',monospace; font-weight:700; letter-spacing:0.5px; }
-      .mbar-btn .micon { font-size:20px; }
-      .mbar-btn.active { color: var(--accent); }
-      .layout { height: calc(100vh - 56px - 56px); }
-      .mobile-filter-sheet {
-        position: fixed; bottom: 56px; left: 0; right: 0;
-        background: var(--card); border-top: 2px solid var(--border);
-        padding: 12px 16px; z-index: 590; display: none; flex-wrap: wrap; gap: 6px;
-      }
-      .mobile-filter-sheet.open { display: flex; }
-      .sidebar { display: none; }
-      .sidebar.mobile-active { display: flex; }
-      #map { height: 100%; }
-      .map-mode #map { height: 100%; }
-      .list-mode #map { display: none; }
-      .list-mode .sidebar { display: flex; height: calc(100vh - 56px - 56px); }
-      .toast-stack { bottom: 72px; }
-      .header { padding: 0 14px; }
+    /* MOBILE */
+    @media (max-width:768px) {
+      .top-bars { display:none; }
+      .layout { flex-direction:column; }
+      #map { flex:none; height:45vh; }
+      .sidebar { width:100%; min-width:unset; flex:1; border-left:none; border-top:1px solid var(--border); display:none; }
+      .sidebar.mob-show { display:flex; }
+      .mob-bar { position:fixed; bottom:0; left:0; right:0; height:54px; background:var(--card); border-top:1px solid var(--border); display:flex; z-index:600; }
+      .mbbtn { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; cursor:pointer; border:none; background:transparent; color:var(--text3); font-size:9px; font-family:'Space Mono',monospace; font-weight:700; letter-spacing:0.5px; transition:color 0.2s; }
+      .mbbtn .mbi { font-size:20px; }
+      .mbbtn.active { color:var(--accent); }
+      .mob-filter { position:fixed; bottom:54px; left:0; right:0; background:var(--card); border-top:2px solid var(--border); padding:10px 14px; z-index:590; display:none; flex-wrap:wrap; gap:6px; }
+      .mob-filter.open { display:flex; }
+      .layout.list-m #map { display:none; }
+      .layout.list-m .sidebar { display:flex; height:calc(100vh - 52px - 54px); }
+      .layout.list-m { flex-direction:column; }
+      .tstack { bottom:68px; }
     }
-    @media (min-width: 769px) { .mobile-bar { display:none; } }
+    @media (min-width:769px) { .mob-bar,.mob-filter { display:none!important; } }
 
-    /* ─── MARKER PULSE ─── */
-    @keyframes markerPulse { 0%{transform:scale(0.8);opacity:1} 100%{transform:scale(2.5);opacity:0} }
-    .marker-inner { position:absolute; inset:2px; border-radius:50%; border:2px solid #fff; box-shadow:0 1px 4px rgba(0,0,0,0.4); }
-    .marker-ring { position:absolute; inset:0; border-radius:50%; animation:markerPulse 2.5s infinite; opacity:0.6; }
-
-    /* ─── SCROLLBAR ─── */
-    ::-webkit-scrollbar { width: 4px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+    /* CLUSTER */
+    .ccluster { background:rgba(0,229,200,0.15)!important; border:2px solid #00e5c8!important; border-radius:50%!important; color:#00e5c8!important; font-weight:800!important; font-family:'Space Mono',monospace!important; display:flex!important; align-items:center!important; justify-content:center!important; }
+    @keyframes mpulse { 0%{transform:scale(0.8);opacity:0.8} 100%{transform:scale(2.2);opacity:0} }
+    ::-webkit-scrollbar { width:3px; }
+    ::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
   </style>
 </head>
 <body data-theme="dark">
 
-<!-- SPLASH -->
 <div class="splash" id="splash">
   <div class="splash-grid"></div>
   <div class="splash-owl">🦉</div>
@@ -297,76 +191,75 @@
   <div class="splash-bar"><div class="splash-fill"></div></div>
 </div>
 
-<!-- HEADER -->
-<div class="header">
-  <div class="logo">
-    <span class="owl-anim">🦉</span>
-    <div>
-      <div class="logo-text">OWLS</div>
-      <div class="logo-sub" id="feedLabel">GLOBAL FEED</div>
-    </div>
-  </div>
-  <div class="hdr-actions">
-    <button class="hbtn" id="notifyBtn" onclick="toggleNotify()">🔔 <span id="notifyBadge" class="badge-count" style="display:none">0</span></button>
-    <button class="hbtn" onclick="openSavedPanel()">🔖 <span id="savedBadge" class="badge-count">0</span></button>
-    <button class="hbtn" onclick="toggleTheme()" id="themeBtn">🌙</button>
-    <button class="hbtn" onclick="loginWithGoogle()" id="loginBtn">Login</button>
-    <img src="" id="userAvatar" class="user-avatar" onclick="logout()" title="Logout">
-  </div>
-</div>
-
-<!-- TOP BARS (desktop) -->
-<div class="top-bars">
-  <div class="region-bar" id="regionBar">
-    <button class="rbtn active" data-region="all">🌐 ALL</button>
-    <button class="rbtn" data-region="europe">🇪🇺 EUROPE</button>
-    <button class="rbtn" data-region="americas">🌎 AMERICAS</button>
-    <button class="rbtn" data-region="asia">🌏 ASIA</button>
-    <button class="rbtn" data-region="mideast">🕌 MID EAST</button>
-    <button class="rbtn" data-region="africa">🌍 AFRICA</button>
-    <button class="rbtn" data-region="oceania">🦘 OCEANIA</button>
-  </div>
-  <div class="cat-bar" id="catBar">
-    <button class="cbtn active" data-q="world">🌍 World</button>
-    <button class="cbtn" data-q="technology">💻 Tech</button>
-    <button class="cbtn" data-q="business">📈 Business</button>
-    <button class="cbtn" data-q="science">🔬 Science</button>
-    <button class="cbtn" data-q="health">❤️ Health</button>
-    <button class="cbtn" data-q="sport">⚽ Sport</button>
-    <button class="cbtn" data-q="climate">🌿 Climate</button>
-    <button class="cbtn" data-q="politics">🏛️ Politics</button>
-  </div>
-</div>
-
-<!-- LAYOUT -->
-<div class="layout" id="layout">
-  <div id="map"></div>
-  <div class="sidebar" id="sidebar">
-    <div class="sidebar-tabs">
-      <div class="stab active" onclick="switchTab('feed')">📡 FEED</div>
-      <div class="stab" onclick="switchTab('saved')">🔖 SAVED</div>
-      <div class="stab" onclick="switchTab('alerts')">🔔 ALERTS</div>
-    </div>
-    <div class="stab-panel active" id="panel-feed">
-      <div class="live-row">
-        <div class="live-dot">LIVE</div>
-        <span class="source-count" id="sourceCount">0 sources</span>
+<div class="app-wrap">
+  <!-- HEADER -->
+  <div class="header">
+    <div class="logo">
+      <span class="owl-anim">🦉</span>
+      <div>
+        <div class="logo-name">OWLS</div>
+        <div class="logo-sub" id="feedLabel">GLOBAL FEED</div>
       </div>
-      <div class="news-list" id="newsList"></div>
     </div>
-    <div class="stab-panel" id="panel-saved">
-      <div class="news-list" id="savedList"></div>
+    <div class="hdr-right">
+      <button class="hbtn" onclick="openSaved()">🔖 <span class="bcount" id="sbadge">0</span></button>
+      <button class="hbtn" onclick="toggleTheme()" id="themeBtn">🌙</button>
+      <button class="hbtn" id="loginBtn" onclick="loginGoogle()">Login</button>
+      <img src="" id="uavatar" class="uavatar" onclick="doLogout()" title="Logout">
     </div>
-    <div class="stab-panel" id="panel-alerts">
-      <div style="padding:16px;">
-        <div style="font-size:11px;color:var(--text3);font-family:'Space Mono',monospace;margin-bottom:12px;letter-spacing:1px;">KEYWORD ALERTS</div>
-        <div style="display:flex;gap:8px;margin-bottom:12px;">
-          <input id="alertInput" placeholder="e.g. earthquake, NATO..." style="flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--text);font-size:12px;font-family:'Syne',sans-serif;outline:none;" onkeydown="if(event.key==='Enter')addAlert()">
-          <button onclick="addAlert()" style="background:var(--accent);color:#000;border:none;border-radius:8px;padding:8px 14px;font-weight:700;cursor:pointer;font-size:12px;">+</button>
+  </div>
+
+  <!-- REGION + CATEGORY BARS (desktop) -->
+  <div class="top-bars">
+    <div class="bar-row" id="regionBar">
+      <button class="rbtn active" data-r="all">🌐 ALL REGIONS</button>
+      <button class="rbtn" data-r="europe">🇪🇺 EUROPE</button>
+      <button class="rbtn" data-r="americas">🌎 AMERICAS</button>
+      <button class="rbtn" data-r="asia">🌏 ASIA</button>
+      <button class="rbtn" data-r="mideast">🕌 MID EAST</button>
+      <button class="rbtn" data-r="africa">🌍 AFRICA</button>
+      <button class="rbtn" data-r="oceania">🦘 OCEANIA</button>
+    </div>
+    <div class="bar-row" id="catBar">
+      <button class="cbtn active" data-q="world">🌍 World</button>
+      <button class="cbtn" data-q="technology">💻 Tech</button>
+      <button class="cbtn" data-q="business">📈 Business</button>
+      <button class="cbtn" data-q="science">🔬 Science</button>
+      <button class="cbtn" data-q="health">❤️ Health</button>
+      <button class="cbtn" data-q="sport">⚽ Sport</button>
+      <button class="cbtn" data-q="climate">🌿 Climate</button>
+      <button class="cbtn" data-q="politics">🏛️ Politics</button>
+    </div>
+  </div>
+
+  <!-- LAYOUT -->
+  <div class="layout" id="layout">
+    <div id="map"></div>
+    <div class="sidebar" id="sidebar">
+      <div class="stabs">
+        <div class="stab active" onclick="stab('feed')">📡 FEED</div>
+        <div class="stab" onclick="stab('saved')">🔖 SAVED</div>
+        <div class="stab" onclick="stab('alerts')">🔔 ALERTS</div>
+      </div>
+      <div class="spanel active" id="p-feed">
+        <div class="live-row">
+          <div class="live-dot">LIVE</div>
+          <span class="scount" id="scount">loading...</span>
         </div>
-        <div id="alertList" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
-        <div style="margin-top:20px;font-size:11px;color:var(--text3);line-height:1.6;">
-          🔔 Add keywords to get notified when matching news arrives. Alerts fire as toast notifications.
+        <div class="news-scroll" id="newsList"></div>
+      </div>
+      <div class="spanel" id="p-saved">
+        <div class="news-scroll" id="savedList"></div>
+      </div>
+      <div class="spanel" id="p-alerts">
+        <div class="alerts-body">
+          <div style="font-size:10px;color:var(--text3);font-family:'Space Mono',monospace;margin-bottom:10px;letter-spacing:1px;">KEYWORD ALERTS</div>
+          <div class="alert-input-row">
+            <input class="alert-input" id="alertIn" placeholder="e.g. earthquake, NATO, Apple..." onkeydown="if(event.key==='Enter')addAlert()">
+            <button class="alert-add-btn" onclick="addAlert()">+</button>
+          </div>
+          <div class="alert-tags" id="alertTags"></div>
+          <div class="alerts-hint">🔔 Add keywords — when a matching story arrives you'll get a notification toast at the bottom of the screen.</div>
         </div>
       </div>
     </div>
@@ -374,833 +267,718 @@
 </div>
 
 <!-- MOBILE BOTTOM BAR -->
-<div class="mobile-bar">
-  <button class="mbar-btn active" id="mb-map" onclick="mobileSwitch('map')"><span class="micon">🗺️</span>MAP</button>
-  <button class="mbar-btn" id="mb-list" onclick="mobileSwitch('list')"><span class="micon">📰</span>NEWS</button>
-  <button class="mbar-btn" id="mb-filter" onclick="toggleMobileFilter()"><span class="micon">🔍</span>FILTER</button>
-  <button class="mbar-btn" id="mb-saved" onclick="mobileSwitch('saved')"><span class="micon">🔖</span>SAVED</button>
+<div class="mob-bar">
+  <button class="mbbtn active" id="mb-map" onclick="mobSwitch('map')"><span class="mbi">🗺️</span>MAP</button>
+  <button class="mbbtn" id="mb-news" onclick="mobSwitch('news')"><span class="mbi">📰</span>NEWS</button>
+  <button class="mbbtn" id="mb-filter" onclick="toggleMobFilter()"><span class="mbi">🔍</span>FILTER</button>
+  <button class="mbbtn" id="mb-saved" onclick="mobSwitch('saved')"><span class="mbi">🔖</span>SAVED</button>
 </div>
-
-<!-- MOBILE FILTER SHEET -->
-<div class="mobile-filter-sheet" id="mobileFilter">
-  <button class="cbtn active" data-mq="world" onclick="mobileCatClick(this,'world')">🌍 World</button>
-  <button class="cbtn" data-mq="technology" onclick="mobileCatClick(this,'technology')">💻 Tech</button>
-  <button class="cbtn" data-mq="business" onclick="mobileCatClick(this,'business')">📈 Business</button>
-  <button class="cbtn" data-mq="science" onclick="mobileCatClick(this,'science')">🔬 Science</button>
-  <button class="cbtn" data-mq="health" onclick="mobileCatClick(this,'health')">❤️ Health</button>
-  <button class="cbtn" data-mq="sport" onclick="mobileCatClick(this,'sport')">⚽ Sport</button>
-  <button class="cbtn" data-mq="climate" onclick="mobileCatClick(this,'climate')">🌿 Climate</button>
-  <button class="cbtn" data-mq="politics" onclick="mobileCatClick(this,'politics')">🏛️ Politics</button>
+<div class="mob-filter" id="mobFilter">
+  <button class="cbtn active" onclick="mobCat(this,'world')">🌍 World</button>
+  <button class="cbtn" onclick="mobCat(this,'technology')">💻 Tech</button>
+  <button class="cbtn" onclick="mobCat(this,'business')">📈 Business</button>
+  <button class="cbtn" onclick="mobCat(this,'science')">🔬 Science</button>
+  <button class="cbtn" onclick="mobCat(this,'health')">❤️ Health</button>
+  <button class="cbtn" onclick="mobCat(this,'sport')">⚽ Sport</button>
+  <button class="cbtn" onclick="mobCat(this,'climate')">🌿 Climate</button>
+  <button class="cbtn" onclick="mobCat(this,'politics')">🏛️ Politics</button>
 </div>
 
 <!-- MODAL -->
-<div class="modal-overlay" id="newsModal">
-  <div class="modal-box">
-    <button class="modal-close" onclick="closeModal()">×</button>
-    <img src="" id="modalImg" class="modal-hero" onerror="this.style.display='none'">
-    <div class="modal-body">
-      <div class="modal-tags">
-        <span class="modal-tag" id="modalSource" style="background:rgba(255,107,53,0.15);color:#ff6b35;"></span>
-        <span class="modal-tag" id="modalRegion" style="background:rgba(0,229,200,0.1);color:var(--accent);"></span>
-        <span class="modal-tag" id="modalTime" style="background:var(--bg3);color:var(--text2);"></span>
+<div class="moverlay" id="modal">
+  <div class="mbox">
+    <button class="mclose" onclick="closeModal()">×</button>
+    <img id="mhero" class="mhero" onerror="this.style.display='none'">
+    <div class="mbody">
+      <div class="mtags">
+        <span class="mtag" id="msrc" style="background:rgba(255,107,53,0.15);color:#ff6b35;"></span>
+        <span class="mtag" id="mloc" style="background:rgba(0,229,200,0.1);color:var(--accent);"></span>
+        <span class="mtag" id="mtime" style="background:var(--bg3);color:var(--text2);"></span>
       </div>
-      <div class="modal-title" id="modalTitle"></div>
-      <div class="modal-desc" id="modalDesc"></div>
-      <div class="modal-footer">
-        <a href="" id="modalLink" target="_blank" class="modal-btn primary">Read Full Story →</a>
-        <button class="modal-btn secondary save-btn" id="modalSaveBtn" onclick="toggleSaveFromModal()">🔖 Save</button>
-        <button class="modal-btn secondary" onclick="closeModal()">Close</button>
+      <div class="mtitle" id="mtitle"></div>
+      <div class="mdesc" id="mdesc"></div>
+      <div class="mfooter">
+        <a href="#" id="mlink" target="_blank" class="mbtn pri">Read Full Story →</a>
+        <button class="mbtn sec sv" id="msavebtn" onclick="toggleSaveModal()">🔖 Save</button>
+        <button class="mbtn sec" onclick="closeModal()">Close</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- TOAST STACK -->
-<div class="toast-stack" id="toastStack"></div>
+<!-- TOASTS -->
+<div class="tstack" id="tstack"></div>
 
 <script>
-// ═══════════════════════════════════════════════
-// FIREBASE
-// ═══════════════════════════════════════════════
-const firebaseConfig = {
-  apiKey: "AIzaSyBf3EDUobPIaZL6Jzu5i1ITT8YRSZaCOa8",
-  authDomain: "newsmap-5d380.firebaseapp.com",
-  projectId: "newsmap-5d380",
-  storageBucket: "newsmap-5d380.firebasestorage.app",
-  messagingSenderId: "270586913079",
-  appId: "1:270586913079:web:271cb786e7195299f73ab2"
-};
-firebase.initializeApp(firebaseConfig);
+// ── FIREBASE ──────────────────────────────────
+const fbCfg = {apiKey:"AIzaSyBf3EDUobPIaZL6Jzu5i1ITT8YRSZaCOa8",authDomain:"newsmap-5d380.firebaseapp.com",projectId:"newsmap-5d380",storageBucket:"newsmap-5d380.firebasestorage.app",messagingSenderId:"270586913079",appId:"1:270586913079:web:271cb786e7195299f73ab2"};
+firebase.initializeApp(fbCfg);
 const auth = firebase.auth();
 
-// ═══════════════════════════════════════════════
-// STATE
-// ═══════════════════════════════════════════════
-let currentQ = 'world';
-let currentRegion = 'all';
-let allArticles = [];
-let markers = [];
-let clusterGroup;
-let currentModalArticle = null;
-let notifyEnabled = false;
-let alerts = JSON.parse(localStorage.getItem('owls_alerts') || '[]');
-let savedArticles = JSON.parse(localStorage.getItem('owls_saved') || '[]');
-let readArticles = new Set(JSON.parse(localStorage.getItem('owls_read') || '[]'));
+// ── STATE ─────────────────────────────────────
+let curQ = 'world', curR = 'all';
+let allArticles = [], clusterLayer;
+let curModalArt = null;
+let savedArts  = JSON.parse(localStorage.getItem('owls_saved')||'[]');
+let readSet    = new Set(JSON.parse(localStorage.getItem('owls_read')||'[]'));
+let alerts     = JSON.parse(localStorage.getItem('owls_alerts')||'[]');
 
-// ═══════════════════════════════════════════════
-// COLOURS PER CATEGORY
-// ═══════════════════════════════════════════════
-const COLORS = {
-  world:'#00e5c8', technology:'#7c6bff', business:'#00e676',
-  science:'#00b8d9', health:'#ff4757', sport:'#ff6b35',
-  climate:'#69f0ae', politics:'#ffd740'
-};
+const COLORS = {world:'#00e5c8',technology:'#7c6bff',business:'#00e676',science:'#00b8d9',health:'#ff4757',sport:'#ff6b35',climate:'#69f0ae',politics:'#ffd740'};
 
-// ═══════════════════════════════════════════════
-// REGION MAPPING
-// ═══════════════════════════════════════════════
-const REGION_BOUNDS = {
-  europe:   { lat:[35,72], lng:[-25,45] },
-  americas: { lat:[-60,75], lng:[-170,-30] },
-  asia:     { lat:[-10,60], lng:[45,150] },
-  mideast:  { lat:[12,42], lng:[25,65] },
-  africa:   { lat:[-40,38], lng:[-20,55] },
-  oceania:  { lat:[-50,10], lng:[110,180] }
-};
+// ── MAP ───────────────────────────────────────
+const map = L.map('map',{zoomControl:false}).setView([20,10],2);
+L.control.zoom({position:'bottomright'}).addTo(map);
+let tileLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_matter/{z}/{x}/{y}{r}.png',{maxZoom:19}).addTo(map);
 
-function getArticleRegion(lat, lng) {
-  for (const [r, b] of Object.entries(REGION_BOUNDS)) {
-    if (lat >= b.lat[0] && lat <= b.lat[1] && lng >= b.lng[0] && lng <= b.lng[1]) return r;
-  }
-  return 'other';
+function setTile(dark){
+  map.removeLayer(tileLayer);
+  tileLayer = L.tileLayer(dark
+    ? 'https://{s}.basemaps.cartocdn.com/dark_matter/{z}/{x}/{y}{r}.png'
+    : 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
+    {maxZoom:19}).addTo(map);
 }
 
-// ═══════════════════════════════════════════════
-// MASSIVE LOCATION DB
-// ═══════════════════════════════════════════════
+function mkIcon(color){
+  return L.divIcon({
+    html:`<div style="position:relative;width:14px;height:14px">
+      <div style="position:absolute;inset:0;border-radius:50%;border:3px solid ${color};animation:mpulse 2s infinite;opacity:0.65"></div>
+      <div style="position:absolute;inset:2px;border-radius:50%;background:${color};border:2px solid rgba(255,255,255,0.8)"></div>
+    </div>`,
+    iconSize:[14,14],iconAnchor:[7,7],className:''
+  });
+}
+
+// ── LOCATION DATABASE ─────────────────────────
 const CITIES = {
-  // Americas
+  // N America
   'new york':[40.71,-74.00],'washington':[38.90,-77.03],'los angeles':[34.05,-118.24],
   'chicago':[41.87,-87.62],'san francisco':[37.77,-122.41],'miami':[25.77,-80.19],
   'seattle':[47.60,-122.33],'boston':[42.36,-71.05],'houston':[29.76,-95.36],
   'dallas':[32.77,-96.79],'toronto':[43.65,-79.38],'vancouver':[49.28,-123.12],
-  'montreal':[45.50,-73.56],'mexico city':[19.43,-99.13],'sao paulo':[-23.54,-46.63],
-  'rio de janeiro':[-22.90,-43.17],'buenos aires':[-34.60,-58.38],'bogota':[4.71,-74.07],
-  'lima':[-12.04,-77.03],'santiago':[-33.45,-70.66],
+  'montreal':[45.50,-73.56],'mexico city':[19.43,-99.13],
+  // S America
+  'sao paulo':[-23.54,-46.63],'rio de janeiro':[-22.90,-43.17],'buenos aires':[-34.60,-58.38],
+  'bogota':[4.71,-74.07],'lima':[-12.04,-77.03],'santiago':[-33.45,-70.66],
+  'caracas':[10.48,-66.88],'quito':[-0.23,-78.51],
   // Europe
-  'london':[51.50,-0.12],'manchester':[53.48,-2.24],'paris':[48.85,2.35],
-  'berlin':[52.52,13.40],'madrid':[40.41,-3.70],'barcelona':[41.38,2.17],
-  'rome':[41.90,12.49],'milan':[45.46,9.19],'amsterdam':[52.37,4.90],
-  'brussels':[50.85,4.35],'vienna':[48.20,16.37],'zurich':[47.37,8.54],
-  'stockholm':[59.33,18.06],'oslo':[59.91,10.75],'copenhagen':[55.67,12.56],
-  'helsinki':[60.17,24.94],'warsaw':[52.23,21.01],'prague':[50.07,14.43],
-  'budapest':[47.49,19.04],'athens':[37.97,23.72],'lisbon':[38.71,-9.14],
-  'dublin':[53.33,-6.24],'edinburgh':[55.95,-3.19],'kyiv':[50.45,30.52],
-  'istanbul':[41.01,28.97],'ankara':[39.92,32.85],'moscow':[55.75,37.61],
-  'st. petersburg':[59.93,30.32],'bucharest':[44.43,26.09],'belgrade':[44.80,20.46],
+  'london':[51.50,-0.12],'manchester':[53.48,-2.24],'edinburgh':[55.95,-3.19],
+  'paris':[48.85,2.35],'berlin':[52.52,13.40],'munich':[48.13,11.58],
+  'frankfurt':[50.11,8.68],'hamburg':[53.55,9.99],'madrid':[40.41,-3.70],
+  'barcelona':[41.38,2.17],'rome':[41.90,12.49],'milan':[45.46,9.19],
+  'amsterdam':[52.37,4.90],'brussels':[50.85,4.35],'vienna':[48.20,16.37],
+  'zurich':[47.37,8.54],'stockholm':[59.33,18.06],'oslo':[59.91,10.75],
+  'copenhagen':[55.67,12.56],'helsinki':[60.17,24.94],'warsaw':[52.23,21.01],
+  'prague':[50.07,14.43],'budapest':[47.49,19.04],'athens':[37.97,23.72],
+  'lisbon':[38.71,-9.14],'dublin':[53.33,-6.24],'kyiv':[50.45,30.52],
+  'moscow':[55.75,37.61],'st. petersburg':[59.93,30.32],'istanbul':[41.01,28.97],
+  'ankara':[39.92,32.85],'bucharest':[44.43,26.09],'belgrade':[44.80,20.46],
+  'zagreb':[45.81,15.98],'sofia':[42.69,23.33],'vilnius':[54.68,25.28],
+  'riga':[56.95,24.11],'tallinn':[59.44,24.75],'bratislava':[48.14,17.11],
+  'ljubljana':[46.05,14.50],'skopje':[41.99,21.43],'sarajevo':[43.85,18.38],
+  'tirana':[41.33,19.82],'minsk':[53.90,27.57],'chisinau':[47.00,28.85],
+  'baku':[40.41,49.87],'yerevan':[40.18,44.51],'tbilisi':[41.69,44.83],
   // Asia
   'tokyo':[35.68,139.69],'osaka':[34.69,135.50],'beijing':[39.90,116.40],
   'shanghai':[31.22,121.47],'hong kong':[22.31,114.17],'shenzhen':[22.54,114.06],
+  'guangzhou':[23.12,113.26],'chengdu':[30.57,104.07],'wuhan':[30.59,114.30],
   'seoul':[37.56,126.97],'busan':[35.10,129.03],'singapore':[1.35,103.81],
   'bangkok':[13.75,100.50],'jakarta':[-6.20,106.81],'manila':[14.59,120.98],
   'kuala lumpur':[3.14,101.68],'ho chi minh':[10.82,106.62],'hanoi':[21.02,105.84],
   'taipei':[25.04,121.56],'new delhi':[28.61,77.20],'mumbai':[19.07,72.87],
   'bangalore':[12.97,77.59],'chennai':[13.08,80.27],'kolkata':[22.57,88.36],
-  'karachi':[24.86,67.00],'islamabad':[33.68,73.04],'dhaka':[23.81,90.41],
-  'kathmandu':[27.70,85.31],'colombo':[6.93,79.85],'yangon':[16.87,96.15],
-  'phnom penh':[11.56,104.92],'ulaanbaatar':[47.90,106.90],
+  'hyderabad':[17.38,78.47],'karachi':[24.86,67.00],'islamabad':[33.68,73.04],
+  'lahore':[31.55,74.34],'dhaka':[23.81,90.41],'colombo':[6.93,79.85],
+  'kathmandu':[27.70,85.31],'yangon':[16.87,96.15],'phnom penh':[11.56,104.92],
+  'vientiane':[17.96,102.60],'ulaanbaatar':[47.90,106.90],'almaty':[43.24,76.95],
+  'tashkent':[41.30,69.24],'bishkek':[42.87,74.60],
   // Middle East
   'dubai':[25.20,55.27],'abu dhabi':[24.45,54.37],'doha':[25.28,51.53],
-  'riyadh':[24.71,46.67],'jeddah':[21.49,39.19],'kuwait city':[29.37,47.98],
-  'manama':[26.22,50.58],'muscat':[23.61,58.59],'tehran':[35.69,51.39],
-  'baghdad':[33.33,44.40],'amman':[31.95,35.93],'beirut':[33.88,35.49],
-  'damascus':[33.51,36.29],'jerusalem':[31.76,35.21],'tel aviv':[32.08,34.78],
-  'sanaa':[15.36,44.20],'kabul':[34.52,69.17],
+  'riyadh':[24.71,46.67],'jeddah':[21.49,39.19],'mecca':[21.39,39.86],
+  'kuwait city':[29.37,47.98],'manama':[26.22,50.58],'muscat':[23.61,58.59],
+  'tehran':[35.69,51.39],'baghdad':[33.33,44.40],'amman':[31.95,35.93],
+  'beirut':[33.88,35.49],'damascus':[33.51,36.29],'jerusalem':[31.76,35.21],
+  'tel aviv':[32.08,34.78],'sanaa':[15.36,44.20],'kabul':[34.52,69.17],
+  'erbil':[36.19,44.01],'mosul':[36.34,43.13],
   // Africa
   'cairo':[30.04,31.23],'alexandria':[31.21,29.95],'nairobi':[-1.28,36.81],
-  'johannesburg':[-26.20,28.04],'cape town':[-33.92,18.42],'lagos':[6.45,3.39],
-  'accra':[5.56,-0.20],'abuja':[9.07,7.39],'addis ababa':[9.02,38.74],
-  'dar es salaam':[-6.79,39.22],'kampala':[0.31,32.58],'kigali':[-1.94,30.06],
-  'harare':[-17.82,31.05],'lusaka':[-15.42,28.28],'kinshasa':[-4.32,15.32],
-  'luanda':[-8.84,13.23],'dakar':[14.69,-17.44],'casablanca':[33.59,-7.62],
+  'johannesburg':[-26.20,28.04],'cape town':[-33.92,18.42],'durban':[-29.86,31.02],
+  'lagos':[6.45,3.39],'abuja':[9.07,7.39],'kano':[12.00,8.52],
+  'accra':[5.56,-0.20],'addis ababa':[9.02,38.74],'dar es salaam':[-6.79,39.22],
+  'kampala':[0.31,32.58],'kigali':[-1.94,30.06],'harare':[-17.82,31.05],
+  'lusaka':[-15.42,28.28],'kinshasa':[-4.32,15.32],'luanda':[-8.84,13.23],
+  'dakar':[14.69,-17.44],'casablanca':[33.59,-7.62],'rabat':[34.01,-6.83],
   'tunis':[36.81,10.18],'tripoli':[32.89,13.18],'khartoum':[15.55,32.53],
+  'mogadishu':[2.05,45.34],'antananarivo':[-18.91,47.54],
   // Oceania
   'sydney':[-33.86,151.20],'melbourne':[-37.81,144.96],'brisbane':[-27.47,153.02],
-  'perth':[-31.95,115.86],'auckland':[-36.86,174.76],'wellington':[-41.28,174.77]
+  'perth':[-31.95,115.86],'adelaide':[-34.92,138.60],'canberra':[-35.28,149.12],
+  'auckland':[-36.86,174.76],'wellington':[-41.28,174.77],'christchurch':[-43.53,172.63]
 };
 
-const CAPITALS = {
-  'us':[38.90,-77.03],'gb':[51.50,-0.12],'de':[52.52,13.40],'fr':[48.85,2.35],
-  'tr':[39.92,32.85],'jp':[35.68,139.69],'cn':[39.90,116.40],'ru':[55.75,37.61],
-  'in':[28.61,77.20],'au':[-35.28,149.12],'ca':[45.42,-75.69],'za':[-25.74,28.18],
-  'ng':[9.07,7.39],'eg':[30.04,31.23],'mx':[19.43,-99.13],'ar':[-34.60,-58.38],
-  'sa':[24.71,46.67],'id':[-6.20,106.81],'it':[41.90,12.49],'es':[40.41,-3.70],
-  'kr':[37.56,126.97],'ua':[50.45,30.52],'il':[31.76,35.21],'ae':[24.45,54.37],
-  'qa':[25.28,51.53],'br':[-15.82,-47.92],'pk':[33.68,73.04],'bd':[23.81,90.41],
-  'th':[13.75,100.50],'my':[3.14,101.68],'vn':[21.02,105.84],'ph':[14.59,120.98],
-  'pl':[52.23,21.01],'se':[59.33,18.06],'no':[59.91,10.75],'dk':[55.67,12.56],
-  'fi':[60.17,24.94],'nl':[52.37,4.90],'be':[50.85,4.35],'ch':[46.94,7.46],
-  'at':[48.20,16.37],'pt':[38.71,-9.14],'gr':[37.97,23.72],'cz':[50.07,14.43],
-  'hu':[47.49,19.04],'ro':[44.43,26.09],'bg':[42.69,23.33],'hr':[45.81,15.98],
-  'ke':[-1.28,36.81],'tz':[-6.79,39.22],'gh':[5.56,-0.20],'et':[9.02,38.74],
-  'ma':[33.59,-7.62],'dz':[36.73,3.08],'tn':[36.81,10.18],'ly':[32.89,13.18],
-  'iq':[33.33,44.40],'ir':[35.69,51.39],'sy':[33.51,36.29],'jo':[31.95,35.93],
-  'lb':[33.88,35.49],'kw':[29.37,47.98],'bh':[26.22,50.58],'om':[23.61,58.59],
-  'ye':[15.36,44.20],'af':[34.52,69.17],'nz':[-41.28,174.77],'sg':[1.35,103.81],
-  'tw':[25.04,121.56],'mm':[16.87,96.15],'kh':[11.56,104.92],'np':[27.70,85.31],
-  'lk':[6.93,79.85]
+const CAPS = {
+  us:[38.90,-77.03],gb:[51.50,-0.12],de:[52.52,13.40],fr:[48.85,2.35],
+  tr:[39.92,32.85],jp:[35.68,139.69],cn:[39.90,116.40],ru:[55.75,37.61],
+  in:[28.61,77.20],au:[-35.28,149.12],ca:[45.42,-75.69],za:[-25.74,28.18],
+  ng:[9.07,7.39],eg:[30.04,31.23],mx:[19.43,-99.13],ar:[-34.60,-58.38],
+  sa:[24.71,46.67],id:[-6.20,106.81],it:[41.90,12.49],es:[40.41,-3.70],
+  kr:[37.56,126.97],ua:[50.45,30.52],il:[31.76,35.21],ae:[24.45,54.37],
+  qa:[25.28,51.53],br:[-15.82,-47.92],pk:[33.68,73.04],bd:[23.81,90.41],
+  th:[13.75,100.50],my:[3.14,101.68],vn:[21.02,105.84],ph:[14.59,120.98],
+  pl:[52.23,21.01],se:[59.33,18.06],no:[59.91,10.75],dk:[55.67,12.56],
+  fi:[60.17,24.94],nl:[52.37,4.90],be:[50.85,4.35],ch:[46.94,7.46],
+  at:[48.20,16.37],pt:[38.71,-9.14],gr:[37.97,23.72],cz:[50.07,14.43],
+  hu:[47.49,19.04],ro:[44.43,26.09],bg:[42.69,23.33],ke:[-1.28,36.81],
+  tz:[-6.79,39.22],gh:[5.56,-0.20],et:[9.02,38.74],ma:[33.59,-7.62],
+  dz:[36.73,3.08],tn:[36.81,10.18],ly:[32.89,13.18],iq:[33.33,44.40],
+  ir:[35.69,51.39],sy:[33.51,36.29],jo:[31.95,35.93],lb:[33.88,35.49],
+  kw:[29.37,47.98],bh:[26.22,50.58],om:[23.61,58.59],ye:[15.36,44.20],
+  af:[34.52,69.17],nz:[-41.28,174.77],sg:[1.35,103.81],tw:[25.04,121.56],
+  mm:[16.87,96.15],kh:[11.56,104.92],np:[27.70,85.31],lk:[6.93,79.85],
+  cl:[-33.45,-70.66],co:[4.71,-74.07],pe:[-12.04,-77.03],ve:[10.48,-66.88],
+  ec:[-0.23,-78.51],bo:[-16.50,-68.14],py:[-25.29,-57.64],uy:[-34.90,-56.19],
+  az:[40.41,49.87],am:[40.18,44.51],ge:[41.69,44.83],kz:[51.18,71.45],
+  uz:[41.30,69.24],mn:[47.90,106.90],rs:[44.80,20.46],hr:[45.81,15.98]
 };
 
 const CNAMES = {
-  'us':'USA','gb':'UK','de':'Germany','fr':'France','tr':'Turkey','jp':'Japan',
-  'cn':'China','ru':'Russia','in':'India','au':'Australia','ca':'Canada',
-  'za':'South Africa','ng':'Nigeria','eg':'Egypt','mx':'Mexico','ar':'Argentina',
-  'sa':'Saudi Arabia','id':'Indonesia','it':'Italy','es':'Spain','kr':'South Korea',
-  'ua':'Ukraine','il':'Israel','ae':'UAE','qa':'Qatar','br':'Brazil','pk':'Pakistan',
-  'bd':'Bangladesh','th':'Thailand','my':'Malaysia','vn':'Vietnam','ph':'Philippines',
-  'pl':'Poland','se':'Sweden','no':'Norway','dk':'Denmark','fi':'Finland',
-  'nl':'Netherlands','be':'Belgium','ch':'Switzerland','at':'Austria','pt':'Portugal',
-  'gr':'Greece','cz':'Czech Republic','hu':'Hungary','ro':'Romania','bg':'Bulgaria',
-  'ke':'Kenya','tz':'Tanzania','gh':'Ghana','et':'Ethiopia','ma':'Morocco',
-  'dz':'Algeria','tn':'Tunisia','ly':'Libya','iq':'Iraq','ir':'Iran',
-  'sy':'Syria','jo':'Jordan','lb':'Lebanon','kw':'Kuwait','bh':'Bahrain',
-  'om':'Oman','ye':'Yemen','af':'Afghanistan','nz':'New Zealand','sg':'Singapore',
-  'tw':'Taiwan','mm':'Myanmar','kh':'Cambodia','np':'Nepal','lk':'Sri Lanka'
+  us:'USA',gb:'UK',de:'Germany',fr:'France',tr:'Turkey',jp:'Japan',cn:'China',
+  ru:'Russia',in:'India',au:'Australia',ca:'Canada',za:'South Africa',ng:'Nigeria',
+  eg:'Egypt',mx:'Mexico',ar:'Argentina',sa:'Saudi Arabia',id:'Indonesia',
+  it:'Italy',es:'Spain',kr:'South Korea',ua:'Ukraine',il:'Israel',ae:'UAE',
+  qa:'Qatar',br:'Brazil',pk:'Pakistan',bd:'Bangladesh',th:'Thailand',
+  my:'Malaysia',vn:'Vietnam',ph:'Philippines',pl:'Poland',se:'Sweden',
+  no:'Norway',dk:'Denmark',fi:'Finland',nl:'Netherlands',be:'Belgium',
+  ch:'Switzerland',at:'Austria',pt:'Portugal',gr:'Greece',cz:'Czech Republic',
+  hu:'Hungary',ro:'Romania',bg:'Bulgaria',ke:'Kenya',tz:'Tanzania',gh:'Ghana',
+  et:'Ethiopia',ma:'Morocco',dz:'Algeria',tn:'Tunisia',ly:'Libya',iq:'Iraq',
+  ir:'Iran',sy:'Syria',jo:'Jordan',lb:'Lebanon',kw:'Kuwait',bh:'Bahrain',
+  om:'Oman',ye:'Yemen',af:'Afghanistan',nz:'New Zealand',sg:'Singapore',
+  tw:'Taiwan',mm:'Myanmar',kh:'Cambodia',np:'Nepal',lk:'Sri Lanka',
+  cl:'Chile',co:'Colombia',pe:'Peru',ve:'Venezuela',ec:'Ecuador',
+  az:'Azerbaijan',am:'Armenia',ge:'Georgia',kz:'Kazakhstan',uz:'Uzbekistan',
+  mn:'Mongolia',rs:'Serbia',hr:'Croatia'
 };
 
-const KEYWORDS = {
-  'america':'us','american':'us','american':'us','nato':'gb','pentagon':'us',
-  'white house':'us','kremlin':'ru','ukraine':'ua','ukrainian':'ua','russian army':'ru',
-  'premier league':'gb','la liga':'es','serie a':'it','bundesliga':'de','ligue 1':'fr',
-  'nba':'us','nfl':'us','mlb':'us','nhl':'us','espn':'us',
-  'macron':'fr','putin':'ru','zelensky':'ua','modi':'in','xi jinping':'cn',
-  'erdogan':'tr','netanyahu':'il','hamas':'il','hezbollah':'lb',
-  'silicon valley':'us','wall street':'us','dow jones':'us','nasdaq':'us',
-  'amazon':'us','google':'us','apple':'us','microsoft':'us','tesla':'us','meta':'us',
-  'olympic':'us','world cup':'gb','champions league':'gb',
-  'bbc':'gb','guardian':'gb','cnn':'us','fox news':'us','al jazeera':'qa'
+// keyword → country code
+const KW = {
+  america:'us',american:'us','united states':'us',pentagon:'us','white house':'us',
+  'wall street':'us','silicon valley':'us',england:'gb','premier league':'gb',
+  scotland:'gb',wales:'gb',nato:'us',kremlin:'ru',ukraine:'ua',ukrainian:'ua',
+  macron:'fr',paris:'fr',putin:'ru',zelensky:'ua',modi:'in',
+  'xi jinping':'cn','kim jong':'kr',erdogan:'tr',netanyahu:'il',
+  hamas:'il',hezbollah:'lb',
+  nba:'us',nfl:'us',mlb:'us',nhl:'us',
+  'la liga':'es','serie a':'it','bundesliga':'de','ligue 1':'fr',
+  amazon:'us',google:'us',apple:'us',microsoft:'us',tesla:'us',openai:'us',meta:'us',
+  samsung:'kr',huawei:'cn',alibaba:'cn',tencent:'cn',toyota:'jp',honda:'jp',
+  bbc:'gb',guardian:'gb',cnn:'us','fox news':'us','al jazeera':'qa',
+  'times of india':'in',geo:'pk',dawn:'pk',nikkei:'jp',
+  'world cup':'gb','champions league':'gb',olympic:'us',
+  'european union':'be',eu:'be',imf:'us','world bank':'us',
+  un:'us',nato:'be',g7:'us',g20:'us',brics:'ru',
+  ukraine:'ua',crimea:'ua',taiwan:'tw',kashmir:'in',
+  'south china sea':'cn',gaza:'il',westbank:'il',
+  earthquake:'jp',tsunami:'jp',hurricane:'us',tornado:'us',
+  flood:'in',wildfire:'au'
 };
 
-// Location cache to avoid spiral collisions
-const locCache = {};
-function getCoords(text, source) {
-  const t = (text || '').toLowerCase();
-  let lat = null, lng = null, locName = null;
-
-  // 1. Exact city match
-  for (const [city, c] of Object.entries(CITIES)) {
-    if (new RegExp('\\b' + city.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'i').test(t)) {
-      lat = c[0]; lng = c[1];
-      locName = city.split(' ').map(w => w[0].toUpperCase() + w.slice(1)).join(' ');
-      break;
-    }
-  }
-
-  // 2. Keyword → country
-  if (!lat) {
-    for (const [k, cc] of Object.entries(KEYWORDS)) {
-      if (new RegExp('\\b' + k + '\\b', 'i').test(t)) {
-        if (CAPITALS[cc]) { lat = CAPITALS[cc][0]; lng = CAPITALS[cc][1]; locName = CNAMES[cc]; break; }
-      }
-    }
-  }
-
-  // 3. Country name match
-  if (!lat) {
-    for (const [cc, name] of Object.entries(CNAMES)) {
-      if (new RegExp('\\b' + name + '\\b', 'i').test(t)) {
-        if (CAPITALS[cc]) { lat = CAPITALS[cc][0]; lng = CAPITALS[cc][1]; locName = name; break; }
-      }
-    }
-  }
-
-  // 4. Fallback: random spread across globe
-  if (!lat) {
-    const fallbacks = [[40.71,-74.00,'New York'],[51.50,-0.12,'London'],[35.68,139.69,'Tokyo'],[48.85,2.35,'Paris'],[28.61,77.20,'New Delhi']];
-    const f = fallbacks[Math.floor(Math.random() * fallbacks.length)];
-    lat = f[0]; lng = f[1]; locName = f[2];
-  }
-
-  // Jitter to prevent perfect overlap (±0.08° ≈ 9km)
-  const jitter = () => (Math.random() - 0.5) * 0.16;
-  return { coords: [lat + jitter(), lng + jitter()], locationName: locName };
+// region bounding boxes
+const REGION_BB = {
+  europe:   {lat:[35,72],lng:[-25,45]},
+  americas: {lat:[-60,75],lng:[-170,-30]},
+  asia:     {lat:[-10,60],lng:[60,150]},
+  mideast:  {lat:[12,42],lng:[25,62]},
+  africa:   {lat:[-38,38],lng:[-20,55]},
+  oceania:  {lat:[-50,10],lng:[110,180]}
+};
+function artRegion(lat,lng){
+  for(const [r,b] of Object.entries(REGION_BB))
+    if(lat>=b.lat[0]&&lat<=b.lat[1]&&lng>=b.lng[0]&&lng<=b.lng[1]) return r;
+  return 'other';
 }
 
-// ═══════════════════════════════════════════════
-// MAP INIT
-// ═══════════════════════════════════════════════
-const map = L.map('map', { zoomControl: false }).setView([20, 10], 2);
-L.control.zoom({ position: 'bottomright' }).addTo(map);
-L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_matter/{z}/{x}/{y}{r}.png', {
-  attribution: '© OpenStreetMap © CartoDB', maxZoom: 18
-}).addTo(map);
+// ── COORD RESOLUTION ─────────────────────────
+// Fallback pool spread across globe for unknown locations
+const FALLBACK_POOL = [
+  [40.71,-74.00,'New York'],[51.50,-0.12,'London'],[35.68,139.69,'Tokyo'],
+  [48.85,2.35,'Paris'],[28.61,77.20,'New Delhi'],[39.90,116.40,'Beijing'],
+  [-23.54,-46.63,'São Paulo'],[55.75,37.61,'Moscow'],[25.20,55.27,'Dubai'],
+  [-33.86,151.20,'Sydney'],[1.35,103.81,'Singapore'],[9.07,7.39,'Abuja'],
+  [30.04,31.23,'Cairo'],[-1.28,36.81,'Nairobi'],[19.43,-99.13,'Mexico City'],
+  [37.56,126.97,'Seoul'],[-34.60,-58.38,'Buenos Aires'],[41.01,28.97,'Istanbul'],
+  [52.52,13.40,'Berlin'],[14.59,120.98,'Manila']
+];
+let fbIdx = 0;
 
-// Light tile layer stored for theme toggle
-let tileLayerDark = map._layers[Object.keys(map._layers)[0]];
-let currentTileLayer = tileLayerDark;
-
-function updateMapTiles() {
-  const isDark = document.body.getAttribute('data-theme') === 'dark';
-  if (currentTileLayer) map.removeLayer(currentTileLayer);
-  const url = isDark
-    ? 'https://{s}.basemaps.cartocdn.com/dark_matter/{z}/{x}/{y}{r}.png'
-    : 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png';
-  currentTileLayer = L.tileLayer(url, { maxZoom:18 }).addTo(map);
+function getCoords(text, source){
+  const t = (text||'').toLowerCase();
+  // 1. city exact
+  for(const [city,c] of Object.entries(CITIES)){
+    if(new RegExp('\\b'+city.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'\\b','i').test(t))
+      return {coords:[c[0]+jit(),c[1]+jit()], loc:cap(city)};
+  }
+  // 2. keyword
+  for(const [kw,cc] of Object.entries(KW)){
+    if(new RegExp('\\b'+kw.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'\\b','i').test(t) && CAPS[cc])
+      return {coords:[CAPS[cc][0]+jit(),CAPS[cc][1]+jit()], loc:CNAMES[cc]||cc.toUpperCase()};
+  }
+  // 3. country name
+  for(const [cc,name] of Object.entries(CNAMES)){
+    if(new RegExp('\\b'+name.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'\\b','i').test(t) && CAPS[cc])
+      return {coords:[CAPS[cc][0]+jit(),CAPS[cc][1]+jit()], loc:name};
+  }
+  // 4. global fallback (round-robin, ensures spread)
+  const f = FALLBACK_POOL[fbIdx % FALLBACK_POOL.length]; fbIdx++;
+  return {coords:[f[0]+jit(),f[1]+jit()], loc:f[2]};
 }
+function jit(){ return (Math.random()-0.5)*0.22; }
+function cap(s){ return s.replace(/\b\w/g,c=>c.toUpperCase()); }
 
-function pulseIcon(color) {
-  return L.divIcon({
-    html: `<div style="position:relative;width:16px;height:16px;">
-      <div class="marker-ring" style="background:${color}; border:3px solid ${color};"></div>
-      <div class="marker-inner" style="background:${color};"></div>
-    </div>`,
-    iconSize: [16,16], iconAnchor: [8,8], className: ''
-  });
-}
+// ── FEEDS (Guardian API primary, RSS as supplement) ──
+const GUARDIAN_KEY = '0a321643-aaab-4c6a-9185-1762685abe3d';
 
-// ═══════════════════════════════════════════════
-// MASSIVE FEED CONFIGS
-// ═══════════════════════════════════════════════
-const FEEDS = {
-  world: [
-    {url:'http://rss.cnn.com/rss/edition_world.rss', name:'CNN', region:'americas'},
-    {url:'http://feeds.bbci.co.uk/news/world/rss.xml', name:'BBC News', region:'europe'},
-    {url:'https://www.aljazeera.com/xml/rss/all.xml', name:'Al Jazeera', region:'mideast'},
-    {url:'https://www.theguardian.com/world/rss', name:'The Guardian', region:'europe'},
-    {url:'https://rss.nytimes.com/services/xml/rss/nyt/World.xml', name:'NY Times', region:'americas'},
-    {url:'https://feeds.a.dj.com/rss/RSSWorldNews.xml', name:'WSJ', region:'americas'},
-    {url:'https://english.alarabiya.net/feed/world', name:'Al Arabiya', region:'mideast'},
-    {url:'https://www.geo.tv/rss/1/2', name:'Geo News', region:'asia'},
-    {url:'https://timesofindia.indiatimes.com/rssfeedstopstories.cms', name:'Times of India', region:'asia'},
-    {url:'https://www.dawn.com/feeds/home', name:'Dawn Pakistan', region:'asia'},
-    {url:'https://www.bbc.co.uk/news/world/africa/rss.xml', name:'BBC Africa', region:'africa'},
-    {url:'https://www.france24.com/en/rss', name:'France24', region:'europe'},
-    {url:'https://feeds.dw.com/rss/rss-en-all', name:'DW', region:'europe'},
-    {url:'https://www3.nhk.or.jp/rss/news/cat0.xml', name:'NHK Japan', region:'asia'},
-    {url:'https://www.abc.net.au/news/feed/51120/rss.xml', name:'ABC Australia', region:'oceania'},
+// Mapping category → multiple Guardian sections + keywords
+const G_SECTIONS = {
+  world:    ['world','politics','international'],
+  technology:['technology'],
+  business: ['business','money'],
+  science:  ['science'],
+  health:   ['society'],
+  sport:    ['sport','football','cricket'],
+  climate:  ['environment'],
+  politics: ['politics','us-news','uk-news','world']
+};
+
+// Extra Guardian section queries for geographic diversity
+const G_GEO = ['world/europe-news','world/americas','world/asia-pacific','world/middle-east','world/africa'];
+
+// RSS feeds as supplement (using allorigins CORS proxy)
+const RSS_FEEDS = {
+  world:[
+    {u:'http://rss.cnn.com/rss/edition_world.rss',n:'CNN'},
+    {u:'https://feeds.dw.com/rss/rss-en-all',n:'DW'},
+    {u:'https://www.france24.com/en/rss',n:'France24'},
+    {u:'https://www3.nhk.or.jp/rss/news/cat0.xml',n:'NHK Japan'},
+    {u:'https://www.geo.tv/rss/1/2',n:'Geo News'},
+    {u:'https://english.alarabiya.net/feed/world',n:'Al Arabiya'},
+    {u:'https://www.abc.net.au/news/feed/51120/rss.xml',n:'ABC Australia'},
+    {u:'https://feeds.bbci.co.uk/news/world/rss.xml',n:'BBC World'},
+    {u:'https://www.aljazeera.com/xml/rss/all.xml',n:'Al Jazeera'},
   ],
-  technology: [
-    {url:'https://techcrunch.com/feed/', name:'TechCrunch', region:'americas'},
-    {url:'https://www.wired.com/feed/rss', name:'Wired', region:'americas'},
-    {url:'https://feeds.arstechnica.com/arstechnica/index', name:'Ars Technica', region:'americas'},
-    {url:'https://www.theverge.com/rss/index.xml', name:'The Verge', region:'americas'},
-    {url:'http://feeds.bbci.co.uk/news/technology/rss.xml', name:'BBC Tech', region:'europe'},
-    {url:'https://feeds.dw.com/rss/rss-en-top', name:'DW Tech', region:'europe'},
-    {url:'https://asia.nikkei.com/rss/feed/nar', name:'Nikkei Asia', region:'asia'},
+  technology:[
+    {u:'https://techcrunch.com/feed/',n:'TechCrunch'},
+    {u:'https://www.theverge.com/rss/index.xml',n:'The Verge'},
+    {u:'https://feeds.arstechnica.com/arstechnica/index',n:'Ars Technica'},
+    {u:'http://feeds.bbci.co.uk/news/technology/rss.xml',n:'BBC Tech'},
   ],
-  business: [
-    {url:'https://feeds.a.dj.com/rss/WSJcomUSBusiness.xml', name:'WSJ', region:'americas'},
-    {url:'https://rss.nytimes.com/services/xml/rss/nyt/Business.xml', name:'NY Times', region:'americas'},
-    {url:'http://feeds.bbci.co.uk/news/business/rss.xml', name:'BBC Business', region:'europe'},
-    {url:'https://www.ft.com/rss/home/uk', name:'Financial Times', region:'europe'},
-    {url:'https://feeds.a.dj.com/rss/RSSMarketsMain.xml', name:'WSJ Markets', region:'americas'},
-    {url:'https://asia.nikkei.com/rss/feed/nar', name:'Nikkei Asia', region:'asia'},
-    {url:'https://www.cnbc.com/id/100003114/device/rss/rss.html', name:'CNBC', region:'americas'},
+  business:[
+    {u:'https://feeds.a.dj.com/rss/WSJcomUSBusiness.xml',n:'WSJ'},
+    {u:'http://feeds.bbci.co.uk/news/business/rss.xml',n:'BBC Business'},
+    {u:'https://www.cnbc.com/id/100003114/device/rss/rss.html',n:'CNBC'},
   ],
-  science: [
-    {url:'https://rss.nytimes.com/services/xml/rss/nyt/Science.xml', name:'NY Times', region:'americas'},
-    {url:'http://feeds.bbci.co.uk/news/science_and_environment/rss.xml', name:'BBC Science', region:'europe'},
-    {url:'https://www.nature.com/nature.rss', name:'Nature', region:'europe'},
-    {url:'https://www.newscientist.com/feed/home/', name:'New Scientist', region:'europe'},
-    {url:'https://feeds.sciencedaily.com/sciencedaily/top_news', name:'ScienceDaily', region:'americas'},
+  sport:[
+    {u:'https://www.espn.com/espn/rss/news',n:'ESPN'},
+    {u:'https://www.skysports.com/rss/12040',n:'Sky Sports'},
+    {u:'http://feeds.bbci.co.uk/sport/rss.xml',n:'BBC Sport'},
   ],
-  health: [
-    {url:'http://feeds.bbci.co.uk/news/health/rss.xml', name:'BBC Health', region:'europe'},
-    {url:'https://rss.nytimes.com/services/xml/rss/nyt/Health.xml', name:'NY Times', region:'americas'},
-    {url:'https://www.who.int/rss-feeds/news-english.xml', name:'WHO', region:'europe'},
-    {url:'https://feeds.a.dj.com/rss/RSSWSJD.xml', name:'WSJ Health', region:'americas'},
+  science:[
+    {u:'https://rss.nytimes.com/services/xml/rss/nyt/Science.xml',n:'NY Times'},
+    {u:'http://feeds.bbci.co.uk/news/science_and_environment/rss.xml',n:'BBC Science'},
   ],
-  sport: [
-    {url:'https://www.espn.com/espn/rss/news', name:'ESPN', region:'americas'},
-    {url:'https://www.skysports.com/rss/12040', name:'Sky Sports', region:'europe'},
-    {url:'https://e00-marca.uecdn.es/rss/en/football.xml', name:'Marca', region:'europe'},
-    {url:'https://www.goal.com/en/feeds/news', name:'Goal.com', region:'europe'},
-    {url:'http://feeds.bbci.co.uk/sport/rss.xml', name:'BBC Sport', region:'europe'},
-    {url:'https://sportstar.thehindu.com/rss/home_page_top_stories.rss', name:'Sportstar India', region:'asia'},
+  health:[
+    {u:'http://feeds.bbci.co.uk/news/health/rss.xml',n:'BBC Health'},
+    {u:'https://rss.nytimes.com/services/xml/rss/nyt/Health.xml',n:'NY Times'},
   ],
-  climate: [
-    {url:'http://feeds.bbci.co.uk/news/science_and_environment/rss.xml', name:'BBC Environment', region:'europe'},
-    {url:'https://www.theguardian.com/environment/rss', name:'Guardian Env', region:'europe'},
-    {url:'https://insideclimatenews.org/feed', name:'Inside Climate News', region:'americas'},
-    {url:'https://rss.nytimes.com/services/xml/rss/nyt/Climate.xml', name:'NY Times Climate', region:'americas'},
+  climate:[
+    {u:'https://www.theguardian.com/environment/rss',n:'Guardian Env'},
+    {u:'http://feeds.bbci.co.uk/news/science_and_environment/rss.xml',n:'BBC Env'},
   ],
-  politics: [
-    {url:'https://rss.nytimes.com/services/xml/rss/nyt/Politics.xml', name:'NY Times', region:'americas'},
-    {url:'https://feeds.a.dj.com/rss/RSSOpinion.xml', name:'WSJ Politics', region:'americas'},
-    {url:'https://www.theguardian.com/politics/rss', name:'Guardian Politics', region:'europe'},
-    {url:'http://feeds.bbci.co.uk/news/politics/rss.xml', name:'BBC Politics', region:'europe'},
-    {url:'https://www.aljazeera.com/xml/rss/all.xml', name:'Al Jazeera', region:'mideast'},
+  politics:[
+    {u:'https://rss.nytimes.com/services/xml/rss/nyt/Politics.xml',n:'NY Times'},
+    {u:'http://feeds.bbci.co.uk/news/politics/rss.xml',n:'BBC Politics'},
   ]
 };
 
-// ═══════════════════════════════════════════════
-// RSS FETCH
-// ═══════════════════════════════════════════════
-async function fetchRSS(url, sourceName, sourceRegion) {
-  try {
-    const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}&count=20`);
-    if (!res.ok) return [];
-    const data = await res.json();
-    if (data.status !== 'ok') return [];
-    return (data.items || []).map(item => ({
-      title: item.title || '',
-      url: item.link || '#',
-      source: sourceName,
-      sourceRegion,
-      date: item.pubDate,
-      thumb: item.thumbnail || (item.enclosure?.link) || null,
-      trailText: (item.description || '').replace(/<[^>]*>/gm, '').slice(0, 200)
+async function fetchGuardian(section, tag){
+  try{
+    const q = tag ? `q=${encodeURIComponent(tag)}&` : '';
+    const sec = section ? `${section}?` : `?`;
+    const url = `https://content.guardianapis.com/${sec}${q}api-key=${GUARDIAN_KEY}&page-size=20&show-fields=thumbnail,trailText,publication`;
+    const r = await fetch(url);
+    const d = await r.json();
+    return (d.response?.results||[]).map(a=>({
+      title:a.webTitle, url:a.webUrl, source:'The Guardian',
+      date:a.webPublicationDate,
+      thumb:a.fields?.thumbnail||null,
+      trail:(a.fields?.trailText||'').replace(/<[^>]*>/gm,'')
     }));
-  } catch { return []; }
+  }catch{return [];}
 }
 
-async function fetchGuardianFallback(category) {
-  try {
-    const GKEY = '0a321643-aaab-4c6a-9185-1762685abe3d';
-    const sec = { world:'world', technology:'technology', business:'business', science:'science', health:'health', sport:'sport', climate:'environment', politics:'politics' }[category] || 'world';
-    const res = await fetch(`https://content.guardianapis.com/${sec}?api-key=${GKEY}&page-size=15&show-fields=thumbnail,trailText`);
-    const data = await res.json();
-    return (data.response?.results || []).map(a => ({
-      title: a.webTitle, url: a.webUrl, source: 'The Guardian', sourceRegion: 'europe',
-      date: a.webPublicationDate,
-      thumb: a.fields?.thumbnail || null,
-      trailText: (a.fields?.trailText || '').replace(/<[^>]*>/gm, '')
-    }));
-  } catch { return []; }
+async function fetchRSS(feed){
+  // Try rss2json first
+  try{
+    const r = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feed.u)}&count=15`);
+    const d = await r.json();
+    if(d.status==='ok' && d.items?.length){
+      return d.items.map(i=>({
+        title:i.title||'', url:i.link||'#', source:feed.n,
+        date:i.pubDate,
+        thumb:i.thumbnail||(i.enclosure?.link)||null,
+        trail:(i.description||'').replace(/<[^>]*>/gm,'').slice(0,200)
+      }));
+    }
+  }catch{}
+  // Fallback: allorigins proxy
+  try{
+    const r = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(feed.u)}`);
+    const d = await r.json();
+    const parser = new DOMParser();
+    const xml = parser.parseFromString(d.contents,'text/xml');
+    const items = [...xml.querySelectorAll('item')].slice(0,15);
+    return items.map(it=>({
+      title:it.querySelector('title')?.textContent||'',
+      url:it.querySelector('link')?.textContent||'#',
+      source:feed.n,
+      date:it.querySelector('pubDate')?.textContent||'',
+      thumb:it.querySelector('enclosure')?.getAttribute('url')||null,
+      trail:(it.querySelector('description')?.textContent||'').replace(/<[^>]*>/gm,'').slice(0,200)
+    })).filter(a=>a.title);
+  }catch{return [];}
 }
 
-// ═══════════════════════════════════════════════
-// HELPERS
-// ═══════════════════════════════════════════════
-function timeAgo(d) {
-  if (!d) return '';
-  const diff = Date.now() - new Date(d).getTime();
-  const h = Math.floor(diff / 3600000), m = Math.floor(diff / 60000);
-  if (h > 48) return Math.floor(h/24) + 'd ago';
-  if (h > 0) return h + 'h ago';
-  return m > 0 ? m + 'm ago' : 'Now';
-}
+// ── MAIN FETCH ────────────────────────────────
+async function fetchNews(cat){
+  fbIdx = 0; // reset fallback rotation
+  document.getElementById('newsList').innerHTML = '<div class="loader"><div class="loader-owl">🦉</div><div class="loader-txt">SCANNING GLOBE</div></div>';
+  document.getElementById('feedLabel').textContent = cat.toUpperCase()+' FEED';
 
-function isSaved(article) { return savedArticles.some(s => s.url === article.url); }
-function isRead(article) { return readArticles.has(article.url); }
+  const sections = G_SECTIONS[cat]||['world'];
+  const geoSections = cat==='world' ? G_GEO : [];
+  const rssList = RSS_FEEDS[cat]||RSS_FEEDS.world;
 
-function saveArticle(article) {
-  if (!isSaved(article)) {
-    savedArticles.unshift(article);
-    localStorage.setItem('owls_saved', JSON.stringify(savedArticles));
-    updateSavedBadge();
-    showToast('🔖', 'Saved', article.title.slice(0,60) + '...', null);
-  }
-}
+  // Fire everything in parallel
+  const jobs = [
+    ...sections.map(s=>fetchGuardian(s)),
+    ...geoSections.map(s=>fetchGuardian(s)),
+    ...rssList.map(f=>fetchRSS(f))
+  ];
 
-function unsaveArticle(url) {
-  savedArticles = savedArticles.filter(s => s.url !== url);
-  localStorage.setItem('owls_saved', JSON.stringify(savedArticles));
-  updateSavedBadge();
-}
+  const results = await Promise.allSettled(jobs);
+  let arts = [];
+  results.forEach(r=>{ if(r.status==='fulfilled') arts.push(...r.value); });
 
-function markRead(url) {
-  readArticles.add(url);
-  localStorage.setItem('owls_read', JSON.stringify([...readArticles]));
-}
+  // Dedupe by title
+  const seen = new Set();
+  arts = arts.filter(a=>{ if(!a.title||seen.has(a.title)) return false; seen.add(a.title); return true; });
 
-function updateSavedBadge() {
-  document.getElementById('savedBadge').textContent = savedArticles.length;
-}
-
-// ═══════════════════════════════════════════════
-// ALERT SYSTEM
-// ═══════════════════════════════════════════════
-function addAlert() {
-  const input = document.getElementById('alertInput');
-  const kw = input.value.trim().toLowerCase();
-  if (!kw || alerts.includes(kw)) { input.value = ''; return; }
-  alerts.push(kw);
-  localStorage.setItem('owls_alerts', JSON.stringify(alerts));
-  input.value = '';
-  renderAlerts();
-}
-
-function removeAlert(kw) {
-  alerts = alerts.filter(a => a !== kw);
-  localStorage.setItem('owls_alerts', JSON.stringify(alerts));
-  renderAlerts();
-}
-
-function renderAlerts() {
-  const list = document.getElementById('alertList');
-  list.innerHTML = '';
-  alerts.forEach(kw => {
-    const el = document.createElement('div');
-    el.style.cssText = 'display:flex;align-items:center;gap:6px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:5px 10px;font-size:11px;font-weight:700;';
-    el.innerHTML = `<span style="color:var(--accent)">🔔</span> ${kw} <span style="cursor:pointer;color:var(--text3);margin-left:4px;" onclick="removeAlert('${kw}')">×</span>`;
-    list.appendChild(el);
+  // Attach coords + region
+  arts.forEach(a=>{
+    const text = a.title+' '+(a.trail||'');
+    const {coords,loc} = getCoords(text, a.source);
+    a._coords = coords;
+    a._loc    = loc;
+    a._region = artRegion(coords[0],coords[1]);
   });
+
+  // Shuffle for variety
+  arts.sort(()=>Math.random()-0.5);
+  allArticles = arts;
+  renderFeed(arts);
 }
 
-function checkAlerts(articles) {
-  if (!alerts.length) return;
-  articles.forEach(a => {
-    const text = (a.title + ' ' + a.trailText).toLowerCase();
-    alerts.forEach(kw => {
-      if (text.includes(kw)) {
-        showToast('🔔', 'Alert: ' + kw.toUpperCase(), a.title.slice(0,60) + '...', a);
-      }
-    });
-  });
-}
-
-// ═══════════════════════════════════════════════
-// TOAST NOTIFICATIONS
-// ═══════════════════════════════════════════════
-let toastQueue = [];
-let toastBusy = false;
-
-function showToast(icon, label, title, article) {
-  toastQueue.push({icon, label, title, article});
-  if (!toastBusy) processToast();
-}
-
-function processToast() {
-  if (!toastQueue.length) { toastBusy = false; return; }
-  toastBusy = true;
-  const {icon, label, title, article} = toastQueue.shift();
-  const stack = document.getElementById('toastStack');
-  const toast = document.createElement('div');
-  toast.className = 'toast';
-  toast.innerHTML = `<div class="toast-icon">${icon}</div><div style="flex:1;min-width:0;"><div class="toast-label">${label}</div><div class="toast-title">${title}</div></div><div class="toast-close">×</div>`;
-  toast.querySelector('.toast-close').onclick = (e) => { e.stopPropagation(); dismissToast(toast); };
-  if (article) toast.onclick = () => { dismissToast(toast); openModal(article); };
-  stack.appendChild(toast);
-  requestAnimationFrame(() => requestAnimationFrame(() => toast.classList.add('show')));
-  setTimeout(() => dismissToast(toast), 6000);
-}
-
-function dismissToast(toast) {
-  toast.classList.remove('show');
-  setTimeout(() => { toast.remove(); setTimeout(processToast, 200); }, 400);
-}
-
-// ═══════════════════════════════════════════════
-// MODAL
-// ═══════════════════════════════════════════════
-function openModal(article) {
-  currentModalArticle = article;
-  markRead(article.url);
-  const img = document.getElementById('modalImg');
-  if (article.thumb) { img.src = article.thumb; img.style.display = 'block'; }
-  else img.style.display = 'none';
-  document.getElementById('modalTitle').textContent = article.title;
-  document.getElementById('modalSource').textContent = article.source;
-  document.getElementById('modalRegion').textContent = (article.locationName || 'Global').toUpperCase();
-  document.getElementById('modalTime').textContent = timeAgo(article.date);
-  document.getElementById('modalDesc').textContent = article.trailText || 'Click below to read the full story.';
-  document.getElementById('modalLink').href = article.url;
-  const saveBtn = document.getElementById('modalSaveBtn');
-  saveBtn.classList.toggle('saved', isSaved(article));
-  saveBtn.textContent = isSaved(article) ? '✓ Saved' : '🔖 Save';
-  document.getElementById('newsModal').classList.add('active');
-  // Mark card as read in list
-  document.querySelectorAll('.news-card').forEach(c => { if (c.dataset.url === article.url) c.classList.add('read'); });
-}
-
-function closeModal() { document.getElementById('newsModal').classList.remove('active'); }
-
-function toggleSaveFromModal() {
-  if (!currentModalArticle) return;
-  if (isSaved(currentModalArticle)) {
-    unsaveArticle(currentModalArticle.url);
-    document.getElementById('modalSaveBtn').textContent = '🔖 Save';
-    document.getElementById('modalSaveBtn').classList.remove('saved');
-  } else {
-    saveArticle(currentModalArticle);
-    document.getElementById('modalSaveBtn').textContent = '✓ Saved';
-    document.getElementById('modalSaveBtn').classList.add('saved');
-  }
-  renderSavedPanel();
-}
-
-// ═══════════════════════════════════════════════
-// RENDER
-// ═══════════════════════════════════════════════
-function renderArticles(articles) {
-  const color = COLORS[currentQ] || '#00e5c8';
-  const list = document.getElementById('newsList');
-
-  // Clear map
-  if (clusterGroup) map.removeLayer(clusterGroup);
-  clusterGroup = L.markerClusterGroup({
-    maxClusterRadius: 40,
-    iconCreateFunction: (cluster) => L.divIcon({
-      html: `<div class="custom-cluster" style="width:34px;height:34px;font-size:12px;">${cluster.getChildCount()}</div>`,
-      iconSize: [34,34], iconAnchor: [17,17], className:''
+// ── RENDER ────────────────────────────────────
+function renderFeed(arts){
+  const color = COLORS[curQ]||'#00e5c8';
+  if(clusterLayer){ map.removeLayer(clusterLayer); }
+  clusterLayer = L.markerClusterGroup({
+    maxClusterRadius:50,
+    iconCreateFunction:cl=>L.divIcon({
+      html:`<div class="ccluster" style="width:32px;height:32px;font-size:11px;">${cl.getChildCount()}</div>`,
+      iconSize:[32,32],iconAnchor:[16,16],className:''
     })
   });
 
+  const list = document.getElementById('newsList');
   list.innerHTML = '';
 
-  // Filter by region
-  const filtered = currentRegion === 'all' ? articles : articles.filter(a => a._region === currentRegion);
+  const filtered = curR==='all' ? arts : arts.filter(a=>a._region===curR);
+  document.getElementById('scount').textContent = `${filtered.length} stories · ${new Set(arts.map(a=>a.source)).size} sources`;
 
-  document.getElementById('sourceCount').textContent = `${filtered.length} stories`;
-
-  if (!filtered.length) {
-    list.innerHTML = '<div class="loading-state"><div class="loading-owl">🦉</div><div class="loading-text">No stories in this region</div></div>';
-    map.addLayer(clusterGroup);
+  if(!filtered.length){
+    list.innerHTML = '<div class="loader"><div class="loader-owl">🦉</div><div class="loader-txt">No stories in this region</div></div>';
+    map.addLayer(clusterLayer);
     return;
   }
 
-  filtered.slice(0, 60).forEach(a => {
-    const {coords, locationName} = getCoords(a.title + ' ' + (a.trailText || ''), a.source);
-    a.locationName = locationName;
-    const marker = L.marker(coords, { icon: pulseIcon(color) });
-    marker.bindPopup(`<div style="font-weight:700;font-size:13px;max-width:200px;">${a.title}</div><div style="font-size:11px;color:#888;margin-top:4px;">${a.source}</div>`);
-    marker.on('click', () => openModal(a));
-    clusterGroup.addLayer(marker);
+  filtered.slice(0,60).forEach(a=>{
+    // Marker
+    const m = L.marker(a._coords,{icon:mkIcon(color)});
+    m.bindPopup(`<div style="font-weight:700;font-size:12px;max-width:190px;line-height:1.4">${a.title}</div><div style="font-size:10px;color:#888;margin-top:3px">${a.source} · ${a._loc}</div>`);
+    m.on('click',()=>openModal(a));
+    clusterLayer.addLayer(m);
 
+    // Card
     const card = document.createElement('div');
-    card.className = 'news-card' + (isRead(a) ? ' read' : '');
+    card.className = 'ncard'+(isRead(a)?' read':'');
     card.dataset.url = a.url;
-    if (!isRead(a)) {
+    if(!isRead(a)){
       const dot = document.createElement('div');
-      dot.className = 'read-indicator';
-      card.appendChild(dot);
+      dot.className='unread-dot'; card.appendChild(dot);
     }
-    const thumbHtml = a.thumb
-      ? `<img src="${a.thumb}" class="card-thumb" onerror="this.parentNode.innerHTML='<div class=\\'card-thumb-placeholder\\'>📰</div>'">`
-      : `<div class="card-thumb-placeholder">📰</div>`;
+    const saved = isSaved(a);
+    const thumb = a.thumb
+      ? `<img class="nthumb" src="${a.thumb}" onerror="this.outerHTML='<div class=nthumb-ph>📰</div>'">`
+      : `<div class="nthumb-ph">📰</div>`;
     card.innerHTML += `
-      <div class="card-top">
-        ${thumbHtml}
-        <div class="card-info">
-          <div class="card-source">${a.source}</div>
-          <div class="card-title">${a.title}</div>
-          <div class="card-meta">
-            <span class="region-tag">${locationName}</span>
+      <div class="ncard-row">
+        ${thumb}
+        <div class="ninfo">
+          <div class="nsrc">${a.source}</div>
+          <div class="ntitle">${a.title}</div>
+          <div class="nmeta">
+            <span class="nloc">${a._loc}</span>
             <span>${timeAgo(a.date)}</span>
           </div>
         </div>
       </div>
-      <div class="card-actions">
-        <button class="card-action-btn ${isSaved(a) ? 'saved' : ''}" title="Save" onclick="event.stopPropagation(); toggleSaveCard(this, '${a.url.replace(/'/g,"\\'")}')">🔖</button>
-      </div>`;
-    card.onclick = () => {
-      document.querySelectorAll('.news-card').forEach(c => c.classList.remove('active'));
+      <div class="nbookmark${saved?' on':''}" data-url="${a.url}" onclick="event.stopPropagation();toggleSaveCard(this,'${a.url.replace(/'/g,"\\'")}')">🔖</div>`;
+    card.onclick = ()=>{
+      document.querySelectorAll('.ncard').forEach(c=>c.classList.remove('active'));
       card.classList.add('active');
-      map.flyTo(coords, 7, { duration: 1.5, easeLinearity: 0.25 });
+      map.flyTo(a._coords,6,{duration:1.5,easeLinearity:0.25});
       openModal(a);
     };
     list.appendChild(card);
   });
 
-  map.addLayer(clusterGroup);
+  map.addLayer(clusterLayer);
   checkAlerts(filtered);
 }
 
-function toggleSaveCard(btn, url) {
-  const article = allArticles.find(a => a.url === url);
-  if (!article) return;
-  if (isSaved(article)) { unsaveArticle(url); btn.classList.remove('saved'); }
-  else { saveArticle(article); btn.classList.add('saved'); }
-  renderSavedPanel();
+// ── HELPERS ───────────────────────────────────
+function timeAgo(d){
+  if(!d) return '';
+  const diff = Date.now()-new Date(d).getTime();
+  const h=Math.floor(diff/3600000), m=Math.floor(diff/60000);
+  if(h>48) return Math.floor(h/24)+'d ago';
+  if(h>0) return h+'h ago';
+  return m>0?m+'m ago':'Now';
+}
+function isSaved(a){ return savedArts.some(s=>s.url===a.url); }
+function isRead(a){ return readSet.has(a.url); }
+function markRead(url){ readSet.add(url); localStorage.setItem('owls_read',JSON.stringify([...readSet])); }
+function updateSBadge(){ document.getElementById('sbadge').textContent=savedArts.length; }
+
+function savArt(a){
+  if(isSaved(a)) return;
+  savedArts.unshift(a);
+  localStorage.setItem('owls_saved',JSON.stringify(savedArts));
+  updateSBadge();
+  showToast('🔖','Saved',a.title.slice(0,65)+'…',null);
+}
+function unsavArt(url){
+  savedArts=savedArts.filter(s=>s.url!==url);
+  localStorage.setItem('owls_saved',JSON.stringify(savedArts));
+  updateSBadge();
 }
 
-function renderSavedPanel() {
+// ── MODAL ─────────────────────────────────────
+function openModal(a){
+  curModalArt = a; markRead(a.url);
+  const img = document.getElementById('mhero');
+  if(a.thumb){img.src=a.thumb;img.style.display='block';} else img.style.display='none';
+  document.getElementById('mtitle').textContent = a.title;
+  document.getElementById('msrc').textContent   = a.source;
+  document.getElementById('mloc').textContent   = (a._loc||'Global').toUpperCase();
+  document.getElementById('mtime').textContent  = timeAgo(a.date);
+  document.getElementById('mdesc').textContent  = a.trail||'Click below to read the full story on the original source.';
+  document.getElementById('mlink').href         = a.url;
+  const sb = document.getElementById('msavebtn');
+  sb.classList.toggle('on',isSaved(a));
+  sb.textContent = isSaved(a)?'✓ Saved':'🔖 Save';
+  document.getElementById('modal').classList.add('on');
+  document.querySelectorAll('.ncard').forEach(c=>{ if(c.dataset.url===a.url) c.classList.add('read'); });
+}
+function closeModal(){ document.getElementById('modal').classList.remove('on'); }
+function toggleSaveModal(){
+  if(!curModalArt) return;
+  if(isSaved(curModalArt)){
+    unsavArt(curModalArt.url);
+    document.getElementById('msavebtn').textContent='🔖 Save';
+    document.getElementById('msavebtn').classList.remove('on');
+  } else {
+    savArt(curModalArt);
+    document.getElementById('msavebtn').textContent='✓ Saved';
+    document.getElementById('msavebtn').classList.add('on');
+  }
+  renderSaved();
+}
+
+function toggleSaveCard(btn, url){
+  const a = allArticles.find(x=>x.url===url)||savedArts.find(x=>x.url===url);
+  if(!a) return;
+  if(isSaved(a)){ unsavArt(url); btn.classList.remove('on'); }
+  else { savArt(a); btn.classList.add('on'); }
+  renderSaved();
+}
+
+// ── SAVED PANEL ───────────────────────────────
+function openSaved(){ stab('saved'); }
+function renderSaved(){
+  updateSBadge();
   const list = document.getElementById('savedList');
-  updateSavedBadge();
-  if (!savedArticles.length) {
-    list.innerHTML = '<div class="saved-empty"><div style="font-size:40px">🔖</div><div>No saved articles yet</div><div style="font-size:11px;margin-top:4px;">Tap the bookmark icon on any story</div></div>';
+  if(!savedArts.length){
+    list.innerHTML='<div class="saved-empty"><div style="font-size:40px">🔖</div><div>No saved articles yet</div><div style="font-size:11px;margin-top:4px">Tap 🔖 on any card</div></div>';
     return;
   }
-  list.innerHTML = '';
-  savedArticles.forEach(a => {
+  list.innerHTML='';
+  savedArts.forEach(a=>{
     const card = document.createElement('div');
-    card.className = 'news-card';
-    card.innerHTML = `
-      <div class="card-top">
-        ${a.thumb ? `<img src="${a.thumb}" class="card-thumb">` : `<div class="card-thumb-placeholder">📰</div>`}
-        <div class="card-info">
-          <div class="card-source">${a.source}</div>
-          <div class="card-title">${a.title}</div>
-          <div class="card-meta"><span>${timeAgo(a.date)}</span></div>
+    card.className='ncard';
+    const thumb = a.thumb?`<img class="nthumb" src="${a.thumb}" onerror="this.outerHTML='<div class=nthumb-ph>📰</div>'">`:`<div class="nthumb-ph">📰</div>`;
+    card.innerHTML=`
+      <div class="ncard-row">
+        ${thumb}
+        <div class="ninfo">
+          <div class="nsrc">${a.source}</div>
+          <div class="ntitle">${a.title}</div>
+          <div class="nmeta"><span>${timeAgo(a.date)}</span></div>
         </div>
       </div>
-      <div class="card-actions" style="opacity:1;">
-        <button class="card-action-btn saved" title="Remove" onclick="event.stopPropagation(); unsaveArticle('${a.url.replace(/'/g,"\\'")}'); renderSavedPanel();">×</button>
-      </div>`;
-    card.onclick = () => openModal(a);
+      <div class="nbookmark on" onclick="event.stopPropagation();unsavArt('${a.url.replace(/'/g,"\\'")}');renderSaved()">×</div>`;
+    card.onclick=()=>openModal(a);
     list.appendChild(card);
   });
 }
 
-// ═══════════════════════════════════════════════
-// FETCH PIPELINE
-// ═══════════════════════════════════════════════
-async function fetchNews(category) {
-  const list = document.getElementById('newsList');
-  list.innerHTML = `<div class="loading-state"><div class="loading-owl">🦉</div><div class="loading-text loading-dots">SCANNING GLOBE</div></div>`;
-  document.getElementById('feedLabel').textContent = category.toUpperCase() + ' FEED';
-
-  const configs = FEEDS[category] || FEEDS.world;
-  const results = await Promise.allSettled(configs.map(f => fetchRSS(f.url, f.name, f.region)));
-  let articles = [];
-  results.forEach(r => { if (r.status === 'fulfilled') articles.push(...r.value); });
-
-  if (articles.length < 5) {
-    const fb = await fetchGuardianFallback(category);
-    articles.push(...fb);
-  }
-
-  // Dedupe
-  const seen = new Set();
-  articles = articles.filter(a => { if (!a.title || seen.has(a.title)) return false; seen.add(a.title); return true; });
-
-  // Add region tag based on coords
-  articles.forEach(a => {
-    const { coords } = getCoords(a.title + ' ' + (a.trailText || ''), a.source);
-    a._region = getArticleRegion(coords[0], coords[1]);
+// ── ALERTS ────────────────────────────────────
+function addAlert(){
+  const inp=document.getElementById('alertIn');
+  const kw=inp.value.trim().toLowerCase();
+  if(!kw||alerts.includes(kw)){inp.value='';return;}
+  alerts.push(kw); inp.value='';
+  localStorage.setItem('owls_alerts',JSON.stringify(alerts));
+  renderAlertTags();
+}
+function removeAlert(kw){ alerts=alerts.filter(a=>a!==kw); localStorage.setItem('owls_alerts',JSON.stringify(alerts)); renderAlertTags(); }
+function renderAlertTags(){
+  const el=document.getElementById('alertTags');
+  el.innerHTML=alerts.map(kw=>`<div class="atag">🔔 ${kw} <span onclick="removeAlert('${kw}')">×</span></div>`).join('');
+}
+function checkAlerts(arts){
+  if(!alerts.length) return;
+  arts.forEach(a=>{
+    const txt=(a.title+' '+(a.trail||'')).toLowerCase();
+    alerts.forEach(kw=>{ if(txt.includes(kw)) showToast('🔔','Alert: '+kw.toUpperCase(),a.title.slice(0,65)+'…',a); });
   });
-
-  // Shuffle
-  articles = articles.sort(() => Math.random() - 0.5);
-  allArticles = articles;
-
-  renderArticles(articles);
 }
 
-// ═══════════════════════════════════════════════
-// UI CONTROLS
-// ═══════════════════════════════════════════════
-function switchTab(tab) {
-  document.querySelectorAll('.stab').forEach((t,i) => t.classList.toggle('active', ['feed','saved','alerts'][i] === tab));
-  document.querySelectorAll('.stab-panel').forEach(p => p.classList.remove('active'));
-  document.getElementById('panel-' + tab).classList.add('active');
-  if (tab === 'saved') renderSavedPanel();
-  if (tab === 'alerts') renderAlerts();
+// ── TOAST ─────────────────────────────────────
+const toastQ=[]; let tBusy=false;
+function showToast(icon,label,title,article){
+  toastQ.push({icon,label,title,article});
+  if(!tBusy) nextToast();
+}
+function nextToast(){
+  if(!toastQ.length){tBusy=false;return;}
+  tBusy=true;
+  const {icon,label,title,article}=toastQ.shift();
+  const stack=document.getElementById('tstack');
+  const t=document.createElement('div');
+  t.className='toast';
+  t.innerHTML=`<div class="t-icon">${icon}</div><div style="flex:1;min-width:0"><div class="t-label">${label}</div><div class="t-title">${title}</div></div><div class="t-close">×</div>`;
+  t.querySelector('.t-close').onclick=e=>{e.stopPropagation();dimiss(t);};
+  if(article) t.onclick=()=>{dimiss(t);openModal(article);};
+  stack.appendChild(t);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>t.classList.add('show')));
+  setTimeout(()=>dimiss(t),6000);
+}
+function dimiss(t){ t.classList.remove('show'); setTimeout(()=>{t.remove();setTimeout(nextToast,150);},400); }
+
+// ── TABS ──────────────────────────────────────
+function stab(name){
+  document.querySelectorAll('.stab').forEach((t,i)=>t.classList.toggle('active',['feed','saved','alerts'][i]===name));
+  document.querySelectorAll('.spanel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('p-'+name).classList.add('active');
+  if(name==='saved') renderSaved();
+  if(name==='alerts') renderAlertTags();
 }
 
-function openSavedPanel() { switchTab('saved'); }
-
-function toggleTheme() {
-  const isDark = document.body.getAttribute('data-theme') === 'dark';
-  document.body.setAttribute('data-theme', isDark ? 'light' : 'dark');
-  document.getElementById('themeBtn').textContent = isDark ? '🌙' : '☀️';
-  localStorage.setItem('owlsTheme', isDark ? 'light' : 'dark');
-  updateMapTiles();
+// ── THEME ─────────────────────────────────────
+function toggleTheme(){
+  const isDark = document.body.getAttribute('data-theme')==='dark';
+  document.body.setAttribute('data-theme',isDark?'light':'dark');
+  document.getElementById('themeBtn').textContent = isDark?'🌙':'☀️';
+  localStorage.setItem('owlsTheme',isDark?'light':'dark');
+  setTile(!isDark);
 }
 
-function toggleNotify() {
-  notifyEnabled = !notifyEnabled;
-  const btn = document.getElementById('notifyBtn');
-  btn.classList.toggle('notify-active', notifyEnabled);
-  showToast(notifyEnabled ? '🔔' : '🔕', 'Notifications', notifyEnabled ? 'Alerts enabled' : 'Alerts disabled', null);
-}
-
-// Region filter
-document.getElementById('regionBar').addEventListener('click', e => {
-  const btn = e.target.closest('.rbtn');
-  if (!btn) return;
-  document.querySelectorAll('.rbtn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  currentRegion = btn.dataset.region;
-  renderArticles(allArticles);
+// ── REGION + CAT FILTER ───────────────────────
+document.getElementById('regionBar').addEventListener('click',e=>{
+  const b=e.target.closest('.rbtn'); if(!b) return;
+  document.querySelectorAll('.rbtn').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active'); curR=b.dataset.r;
+  renderFeed(allArticles);
+});
+document.getElementById('catBar').addEventListener('click',e=>{
+  const b=e.target.closest('.cbtn'); if(!b) return;
+  document.querySelectorAll('.cbtn').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active'); curQ=b.dataset.q;
+  fetchNews(curQ);
 });
 
-// Category filter
-document.getElementById('catBar').addEventListener('click', e => {
-  const btn = e.target.closest('.cbtn');
-  if (!btn) return;
-  document.querySelectorAll('.cbtn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  currentQ = btn.dataset.q;
-  fetchNews(currentQ);
-});
-
-// Mobile
-let mobileMode = 'map';
-function mobileSwitch(mode) {
-  mobileMode = mode;
-  const layout = document.getElementById('layout');
-  const sidebar = document.getElementById('sidebar');
-  const mapEl = document.getElementById('map');
-  ['mb-map','mb-list','mb-filter','mb-saved'].forEach(id => document.getElementById(id)?.classList.remove('active'));
-  layout.className = 'layout';
-  sidebar.classList.remove('mobile-active');
-  mapEl.style.display = '';
-  if (mode === 'map') {
-    document.getElementById('mb-map')?.classList.add('active');
-    layout.classList.add('map-mode');
-  } else if (mode === 'list') {
-    document.getElementById('mb-list')?.classList.add('active');
-    layout.classList.add('list-mode');
-    sidebar.classList.add('mobile-active');
-    switchTab('feed');
-  } else if (mode === 'saved') {
-    document.getElementById('mb-saved')?.classList.add('active');
-    layout.classList.add('list-mode');
-    sidebar.classList.add('mobile-active');
-    switchTab('saved');
-  }
-  document.getElementById('mobileFilter').classList.remove('open');
-}
-
-function toggleMobileFilter() {
-  const sheet = document.getElementById('mobileFilter');
-  sheet.classList.toggle('open');
-  document.getElementById('mb-filter')?.classList.toggle('active', sheet.classList.contains('open'));
-}
-
-function mobileCatClick(btn, q) {
-  document.querySelectorAll('#mobileFilter .cbtn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  currentQ = q;
-  fetchNews(q);
-  document.getElementById('mobileFilter').classList.remove('open');
-  mobileSwitch('list');
-}
-
-// Close modal on overlay click
-document.getElementById('newsModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
-
-// ═══════════════════════════════════════════════
-// AUTH
-// ═══════════════════════════════════════════════
-function loginWithGoogle() { auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).catch(console.error); }
-function logout() { if (confirm('Log out from OWLS?')) auth.signOut(); }
-
-auth.onAuthStateChanged(user => {
-  const loginBtn = document.getElementById('loginBtn');
-  const avatar = document.getElementById('userAvatar');
-  if (user) {
-    loginBtn.style.display = 'none';
-    avatar.src = user.photoURL; avatar.style.display = 'block';
-    document.getElementById('feedLabel').textContent = user.displayName.split(' ')[0].toUpperCase() + "'S FEED";
+// ── MOBILE ────────────────────────────────────
+function mobSwitch(mode){
+  const layout=document.getElementById('layout');
+  ['mb-map','mb-news','mb-filter','mb-saved'].forEach(id=>document.getElementById(id)?.classList.remove('active'));
+  layout.className='layout';
+  document.getElementById('mobFilter').classList.remove('open');
+  if(mode==='map'){
+    document.getElementById('mb-map').classList.add('active');
   } else {
-    loginBtn.style.display = '';
-    avatar.style.display = 'none';
+    layout.classList.add('list-m');
+    if(mode==='saved'){ document.getElementById('mb-saved').classList.add('active'); stab('saved'); }
+    else { document.getElementById('mb-news').classList.add('active'); stab('feed'); }
   }
+  // Invalidate map size after layout change
+  setTimeout(()=>map.invalidateSize(),50);
+}
+function toggleMobFilter(){
+  const f=document.getElementById('mobFilter');
+  f.classList.toggle('open');
+  document.getElementById('mb-filter').classList.toggle('active',f.classList.contains('open'));
+}
+function mobCat(btn,q){
+  document.querySelectorAll('#mobFilter .cbtn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active'); curQ=q;
+  fetchNews(q);
+  document.getElementById('mobFilter').classList.remove('open');
+  mobSwitch('news');
+}
+
+// ── AUTH ──────────────────────────────────────
+function loginGoogle(){ auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).catch(console.error); }
+function doLogout(){ if(confirm('Log out?')) auth.signOut(); }
+auth.onAuthStateChanged(user=>{
+  document.getElementById('loginBtn').style.display = user?'none':'';
+  const av=document.getElementById('uavatar');
+  if(user){ av.src=user.photoURL; av.style.display='block'; document.getElementById('feedLabel').textContent=user.displayName.split(' ')[0].toUpperCase()+"'S FEED"; }
+  else { av.style.display='none'; }
 });
 
-// ═══════════════════════════════════════════════
-// INIT
-// ═══════════════════════════════════════════════
-window.addEventListener('load', () => {
-  // Theme
-  const saved = localStorage.getItem('owlsTheme');
-  if (saved) {
-    document.body.setAttribute('data-theme', saved);
-    document.getElementById('themeBtn').textContent = saved === 'dark' ? '☀️' : '🌙';
-    if (saved === 'light') updateMapTiles();
-  }
-  updateSavedBadge();
-  renderAlerts();
+document.getElementById('modal').addEventListener('click',e=>{ if(e.target===e.currentTarget) closeModal(); });
+
+// ── INIT ──────────────────────────────────────
+window.addEventListener('load',()=>{
+  const th=localStorage.getItem('owlsTheme');
+  if(th){ document.body.setAttribute('data-theme',th); document.getElementById('themeBtn').textContent=th==='dark'?'☀️':'🌙'; if(th==='light') setTile(false); }
+  updateSBadge(); renderAlertTags();
   // Splash
-  setTimeout(() => {
-    const splash = document.getElementById('splash');
-    splash.classList.add('hide');
-    setTimeout(() => splash.remove(), 700);
-  }, 2000);
+  setTimeout(()=>{ const s=document.getElementById('splash'); s.classList.add('hide'); setTimeout(()=>s.remove(),700); },2200);
   fetchNews('world');
+  // Ensure map redraws after splash gone
+  setTimeout(()=>map.invalidateSize(),2500);
 });
 </script>
 </body>
