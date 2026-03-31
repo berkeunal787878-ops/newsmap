@@ -8,7 +8,7 @@
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script> <!-- VERİTABANI EKLENDİ -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script> 
   
   <!-- Leaflet Harita -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -20,6 +20,7 @@
 
   <style>
     :root {
+      /* SADECE AYDINLIK & TURKUAZ MOD */
       --bg: #f4fbfc; --bg2: #e8f5f7; --bg3: #d0ebeb; --card: #ffffff;
       --border: #b8e0df; --accent: #0098a0; --accent2: #e55a20;
       --text: #0a1b24; --text2: #3a5866; --text3: #6b8a99; --saved: #d4a800;
@@ -81,7 +82,7 @@
     .scount{font-size:9px;color:var(--text2);font-family:'Space Mono',monospace;font-weight:700;}
     .news-scroll{overflow-y:auto;flex:1;}
 
-    /* DATA PANEL (YENİ) */
+    /* DATA PANEL */
     .data-body { padding: 16px; display: flex; flex-direction: column; gap: 16px; }
     .stat-box { background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 14px; }
     .stat-title { font-size: 9px; font-family: 'Space Mono', monospace; font-weight: 700; color: var(--text3); letter-spacing: 1px; margin-bottom: 10px; }
@@ -96,13 +97,13 @@
     .ncard.read{opacity:.65;}
     .ncard-row{display:flex;gap:12px;}
     .nthumb{width:70px;height:52px;object-fit:cover;border-radius:8px;flex-shrink:0;background:var(--bg3);border:1px solid var(--border);}
+    .nthumb-ph{width:70px;height:52px;border-radius:8px;flex-shrink:0;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:18px;border:1px solid var(--border);}
     .ninfo{flex:1;min-width:0;}
     .nsrc{font-size:9px;font-weight:700;letter-spacing:1px;color:var(--accent2);font-family:'Space Mono',monospace;display:flex;justify-content:space-between;}
     .ntitle{font-size:13px;font-weight:700;line-height:1.35;margin:4px 0;color:var(--text);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
     .nmeta{font-size:9px;color:var(--text3);display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;font-weight:700; align-items:center;}
     .nloc{background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:2px 6px;font-family:'Space Mono',monospace;color:var(--accent);}
     
-    /* TEHDİT ETİKETLERİ */
     .th-crit { color: var(--crit); background: rgba(224,49,49,0.1); padding:2px 5px; border-radius:4px; border: 1px solid rgba(224,49,49,0.3); }
     .th-warn { color: var(--warn); background: rgba(255,176,32,0.1); padding:2px 5px; border-radius:4px; border: 1px solid rgba(255,176,32,0.3); }
     
@@ -111,6 +112,7 @@
     .nbookmark:hover{color:var(--accent);border-color:var(--accent);}
     .nbookmark.on{opacity:1;color:var(--saved);border-color:var(--saved);background:var(--bg);}
     .unread-dot{position:absolute;left:5px;top:50%;transform:translateY(-50%);width:6px;height:6px;border-radius:50%;background:var(--accent);}
+    .saved-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:10px;color:var(--text3);font-size:12px;padding:40px;text-align:center;font-weight:600;}
 
     /* ALERTS */
     .alerts-body{padding:16px;}
@@ -181,14 +183,10 @@
   <div class="splash-bar"><div class="splash-fill"></div></div>
 </div>
 
-<!-- HEADER -->
 <div class="header">
   <div class="logo">
     <span class="owl-anim">🦉</span>
-    <div>
-      <div class="logo-name">OWLS</div>
-      <div class="logo-sub" id="feedLabel">GLOBAL FEED</div>
-    </div>
+    <div><div class="logo-name">OWLS</div><div class="logo-sub" id="feedLabel">GLOBAL FEED</div></div>
   </div>
   <div class="hdr-right">
     <button class="hbtn" onclick="openSaved()">🔖 <span class="bcount" id="sbadge">0</span></button>
@@ -197,7 +195,6 @@
   </div>
 </div>
 
-<!-- TOP BARS -->
 <div class="top-bars" id="topBars">
   <div class="bar-row" id="regionBar">
     <button class="rbtn active" data-r="all">🌐 ALL REGIONS</button>
@@ -220,31 +217,25 @@
   </div>
 </div>
 
-<!-- MAP -->
 <div id="map"></div>
 
-<!-- SIDEBAR -->
 <div class="sidebar" id="sidebar">
   <div class="stabs">
     <div class="stab active" onclick="stab('feed')">📡 FEED</div>
     <div class="stab" onclick="stab('saved')">🔖 SAVED</div>
-    <div class="stab" onclick="stab('analytics')">📊 DATA</div> <!-- YENİ SEKME -->
+    <div class="stab" onclick="stab('analytics')">📊 DATA</div>
     <div class="stab" onclick="stab('alerts')">🔔 ALERTS</div>
   </div>
   
   <div class="spanel active" id="p-feed">
     <div class="live-row">
-      <div class="live-dot">LIVE</div>
-      <span class="scount" id="scount">loading...</span>
+      <div class="live-dot">LIVE</div><span class="scount" id="scount">loading...</span>
     </div>
     <div class="news-scroll" id="newsList"></div>
   </div>
   
-  <div class="spanel" id="p-saved">
-    <div class="news-scroll" id="savedList"></div>
-  </div>
+  <div class="spanel" id="p-saved"><div class="news-scroll" id="savedList"></div></div>
 
-  <!-- YENİ ANALİTİK PANELİ -->
   <div class="spanel" id="p-analytics">
     <div class="data-body" id="dataDashboard">
       <div style="font-size:10px;color:var(--text3);font-family:'Space Mono',monospace;text-align:center;margin-top:20px;">Scanning Geopolitical Data...</div>
@@ -264,7 +255,6 @@
   </div>
 </div>
 
-<!-- MOBILE BOTTOM BAR -->
 <div class="mob-bar">
   <button class="mbbtn active" id="mb-map" onclick="mobSwitch('map')">🗺️ MAP</button>
   <button class="mbbtn" id="mb-news" onclick="mobSwitch('news')">📰 NEWS</button>
@@ -277,7 +267,6 @@
   <button class="cbtn" onclick="mobCat(this,'politics')">🏛️ Politics</button>
 </div>
 
-<!-- MODAL (HABER DETAYI) -->
 <div class="moverlay" id="modal">
   <div class="mbox">
     <button class="mclose" onclick="closeModal()">×</button>
@@ -299,15 +288,14 @@
   </div>
 </div>
 
-<!-- TOASTS -->
 <div class="tstack" id="tstack"></div>
 
 <script>
-// ── FIREBASE & FIRESTORE (BULUT SENKRONİZASYONU) ─────────
+// ── FIREBASE ────────────────────────────────────────────
 const fbCfg={apiKey:"AIzaSyBf3EDUobPIaZL6Jzu5i1ITT8YRSZaCOa8",authDomain:"newsmap-5d380.firebaseapp.com",projectId:"newsmap-5d380",storageBucket:"newsmap-5d380.firebasestorage.app",messagingSenderId:"270586913079",appId:"1:270586913079:web:271cb786e7195299f73ab2"};
 firebase.initializeApp(fbCfg);
 const auth=firebase.auth();
-const db=firebase.firestore(); // Veritabanı Aktif
+const db=firebase.firestore(); 
 
 // ── STATE ────────────────────────────────────────────────
 let curQ='world',curR='all';
@@ -317,7 +305,7 @@ let savedArts=JSON.parse(localStorage.getItem('owls_saved')||'[]');
 let readSet=new Set(JSON.parse(localStorage.getItem('owls_read')||'[]'));
 let alerts=JSON.parse(localStorage.getItem('owls_alerts')||'[]');
 
-// ── MAP INIT (PREMIUM TURQUOISE) ─
+// ── MAP INIT ─
 const map=L.map('map',{zoomControl:false}).setView([20,10],2);
 L.control.zoom({position:'bottomright'}).addTo(map);
 L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', { maxZoom: 19, attribution: '© CARTO' }).addTo(map);
@@ -383,39 +371,74 @@ function getCoords(text){
 }
 
 // ── FAST FETCH ──
-async function fastFetch(url, ms = 2000) {
+async function fastFetch(url, ms = 2500) {
   const controller = new AbortController();
   const id = setTimeout(() => controller.abort(), ms);
   try { const res = await fetch(url, { signal: controller.signal }); clearTimeout(id); return res; } 
   catch (e) { clearTimeout(id); throw e; }
 }
 
+// ── KAYNAKLAR (GERİ GETİRİLDİ) ──
+const RSS_FEEDS={
+  world: [
+    {u:'http://rss.cnn.com/rss/edition_world.rss',n:'CNN'},
+    {u:'https://feeds.bbci.co.uk/news/world/rss.xml',n:'BBC'},
+    {u:'https://www.aljazeera.com/xml/rss/all.xml',n:'Al Jazeera'},
+    {u:'https://www.france24.com/en/rss',n:'France24'}
+  ],
+  technology: [
+    {u:'https://techcrunch.com/feed/',n:'TechCrunch'},
+    {u:'https://www.theverge.com/rss/index.xml',n:'The Verge'}
+  ],
+  business: [
+    {u:'https://feeds.bbci.co.uk/news/business/rss.xml',n:'BBC Biz'},
+    {u:'https://search.cnbc.com/rs/search/combinedcms/view.xml?profile=12000000&id=10000664',n:'CNBC'}
+  ],
+  science: [ {u:'https://feeds.bbci.co.uk/news/science_and_environment/rss.xml',n:'BBC Sci'} ],
+  health: [ {u:'https://feeds.bbci.co.uk/news/health/rss.xml',n:'BBC Health'} ],
+  sport: [
+    {u:'https://www.espn.com/espn/rss/news',n:'ESPN'},
+    {u:'https://feeds.bbci.co.uk/sport/rss.xml',n:'BBC Sport'}
+  ],
+  climate: [ {u:'https://www.theguardian.com/environment/rss',n:'Guardian Env'} ],
+  politics: [
+    {u:'https://rss.nytimes.com/services/xml/rss/nyt/Politics.xml',n:'NY Times'},
+    {u:'https://feeds.bbci.co.uk/news/politics/rss.xml',n:'BBC Politics'}
+  ]
+};
+
 async function fetchGuardian(sec){
   try{
-    const r=await fastFetch(`https://content.guardianapis.com/${sec}?api-key=0a321643-aaab-4c6a-9185-1762685abe3d&page-size=20&show-fields=thumbnail`);
+    const r=await fastFetch(`https://content.guardianapis.com/${sec}?api-key=0a321643-aaab-4c6a-9185-1762685abe3d&page-size=15&show-fields=thumbnail`);
     const d=await r.json();
     return(d.response?.results||[]).map(a=>({ title:a.webTitle,url:a.webUrl,source:'The Guardian',date:a.webPublicationDate,thumb:a.fields?.thumbnail||null }));
   }catch{return[];}
 }
 
-async function fetchRSS(u, n){
+// RSS GETİRİCİSİ (GÜVENLİ rss2json)
+async function fetchRSS(feed){
   try{
-    const r=await fastFetch(`https://api.allorigins.win/get?url=${encodeURIComponent(u)}`);
+    const r=await fastFetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feed.u)}&count=12`, 2500);
     const d=await r.json();
-    const xml=new DOMParser().parseFromString(d.contents,'text/xml');
-    return[...xml.querySelectorAll('item')].slice(0,10).map(it=>({
-      title:it.querySelector('title')?.textContent||'', url:it.querySelector('link')?.textContent||'#', source:n,
-      thumb:it.querySelector('enclosure')?.getAttribute('url')||null
-    })).filter(a=>a.title);
-  }catch{return[];}
+    if(d.status==='ok'&&d.items) {
+      return d.items.map(i=>({
+        title:i.title||'', url:i.link||'#', source:feed.n, date:i.pubDate,
+        thumb:i.thumbnail||(i.enclosure?.link)||null
+      })).filter(a=>a.title);
+    }
+  }catch(e){}
+  return [];
 }
 
 async function fetchNews(cat){
   document.getElementById('newsList').innerHTML='<div class="loader"><div class="loader-owl">🦉</div><div class="loader-txt">SCANNING GLOBE</div></div>';
-  const feeds = [fetchGuardian(cat==='sport'?'world':cat)];
-  if(cat==='world') feeds.push(fetchRSS('http://rss.cnn.com/rss/edition_world.rss','CNN'), fetchRSS('https://www.aljazeera.com/xml/rss/all.xml','Al Jazeera'));
-  if(cat==='business') feeds.push(fetchRSS('https://feeds.bbci.co.uk/news/business/rss.xml','BBC'), fetchRSS('https://search.cnbc.com/rs/search/combinedcms/view.xml?profile=12000000&id=10000664','CNBC'));
-  if(cat==='politics') feeds.push(fetchRSS('https://rss.nytimes.com/services/xml/rss/nyt/Politics.xml','NY Times'));
+  const rssList = RSS_FEEDS[cat] || RSS_FEEDS.world;
+  
+  // THE GUARDIAN + RSS LİSTESİ BİRLEŞTİRİLDİ
+  const feeds = [
+      fetchGuardian(cat==='sport'?'world':cat),
+      ...rssList.map(f => fetchRSS(f))
+  ];
   
   const results=await Promise.allSettled(feeds);
   let arts=[];
@@ -426,12 +449,12 @@ async function fetchNews(cat){
   arts.forEach(a=>{
     const{coords,loc}=getCoords(a.title);
     a._c=coords;a._loc=loc;a._r=artRegion(coords[0],coords[1]);
-    a._sentiment = getSentiment(a.title); // DUYGU ANALİZİ EKLENDİ
+    a._sentiment = getSentiment(a.title);
   });
   
   allArticles=arts;
   renderFeed(arts);
-  renderAnalytics(arts); // İSTATİSTİKLERİ ÇİZ
+  renderAnalytics(arts);
 }
 
 // ── RENDER ────────────────────────────────────────────────
@@ -447,14 +470,12 @@ function renderFeed(arts){
   document.getElementById('scount').textContent=`${filtered.length} stories`;
   
   filtered.forEach(a=>{
-    // Haritadaki Noktalar (Duygu rengine göre)
     const m=L.marker(a._c,{icon:mkIcon(a._sentiment.color)});
     m.bindPopup(`<div style="font-weight:700;font-size:13px;line-height:1.4;margin-bottom:6px;">${a.title}</div><div style="font-size:10px;margin-bottom:10px;">${a.source} · <span class="${a._sentiment.class}">${a._sentiment.level}</span></div><button onclick="window._openModalById('${encodeURIComponent(a.url)}')" style="background:var(--accent);color:#fff;border:none;border-radius:8px;padding:6px 12px;font-weight:700;cursor:pointer;width:100%">Read Story</button>`,{maxWidth:220});
     m.on('mouseover', () => drawRelations(a));
     m.on('mouseout', () => clearRelations());
     clusterLayer.addLayer(m);
 
-    // Sağdaki Kartlar
     const card=document.createElement('div');
     card.className='ncard'+(isRead(a)?' read':'');
     card.dataset.url=a.url;
@@ -476,10 +497,9 @@ function renderFeed(arts){
     list.appendChild(card);
   });
   map.addLayer(clusterLayer);
-  checkAlerts(filtered);
 }
 
-// ── YENİ: İSTATİSTİKSEL PANEL RENDER EDİCİ ──
+// ── İSTATİSTİKSEL PANEL ──
 function renderAnalytics(arts) {
   const dash = document.getElementById('dataDashboard');
   if(!arts.length) return;
@@ -492,8 +512,8 @@ function renderAnalytics(arts) {
   });
 
   const total = arts.length;
-  const pCrit = Math.round((crit/total)*100);
-  const pWarn = Math.round((warn/total)*100);
+  const pCrit = Math.round((crit/total)*100) || 0;
+  const pWarn = Math.round((warn/total)*100) || 0;
   
   dash.innerHTML = `
     <div class="stat-box">
@@ -557,17 +577,15 @@ function toggleSaveCard(btn,encoded){
   renderSaved();
 }
 
-// ── YENİ: BULUT SENKRONİZASYONU (FIRESTORE) ───────────────
+// ── BULUT SENKRONİZASYONU ───────────────
 async function syncToCloud() {
     const user = auth.currentUser;
     if(user) {
         try {
             await db.collection('owls_users').doc(user.uid).set({
-                saved: savedArts,
-                alerts: alerts,
-                lastSync: firebase.firestore.FieldValue.serverTimestamp()
+                saved: savedArts, alerts: alerts, lastSync: firebase.firestore.FieldValue.serverTimestamp()
             }, {merge: true});
-        } catch(e) { console.warn("Firebase veritabanı kuralları ayarlanmamış olabilir."); }
+        } catch(e) {}
     } else {
         localStorage.setItem('owls_saved',JSON.stringify(savedArts));
         localStorage.setItem('owls_alerts',JSON.stringify(alerts));
@@ -582,9 +600,8 @@ async function loadFromCloud(user) {
             savedArts = doc.data().saved || [];
             alerts = doc.data().alerts || [];
             renderSaved(); renderAlertTags(); updateSBadge();
-            showToast('☁️', 'Cloud Sync', 'Verilerin buluttan yüklendi.', null);
         }
-    } catch(e) { console.warn("Firestore okuma izni yok."); }
+    } catch(e) {}
 }
 
 // ── SAVED & ALERTS ─────────────────────────────────────────
@@ -604,35 +621,10 @@ function renderSaved(){
 function addAlert(){
   const inp=document.getElementById('alertIn'),kw=inp.value.trim().toLowerCase();
   if(!kw||alerts.includes(kw)){inp.value='';return;}
-  alerts.push(kw);inp.value=''; 
-  syncToCloud(); renderAlertTags();
+  alerts.push(kw);inp.value=''; syncToCloud(); renderAlertTags();
 }
 function removeAlert(kw){alerts=alerts.filter(a=>a!==kw); syncToCloud(); renderAlertTags();}
 function renderAlertTags(){ document.getElementById('alertTags').innerHTML=alerts.map(kw=>`<div class="atag">🔔 ${kw} <span onclick="removeAlert('${kw}')">×</span></div>`).join(''); }
-function checkAlerts(arts){
-  if(!alerts.length)return;
-  arts.forEach(a=>{
-    const txt=(a.title+' '+(a.trail||'')).toLowerCase();
-    alerts.forEach(kw=>{if(txt.includes(kw))showToast('🔔','Alert: '+kw.toUpperCase(),a.title.slice(0,60)+'…',a);});
-  });
-}
-
-// ── TOAST ────────────────────────────────────────────────
-const tQ=[];let tBusy=false;
-function showToast(icon,label,title,article){tQ.push({icon,label,title,article});if(!tBusy)nextToast();}
-function nextToast(){
-  if(!tQ.length){tBusy=false;return;}tBusy=true;
-  const{icon,label,title,article}=tQ.shift();
-  const stack=document.getElementById('tstack');
-  const t=document.createElement('div');t.className='toast';
-  t.innerHTML=`<div class="t-icon">${icon}</div><div style="flex:1;min-width:0"><div class="t-label">${label}</div><div class="t-title">${title}</div></div><div class="t-close">×</div>`;
-  t.querySelector('.t-close').onclick=e=>{e.stopPropagation();dismiss(t);};
-  if(article)t.onclick=()=>{dismiss(t);openModal(article);};
-  stack.appendChild(t);
-  requestAnimationFrame(()=>requestAnimationFrame(()=>t.classList.add('show')));
-  setTimeout(()=>dismiss(t),6000);
-}
-function dismiss(t){t.classList.remove('show');setTimeout(()=>{t.remove();setTimeout(nextToast,150);},400);}
 
 // ── HELPERS ───────────────────────────────────────────────
 function timeAgo(d){
@@ -644,7 +636,7 @@ function isSaved(a){return savedArts.some(s=>s.url===a.url);}
 function isRead(a){return readSet.has(a.url);}
 function markRead(url){readSet.add(url);localStorage.setItem('owls_read',JSON.stringify([...readSet]));}
 function updateSBadge(){document.getElementById('sbadge').textContent=savedArts.length;}
-function savArt(a){if(isSaved(a))return;savedArts.unshift(a); syncToCloud(); updateSBadge();showToast('🔖','Saved',a.title.slice(0,60)+'…',null);}
+function savArt(a){if(isSaved(a))return;savedArts.unshift(a); syncToCloud(); updateSBadge();}
 function unsavArt(encoded){
   const url=encoded.startsWith('http')?encoded:decodeURIComponent(encoded);
   savedArts=savedArts.filter(s=>s.url!==url); syncToCloud(); updateSBadge();
@@ -702,7 +694,7 @@ auth.onAuthStateChanged(user => {
   if(user){
     av.src=user.photoURL; av.style.display='block';
     document.getElementById('feedLabel').textContent=user.displayName.split(' ')[0].toUpperCase()+"'S FEED";
-    loadFromCloud(user); // GİRİŞ YAPINCA VERİLERİ BULUTTAN ÇEK
+    loadFromCloud(user);
   } else { av.style.display='none'; }
 });
 
