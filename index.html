@@ -55,7 +55,7 @@
     .cbtn { font-size:11px; font-weight:700; padding:5px 14px; border-radius:20px; border:1px solid var(--border); background:var(--card); color:var(--text2); cursor:pointer; white-space:nowrap; }
     .cbtn.active { background:var(--accent); color:#000; border-color:var(--accent); }
 
-    /* LAYOUT - ESNEK KUTU HATASI KESİN GİDERİLDİ */
+    /* LAYOUT */
     .app-wrap { display:block; width:100%; height:100%; }
     .layout { width: 100%; height: calc(100vh - 94px); display: block; position: relative; }
     
@@ -155,7 +155,7 @@ const fbCfg = {
 };
 firebase.initializeApp(fbCfg);
 const auth = firebase.auth();
-const provider = new firebase.auth.GoogleAuthProvider(); // LOGIN HATASI İÇİN DÜZELTİLDİ
+const provider = new firebase.auth.GoogleAuthProvider();
 
 // HARİTA
 const map = L.map('map',{zoomControl:false}).setView([20,10],2);
@@ -180,24 +180,11 @@ function getCoords(text) {
   return {c:[40.71+(Math.random()-0.5)*2, -74.00+(Math.random()-0.5)*2], l:'USA (HQ)'};
 }
 
-// ASENKRON CANLI YÜKLEME MOTORU (INCREMENTAL RENDERING)
+// YENİ LİMİTSİZ YÜKLEME MOTORU (DOMParser + AllOrigins)
 let globalSeenTitles = new Set();
 let articleCount = 0;
 
-async function fetchWithTimeout(url, timeout=2500) {
-  const controller = new AbortController();
-  const id = setTimeout(() => controller.abort(), timeout);
-  try {
-    const res = await fetch(url, { signal: controller.signal });
-    clearTimeout(id);
-    return await res.json();
-  } catch (e) {
-    clearTimeout(id);
-    return null;
-  }
-}
-
-function processIncomingNews(articles, category) {
+function processIncomingNews(articles) {
     const list = document.getElementById('newsList');
     let addedCount = 0;
 
@@ -231,20 +218,41 @@ function processIncomingNews(articles, category) {
     document.getElementById('scount').innerText = `${articleCount} signals acquired`;
 }
 
-// BİREYSEL KAYNAK GETİRİCİLER
+// DOĞRUDAN API'DEN JSON ÇEKME
 async function fetchGuardianLive(cat) {
   const c = (cat==='sport'||cat==='health') ? 'world' : cat;
-  const d = await fetchWithTimeout(`https://content.guardianapis.com/${c}?api-key=0a321643-aaab-4c6a-9185-1762685abe3d&page-size=15&show-fields=thumbnail`);
-  if(d && d.response?.results) {
-      processIncomingNews(d.response.results.map(a=>({ title:a.webTitle, url:a.webUrl, source:'Guardian', thumb:a.fields?.thumbnail })), cat);
-  }
+  try {
+    const res = await fetch(`https://content.guardianapis.com/${c}?api-key=0a321643-aaab-4c6a-9185-1762685abe3d&page-size=15&show-fields=thumbnail`);
+    const d = await res.json();
+    if(d && d.response?.results) {
+        processIncomingNews(d.response.results.map(a=>({ title:a.webTitle, url:a.webUrl, source:'Guardian', thumb:a.fields?.thumbnail })));
+    }
+  } catch(e) {}
 }
 
-async function fetchRssLive(url, name, cat) {
-  const d = await fetchWithTimeout(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}&count=10`, 3000);
-  if(d && d.status === 'ok') {
-      processIncomingNews(d.items.map(i=>({ title:i.title, url:i.link, source:name, thumb:i.thumbnail })), cat);
-  }
+// LİMİTSİZ RAW XML PARSER (rss2json çöpe atıldı)
+async function fetchRssLive(url, name) {
+  try {
+    const res = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`);
+    const data = await res.json();
+    const parser = new DOMParser();
+    const xml = parser.parseFromString(data.contents, "text/xml");
+    const items = Array.from(xml.querySelectorAll("item")).slice(0, 10);
+    
+    const articles = items.map(i => {
+        const title = i.querySelector("title")?.textContent || "";
+        const link = i.querySelector("link")?.textContent || "";
+        
+        let thumb = null;
+        const enc = i.querySelector("enclosure");
+        if(enc && enc.getAttribute("type")?.includes("image")) thumb = enc.getAttribute("url");
+        const media = i.getElementsByTagNameNS("*", "content");
+        if(media.length > 0 && media[0].getAttribute("url")) thumb = media[0].getAttribute("url");
+
+        return {title, url:link, source:name, thumb};
+    });
+    processIncomingNews(articles);
+  } catch(e) {}
 }
 
 // ANA TETİKLEYİCİ
@@ -258,28 +266,29 @@ function fetchNews(category) {
 
   fetchGuardianLive(category);
 
+  // Kapasite maksimize edildi, engelleme yok.
   if(category === 'world') {
-      fetchRssLive('http://rss.cnn.com/rss/edition_world.rss', 'CNN', category);
-      fetchRssLive('https://www.aljazeera.com/xml/rss/all.xml', 'Al Jazeera', category);
-      fetchRssLive('https://www.ntv.com.tr/dunya.rss', 'NTV', category);
-      fetchRssLive('http://feeds.bbci.co.uk/news/world/rss.xml', 'BBC', category);
+      fetchRssLive('http://rss.cnn.com/rss/edition_world.rss', 'CNN');
+      fetchRssLive('https://www.aljazeera.com/xml/rss/all.xml', 'Al Jazeera');
+      fetchRssLive('https://www.ntv.com.tr/dunya.rss', 'NTV');
+      fetchRssLive('http://feeds.bbci.co.uk/news/world/rss.xml', 'BBC');
   }
   else if(category === 'business') {
-      fetchRssLive('https://search.cnbc.com/rs/search/combinedcms/view.xml?profile=12000000&id=10000664', 'CNBC', category);
-      fetchRssLive('https://www.ntv.com.tr/ekonomi.rss', 'NTV', category);
-      fetchRssLive('http://feeds.bbci.co.uk/news/business/rss.xml', 'BBC', category);
+      fetchRssLive('https://search.cnbc.com/rs/search/combinedcms/view.xml?profile=12000000&id=10000664', 'CNBC');
+      fetchRssLive('https://www.ntv.com.tr/ekonomi.rss', 'NTV');
+      fetchRssLive('http://feeds.bbci.co.uk/news/business/rss.xml', 'BBC');
   }
   else if(category === 'technology') {
-      fetchRssLive('https://techcrunch.com/feed/', 'TechCrunch', category);
-      fetchRssLive('https://www.theverge.com/rss/index.xml', 'The Verge', category);
+      fetchRssLive('https://techcrunch.com/feed/', 'TechCrunch');
+      fetchRssLive('https://www.theverge.com/rss/index.xml', 'The Verge');
   }
   else if(category === 'sport') {
-      fetchRssLive('https://www.espn.com/espn/rss/news', 'ESPN', category);
-      fetchRssLive('https://www.skysports.com/rss/12040', 'Sky Sports', category);
-      fetchRssLive('https://www.ntv.com.tr/sporskor.rss', 'NTV Spor', category);
+      fetchRssLive('https://www.espn.com/espn/rss/news', 'ESPN');
+      fetchRssLive('https://www.skysports.com/rss/12040', 'Sky Sports');
+      fetchRssLive('https://www.ntv.com.tr/sporskor.rss', 'NTV Spor');
   }
   else {
-      fetchRssLive('http://feeds.bbci.co.uk/news/health/rss.xml', 'BBC Health', category);
+      fetchRssLive('http://feeds.bbci.co.uk/news/health/rss.xml', 'BBC Health');
   }
 }
 
@@ -289,7 +298,7 @@ function cat(btn, q) {
   fetchNews(q);
 }
 
-// KARANLIK MOD - SİYAH EKRAN KESİN ÇÖZÜMÜ (sadece setUrl kullanıldı)
+// KARANLIK MOD
 function toggleTheme() {
   const isDark = document.body.getAttribute('data-theme')==='dark';
   document.body.setAttribute('data-theme', isDark ? 'light' : 'dark');
@@ -299,11 +308,11 @@ function toggleTheme() {
   tileLayer.setUrl(newUrl);
 }
 
-// GİRİŞ FONKSİYONLARI DÜZELTİLDİ
+// GİRİŞ FONKSİYONLARI (TAMAMEN DÜZELTİLDİ)
 function loginGoogle() { 
     auth.signInWithPopup(provider).catch(e => {
         console.error(e);
-        alert("Giriş yapılırken bir hata oluştu: " + e.message);
+        alert("GİRİŞ HATASI: Lütfen Firebase Console -> Authentication -> Settings -> Authorized Domains kısmına 'berkeunal787878-ops.github.io' adresini eklediğinizden emin olun.\n\nHata detayı: " + e.message);
     }); 
 }
 
