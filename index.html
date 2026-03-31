@@ -5,6 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
   <title>OWLS — True Global News Map</title>
 
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-TG3Q7KX51N"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-TG3Q7KX51N');
+  </script>
+
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -64,12 +72,29 @@
     .cbtn.active { background:var(--accent); color:#000; border-color:var(--accent); }
     .cbtn:hover:not(.active) { border-color:var(--accent); color:var(--accent); }
 
-    /* MAIN LAYOUT — KEY FIX: explicit flex column on body, percentage heights */
+    /* MAIN LAYOUT */
     .app-wrap { display:flex; flex-direction:column; width:100%; height:100%; }
     .layout { display:flex; flex:1; min-height:0; overflow:hidden; }
 
-    /* MAP — CRITICAL: must have explicit pixel or % size, not just flex */
-    #map { flex:1; min-width:0; min-height:0; }
+    /* MAP */
+    #map { flex:1; min-width:0; min-height:0; background: var(--bg); }
+
+    /* PREMIUM LEAFLET OVERRIDES (Map Design Fixes) */
+    .leaflet-popup-content-wrapper { background: var(--card); color: var(--text); border: 1px solid var(--border); border-radius: 14px; box-shadow: 0 16px 32px rgba(0,0,0,0.4); padding: 4px; }
+    .leaflet-popup-tip { background: var(--card); border: 1px solid var(--border); border-top: none; border-left: none; box-shadow: 2px 2px 4px rgba(0,0,0,0.2); }
+    .leaflet-popup-content { font-family: 'Syne', sans-serif; margin: 12px; }
+    .leaflet-container a.leaflet-popup-close-button { color: var(--text2); padding: 8px; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s; }
+    .leaflet-container a.leaflet-popup-close-button:hover { color: var(--accent2); background: transparent; }
+    
+    /* Sleek Map Zoom Controls */
+    .leaflet-control-zoom { border: none !important; box-shadow: 0 8px 24px rgba(0,0,0,0.4) !important; display: flex; flex-direction: column; gap: 4px; margin-right: 16px !important; margin-bottom: 24px !important;}
+    .leaflet-bar a { background-color: var(--card) !important; color: var(--text) !important; border: 1px solid var(--border) !important; border-radius: 10px !important; width: 36px !important; height: 36px !important; line-height: 34px !important; transition: all 0.2s; }
+    .leaflet-bar a:hover { background-color: var(--bg3) !important; color: var(--accent) !important; border-color: var(--accent) !important; }
+    .leaflet-bar a.leaflet-disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* Sleek Cluster Icons (Glassmorphism look) */
+    .ccluster { background: var(--card)!important; border: 2px solid var(--border)!important; box-shadow: 0 4px 12px rgba(0,0,0,0.4)!important; border-radius: 50%!important; color: var(--text)!important; font-weight: 800!important; font-family: 'Space Mono', monospace!important; display: flex!important; align-items: center!important; justify-content: center!important; transition: border-color 0.2s; }
+    .ccluster:hover { border-color: var(--accent)!important; color: var(--accent)!important; }
 
     /* SIDEBAR */
     .sidebar { width:350px; min-width:350px; display:flex; flex-direction:column; background:var(--card); border-left:1px solid var(--border); overflow:hidden; }
@@ -174,9 +199,6 @@
     }
     @media (min-width:769px) { .mob-bar,.mob-filter { display:none!important; } }
 
-    /* CLUSTER */
-    .ccluster { background:rgba(0,229,200,0.15)!important; border:2px solid #00e5c8!important; border-radius:50%!important; color:#00e5c8!important; font-weight:800!important; font-family:'Space Mono',monospace!important; display:flex!important; align-items:center!important; justify-content:center!important; }
-    @keyframes mpulse { 0%{transform:scale(0.8);opacity:0.8} 100%{transform:scale(2.2);opacity:0} }
     ::-webkit-scrollbar { width:3px; }
     ::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
   </style>
@@ -338,12 +360,10 @@ function setTile(dark){
     {maxZoom:19}).addTo(map);
 }
 
+// PREMIUM, HIGH-PERFORMANCE MARKER (No heavy animations, just a sleek glowing dot)
 function mkIcon(color){
   return L.divIcon({
-    html:`<div style="position:relative;width:14px;height:14px">
-      <div style="position:absolute;inset:0;border-radius:50%;border:3px solid ${color};animation:mpulse 2s infinite;opacity:0.65"></div>
-      <div style="position:absolute;inset:2px;border-radius:50%;background:${color};border:2px solid rgba(255,255,255,0.8)"></div>
-    </div>`,
+    html:`<div style="width:14px;height:14px;background:${color};border-radius:50%;border:2px solid var(--card);box-shadow:0 0 12px ${color}aa;"></div>`,
     iconSize:[14,14],iconAnchor:[7,7],className:''
   });
 }
@@ -459,7 +479,6 @@ const CNAMES = {
   mn:'Mongolia',rs:'Serbia',hr:'Croatia'
 };
 
-// keyword → country code
 const KW = {
   america:'us',american:'us','united states':'us',pentagon:'us','white house':'us',
   'wall street':'us','silicon valley':'us',england:'gb','premier league':'gb',
@@ -482,7 +501,6 @@ const KW = {
   flood:'in',wildfire:'au'
 };
 
-// region bounding boxes
 const REGION_BB = {
   europe:   {lat:[35,72],lng:[-25,45]},
   americas: {lat:[-60,75],lng:[-170,-30]},
@@ -497,8 +515,6 @@ function artRegion(lat,lng){
   return 'other';
 }
 
-// ── COORD RESOLUTION ─────────────────────────
-// Fallback pool spread across globe for unknown locations
 const FALLBACK_POOL = [
   [40.71,-74.00,'New York'],[51.50,-0.12,'London'],[35.68,139.69,'Tokyo'],
   [48.85,2.35,'Paris'],[28.61,77.20,'New Delhi'],[39.90,116.40,'Beijing'],
@@ -512,32 +528,26 @@ let fbIdx = 0;
 
 function getCoords(text, source){
   const t = (text||'').toLowerCase();
-  // 1. city exact
   for(const [city,c] of Object.entries(CITIES)){
     if(new RegExp('\\b'+city.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'\\b','i').test(t))
       return {coords:[c[0]+jit(),c[1]+jit()], loc:cap(city)};
   }
-  // 2. keyword
   for(const [kw,cc] of Object.entries(KW)){
     if(new RegExp('\\b'+kw.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'\\b','i').test(t) && CAPS[cc])
       return {coords:[CAPS[cc][0]+jit(),CAPS[cc][1]+jit()], loc:CNAMES[cc]||cc.toUpperCase()};
   }
-  // 3. country name
   for(const [cc,name] of Object.entries(CNAMES)){
     if(new RegExp('\\b'+name.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'\\b','i').test(t) && CAPS[cc])
       return {coords:[CAPS[cc][0]+jit(),CAPS[cc][1]+jit()], loc:name};
   }
-  // 4. global fallback (round-robin, ensures spread)
   const f = FALLBACK_POOL[fbIdx % FALLBACK_POOL.length]; fbIdx++;
   return {coords:[f[0]+jit(),f[1]+jit()], loc:f[2]};
 }
 function jit(){ return (Math.random()-0.5)*0.22; }
 function cap(s){ return s.replace(/\b\w/g,c=>c.toUpperCase()); }
 
-// ── FEEDS (Guardian API primary, RSS as supplement) ──
+// ── FEEDS ─────────────────────────────────────
 const GUARDIAN_KEY = '0a321643-aaab-4c6a-9185-1762685abe3d';
-
-// Mapping category → multiple Guardian sections + keywords
 const G_SECTIONS = {
   world:    ['world','politics','international'],
   technology:['technology'],
@@ -548,11 +558,8 @@ const G_SECTIONS = {
   climate:  ['environment'],
   politics: ['politics','us-news','uk-news','world']
 };
-
-// Extra Guardian section queries for geographic diversity
 const G_GEO = ['world/europe-news','world/americas','world/asia-pacific','world/middle-east','world/africa'];
 
-// RSS feeds as supplement (using allorigins CORS proxy)
 const RSS_FEEDS = {
   world:[
     {u:'http://rss.cnn.com/rss/edition_world.rss',n:'CNN'},
@@ -616,7 +623,6 @@ async function fetchGuardian(section, tag){
 }
 
 async function fetchRSS(feed){
-  // Try rss2json first
   try{
     const r = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feed.u)}&count=15`);
     const d = await r.json();
@@ -629,7 +635,6 @@ async function fetchRSS(feed){
       }));
     }
   }catch{}
-  // Fallback: allorigins proxy
   try{
     const r = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(feed.u)}`);
     const d = await r.json();
@@ -647,9 +652,8 @@ async function fetchRSS(feed){
   }catch{return [];}
 }
 
-// ── MAIN FETCH ────────────────────────────────
 async function fetchNews(cat){
-  fbIdx = 0; // reset fallback rotation
+  fbIdx = 0;
   document.getElementById('newsList').innerHTML = '<div class="loader"><div class="loader-owl">🦉</div><div class="loader-txt">SCANNING GLOBE</div></div>';
   document.getElementById('feedLabel').textContent = cat.toUpperCase()+' FEED';
 
@@ -657,7 +661,6 @@ async function fetchNews(cat){
   const geoSections = cat==='world' ? G_GEO : [];
   const rssList = RSS_FEEDS[cat]||RSS_FEEDS.world;
 
-  // Fire everything in parallel
   const jobs = [
     ...sections.map(s=>fetchGuardian(s)),
     ...geoSections.map(s=>fetchGuardian(s)),
@@ -668,11 +671,9 @@ async function fetchNews(cat){
   let arts = [];
   results.forEach(r=>{ if(r.status==='fulfilled') arts.push(...r.value); });
 
-  // Dedupe by title
   const seen = new Set();
   arts = arts.filter(a=>{ if(!a.title||seen.has(a.title)) return false; seen.add(a.title); return true; });
 
-  // Attach coords + region
   arts.forEach(a=>{
     const text = a.title+' '+(a.trail||'');
     const {coords,loc} = getCoords(text, a.source);
@@ -681,13 +682,11 @@ async function fetchNews(cat){
     a._region = artRegion(coords[0],coords[1]);
   });
 
-  // Shuffle for variety
   arts.sort(()=>Math.random()-0.5);
   allArticles = arts;
   renderFeed(arts);
 }
 
-// ── RENDER ────────────────────────────────────
 function renderFeed(arts){
   const color = COLORS[curQ]||'#00e5c8';
   if(clusterLayer){ map.removeLayer(clusterLayer); }
@@ -712,13 +711,11 @@ function renderFeed(arts){
   }
 
   filtered.slice(0,60).forEach(a=>{
-    // Marker
     const m = L.marker(a._coords,{icon:mkIcon(color)});
-    m.bindPopup(`<div style="font-weight:700;font-size:12px;max-width:190px;line-height:1.4">${a.title}</div><div style="font-size:10px;color:#888;margin-top:3px">${a.source} · ${a._loc}</div>`);
+    m.bindPopup(`<div style="font-weight:700;font-size:12px;max-width:190px;line-height:1.4">${a.title}</div><div style="font-size:10px;color:var(--text3);margin-top:3px">${a.source} · ${a._loc}</div>`);
     m.on('click',()=>openModal(a));
     clusterLayer.addLayer(m);
 
-    // Card
     const card = document.createElement('div');
     card.className = 'ncard'+(isRead(a)?' read':'');
     card.dataset.url = a.url;
@@ -756,7 +753,6 @@ function renderFeed(arts){
   checkAlerts(filtered);
 }
 
-// ── HELPERS ───────────────────────────────────
 function timeAgo(d){
   if(!d) return '';
   const diff = Date.now()-new Date(d).getTime();
@@ -783,7 +779,6 @@ function unsavArt(url){
   updateSBadge();
 }
 
-// ── MODAL ─────────────────────────────────────
 function openModal(a){
   curModalArt = a; markRead(a.url);
   const img = document.getElementById('mhero');
@@ -823,7 +818,6 @@ function toggleSaveCard(btn, url){
   renderSaved();
 }
 
-// ── SAVED PANEL ───────────────────────────────
 function openSaved(){ stab('saved'); }
 function renderSaved(){
   updateSBadge();
@@ -852,7 +846,6 @@ function renderSaved(){
   });
 }
 
-// ── ALERTS ────────────────────────────────────
 function addAlert(){
   const inp=document.getElementById('alertIn');
   const kw=inp.value.trim().toLowerCase();
@@ -874,7 +867,6 @@ function checkAlerts(arts){
   });
 }
 
-// ── TOAST ─────────────────────────────────────
 const toastQ=[]; let tBusy=false;
 function showToast(icon,label,title,article){
   toastQ.push({icon,label,title,article});
@@ -896,7 +888,6 @@ function nextToast(){
 }
 function dimiss(t){ t.classList.remove('show'); setTimeout(()=>{t.remove();setTimeout(nextToast,150);},400); }
 
-// ── TABS ──────────────────────────────────────
 function stab(name){
   document.querySelectorAll('.stab').forEach((t,i)=>t.classList.toggle('active',['feed','saved','alerts'][i]===name));
   document.querySelectorAll('.spanel').forEach(p=>p.classList.remove('active'));
@@ -905,7 +896,6 @@ function stab(name){
   if(name==='alerts') renderAlertTags();
 }
 
-// ── THEME ─────────────────────────────────────
 function toggleTheme(){
   const isDark = document.body.getAttribute('data-theme')==='dark';
   document.body.setAttribute('data-theme',isDark?'light':'dark');
@@ -914,7 +904,6 @@ function toggleTheme(){
   setTile(!isDark);
 }
 
-// ── REGION + CAT FILTER ───────────────────────
 document.getElementById('regionBar').addEventListener('click',e=>{
   const b=e.target.closest('.rbtn'); if(!b) return;
   document.querySelectorAll('.rbtn').forEach(x=>x.classList.remove('active'));
@@ -928,7 +917,6 @@ document.getElementById('catBar').addEventListener('click',e=>{
   fetchNews(curQ);
 });
 
-// ── MOBILE ────────────────────────────────────
 function mobSwitch(mode){
   const layout=document.getElementById('layout');
   ['mb-map','mb-news','mb-filter','mb-saved'].forEach(id=>document.getElementById(id)?.classList.remove('active'));
@@ -941,7 +929,6 @@ function mobSwitch(mode){
     if(mode==='saved'){ document.getElementById('mb-saved').classList.add('active'); stab('saved'); }
     else { document.getElementById('mb-news').classList.add('active'); stab('feed'); }
   }
-  // Invalidate map size after layout change
   setTimeout(()=>map.invalidateSize(),50);
 }
 function toggleMobFilter(){
@@ -957,7 +944,6 @@ function mobCat(btn,q){
   mobSwitch('news');
 }
 
-// ── AUTH ──────────────────────────────────────
 function loginGoogle(){ auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).catch(console.error); }
 function doLogout(){ if(confirm('Log out?')) auth.signOut(); }
 auth.onAuthStateChanged(user=>{
@@ -969,15 +955,12 @@ auth.onAuthStateChanged(user=>{
 
 document.getElementById('modal').addEventListener('click',e=>{ if(e.target===e.currentTarget) closeModal(); });
 
-// ── INIT ──────────────────────────────────────
 window.addEventListener('load',()=>{
   const th=localStorage.getItem('owlsTheme');
   if(th){ document.body.setAttribute('data-theme',th); document.getElementById('themeBtn').textContent=th==='dark'?'☀️':'🌙'; if(th==='light') setTile(false); }
   updateSBadge(); renderAlertTags();
-  // Splash
   setTimeout(()=>{ const s=document.getElementById('splash'); s.classList.add('hide'); setTimeout(()=>s.remove(),700); },2200);
   fetchNews('world');
-  // Ensure map redraws after splash gone
   setTimeout(()=>map.invalidateSize(),2500);
 });
 </script>
