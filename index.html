@@ -36,7 +36,6 @@
     * { box-sizing:border-box; margin:0; padding:0; }
     html, body { width:100%; height:100%; overflow:hidden; font-family:'Syne',sans-serif; background:var(--bg); color:var(--text); }
 
-    /* SPLASH */
     .splash { position:fixed; inset:0; background:#040d1a; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:99999; transition:opacity 0.6s; }
     .splash.hide { opacity:0; pointer-events:none; }
     .splash-grid { position:absolute; inset:0; background-image:linear-gradient(rgba(0,229,200,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,200,0.04) 1px,transparent 1px); background-size:40px 40px; }
@@ -48,7 +47,6 @@
     @keyframes loadBar { from{width:0} to{width:100%} }
     @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
 
-    /* HEADER */
     .header { height:52px; background:var(--card); border-bottom:1px solid var(--border); padding:0 16px; display:flex; align-items:center; justify-content:space-between; flex-shrink:0; z-index:500; position:relative; }
     .logo { display:flex; align-items:center; gap:8px; }
     .owl-anim { font-size:26px; animation:owlBlink 5s infinite; display:inline-block; }
@@ -61,7 +59,6 @@
     .bcount { background:#e03; color:#fff; border-radius:10px; padding:1px 5px; font-size:9px; margin-left:2px; }
     .uavatar { width:28px; height:28px; border-radius:50%; border:2px solid var(--accent); display:none; cursor:pointer; }
 
-    /* TOP BARS */
     .top-bars { background:var(--bg2); border-bottom:1px solid var(--border); flex-shrink:0; }
     .bar-row { display:flex; gap:4px; overflow-x:auto; padding:6px 14px; scrollbar-width:none; }
     .bar-row::-webkit-scrollbar { display:none; }
@@ -72,31 +69,25 @@
     .cbtn.active { background:var(--accent); color:#000; border-color:var(--accent); }
     .cbtn:hover:not(.active) { border-color:var(--accent); color:var(--accent); }
 
-    /* MAIN LAYOUT */
     .app-wrap { display:flex; flex-direction:column; width:100%; height:100%; }
     .layout { display:flex; flex:1; min-height:0; overflow:hidden; }
 
-    /* MAP */
     #map { flex:1; min-width:0; min-height:0; background: var(--bg); }
 
-    /* PREMIUM LEAFLET OVERRIDES (Map Design Fixes) */
     .leaflet-popup-content-wrapper { background: var(--card); color: var(--text); border: 1px solid var(--border); border-radius: 14px; box-shadow: 0 16px 32px rgba(0,0,0,0.4); padding: 4px; }
     .leaflet-popup-tip { background: var(--card); border: 1px solid var(--border); border-top: none; border-left: none; box-shadow: 2px 2px 4px rgba(0,0,0,0.2); }
     .leaflet-popup-content { font-family: 'Syne', sans-serif; margin: 12px; }
     .leaflet-container a.leaflet-popup-close-button { color: var(--text2); padding: 8px; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s; }
     .leaflet-container a.leaflet-popup-close-button:hover { color: var(--accent2); background: transparent; }
     
-    /* Sleek Map Zoom Controls */
     .leaflet-control-zoom { border: none !important; box-shadow: 0 8px 24px rgba(0,0,0,0.4) !important; display: flex; flex-direction: column; gap: 4px; margin-right: 16px !important; margin-bottom: 24px !important;}
     .leaflet-bar a { background-color: var(--card) !important; color: var(--text) !important; border: 1px solid var(--border) !important; border-radius: 10px !important; width: 36px !important; height: 36px !important; line-height: 34px !important; transition: all 0.2s; }
     .leaflet-bar a:hover { background-color: var(--bg3) !important; color: var(--accent) !important; border-color: var(--accent) !important; }
     .leaflet-bar a.leaflet-disabled { opacity: 0.5; cursor: not-allowed; }
 
-    /* Sleek Cluster Icons (Glassmorphism look) */
     .ccluster { background: var(--card)!important; border: 2px solid var(--border)!important; box-shadow: 0 4px 12px rgba(0,0,0,0.4)!important; border-radius: 50%!important; color: var(--text)!important; font-weight: 800!important; font-family: 'Space Mono', monospace!important; display: flex!important; align-items: center!important; justify-content: center!important; transition: border-color 0.2s; }
     .ccluster:hover { border-color: var(--accent)!important; color: var(--accent)!important; }
 
-    /* SIDEBAR */
     .sidebar { width:350px; min-width:350px; display:flex; flex-direction:column; background:var(--card); border-left:1px solid var(--border); overflow:hidden; }
     .stabs { display:flex; border-bottom:1px solid var(--border); flex-shrink:0; }
     .stab { flex:1; padding:10px 4px; text-align:center; font-size:10px; font-weight:700; color:var(--text3); cursor:pointer; border-bottom:2px solid transparent; transition:all 0.2s; letter-spacing:1px; font-family:'Space Mono',monospace; }
@@ -110,7 +101,6 @@
     .scount { font-size:9px; color:var(--text3); font-family:'Space Mono',monospace; }
     .news-scroll { overflow-y:auto; flex:1; }
 
-    /* NEWS CARDS */
     .ncard { padding:12px 14px; border-bottom:1px solid var(--border); cursor:pointer; transition:background 0.15s; position:relative; }
     .ncard:hover { background:var(--bg3); }
     .ncard.active { background:var(--bg2); border-left:3px solid var(--accent); }
@@ -128,7 +118,6 @@
     .nbookmark.on { opacity:1; color:var(--saved); border-color:var(--saved); }
     .unread-dot { position:absolute; left:5px; top:50%; transform:translateY(-50%); width:5px; height:5px; border-radius:50%; background:var(--accent); }
 
-    /* ALERTS PANEL */
     .alerts-body { padding:14px; }
     .alert-input-row { display:flex; gap:8px; margin-bottom:10px; }
     .alert-input { flex:1; background:var(--bg3); border:1px solid var(--border); border-radius:8px; padding:7px 10px; color:var(--text); font-size:11px; font-family:'Syne',sans-serif; outline:none; }
@@ -139,10 +128,8 @@
     .atag span { cursor:pointer; color:var(--text3); font-size:14px; line-height:1; }
     .alerts-hint { margin-top:16px; font-size:10px; color:var(--text3); line-height:1.7; }
 
-    /* SAVED EMPTY */
     .saved-empty { display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; gap:10px; color:var(--text3); font-size:12px; padding:40px; text-align:center; }
 
-    /* MODAL */
     .moverlay { position:fixed; inset:0; background:rgba(4,13,26,0.88); z-index:9000; display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity 0.3s; backdrop-filter:blur(4px); }
     .moverlay.on { opacity:1; pointer-events:auto; }
     .mbox { background:var(--card); border:1px solid var(--border); border-radius:16px; width:92%; max-width:560px; max-height:88vh; overflow-y:auto; position:relative; box-shadow:0 24px 60px rgba(0,0,0,0.6); transform:translateY(14px); transition:transform 0.3s; }
@@ -163,7 +150,6 @@
     .mbtn.sec:hover { background:var(--bg3); color:var(--text); }
     .mbtn.sv.on { color:var(--saved); border-color:var(--saved); }
 
-    /* TOAST */
     .tstack { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); z-index:8000; display:flex; flex-direction:column; gap:8px; align-items:center; pointer-events:none; width:90%; max-width:360px; }
     .toast { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:11px 14px; width:100%; box-shadow:0 8px 24px rgba(0,0,0,0.5); display:flex; align-items:center; gap:10px; pointer-events:auto; cursor:pointer; transform:translateY(80px); opacity:0; transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1); }
     .toast.show { transform:translateY(0); opacity:1; }
@@ -172,14 +158,12 @@
     .t-title { font-size:11px; font-weight:700; margin-top:2px; line-height:1.4; }
     .t-close { margin-left:auto; color:var(--text3); font-size:16px; cursor:pointer; flex-shrink:0; padding:2px 4px; }
 
-    /* LOADING */
     .loader { display:flex; flex-direction:column; align-items:center; justify-content:center; padding:48px 24px; gap:12px; }
     .loader-owl { font-size:38px; animation:float 2s infinite; }
     .loader-txt { font-size:9px; color:var(--accent); font-family:'Space Mono',monospace; letter-spacing:2px; }
     .loader-txt::after { content:''; animation:dots 1.5s infinite steps(4,end); }
     @keyframes dots { 0%{content:''} 25%{content:'.'} 50%{content:'..'} 75%{content:'...'} }
 
-    /* MOBILE */
     @media (max-width:768px) {
       .top-bars { display:none; }
       .layout { flex-direction:column; }
@@ -214,7 +198,6 @@
 </div>
 
 <div class="app-wrap">
-  <!-- HEADER -->
   <div class="header">
     <div class="logo">
       <span class="owl-anim">🦉</span>
@@ -231,7 +214,6 @@
     </div>
   </div>
 
-  <!-- REGION + CATEGORY BARS (desktop) -->
   <div class="top-bars">
     <div class="bar-row" id="regionBar">
       <button class="rbtn active" data-r="all">🌐 ALL REGIONS</button>
@@ -254,7 +236,6 @@
     </div>
   </div>
 
-  <!-- LAYOUT -->
   <div class="layout" id="layout">
     <div id="map"></div>
     <div class="sidebar" id="sidebar">
@@ -265,7 +246,7 @@
       </div>
       <div class="spanel active" id="p-feed">
         <div class="live-row">
-          <div class="live-dot">LIVE</div>
+          <div class="live-dot" id="liveDotIndicator">LIVE</div>
           <span class="scount" id="scount">loading...</span>
         </div>
         <div class="news-scroll" id="newsList"></div>
@@ -288,7 +269,6 @@
   </div>
 </div>
 
-<!-- MOBILE BOTTOM BAR -->
 <div class="mob-bar">
   <button class="mbbtn active" id="mb-map" onclick="mobSwitch('map')"><span class="mbi">🗺️</span>MAP</button>
   <button class="mbbtn" id="mb-news" onclick="mobSwitch('news')"><span class="mbi">📰</span>NEWS</button>
@@ -306,7 +286,6 @@
   <button class="cbtn" onclick="mobCat(this,'politics')">🏛️ Politics</button>
 </div>
 
-<!-- MODAL -->
 <div class="moverlay" id="modal">
   <div class="mbox">
     <button class="mclose" onclick="closeModal()">×</button>
@@ -328,16 +307,13 @@
   </div>
 </div>
 
-<!-- TOASTS -->
 <div class="tstack" id="tstack"></div>
 
 <script>
-// ── FIREBASE ──────────────────────────────────
 const fbCfg = {apiKey:"AIzaSyBf3EDUobPIaZL6Jzu5i1ITT8YRSZaCOa8",authDomain:"newsmap-5d380.firebaseapp.com",projectId:"newsmap-5d380",storageBucket:"newsmap-5d380.firebasestorage.app",messagingSenderId:"270586913079",appId:"1:270586913079:web:271cb786e7195299f73ab2"};
 firebase.initializeApp(fbCfg);
 const auth = firebase.auth();
 
-// ── STATE ─────────────────────────────────────
 let curQ = 'world', curR = 'all';
 let allArticles = [], clusterLayer;
 let curModalArt = null;
@@ -347,7 +323,7 @@ let alerts     = JSON.parse(localStorage.getItem('owls_alerts')||'[]');
 
 const COLORS = {world:'#00e5c8',technology:'#7c6bff',business:'#00e676',science:'#00b8d9',health:'#ff4757',sport:'#ff6b35',climate:'#69f0ae',politics:'#ffd740'};
 
-// ── MAP ───────────────────────────────────────
+// MAP INIT
 const map = L.map('map',{zoomControl:false}).setView([20,10],2);
 L.control.zoom({position:'bottomright'}).addTo(map);
 let tileLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_matter/{z}/{x}/{y}{r}.png',{maxZoom:19}).addTo(map);
@@ -360,7 +336,6 @@ function setTile(dark){
     {maxZoom:19}).addTo(map);
 }
 
-// PREMIUM, HIGH-PERFORMANCE MARKER (No heavy animations, just a sleek glowing dot)
 function mkIcon(color){
   return L.divIcon({
     html:`<div style="width:14px;height:14px;background:${color};border-radius:50%;border:2px solid var(--card);box-shadow:0 0 12px ${color}aa;"></div>`,
@@ -368,71 +343,23 @@ function mkIcon(color){
   });
 }
 
-// ── LOCATION DATABASE ─────────────────────────
 const CITIES = {
-  // N America
   'new york':[40.71,-74.00],'washington':[38.90,-77.03],'los angeles':[34.05,-118.24],
   'chicago':[41.87,-87.62],'san francisco':[37.77,-122.41],'miami':[25.77,-80.19],
   'seattle':[47.60,-122.33],'boston':[42.36,-71.05],'houston':[29.76,-95.36],
-  'dallas':[32.77,-96.79],'toronto':[43.65,-79.38],'vancouver':[49.28,-123.12],
-  'montreal':[45.50,-73.56],'mexico city':[19.43,-99.13],
-  // S America
   'sao paulo':[-23.54,-46.63],'rio de janeiro':[-22.90,-43.17],'buenos aires':[-34.60,-58.38],
-  'bogota':[4.71,-74.07],'lima':[-12.04,-77.03],'santiago':[-33.45,-70.66],
-  'caracas':[10.48,-66.88],'quito':[-0.23,-78.51],
-  // Europe
   'london':[51.50,-0.12],'manchester':[53.48,-2.24],'edinburgh':[55.95,-3.19],
   'paris':[48.85,2.35],'berlin':[52.52,13.40],'munich':[48.13,11.58],
-  'frankfurt':[50.11,8.68],'hamburg':[53.55,9.99],'madrid':[40.41,-3.70],
-  'barcelona':[41.38,2.17],'rome':[41.90,12.49],'milan':[45.46,9.19],
+  'madrid':[40.41,-3.70],'barcelona':[41.38,2.17],'rome':[41.90,12.49],
   'amsterdam':[52.37,4.90],'brussels':[50.85,4.35],'vienna':[48.20,16.37],
-  'zurich':[47.37,8.54],'stockholm':[59.33,18.06],'oslo':[59.91,10.75],
-  'copenhagen':[55.67,12.56],'helsinki':[60.17,24.94],'warsaw':[52.23,21.01],
-  'prague':[50.07,14.43],'budapest':[47.49,19.04],'athens':[37.97,23.72],
-  'lisbon':[38.71,-9.14],'dublin':[53.33,-6.24],'kyiv':[50.45,30.52],
-  'moscow':[55.75,37.61],'st. petersburg':[59.93,30.32],'istanbul':[41.01,28.97],
-  'ankara':[39.92,32.85],'bucharest':[44.43,26.09],'belgrade':[44.80,20.46],
-  'zagreb':[45.81,15.98],'sofia':[42.69,23.33],'vilnius':[54.68,25.28],
-  'riga':[56.95,24.11],'tallinn':[59.44,24.75],'bratislava':[48.14,17.11],
-  'ljubljana':[46.05,14.50],'skopje':[41.99,21.43],'sarajevo':[43.85,18.38],
-  'tirana':[41.33,19.82],'minsk':[53.90,27.57],'chisinau':[47.00,28.85],
-  'baku':[40.41,49.87],'yerevan':[40.18,44.51],'tbilisi':[41.69,44.83],
-  // Asia
-  'tokyo':[35.68,139.69],'osaka':[34.69,135.50],'beijing':[39.90,116.40],
-  'shanghai':[31.22,121.47],'hong kong':[22.31,114.17],'shenzhen':[22.54,114.06],
-  'guangzhou':[23.12,113.26],'chengdu':[30.57,104.07],'wuhan':[30.59,114.30],
-  'seoul':[37.56,126.97],'busan':[35.10,129.03],'singapore':[1.35,103.81],
+  'moscow':[55.75,37.61],'istanbul':[41.01,28.97],'ankara':[39.92,32.85],
+  'tokyo':[35.68,139.69],'beijing':[39.90,116.40],'shanghai':[31.22,121.47],
+  'hong kong':[22.31,114.17],'seoul':[37.56,126.97],'singapore':[1.35,103.81],
   'bangkok':[13.75,100.50],'jakarta':[-6.20,106.81],'manila':[14.59,120.98],
-  'kuala lumpur':[3.14,101.68],'ho chi minh':[10.82,106.62],'hanoi':[21.02,105.84],
-  'taipei':[25.04,121.56],'new delhi':[28.61,77.20],'mumbai':[19.07,72.87],
-  'bangalore':[12.97,77.59],'chennai':[13.08,80.27],'kolkata':[22.57,88.36],
-  'hyderabad':[17.38,78.47],'karachi':[24.86,67.00],'islamabad':[33.68,73.04],
-  'lahore':[31.55,74.34],'dhaka':[23.81,90.41],'colombo':[6.93,79.85],
-  'kathmandu':[27.70,85.31],'yangon':[16.87,96.15],'phnom penh':[11.56,104.92],
-  'vientiane':[17.96,102.60],'ulaanbaatar':[47.90,106.90],'almaty':[43.24,76.95],
-  'tashkent':[41.30,69.24],'bishkek':[42.87,74.60],
-  // Middle East
-  'dubai':[25.20,55.27],'abu dhabi':[24.45,54.37],'doha':[25.28,51.53],
-  'riyadh':[24.71,46.67],'jeddah':[21.49,39.19],'mecca':[21.39,39.86],
-  'kuwait city':[29.37,47.98],'manama':[26.22,50.58],'muscat':[23.61,58.59],
-  'tehran':[35.69,51.39],'baghdad':[33.33,44.40],'amman':[31.95,35.93],
-  'beirut':[33.88,35.49],'damascus':[33.51,36.29],'jerusalem':[31.76,35.21],
-  'tel aviv':[32.08,34.78],'sanaa':[15.36,44.20],'kabul':[34.52,69.17],
-  'erbil':[36.19,44.01],'mosul':[36.34,43.13],
-  // Africa
-  'cairo':[30.04,31.23],'alexandria':[31.21,29.95],'nairobi':[-1.28,36.81],
-  'johannesburg':[-26.20,28.04],'cape town':[-33.92,18.42],'durban':[-29.86,31.02],
-  'lagos':[6.45,3.39],'abuja':[9.07,7.39],'kano':[12.00,8.52],
-  'accra':[5.56,-0.20],'addis ababa':[9.02,38.74],'dar es salaam':[-6.79,39.22],
-  'kampala':[0.31,32.58],'kigali':[-1.94,30.06],'harare':[-17.82,31.05],
-  'lusaka':[-15.42,28.28],'kinshasa':[-4.32,15.32],'luanda':[-8.84,13.23],
-  'dakar':[14.69,-17.44],'casablanca':[33.59,-7.62],'rabat':[34.01,-6.83],
-  'tunis':[36.81,10.18],'tripoli':[32.89,13.18],'khartoum':[15.55,32.53],
-  'mogadishu':[2.05,45.34],'antananarivo':[-18.91,47.54],
-  // Oceania
-  'sydney':[-33.86,151.20],'melbourne':[-37.81,144.96],'brisbane':[-27.47,153.02],
-  'perth':[-31.95,115.86],'adelaide':[-34.92,138.60],'canberra':[-35.28,149.12],
-  'auckland':[-36.86,174.76],'wellington':[-41.28,174.77],'christchurch':[-43.53,172.63]
+  'new delhi':[28.61,77.20],'mumbai':[19.07,72.87],
+  'dubai':[25.20,55.27],'riyadh':[24.71,46.67],'tehran':[35.69,51.39],
+  'cairo':[30.04,31.23],'nairobi':[-1.28,36.81],'johannesburg':[-26.20,28.04],
+  'sydney':[-33.86,151.20],'melbourne':[-37.81,144.96]
 };
 
 const CAPS = {
@@ -442,22 +369,7 @@ const CAPS = {
   ng:[9.07,7.39],eg:[30.04,31.23],mx:[19.43,-99.13],ar:[-34.60,-58.38],
   sa:[24.71,46.67],id:[-6.20,106.81],it:[41.90,12.49],es:[40.41,-3.70],
   kr:[37.56,126.97],ua:[50.45,30.52],il:[31.76,35.21],ae:[24.45,54.37],
-  qa:[25.28,51.53],br:[-15.82,-47.92],pk:[33.68,73.04],bd:[23.81,90.41],
-  th:[13.75,100.50],my:[3.14,101.68],vn:[21.02,105.84],ph:[14.59,120.98],
-  pl:[52.23,21.01],se:[59.33,18.06],no:[59.91,10.75],dk:[55.67,12.56],
-  fi:[60.17,24.94],nl:[52.37,4.90],be:[50.85,4.35],ch:[46.94,7.46],
-  at:[48.20,16.37],pt:[38.71,-9.14],gr:[37.97,23.72],cz:[50.07,14.43],
-  hu:[47.49,19.04],ro:[44.43,26.09],bg:[42.69,23.33],ke:[-1.28,36.81],
-  tz:[-6.79,39.22],gh:[5.56,-0.20],et:[9.02,38.74],ma:[33.59,-7.62],
-  dz:[36.73,3.08],tn:[36.81,10.18],ly:[32.89,13.18],iq:[33.33,44.40],
-  ir:[35.69,51.39],sy:[33.51,36.29],jo:[31.95,35.93],lb:[33.88,35.49],
-  kw:[29.37,47.98],bh:[26.22,50.58],om:[23.61,58.59],ye:[15.36,44.20],
-  af:[34.52,69.17],nz:[-41.28,174.77],sg:[1.35,103.81],tw:[25.04,121.56],
-  mm:[16.87,96.15],kh:[11.56,104.92],np:[27.70,85.31],lk:[6.93,79.85],
-  cl:[-33.45,-70.66],co:[4.71,-74.07],pe:[-12.04,-77.03],ve:[10.48,-66.88],
-  ec:[-0.23,-78.51],bo:[-16.50,-68.14],py:[-25.29,-57.64],uy:[-34.90,-56.19],
-  az:[40.41,49.87],am:[40.18,44.51],ge:[41.69,44.83],kz:[51.18,71.45],
-  uz:[41.30,69.24],mn:[47.90,106.90],rs:[44.80,20.46],hr:[45.81,15.98]
+  qa:[25.28,51.53],br:[-15.82,-47.92],pk:[33.68,73.04]
 };
 
 const CNAMES = {
@@ -465,49 +377,23 @@ const CNAMES = {
   ru:'Russia',in:'India',au:'Australia',ca:'Canada',za:'South Africa',ng:'Nigeria',
   eg:'Egypt',mx:'Mexico',ar:'Argentina',sa:'Saudi Arabia',id:'Indonesia',
   it:'Italy',es:'Spain',kr:'South Korea',ua:'Ukraine',il:'Israel',ae:'UAE',
-  qa:'Qatar',br:'Brazil',pk:'Pakistan',bd:'Bangladesh',th:'Thailand',
-  my:'Malaysia',vn:'Vietnam',ph:'Philippines',pl:'Poland',se:'Sweden',
-  no:'Norway',dk:'Denmark',fi:'Finland',nl:'Netherlands',be:'Belgium',
-  ch:'Switzerland',at:'Austria',pt:'Portugal',gr:'Greece',cz:'Czech Republic',
-  hu:'Hungary',ro:'Romania',bg:'Bulgaria',ke:'Kenya',tz:'Tanzania',gh:'Ghana',
-  et:'Ethiopia',ma:'Morocco',dz:'Algeria',tn:'Tunisia',ly:'Libya',iq:'Iraq',
-  ir:'Iran',sy:'Syria',jo:'Jordan',lb:'Lebanon',kw:'Kuwait',bh:'Bahrain',
-  om:'Oman',ye:'Yemen',af:'Afghanistan',nz:'New Zealand',sg:'Singapore',
-  tw:'Taiwan',mm:'Myanmar',kh:'Cambodia',np:'Nepal',lk:'Sri Lanka',
-  cl:'Chile',co:'Colombia',pe:'Peru',ve:'Venezuela',ec:'Ecuador',
-  az:'Azerbaijan',am:'Armenia',ge:'Georgia',kz:'Kazakhstan',uz:'Uzbekistan',
-  mn:'Mongolia',rs:'Serbia',hr:'Croatia'
+  qa:'Qatar',br:'Brazil',pk:'Pakistan'
 };
 
 const KW = {
-  america:'us',american:'us','united states':'us',pentagon:'us','white house':'us',
-  'wall street':'us','silicon valley':'us',england:'gb','premier league':'gb',
-  scotland:'gb',wales:'gb',nato:'us',kremlin:'ru',ukraine:'ua',ukrainian:'ua',
-  macron:'fr',paris:'fr',putin:'ru',zelensky:'ua',modi:'in',
-  'xi jinping':'cn','kim jong':'kr',erdogan:'tr',netanyahu:'il',
-  hamas:'il',hezbollah:'lb',
-  nba:'us',nfl:'us',mlb:'us',nhl:'us',
-  'la liga':'es','serie a':'it','bundesliga':'de','ligue 1':'fr',
-  amazon:'us',google:'us',apple:'us',microsoft:'us',tesla:'us',openai:'us',meta:'us',
-  samsung:'kr',huawei:'cn',alibaba:'cn',tencent:'cn',toyota:'jp',honda:'jp',
-  bbc:'gb',guardian:'gb',cnn:'us','fox news':'us','al jazeera':'qa',
-  'times of india':'in',geo:'pk',dawn:'pk',nikkei:'jp',
-  'world cup':'gb','champions league':'gb',olympic:'us',
-  'european union':'be',eu:'be',imf:'us','world bank':'us',
-  un:'us',nato:'be',g7:'us',g20:'us',brics:'ru',
-  ukraine:'ua',crimea:'ua',taiwan:'tw',kashmir:'in',
-  'south china sea':'cn',gaza:'il',westbank:'il',
-  earthquake:'jp',tsunami:'jp',hurricane:'us',tornado:'us',
-  flood:'in',wildfire:'au'
+  america:'us',american:'us','united states':'us','white house':'us',
+  england:'gb','premier league':'gb',scotland:'gb',nato:'us',kremlin:'ru',
+  macron:'fr',paris:'fr',putin:'ru',modi:'in',erdogan:'tr',netanyahu:'il',
+  nba:'us',nfl:'us',mlb:'us','la liga':'es','serie a':'it','bundesliga':'de',
+  amazon:'us',google:'us',apple:'us',microsoft:'us',tesla:'us',
+  samsung:'kr',bbc:'gb',guardian:'gb',cnn:'us','al jazeera':'qa',
+  earthquake:'jp',hurricane:'us'
 };
 
 const REGION_BB = {
-  europe:   {lat:[35,72],lng:[-25,45]},
-  americas: {lat:[-60,75],lng:[-170,-30]},
-  asia:     {lat:[-10,60],lng:[60,150]},
-  mideast:  {lat:[12,42],lng:[25,62]},
-  africa:   {lat:[-38,38],lng:[-20,55]},
-  oceania:  {lat:[-50,10],lng:[110,180]}
+  europe:   {lat:[35,72],lng:[-25,45]}, americas: {lat:[-60,75],lng:[-170,-30]},
+  asia:     {lat:[-10,60],lng:[60,150]}, mideast:  {lat:[12,42],lng:[25,62]},
+  africa:   {lat:[-38,38],lng:[-20,55]}, oceania:  {lat:[-50,10],lng:[110,180]}
 };
 function artRegion(lat,lng){
   for(const [r,b] of Object.entries(REGION_BB))
@@ -518,11 +404,7 @@ function artRegion(lat,lng){
 const FALLBACK_POOL = [
   [40.71,-74.00,'New York'],[51.50,-0.12,'London'],[35.68,139.69,'Tokyo'],
   [48.85,2.35,'Paris'],[28.61,77.20,'New Delhi'],[39.90,116.40,'Beijing'],
-  [-23.54,-46.63,'São Paulo'],[55.75,37.61,'Moscow'],[25.20,55.27,'Dubai'],
-  [-33.86,151.20,'Sydney'],[1.35,103.81,'Singapore'],[9.07,7.39,'Abuja'],
-  [30.04,31.23,'Cairo'],[-1.28,36.81,'Nairobi'],[19.43,-99.13,'Mexico City'],
-  [37.56,126.97,'Seoul'],[-34.60,-58.38,'Buenos Aires'],[41.01,28.97,'Istanbul'],
-  [52.52,13.40,'Berlin'],[14.59,120.98,'Manila']
+  [-23.54,-46.63,'São Paulo'],[55.75,37.61,'Moscow'],[25.20,55.27,'Dubai']
 ];
 let fbIdx = 0;
 
@@ -546,128 +428,122 @@ function getCoords(text, source){
 function jit(){ return (Math.random()-0.5)*0.22; }
 function cap(s){ return s.replace(/\b\w/g,c=>c.toUpperCase()); }
 
-// ── FEEDS ─────────────────────────────────────
 const GUARDIAN_KEY = '0a321643-aaab-4c6a-9185-1762685abe3d';
-const G_SECTIONS = {
-  world:    ['world','politics','international'],
-  technology:['technology'],
-  business: ['business','money'],
-  science:  ['science'],
-  health:   ['society'],
-  sport:    ['sport','football','cricket'],
-  climate:  ['environment'],
-  politics: ['politics','us-news','uk-news','world']
-};
-const G_GEO = ['world/europe-news','world/americas','world/asia-pacific','world/middle-east','world/africa'];
 
+// TRIMMED FOR EXTREME SPEED (Max 4 reliable feeds per category)
 const RSS_FEEDS = {
   world:[
     {u:'http://rss.cnn.com/rss/edition_world.rss',n:'CNN'},
-    {u:'https://feeds.dw.com/rss/rss-en-all',n:'DW'},
-    {u:'https://www.france24.com/en/rss',n:'France24'},
-    {u:'https://www3.nhk.or.jp/rss/news/cat0.xml',n:'NHK Japan'},
-    {u:'https://www.geo.tv/rss/1/2',n:'Geo News'},
-    {u:'https://english.alarabiya.net/feed/world',n:'Al Arabiya'},
-    {u:'https://www.abc.net.au/news/feed/51120/rss.xml',n:'ABC Australia'},
-    {u:'https://feeds.bbci.co.uk/news/world/rss.xml',n:'BBC World'},
     {u:'https://www.aljazeera.com/xml/rss/all.xml',n:'Al Jazeera'},
+    {u:'https://www.france24.com/en/rss',n:'France24'},
+    {u:'http://feeds.bbci.co.uk/news/world/rss.xml',n:'BBC World'}
   ],
   technology:[
     {u:'https://techcrunch.com/feed/',n:'TechCrunch'},
     {u:'https://www.theverge.com/rss/index.xml',n:'The Verge'},
-    {u:'https://feeds.arstechnica.com/arstechnica/index',n:'Ars Technica'},
-    {u:'http://feeds.bbci.co.uk/news/technology/rss.xml',n:'BBC Tech'},
+    {u:'http://feeds.bbci.co.uk/news/technology/rss.xml',n:'BBC Tech'}
   ],
   business:[
     {u:'https://feeds.a.dj.com/rss/WSJcomUSBusiness.xml',n:'WSJ'},
-    {u:'http://feeds.bbci.co.uk/news/business/rss.xml',n:'BBC Business'},
     {u:'https://www.cnbc.com/id/100003114/device/rss/rss.html',n:'CNBC'},
+    {u:'http://feeds.bbci.co.uk/news/business/rss.xml',n:'BBC Business'}
   ],
   sport:[
-    {u:'https://www.espn.com/espn/rss/news',n:'ESPN'},
     {u:'https://www.skysports.com/rss/12040',n:'Sky Sports'},
-    {u:'http://feeds.bbci.co.uk/sport/rss.xml',n:'BBC Sport'},
+    {u:'http://feeds.bbci.co.uk/sport/rss.xml',n:'BBC Sport'}
   ],
   science:[
     {u:'https://rss.nytimes.com/services/xml/rss/nyt/Science.xml',n:'NY Times'},
-    {u:'http://feeds.bbci.co.uk/news/science_and_environment/rss.xml',n:'BBC Science'},
+    {u:'http://feeds.bbci.co.uk/news/science_and_environment/rss.xml',n:'BBC Science'}
   ],
   health:[
     {u:'http://feeds.bbci.co.uk/news/health/rss.xml',n:'BBC Health'},
-    {u:'https://rss.nytimes.com/services/xml/rss/nyt/Health.xml',n:'NY Times'},
+    {u:'https://rss.nytimes.com/services/xml/rss/nyt/Health.xml',n:'NY Times'}
   ],
   climate:[
-    {u:'https://www.theguardian.com/environment/rss',n:'Guardian Env'},
-    {u:'http://feeds.bbci.co.uk/news/science_and_environment/rss.xml',n:'BBC Env'},
+    {u:'https://www.theguardian.com/environment/rss',n:'Guardian Env'}
   ],
   politics:[
-    {u:'https://rss.nytimes.com/services/xml/rss/nyt/Politics.xml',n:'NY Times'},
-    {u:'http://feeds.bbci.co.uk/news/politics/rss.xml',n:'BBC Politics'},
+    {u:'https://rss.nytimes.com/services/xml/rss/nyt/Politics.xml',n:'NY Times'}
   ]
 };
 
-async function fetchGuardian(section, tag){
+// TIMEOUT WRAPPER FOR FETCH (Prevents infinite loading)
+async function fetchWithTimeout(resource, options = {}) {
+  const { timeout = 3500 } = options;
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), timeout);
+  const response = await fetch(resource, {
+    ...options,
+    signal: controller.signal  
+  });
+  clearTimeout(id);
+  return response;
+}
+
+async function fetchGuardian(category){
   try{
-    const q = tag ? `q=${encodeURIComponent(tag)}&` : '';
-    const sec = section ? `${section}?` : `?`;
-    const url = `https://content.guardianapis.com/${sec}${q}api-key=${GUARDIAN_KEY}&page-size=20&show-fields=thumbnail,trailText,publication`;
-    const r = await fetch(url);
+    const cat = (category === 'health' || category === 'sport') ? 'world' : category;
+    const url = `https://content.guardianapis.com/${cat}?api-key=${GUARDIAN_KEY}&page-size=15&show-fields=thumbnail,trailText,publication`;
+    const r = await fetchWithTimeout(url);
     const d = await r.json();
     return (d.response?.results||[]).map(a=>({
-      title:a.webTitle, url:a.webUrl, source:'The Guardian',
-      date:a.webPublicationDate,
-      thumb:a.fields?.thumbnail||null,
-      trail:(a.fields?.trailText||'').replace(/<[^>]*>/gm,'')
+      title:a.webTitle, url:a.webUrl, source:'The Guardian', date:a.webPublicationDate,
+      thumb:a.fields?.thumbnail||null, trail:(a.fields?.trailText||'').replace(/<[^>]*>/gm,'')
     }));
   }catch{return [];}
 }
 
 async function fetchRSS(feed){
   try{
-    const r = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feed.u)}&count=15`);
+    const r = await fetchWithTimeout(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feed.u)}&count=10`);
     const d = await r.json();
     if(d.status==='ok' && d.items?.length){
       return d.items.map(i=>({
-        title:i.title||'', url:i.link||'#', source:feed.n,
-        date:i.pubDate,
-        thumb:i.thumbnail||(i.enclosure?.link)||null,
-        trail:(i.description||'').replace(/<[^>]*>/gm,'').slice(0,200)
+        title:i.title||'', url:i.link||'#', source:feed.n, date:i.pubDate,
+        thumb:i.thumbnail||(i.enclosure?.link)||null, trail:(i.description||'').replace(/<[^>]*>/gm,'').slice(0,200)
       }));
     }
   }catch{}
-  try{
-    const r = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(feed.u)}`);
-    const d = await r.json();
-    const parser = new DOMParser();
-    const xml = parser.parseFromString(d.contents,'text/xml');
-    const items = [...xml.querySelectorAll('item')].slice(0,15);
-    return items.map(it=>({
-      title:it.querySelector('title')?.textContent||'',
-      url:it.querySelector('link')?.textContent||'#',
-      source:feed.n,
-      date:it.querySelector('pubDate')?.textContent||'',
-      thumb:it.querySelector('enclosure')?.getAttribute('url')||null,
-      trail:(it.querySelector('description')?.textContent||'').replace(/<[^>]*>/gm,'').slice(0,200)
-    })).filter(a=>a.title);
-  }catch{return [];}
+  return [];
+}
+
+// CACHING SYSTEM
+const CACHE_MINS = 10;
+function getCache(cat) {
+  const data = sessionStorage.getItem('owls_cache_' + cat);
+  const time = sessionStorage.getItem('owls_time_' + cat);
+  if (data && time && (Date.now() - time < CACHE_MINS * 60000)) return JSON.parse(data);
+  return null;
+}
+function setCache(cat, articles) {
+  if (!articles.length) return;
+  sessionStorage.setItem('owls_cache_' + cat, JSON.stringify(articles));
+  sessionStorage.setItem('owls_time_' + cat, Date.now());
 }
 
 async function fetchNews(cat){
-  fbIdx = 0;
   document.getElementById('newsList').innerHTML = '<div class="loader"><div class="loader-owl">🦉</div><div class="loader-txt">SCANNING GLOBE</div></div>';
   document.getElementById('feedLabel').textContent = cat.toUpperCase()+' FEED';
+  document.getElementById('liveDotIndicator').innerHTML = 'LIVE';
+  document.getElementById('liveDotIndicator').style.color = '#00e676';
+  
+  // CHECK CACHE FIRST (Instant Load)
+  const cached = getCache(cat);
+  if(cached) {
+    document.getElementById('liveDotIndicator').innerHTML = '⚡ CACHED';
+    document.getElementById('liveDotIndicator').style.color = '#ffd700';
+    allArticles = cached;
+    renderFeed(cached);
+    return;
+  }
 
-  const sections = G_SECTIONS[cat]||['world'];
-  const geoSections = cat==='world' ? G_GEO : [];
+  fbIdx = 0;
   const rssList = RSS_FEEDS[cat]||RSS_FEEDS.world;
 
-  const jobs = [
-    ...sections.map(s=>fetchGuardian(s)),
-    ...geoSections.map(s=>fetchGuardian(s)),
-    ...rssList.map(f=>fetchRSS(f))
-  ];
-
+  const jobs = [ fetchGuardian(cat), ...rssList.map(f=>fetchRSS(f)) ];
   const results = await Promise.allSettled(jobs);
+  
   let arts = [];
   results.forEach(r=>{ if(r.status==='fulfilled') arts.push(...r.value); });
 
@@ -677,13 +553,13 @@ async function fetchNews(cat){
   arts.forEach(a=>{
     const text = a.title+' '+(a.trail||'');
     const {coords,loc} = getCoords(text, a.source);
-    a._coords = coords;
-    a._loc    = loc;
-    a._region = artRegion(coords[0],coords[1]);
+    a._coords = coords; a._loc = loc; a._region = artRegion(coords[0],coords[1]);
   });
 
   arts.sort(()=>Math.random()-0.5);
   allArticles = arts;
+  
+  setCache(cat, arts); // Save for next time
   renderFeed(arts);
 }
 
@@ -702,19 +578,27 @@ function renderFeed(arts){
   list.innerHTML = '';
 
   const filtered = curR==='all' ? arts : arts.filter(a=>a._region===curR);
-  document.getElementById('scount').textContent = `${filtered.length} stories · ${new Set(arts.map(a=>a.source)).size} sources`;
+  document.getElementById('scount').textContent = `${filtered.length} stories`;
 
   if(!filtered.length){
-    list.innerHTML = '<div class="loader"><div class="loader-owl">🦉</div><div class="loader-txt">No stories in this region</div></div>';
+    list.innerHTML = '<div class="loader"><div class="loader-owl">🦉</div><div class="loader-txt">No stories found</div></div>';
     map.addLayer(clusterLayer);
     return;
   }
 
-  filtered.slice(0,60).forEach(a=>{
+  filtered.slice(0,50).forEach((a, i)=>{
     const m = L.marker(a._coords,{icon:mkIcon(color)});
-    m.bindPopup(`<div style="font-weight:700;font-size:12px;max-width:190px;line-height:1.4">${a.title}</div><div style="font-size:10px;color:var(--text3);margin-top:3px">${a.source} · ${a._loc}</div>`);
+    m.bindPopup(`<div style="font-weight:700;font-size:12px;max-width:190px;line-height:1.4">${a.title}</div><div style="font-size:10px;color:#888;margin-top:3px">${a.source} · ${a._loc}</div>`);
     m.on('click',()=>openModal(a));
     clusterLayer.addLayer(m);
+
+    // ADS EVERY 6 ITEMS
+    if (i > 0 && i % 6 === 0) {
+      const adCard = document.createElement('div');
+      adCard.className = 'ad-placeholder feed-ad';
+      adCard.innerHTML = `<span style="font-size:18px; margin-bottom:5px;">🚀</span> In-Feed AdSense Space`;
+      list.appendChild(adCard);
+    }
 
     const card = document.createElement('div');
     card.className = 'ncard'+(isRead(a)?' read':'');
@@ -894,6 +778,9 @@ function stab(name){
   document.getElementById('p-'+name).classList.add('active');
   if(name==='saved') renderSaved();
   if(name==='alerts') renderAlertTags();
+  
+  // FIX: Pane geçişlerinde haritayı yeniden boyutlandır ki beyaz fayans sorunu olmasın
+  setTimeout(()=>map.invalidateSize(), 50);
 }
 
 function toggleTheme(){
@@ -929,6 +816,7 @@ function mobSwitch(mode){
     if(mode==='saved'){ document.getElementById('mb-saved').classList.add('active'); stab('saved'); }
     else { document.getElementById('mb-news').classList.add('active'); stab('feed'); }
   }
+  // FIX: Mobilde sekme geçişlerinde haritayı hemen düzelt
   setTimeout(()=>map.invalidateSize(),50);
 }
 function toggleMobFilter(){
@@ -955,13 +843,22 @@ auth.onAuthStateChanged(user=>{
 
 document.getElementById('modal').addEventListener('click',e=>{ if(e.target===e.currentTarget) closeModal(); });
 
+// PENCERE BOYUTU DEĞİŞTİĞİNDE HARİTAYI KORU (Beyaz ekran önlemi)
+window.addEventListener('resize', () => { map.invalidateSize(); });
+
 window.addEventListener('load',()=>{
   const th=localStorage.getItem('owlsTheme');
   if(th){ document.body.setAttribute('data-theme',th); document.getElementById('themeBtn').textContent=th==='dark'?'☀️':'🌙'; if(th==='light') setTile(false); }
   updateSBadge(); renderAlertTags();
-  setTimeout(()=>{ const s=document.getElementById('splash'); s.classList.add('hide'); setTimeout(()=>s.remove(),700); },2200);
+  
+  // FIX: Sıçrama ekranı bittiğinde haritayı anında renderla
+  setTimeout(()=>{ 
+      const s=document.getElementById('splash'); 
+      s.classList.add('hide'); 
+      setTimeout(() => { s.remove(); map.invalidateSize(); }, 700); 
+  }, 2200);
+  
   fetchNews('world');
-  setTimeout(()=>map.invalidateSize(),2500);
 });
 </script>
 </body>
