@@ -5,16 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
   <title>OWLS — True Global News Map</title>
 
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-TG3Q7KX51N"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-TG3Q7KX51N');
-  </script>
-
+  <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  
+  <!-- Leaflet Harita -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
@@ -26,174 +21,88 @@
     :root {
       --bg:#0a1628; --bg2:#0f1e3a; --bg3:#162444; --card:#111d35;
       --border:#1e3054; --accent:#00e5c8; --accent2:#ff6b35; --text:#e8f4f8;
-      --text2:#7a9bb5; --text3:#4a6980; --saved:#ffd700;
+      --text2:#7a9bb5; --text3:#4a6980;
     }
     [data-theme="light"] {
       --bg:#f0f5fa; --bg2:#e4edf6; --bg3:#d8e7f2; --card:#ffffff;
       --border:#c5d8e8; --accent:#0098a0; --accent2:#e55a20; --text:#0a1628;
-      --text2:#4a6880; --text3:#8aacbf; --saved:#d4a800;
+      --text2:#4a6880; --text3:#8aacbf;
     }
     * { box-sizing:border-box; margin:0; padding:0; }
     html, body { width:100%; height:100%; overflow:hidden; font-family:'Syne',sans-serif; background:var(--bg); color:var(--text); }
 
-    .splash { position:fixed; inset:0; background:#040d1a; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:99999; transition:opacity 0.6s; }
+    /* SPLASH */
+    .splash { position:fixed; inset:0; background:#040d1a; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:99999; transition:opacity 0.4s; }
     .splash.hide { opacity:0; pointer-events:none; }
-    .splash-grid { position:absolute; inset:0; background-image:linear-gradient(rgba(0,229,200,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,200,0.04) 1px,transparent 1px); background-size:40px 40px; }
-    .splash-owl { font-size:72px; animation:float 2s ease-in-out infinite; position:relative; z-index:1; }
-    .splash-title { font-size:52px; font-weight:800; color:#00e5c8; letter-spacing:10px; margin-top:12px; position:relative; z-index:1; }
-    .splash-sub { font-size:10px; color:rgba(0,229,200,0.5); letter-spacing:4px; margin-top:6px; font-family:'Space Mono',monospace; position:relative; z-index:1; }
-    .splash-bar { width:180px; height:2px; background:rgba(0,229,200,0.15); border-radius:2px; margin-top:28px; overflow:hidden; position:relative; z-index:1; }
-    .splash-fill { height:100%; background:#00e5c8; border-radius:2px; animation:loadBar 2s ease forwards; }
+    .splash-owl { font-size:72px; animation:float 2s ease-in-out infinite; }
+    .splash-title { font-size:52px; font-weight:800; color:#00e5c8; letter-spacing:10px; margin-top:12px; }
+    .splash-bar { width:180px; height:2px; background:rgba(0,229,200,0.15); margin-top:28px; overflow:hidden; }
+    .splash-fill { height:100%; background:#00e5c8; animation:loadBar 1.5s ease forwards; }
     @keyframes loadBar { from{width:0} to{width:100%} }
     @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
 
+    /* HEADER */
     .header { height:52px; background:var(--card); border-bottom:1px solid var(--border); padding:0 16px; display:flex; align-items:center; justify-content:space-between; flex-shrink:0; z-index:500; position:relative; }
     .logo { display:flex; align-items:center; gap:8px; }
-    .owl-anim { font-size:26px; animation:owlBlink 5s infinite; display:inline-block; }
-    @keyframes owlBlink { 0%,88%,100%{transform:scaleY(1)} 90%,95%{transform:scaleY(0.08)} }
     .logo-name { font-size:17px; font-weight:800; letter-spacing:3px; color:var(--accent); }
-    .logo-sub { font-size:9px; color:var(--text3); font-family:'Space Mono',monospace; }
     .hdr-right { display:flex; align-items:center; gap:6px; }
-    .hbtn { background:var(--bg3); border:1px solid var(--border); color:var(--text2); padding:5px 11px; border-radius:8px; cursor:pointer; font-size:11px; font-family:'Syne',sans-serif; font-weight:600; transition:all 0.2s; white-space:nowrap; }
-    .hbtn:hover { border-color:var(--accent); color:var(--accent); }
-    .bcount { background:#e03; color:#fff; border-radius:10px; padding:1px 5px; font-size:9px; margin-left:2px; }
+    .hbtn { background:var(--bg3); border:1px solid var(--border); color:var(--text2); padding:5px 11px; border-radius:8px; cursor:pointer; font-size:11px; font-weight:600; }
     .uavatar { width:28px; height:28px; border-radius:50%; border:2px solid var(--accent); display:none; cursor:pointer; }
 
-    .top-bars { background:var(--bg2); border-bottom:1px solid var(--border); flex-shrink:0; }
-    .bar-row { display:flex; gap:4px; overflow-x:auto; padding:6px 14px; scrollbar-width:none; }
-    .bar-row::-webkit-scrollbar { display:none; }
-    .bar-row + .bar-row { border-top:1px solid var(--border); }
-    .rbtn { flex-shrink:0; font-size:9px; font-weight:700; letter-spacing:1px; padding:4px 10px; border-radius:6px; border:1px solid var(--border); background:transparent; color:var(--text3); cursor:pointer; transition:all 0.2s; font-family:'Space Mono',monospace; white-space:nowrap; }
-    .rbtn.active, .rbtn:hover { background:var(--bg3); color:var(--accent); border-color:var(--accent); }
-    .cbtn { flex-shrink:0; font-size:11px; font-weight:700; padding:5px 14px; border-radius:20px; border:1px solid var(--border); background:var(--card); color:var(--text2); cursor:pointer; transition:all 0.2s; white-space:nowrap; }
+    /* TOP BARS */
+    .top-bars { height: 42px; background:var(--bg2); border-bottom:1px solid var(--border); flex-shrink:0; display:flex; align-items:center; padding:0 14px; overflow-x:auto; gap:6px; scrollbar-width:none; }
+    .top-bars::-webkit-scrollbar { display:none; }
+    .cbtn { font-size:11px; font-weight:700; padding:5px 14px; border-radius:20px; border:1px solid var(--border); background:var(--card); color:var(--text2); cursor:pointer; white-space:nowrap; }
     .cbtn.active { background:var(--accent); color:#000; border-color:var(--accent); }
-    .cbtn:hover:not(.active) { border-color:var(--accent); color:var(--accent); }
 
-    .app-wrap { display:flex; flex-direction:column; width:100%; height:100%; }
-    .layout { display:flex; flex:1; min-height:0; overflow:hidden; }
-
-    #map { flex:1; min-width:0; min-height:0; background: var(--bg); }
-
-    .leaflet-popup-content-wrapper { background: var(--card); color: var(--text); border: 1px solid var(--border); border-radius: 14px; box-shadow: 0 16px 32px rgba(0,0,0,0.4); padding: 4px; }
-    .leaflet-popup-tip { background: var(--card); border: 1px solid var(--border); border-top: none; border-left: none; box-shadow: 2px 2px 4px rgba(0,0,0,0.2); }
-    .leaflet-popup-content { font-family: 'Syne', sans-serif; margin: 12px; }
-    .leaflet-container a.leaflet-popup-close-button { color: var(--text2); padding: 8px; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s; }
-    .leaflet-container a.leaflet-popup-close-button:hover { color: var(--accent2); background: transparent; }
+    /* LAYOUT - ESNEK KUTU HATASI GİDERİLDİ */
+    .app-wrap { display:block; width:100%; height:100%; }
+    .layout { width: 100%; height: calc(100vh - 94px); display: block; position: relative; }
     
-    .leaflet-control-zoom { border: none !important; box-shadow: 0 8px 24px rgba(0,0,0,0.4) !important; display: flex; flex-direction: column; gap: 4px; margin-right: 16px !important; margin-bottom: 24px !important;}
-    .leaflet-bar a { background-color: var(--card) !important; color: var(--text) !important; border: 1px solid var(--border) !important; border-radius: 10px !important; width: 36px !important; height: 36px !important; line-height: 34px !important; transition: all 0.2s; }
-    .leaflet-bar a:hover { background-color: var(--bg3) !important; color: var(--accent) !important; border-color: var(--accent) !important; }
-    .leaflet-bar a.leaflet-disabled { opacity: 0.5; cursor: not-allowed; }
+    #map { position: absolute; top: 0; left: 0; width: calc(100% - 350px); height: 100%; background: #040d1a; z-index: 1; }
+    .sidebar { position: absolute; top: 0; right: 0; width: 350px; height: 100%; background: var(--card); border-left: 1px solid var(--border); z-index: 10; display: flex; flex-direction: column; }
 
-    .ccluster { background: var(--card)!important; border: 2px solid var(--border)!important; box-shadow: 0 4px 12px rgba(0,0,0,0.4)!important; border-radius: 50%!important; color: var(--text)!important; font-weight: 800!important; font-family: 'Space Mono', monospace!important; display: flex!important; align-items: center!important; justify-content: center!important; transition: border-color 0.2s; }
-    .ccluster:hover { border-color: var(--accent)!important; color: var(--accent)!important; }
+    /* HARITA PREMIUM CSS */
+    .leaflet-popup-content-wrapper { background: var(--card); color: var(--text); border: 1px solid var(--border); border-radius: 14px; padding: 4px; }
+    .leaflet-popup-tip { background: var(--card); border: 1px solid var(--border); border-top: none; border-left: none; }
+    .leaflet-popup-content { font-family: 'Syne', sans-serif; margin: 12px; }
+    .leaflet-container a.leaflet-popup-close-button { color: var(--text2); padding: 8px; }
+    .leaflet-control-zoom { border: none !important; margin-right: 16px !important; margin-bottom: 24px !important;}
+    .leaflet-bar a { background-color: var(--card) !important; color: var(--text) !important; border: 1px solid var(--border) !important; border-radius: 10px !important; width: 36px !important; height: 36px !important; line-height: 34px !important; }
+    .ccluster { background: var(--card)!important; border: 2px solid var(--border)!important; border-radius: 50%!important; color: var(--text)!important; font-weight: 800!important; font-family: 'Space Mono', monospace!important; display: flex!important; align-items: center!important; justify-content: center!important; }
 
-    .sidebar { width:350px; min-width:350px; display:flex; flex-direction:column; background:var(--card); border-left:1px solid var(--border); overflow:hidden; }
-    .stabs { display:flex; border-bottom:1px solid var(--border); flex-shrink:0; }
-    .stab { flex:1; padding:10px 4px; text-align:center; font-size:10px; font-weight:700; color:var(--text3); cursor:pointer; border-bottom:2px solid transparent; transition:all 0.2s; letter-spacing:1px; font-family:'Space Mono',monospace; }
-    .stab.active { color:var(--accent); border-bottom-color:var(--accent); }
-    .spanel { flex:1; overflow-y:auto; display:none; flex-direction:column; min-height:0; }
-    .spanel.active { display:flex; }
-    .live-row { padding:7px 14px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); flex-shrink:0; }
-    .live-dot { display:flex; align-items:center; gap:5px; font-size:9px; color:#00e676; font-family:'Space Mono',monospace; font-weight:700; }
-    .live-dot::before { content:''; width:6px; height:6px; border-radius:50%; background:#00e676; animation:pulse 1.5s infinite; box-shadow:0 0 5px #00e676; }
-    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(1.5)} }
-    .scount { font-size:9px; color:var(--text3); font-family:'Space Mono',monospace; }
-    .news-scroll { overflow-y:auto; flex:1; }
+    /* SIDEBAR ICERIK */
+    .spanel { flex:1; overflow-y:auto; display:flex; flex-direction:column; }
+    .live-row { padding:7px 14px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); flex-shrink:0; background: var(--bg2); }
+    .live-dot { font-size:10px; color:#00e676; font-family:'Space Mono',monospace; font-weight:700; display: flex; align-items: center; gap: 5px;}
+    .live-dot::before { content:''; width:6px; height:6px; background:#00e676; border-radius:50%; animation: pulse 1s infinite; }
+    @keyframes pulse { 0%{opacity:1;} 50%{opacity:0.3;} 100%{opacity:1;} }
+    .news-scroll { overflow-y:auto; flex:1; padding-bottom: 20px;}
 
-    .ncard { padding:12px 14px; border-bottom:1px solid var(--border); cursor:pointer; transition:background 0.15s; position:relative; }
+    .ncard { padding:12px 14px; border-bottom:1px solid var(--border); cursor:pointer; animation: fadeIn 0.4s ease forwards; }
+    @keyframes fadeIn { from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);} }
     .ncard:hover { background:var(--bg3); }
-    .ncard.active { background:var(--bg2); border-left:3px solid var(--accent); }
-    .ncard.read { opacity:0.55; }
     .ncard-row { display:flex; gap:10px; }
-    .nthumb { width:68px; height:50px; object-fit:cover; border-radius:6px; flex-shrink:0; background:var(--bg3); }
-    .nthumb-ph { width:68px; height:50px; border-radius:6px; flex-shrink:0; background:var(--bg3); display:flex; align-items:center; justify-content:center; font-size:18px; }
-    .ninfo { flex:1; min-width:0; }
-    .nsrc { font-size:9px; font-weight:700; letter-spacing:1.5px; color:var(--accent2); font-family:'Space Mono',monospace; }
-    .ntitle { font-size:12px; font-weight:700; line-height:1.4; margin:3px 0; color:var(--text); display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
-    .nmeta { font-size:9px; color:var(--text3); display:flex; gap:6px; flex-wrap:wrap; margin-top:3px; }
-    .nloc { background:var(--bg3); border:1px solid var(--border); border-radius:4px; padding:1px 5px; font-family:'Space Mono',monospace; }
-    .nbookmark { position:absolute; right:10px; top:10px; background:var(--bg3); border:1px solid var(--border); border-radius:6px; width:22px; height:22px; cursor:pointer; font-size:11px; display:flex; align-items:center; justify-content:center; opacity:0; transition:opacity 0.2s; }
-    .ncard:hover .nbookmark { opacity:1; }
-    .nbookmark.on { opacity:1; color:var(--saved); border-color:var(--saved); }
-    .unread-dot { position:absolute; left:5px; top:50%; transform:translateY(-50%); width:5px; height:5px; border-radius:50%; background:var(--accent); }
+    .nthumb { width:68px; height:50px; object-fit:cover; border-radius:6px; background:var(--bg3); }
+    .ninfo { flex:1; }
+    .nsrc { font-size:9px; font-weight:700; color:var(--accent2); font-family:'Space Mono',monospace; }
+    .ntitle { font-size:12px; font-weight:700; margin:3px 0; color:var(--text); line-height: 1.4;}
+    .nloc { background:var(--bg3); border:1px solid var(--border); border-radius:4px; padding:2px 6px; font-size:9px; font-family:'Space Mono',monospace; color: var(--accent); display: inline-block;}
 
-    .alerts-body { padding:14px; }
-    .alert-input-row { display:flex; gap:8px; margin-bottom:10px; }
-    .alert-input { flex:1; background:var(--bg3); border:1px solid var(--border); border-radius:8px; padding:7px 10px; color:var(--text); font-size:11px; font-family:'Syne',sans-serif; outline:none; }
-    .alert-input:focus { border-color:var(--accent); }
-    .alert-add-btn { background:var(--accent); color:#000; border:none; border-radius:8px; padding:7px 12px; font-weight:700; cursor:pointer; font-size:12px; }
-    .alert-tags { display:flex; flex-wrap:wrap; gap:6px; }
-    .atag { display:flex; align-items:center; gap:5px; background:var(--bg3); border:1px solid var(--border); border-radius:6px; padding:4px 10px; font-size:10px; font-weight:700; color:var(--accent); }
-    .atag span { cursor:pointer; color:var(--text3); font-size:14px; line-height:1; }
-    .alerts-hint { margin-top:16px; font-size:10px; color:var(--text3); line-height:1.7; }
-
-    .saved-empty { display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; gap:10px; color:var(--text3); font-size:12px; padding:40px; text-align:center; }
-
-    .moverlay { position:fixed; inset:0; background:rgba(4,13,26,0.88); z-index:9000; display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity 0.3s; backdrop-filter:blur(4px); }
-    .moverlay.on { opacity:1; pointer-events:auto; }
-    .mbox { background:var(--card); border:1px solid var(--border); border-radius:16px; width:92%; max-width:560px; max-height:88vh; overflow-y:auto; position:relative; box-shadow:0 24px 60px rgba(0,0,0,0.6); transform:translateY(14px); transition:transform 0.3s; }
-    .moverlay.on .mbox { transform:translateY(0); }
-    .mhero { width:100%; height:210px; object-fit:cover; border-radius:16px 16px 0 0; display:block; }
-    .mclose { position:absolute; top:12px; right:14px; width:30px; height:30px; background:rgba(4,13,26,0.75); border:none; color:#fff; font-size:20px; cursor:pointer; border-radius:50%; display:flex; align-items:center; justify-content:center; z-index:10; }
-    .mclose:hover { background:rgba(220,30,30,0.8); }
-    .mbody { padding:18px 20px; }
-    .mtags { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px; }
-    .mtag { font-size:9px; font-weight:700; letter-spacing:1px; padding:3px 9px; border-radius:20px; font-family:'Space Mono',monospace; }
-    .mtitle { font-size:19px; font-weight:800; line-height:1.35; margin-bottom:10px; }
-    .mdesc { font-size:13px; line-height:1.65; color:var(--text2); margin-bottom:18px; }
-    .mfooter { display:flex; gap:8px; flex-wrap:wrap; }
-    .mbtn { padding:9px 18px; border-radius:10px; font-size:11px; font-weight:700; cursor:pointer; transition:all 0.2s; border:1px solid var(--border); font-family:'Syne',sans-serif; }
-    .mbtn.pri { background:var(--accent); color:#000; border-color:var(--accent); text-decoration:none; display:inline-flex; align-items:center; gap:5px; }
-    .mbtn.pri:hover { opacity:0.85; }
-    .mbtn.sec { background:transparent; color:var(--text2); }
-    .mbtn.sec:hover { background:var(--bg3); color:var(--text); }
-    .mbtn.sv.on { color:var(--saved); border-color:var(--saved); }
-
-    .tstack { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); z-index:8000; display:flex; flex-direction:column; gap:8px; align-items:center; pointer-events:none; width:90%; max-width:360px; }
-    .toast { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:11px 14px; width:100%; box-shadow:0 8px 24px rgba(0,0,0,0.5); display:flex; align-items:center; gap:10px; pointer-events:auto; cursor:pointer; transform:translateY(80px); opacity:0; transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1); }
-    .toast.show { transform:translateY(0); opacity:1; }
-    .t-icon { font-size:22px; flex-shrink:0; }
-    .t-label { font-size:9px; color:var(--accent2); font-family:'Space Mono',monospace; font-weight:700; letter-spacing:1px; }
-    .t-title { font-size:11px; font-weight:700; margin-top:2px; line-height:1.4; }
-    .t-close { margin-left:auto; color:var(--text3); font-size:16px; cursor:pointer; flex-shrink:0; padding:2px 4px; }
-
-    .loader { display:flex; flex-direction:column; align-items:center; justify-content:center; padding:48px 24px; gap:12px; }
-    .loader-owl { font-size:38px; animation:float 2s infinite; }
-    .loader-txt { font-size:9px; color:var(--accent); font-family:'Space Mono',monospace; letter-spacing:2px; }
-    .loader-txt::after { content:''; animation:dots 1.5s infinite steps(4,end); }
-    @keyframes dots { 0%{content:''} 25%{content:'.'} 50%{content:'..'} 75%{content:'...'} }
-
+    /* MOBILE DÜZENİ */
     @media (max-width:768px) {
       .top-bars { display:none; }
-      .layout { flex-direction:column; }
-      #map { flex:none; height:45vh; }
-      .sidebar { width:100%; min-width:unset; flex:1; border-left:none; border-top:1px solid var(--border); display:none; }
-      .sidebar.mob-show { display:flex; }
-      .mob-bar { position:fixed; bottom:0; left:0; right:0; height:54px; background:var(--card); border-top:1px solid var(--border); display:flex; z-index:600; }
-      .mbbtn { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; cursor:pointer; border:none; background:transparent; color:var(--text3); font-size:9px; font-family:'Space Mono',monospace; font-weight:700; letter-spacing:0.5px; transition:color 0.2s; }
-      .mbbtn .mbi { font-size:20px; }
-      .mbbtn.active { color:var(--accent); }
-      .mob-filter { position:fixed; bottom:54px; left:0; right:0; background:var(--card); border-top:2px solid var(--border); padding:10px 14px; z-index:590; display:none; flex-wrap:wrap; gap:6px; }
-      .mob-filter.open { display:flex; }
-      .layout.list-m #map { display:none; }
-      .layout.list-m .sidebar { display:flex; height:calc(100vh - 52px - 54px); }
-      .layout.list-m { flex-direction:column; }
-      .tstack { bottom:68px; }
+      .layout { display: flex; flex-direction: column; height: calc(100vh - 52px); }
+      #map { position: relative; width: 100%; height: 40vh; flex: none; }
+      .sidebar { position: relative; width: 100%; height: 60vh; flex: none; border-left: none; border-top: 1px solid var(--border); }
     }
-    @media (min-width:769px) { .mob-bar,.mob-filter { display:none!important; } }
-
-    ::-webkit-scrollbar { width:3px; }
-    ::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
   </style>
 </head>
 <body data-theme="dark">
 
 <div class="splash" id="splash">
-  <div class="splash-grid"></div>
   <div class="splash-owl">🦉</div>
   <div class="splash-title">OWLS</div>
-  <div class="splash-sub">TRUE GLOBAL INTELLIGENCE</div>
   <div class="splash-bar"><div class="splash-fill"></div></div>
 </div>
 
@@ -201,663 +110,212 @@
   <div class="header">
     <div class="logo">
       <span class="owl-anim">🦉</span>
-      <div>
-        <div class="logo-name">OWLS</div>
-        <div class="logo-sub" id="feedLabel">GLOBAL FEED</div>
-      </div>
+      <div class="logo-name">OWLS</div>
     </div>
     <div class="hdr-right">
-      <button class="hbtn" onclick="openSaved()">🔖 <span class="bcount" id="sbadge">0</span></button>
-      <button class="hbtn" onclick="toggleTheme()" id="themeBtn">🌙</button>
+      <button class="hbtn" onclick="toggleTheme()" id="themeBtn">☀️</button>
       <button class="hbtn" id="loginBtn" onclick="loginGoogle()">Login</button>
-      <img src="" id="uavatar" class="uavatar" onclick="doLogout()" title="Logout">
+      <img src="" id="uavatar" class="uavatar" onclick="doLogout()">
     </div>
   </div>
 
   <div class="top-bars">
-    <div class="bar-row" id="regionBar">
-      <button class="rbtn active" data-r="all">🌐 ALL REGIONS</button>
-      <button class="rbtn" data-r="europe">🇪🇺 EUROPE</button>
-      <button class="rbtn" data-r="americas">🌎 AMERICAS</button>
-      <button class="rbtn" data-r="asia">🌏 ASIA</button>
-      <button class="rbtn" data-r="mideast">🕌 MID EAST</button>
-      <button class="rbtn" data-r="africa">🌍 AFRICA</button>
-      <button class="rbtn" data-r="oceania">🦘 OCEANIA</button>
-    </div>
-    <div class="bar-row" id="catBar">
-      <button class="cbtn active" data-q="world">🌍 World</button>
-      <button class="cbtn" data-q="technology">💻 Tech</button>
-      <button class="cbtn" data-q="business">📈 Business</button>
-      <button class="cbtn" data-q="science">🔬 Science</button>
-      <button class="cbtn" data-q="health">❤️ Health</button>
-      <button class="cbtn" data-q="sport">⚽ Sport</button>
-      <button class="cbtn" data-q="climate">🌿 Climate</button>
-      <button class="cbtn" data-q="politics">🏛️ Politics</button>
-    </div>
+    <button class="cbtn active" onclick="cat(this,'world')">🌍 World</button>
+    <button class="cbtn" onclick="cat(this,'technology')">💻 Tech</button>
+    <button class="cbtn" onclick="cat(this,'business')">📈 Business</button>
+    <button class="cbtn" onclick="cat(this,'science')">🔬 Science</button>
+    <button class="cbtn" onclick="cat(this,'health')">❤️ Health</button>
+    <button class="cbtn" onclick="cat(this,'sport')">⚽ Sport</button>
   </div>
 
-  <div class="layout" id="layout">
+  <div class="layout">
     <div id="map"></div>
-    <div class="sidebar" id="sidebar">
-      <div class="stabs">
-        <div class="stab active" onclick="stab('feed')">📡 FEED</div>
-        <div class="stab" onclick="stab('saved')">🔖 SAVED</div>
-        <div class="stab" onclick="stab('alerts')">🔔 ALERTS</div>
-      </div>
-      <div class="spanel active" id="p-feed">
+    <div class="sidebar">
+      <div class="spanel">
         <div class="live-row">
-          <div class="live-dot" id="liveDotIndicator">LIVE</div>
-          <span class="scount" id="scount">loading...</span>
+          <div class="live-dot" id="lStatus">SCANNING SATELLITES</div>
+          <span style="font-size:9px; color:var(--text3); font-family: 'Space Mono', monospace;" id="scount">0 signals</span>
         </div>
         <div class="news-scroll" id="newsList"></div>
       </div>
-      <div class="spanel" id="p-saved">
-        <div class="news-scroll" id="savedList"></div>
-      </div>
-      <div class="spanel" id="p-alerts">
-        <div class="alerts-body">
-          <div style="font-size:10px;color:var(--text3);font-family:'Space Mono',monospace;margin-bottom:10px;letter-spacing:1px;">KEYWORD ALERTS</div>
-          <div class="alert-input-row">
-            <input class="alert-input" id="alertIn" placeholder="e.g. earthquake, NATO, Apple..." onkeydown="if(event.key==='Enter')addAlert()">
-            <button class="alert-add-btn" onclick="addAlert()">+</button>
-          </div>
-          <div class="alert-tags" id="alertTags"></div>
-          <div class="alerts-hint">🔔 Add keywords — when a matching story arrives you'll get a notification toast at the bottom of the screen.</div>
-        </div>
-      </div>
     </div>
   </div>
 </div>
-
-<div class="mob-bar">
-  <button class="mbbtn active" id="mb-map" onclick="mobSwitch('map')"><span class="mbi">🗺️</span>MAP</button>
-  <button class="mbbtn" id="mb-news" onclick="mobSwitch('news')"><span class="mbi">📰</span>NEWS</button>
-  <button class="mbbtn" id="mb-filter" onclick="toggleMobFilter()"><span class="mbi">🔍</span>FILTER</button>
-  <button class="mbbtn" id="mb-saved" onclick="mobSwitch('saved')"><span class="mbi">🔖</span>SAVED</button>
-</div>
-<div class="mob-filter" id="mobFilter">
-  <button class="cbtn active" onclick="mobCat(this,'world')">🌍 World</button>
-  <button class="cbtn" onclick="mobCat(this,'technology')">💻 Tech</button>
-  <button class="cbtn" onclick="mobCat(this,'business')">📈 Business</button>
-  <button class="cbtn" onclick="mobCat(this,'science')">🔬 Science</button>
-  <button class="cbtn" onclick="mobCat(this,'health')">❤️ Health</button>
-  <button class="cbtn" onclick="mobCat(this,'sport')">⚽ Sport</button>
-  <button class="cbtn" onclick="mobCat(this,'climate')">🌿 Climate</button>
-  <button class="cbtn" onclick="mobCat(this,'politics')">🏛️ Politics</button>
-</div>
-
-<div class="moverlay" id="modal">
-  <div class="mbox">
-    <button class="mclose" onclick="closeModal()">×</button>
-    <img id="mhero" class="mhero" onerror="this.style.display='none'">
-    <div class="mbody">
-      <div class="mtags">
-        <span class="mtag" id="msrc" style="background:rgba(255,107,53,0.15);color:#ff6b35;"></span>
-        <span class="mtag" id="mloc" style="background:rgba(0,229,200,0.1);color:var(--accent);"></span>
-        <span class="mtag" id="mtime" style="background:var(--bg3);color:var(--text2);"></span>
-      </div>
-      <div class="mtitle" id="mtitle"></div>
-      <div class="mdesc" id="mdesc"></div>
-      <div class="mfooter">
-        <a href="#" id="mlink" target="_blank" class="mbtn pri">Read Full Story →</a>
-        <button class="mbtn sec sv" id="msavebtn" onclick="toggleSaveModal()">🔖 Save</button>
-        <button class="mbtn sec" onclick="closeModal()">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="tstack" id="tstack"></div>
 
 <script>
+// FIREBASE
 const fbCfg = {apiKey:"AIzaSyBf3EDUobPIaZL6Jzu5i1ITT8YRSZaCOa8",authDomain:"newsmap-5d380.firebaseapp.com",projectId:"newsmap-5d380",storageBucket:"newsmap-5d380.firebasestorage.app",messagingSenderId:"270586913079",appId:"1:270586913079:web:271cb786e7195299f73ab2"};
 firebase.initializeApp(fbCfg);
 const auth = firebase.auth();
 
-let curQ = 'world', curR = 'all';
-let allArticles = [], clusterLayer;
-let curModalArt = null;
-let savedArts  = JSON.parse(localStorage.getItem('owls_saved')||'[]');
-let readSet    = new Set(JSON.parse(localStorage.getItem('owls_read')||'[]'));
-let alerts     = JSON.parse(localStorage.getItem('owls_alerts')||'[]');
-
-const COLORS = {world:'#00e5c8',technology:'#7c6bff',business:'#00e676',science:'#00b8d9',health:'#ff4757',sport:'#ff6b35',climate:'#69f0ae',politics:'#ffd740'};
-
-// MAP INIT
+// HARİTA (TEMİZ KURULUM)
 const map = L.map('map',{zoomControl:false}).setView([20,10],2);
 L.control.zoom({position:'bottomright'}).addTo(map);
 let tileLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_matter/{z}/{x}/{y}{r}.png',{maxZoom:19}).addTo(map);
-
-function setTile(dark){
-  map.removeLayer(tileLayer);
-  tileLayer = L.tileLayer(dark
-    ? 'https://{s}.basemaps.cartocdn.com/dark_matter/{z}/{x}/{y}{r}.png'
-    : 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
-    {maxZoom:19}).addTo(map);
-}
+let clusterLayer = L.markerClusterGroup({ maxClusterRadius:40, iconCreateFunction:c=>L.divIcon({html:`<div class="ccluster" style="width:30px;height:30px">${c.getChildCount()}</div>`,className:''}) });
+map.addLayer(clusterLayer);
 
 function mkIcon(color){
-  return L.divIcon({
-    html:`<div style="width:14px;height:14px;background:${color};border-radius:50%;border:2px solid var(--card);box-shadow:0 0 12px ${color}aa;"></div>`,
-    iconSize:[14,14],iconAnchor:[7,7],className:''
-  });
+  return L.divIcon({ html:`<div style="width:14px;height:14px;background:${color};border-radius:50%;border:2px solid var(--card);box-shadow:0 0 12px ${color}aa;"></div>`, iconSize:[14,14], iconAnchor:[7,7], className:'' });
 }
 
-const CITIES = {
-  'new york':[40.71,-74.00],'washington':[38.90,-77.03],'los angeles':[34.05,-118.24],
-  'chicago':[41.87,-87.62],'san francisco':[37.77,-122.41],'miami':[25.77,-80.19],
-  'seattle':[47.60,-122.33],'boston':[42.36,-71.05],'houston':[29.76,-95.36],
-  'sao paulo':[-23.54,-46.63],'rio de janeiro':[-22.90,-43.17],'buenos aires':[-34.60,-58.38],
-  'london':[51.50,-0.12],'manchester':[53.48,-2.24],'edinburgh':[55.95,-3.19],
-  'paris':[48.85,2.35],'berlin':[52.52,13.40],'munich':[48.13,11.58],
-  'madrid':[40.41,-3.70],'barcelona':[41.38,2.17],'rome':[41.90,12.49],
-  'amsterdam':[52.37,4.90],'brussels':[50.85,4.35],'vienna':[48.20,16.37],
-  'moscow':[55.75,37.61],'istanbul':[41.01,28.97],'ankara':[39.92,32.85],
-  'tokyo':[35.68,139.69],'beijing':[39.90,116.40],'shanghai':[31.22,121.47],
-  'hong kong':[22.31,114.17],'seoul':[37.56,126.97],'singapore':[1.35,103.81],
-  'bangkok':[13.75,100.50],'jakarta':[-6.20,106.81],'manila':[14.59,120.98],
-  'new delhi':[28.61,77.20],'mumbai':[19.07,72.87],
-  'dubai':[25.20,55.27],'riyadh':[24.71,46.67],'tehran':[35.69,51.39],
-  'cairo':[30.04,31.23],'nairobi':[-1.28,36.81],'johannesburg':[-26.20,28.04],
-  'sydney':[-33.86,151.20],'melbourne':[-37.81,144.96]
-};
+// LOKASYON BULUCU
+const CITIES = {'new york':[40.71,-74.00], 'london':[51.50,-0.12], 'paris':[48.85,2.35], 'tokyo':[35.68,139.69], 'istanbul':[41.01,28.97], 'moscow':[55.75,37.61], 'beijing':[39.90,116.40], 'dubai':[25.20,55.27], 'sydney':[-33.86,151.20]};
+const CAPS = {us:[38.90,-77.03], gb:[51.50,-0.12], tr:[39.92,32.85], de:[52.52,13.40], ru:[55.75,37.61], in:[28.61,77.20], cn:[39.90,116.40], br:[-15.82,-47.92]};
+const CNAMES = {us:'USA', gb:'UK', tr:'Turkey', de:'Germany', ru:'Russia', in:'India', cn:'China', br:'Brazil'};
 
-const CAPS = {
-  us:[38.90,-77.03],gb:[51.50,-0.12],de:[52.52,13.40],fr:[48.85,2.35],
-  tr:[39.92,32.85],jp:[35.68,139.69],cn:[39.90,116.40],ru:[55.75,37.61],
-  in:[28.61,77.20],au:[-35.28,149.12],ca:[45.42,-75.69],za:[-25.74,28.18],
-  ng:[9.07,7.39],eg:[30.04,31.23],mx:[19.43,-99.13],ar:[-34.60,-58.38],
-  sa:[24.71,46.67],id:[-6.20,106.81],it:[41.90,12.49],es:[40.41,-3.70],
-  kr:[37.56,126.97],ua:[50.45,30.52],il:[31.76,35.21],ae:[24.45,54.37],
-  qa:[25.28,51.53],br:[-15.82,-47.92],pk:[33.68,73.04]
-};
-
-const CNAMES = {
-  us:'USA',gb:'UK',de:'Germany',fr:'France',tr:'Turkey',jp:'Japan',cn:'China',
-  ru:'Russia',in:'India',au:'Australia',ca:'Canada',za:'South Africa',ng:'Nigeria',
-  eg:'Egypt',mx:'Mexico',ar:'Argentina',sa:'Saudi Arabia',id:'Indonesia',
-  it:'Italy',es:'Spain',kr:'South Korea',ua:'Ukraine',il:'Israel',ae:'UAE',
-  qa:'Qatar',br:'Brazil',pk:'Pakistan'
-};
-
-const KW = {
-  america:'us',american:'us','united states':'us','white house':'us',
-  england:'gb','premier league':'gb',scotland:'gb',nato:'us',kremlin:'ru',
-  macron:'fr',paris:'fr',putin:'ru',modi:'in',erdogan:'tr',netanyahu:'il',
-  nba:'us',nfl:'us',mlb:'us','la liga':'es','serie a':'it','bundesliga':'de',
-  amazon:'us',google:'us',apple:'us',microsoft:'us',tesla:'us',
-  samsung:'kr',bbc:'gb',guardian:'gb',cnn:'us','al jazeera':'qa',
-  earthquake:'jp',hurricane:'us'
-};
-
-const REGION_BB = {
-  europe:   {lat:[35,72],lng:[-25,45]}, americas: {lat:[-60,75],lng:[-170,-30]},
-  asia:     {lat:[-10,60],lng:[60,150]}, mideast:  {lat:[12,42],lng:[25,62]},
-  africa:   {lat:[-38,38],lng:[-20,55]}, oceania:  {lat:[-50,10],lng:[110,180]}
-};
-function artRegion(lat,lng){
-  for(const [r,b] of Object.entries(REGION_BB))
-    if(lat>=b.lat[0]&&lat<=b.lat[1]&&lng>=b.lng[0]&&lng<=b.lng[1]) return r;
-  return 'other';
+function getCoords(text) {
+  const t = text.toLowerCase();
+  for(const [c, coords] of Object.entries(CITIES)) if(t.includes(c)) return {c:[coords[0]+(Math.random()-0.5)*0.2, coords[1]+(Math.random()-0.5)*0.2], l:c.toUpperCase()};
+  for(const [code, name] of Object.entries(CNAMES)) if(t.includes(name.toLowerCase())) return {c:[CAPS[code][0]+(Math.random()-0.5)*1, CAPS[code][1]+(Math.random()-0.5)*1], l:name};
+  return {c:[40.71+(Math.random()-0.5)*2, -74.00+(Math.random()-0.5)*2], l:'USA (HQ)'};
 }
 
-const FALLBACK_POOL = [
-  [40.71,-74.00,'New York'],[51.50,-0.12,'London'],[35.68,139.69,'Tokyo'],
-  [48.85,2.35,'Paris'],[28.61,77.20,'New Delhi'],[39.90,116.40,'Beijing'],
-  [-23.54,-46.63,'São Paulo'],[55.75,37.61,'Moscow'],[25.20,55.27,'Dubai']
-];
-let fbIdx = 0;
+// ASENKRON CANLI YÜKLEME MOTORU (INCREMENTAL RENDERING)
+// Haberler listesi silinir, gelenler anında eklenir! Bekleme yok!
+let globalSeenTitles = new Set();
+let articleCount = 0;
 
-function getCoords(text, source){
-  const t = (text||'').toLowerCase();
-  for(const [city,c] of Object.entries(CITIES)){
-    if(new RegExp('\\b'+city.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'\\b','i').test(t))
-      return {coords:[c[0]+jit(),c[1]+jit()], loc:cap(city)};
-  }
-  for(const [kw,cc] of Object.entries(KW)){
-    if(new RegExp('\\b'+kw.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'\\b','i').test(t) && CAPS[cc])
-      return {coords:[CAPS[cc][0]+jit(),CAPS[cc][1]+jit()], loc:CNAMES[cc]||cc.toUpperCase()};
-  }
-  for(const [cc,name] of Object.entries(CNAMES)){
-    if(new RegExp('\\b'+name.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'\\b','i').test(t) && CAPS[cc])
-      return {coords:[CAPS[cc][0]+jit(),CAPS[cc][1]+jit()], loc:name};
-  }
-  const f = FALLBACK_POOL[fbIdx % FALLBACK_POOL.length]; fbIdx++;
-  return {coords:[f[0]+jit(),f[1]+jit()], loc:f[2]};
-}
-function jit(){ return (Math.random()-0.5)*0.22; }
-function cap(s){ return s.replace(/\b\w/g,c=>c.toUpperCase()); }
-
-const GUARDIAN_KEY = '0a321643-aaab-4c6a-9185-1762685abe3d';
-
-// TRIMMED FOR EXTREME SPEED (Max 4 reliable feeds per category)
-const RSS_FEEDS = {
-  world:[
-    {u:'http://rss.cnn.com/rss/edition_world.rss',n:'CNN'},
-    {u:'https://www.aljazeera.com/xml/rss/all.xml',n:'Al Jazeera'},
-    {u:'https://www.france24.com/en/rss',n:'France24'},
-    {u:'http://feeds.bbci.co.uk/news/world/rss.xml',n:'BBC World'}
-  ],
-  technology:[
-    {u:'https://techcrunch.com/feed/',n:'TechCrunch'},
-    {u:'https://www.theverge.com/rss/index.xml',n:'The Verge'},
-    {u:'http://feeds.bbci.co.uk/news/technology/rss.xml',n:'BBC Tech'}
-  ],
-  business:[
-    {u:'https://feeds.a.dj.com/rss/WSJcomUSBusiness.xml',n:'WSJ'},
-    {u:'https://www.cnbc.com/id/100003114/device/rss/rss.html',n:'CNBC'},
-    {u:'http://feeds.bbci.co.uk/news/business/rss.xml',n:'BBC Business'}
-  ],
-  sport:[
-    {u:'https://www.skysports.com/rss/12040',n:'Sky Sports'},
-    {u:'http://feeds.bbci.co.uk/sport/rss.xml',n:'BBC Sport'}
-  ],
-  science:[
-    {u:'https://rss.nytimes.com/services/xml/rss/nyt/Science.xml',n:'NY Times'},
-    {u:'http://feeds.bbci.co.uk/news/science_and_environment/rss.xml',n:'BBC Science'}
-  ],
-  health:[
-    {u:'http://feeds.bbci.co.uk/news/health/rss.xml',n:'BBC Health'},
-    {u:'https://rss.nytimes.com/services/xml/rss/nyt/Health.xml',n:'NY Times'}
-  ],
-  climate:[
-    {u:'https://www.theguardian.com/environment/rss',n:'Guardian Env'}
-  ],
-  politics:[
-    {u:'https://rss.nytimes.com/services/xml/rss/nyt/Politics.xml',n:'NY Times'}
-  ]
-};
-
-// TIMEOUT WRAPPER FOR FETCH (Prevents infinite loading)
-async function fetchWithTimeout(resource, options = {}) {
-  const { timeout = 3500 } = options;
+async function fetchWithTimeout(url, timeout=2000) {
   const controller = new AbortController();
   const id = setTimeout(() => controller.abort(), timeout);
-  const response = await fetch(resource, {
-    ...options,
-    signal: controller.signal  
-  });
-  clearTimeout(id);
-  return response;
-}
-
-async function fetchGuardian(category){
-  try{
-    const cat = (category === 'health' || category === 'sport') ? 'world' : category;
-    const url = `https://content.guardianapis.com/${cat}?api-key=${GUARDIAN_KEY}&page-size=15&show-fields=thumbnail,trailText,publication`;
-    const r = await fetchWithTimeout(url);
-    const d = await r.json();
-    return (d.response?.results||[]).map(a=>({
-      title:a.webTitle, url:a.webUrl, source:'The Guardian', date:a.webPublicationDate,
-      thumb:a.fields?.thumbnail||null, trail:(a.fields?.trailText||'').replace(/<[^>]*>/gm,'')
-    }));
-  }catch{return [];}
-}
-
-async function fetchRSS(feed){
-  try{
-    const r = await fetchWithTimeout(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feed.u)}&count=10`);
-    const d = await r.json();
-    if(d.status==='ok' && d.items?.length){
-      return d.items.map(i=>({
-        title:i.title||'', url:i.link||'#', source:feed.n, date:i.pubDate,
-        thumb:i.thumbnail||(i.enclosure?.link)||null, trail:(i.description||'').replace(/<[^>]*>/gm,'').slice(0,200)
-      }));
-    }
-  }catch{}
-  return [];
-}
-
-// CACHING SYSTEM
-const CACHE_MINS = 10;
-function getCache(cat) {
-  const data = sessionStorage.getItem('owls_cache_' + cat);
-  const time = sessionStorage.getItem('owls_time_' + cat);
-  if (data && time && (Date.now() - time < CACHE_MINS * 60000)) return JSON.parse(data);
-  return null;
-}
-function setCache(cat, articles) {
-  if (!articles.length) return;
-  sessionStorage.setItem('owls_cache_' + cat, JSON.stringify(articles));
-  sessionStorage.setItem('owls_time_' + cat, Date.now());
-}
-
-async function fetchNews(cat){
-  document.getElementById('newsList').innerHTML = '<div class="loader"><div class="loader-owl">🦉</div><div class="loader-txt">SCANNING GLOBE</div></div>';
-  document.getElementById('feedLabel').textContent = cat.toUpperCase()+' FEED';
-  document.getElementById('liveDotIndicator').innerHTML = 'LIVE';
-  document.getElementById('liveDotIndicator').style.color = '#00e676';
-  
-  // CHECK CACHE FIRST (Instant Load)
-  const cached = getCache(cat);
-  if(cached) {
-    document.getElementById('liveDotIndicator').innerHTML = '⚡ CACHED';
-    document.getElementById('liveDotIndicator').style.color = '#ffd700';
-    allArticles = cached;
-    renderFeed(cached);
-    return;
+  try {
+    const res = await fetch(url, { signal: controller.signal });
+    clearTimeout(id);
+    return await res.json();
+  } catch (e) {
+    clearTimeout(id);
+    return null;
   }
-
-  fbIdx = 0;
-  const rssList = RSS_FEEDS[cat]||RSS_FEEDS.world;
-
-  const jobs = [ fetchGuardian(cat), ...rssList.map(f=>fetchRSS(f)) ];
-  const results = await Promise.allSettled(jobs);
-  
-  let arts = [];
-  results.forEach(r=>{ if(r.status==='fulfilled') arts.push(...r.value); });
-
-  const seen = new Set();
-  arts = arts.filter(a=>{ if(!a.title||seen.has(a.title)) return false; seen.add(a.title); return true; });
-
-  arts.forEach(a=>{
-    const text = a.title+' '+(a.trail||'');
-    const {coords,loc} = getCoords(text, a.source);
-    a._coords = coords; a._loc = loc; a._region = artRegion(coords[0],coords[1]);
-  });
-
-  arts.sort(()=>Math.random()-0.5);
-  allArticles = arts;
-  
-  setCache(cat, arts); // Save for next time
-  renderFeed(arts);
 }
 
-function renderFeed(arts){
-  const color = COLORS[curQ]||'#00e5c8';
-  if(clusterLayer){ map.removeLayer(clusterLayer); }
-  clusterLayer = L.markerClusterGroup({
-    maxClusterRadius:50,
-    iconCreateFunction:cl=>L.divIcon({
-      html:`<div class="ccluster" style="width:32px;height:32px;font-size:11px;">${cl.getChildCount()}</div>`,
-      iconSize:[32,32],iconAnchor:[16,16],className:''
-    })
-  });
+// Gelen paketi anında haritaya ve listeye basan fonksiyon
+function processIncomingNews(articles, category) {
+    const list = document.getElementById('newsList');
+    let addedCount = 0;
 
-  const list = document.getElementById('newsList');
-  list.innerHTML = '';
+    articles.forEach(a => {
+        if(!a.title || globalSeenTitles.has(a.title)) return; // Tekrarı engelle
+        globalSeenTitles.add(a.title);
+        
+        const locInfo = getCoords(a.title);
+        const m = L.marker(locInfo.c, {icon: mkIcon('#00e5c8')});
+        m.bindPopup(`<b>${a.title}</b><br><span style="font-size:10px">${a.source}</span>`);
+        clusterLayer.addLayer(m);
 
-  const filtered = curR==='all' ? arts : arts.filter(a=>a._region===curR);
-  document.getElementById('scount').textContent = `${filtered.length} stories`;
-
-  if(!filtered.length){
-    list.innerHTML = '<div class="loader"><div class="loader-owl">🦉</div><div class="loader-txt">No stories found</div></div>';
-    map.addLayer(clusterLayer);
-    return;
-  }
-
-  filtered.slice(0,50).forEach((a, i)=>{
-    const m = L.marker(a._coords,{icon:mkIcon(color)});
-    m.bindPopup(`<div style="font-weight:700;font-size:12px;max-width:190px;line-height:1.4">${a.title}</div><div style="font-size:10px;color:#888;margin-top:3px">${a.source} · ${a._loc}</div>`);
-    m.on('click',()=>openModal(a));
-    clusterLayer.addLayer(m);
-
-    // ADS EVERY 6 ITEMS
-    if (i > 0 && i % 6 === 0) {
-      const adCard = document.createElement('div');
-      adCard.className = 'ad-placeholder feed-ad';
-      adCard.innerHTML = `<span style="font-size:18px; margin-bottom:5px;">🚀</span> In-Feed AdSense Space`;
-      list.appendChild(adCard);
-    }
-
-    const card = document.createElement('div');
-    card.className = 'ncard'+(isRead(a)?' read':'');
-    card.dataset.url = a.url;
-    if(!isRead(a)){
-      const dot = document.createElement('div');
-      dot.className='unread-dot'; card.appendChild(dot);
-    }
-    const saved = isSaved(a);
-    const thumb = a.thumb
-      ? `<img class="nthumb" src="${a.thumb}" onerror="this.outerHTML='<div class=nthumb-ph>📰</div>'">`
-      : `<div class="nthumb-ph">📰</div>`;
-    card.innerHTML += `
-      <div class="ncard-row">
-        ${thumb}
-        <div class="ninfo">
-          <div class="nsrc">${a.source}</div>
-          <div class="ntitle">${a.title}</div>
-          <div class="nmeta">
-            <span class="nloc">${a._loc}</span>
-            <span>${timeAgo(a.date)}</span>
+        const card = document.createElement('div');
+        card.className = 'ncard';
+        card.onclick = () => window.open(a.url, '_blank');
+        card.innerHTML = `
+          <div class="ncard-row">
+            ${a.thumb ? `<img src="${a.thumb}" class="nthumb">` : '<div class="nthumb" style="display:flex;align-items:center;justify-content:center">📰</div>'}
+            <div class="ninfo">
+              <div class="nsrc">${a.source}</div>
+              <div class="ntitle">${a.title.slice(0,70)}...</div>
+              <div class="nloc">${locInfo.l}</div>
+            </div>
           </div>
-        </div>
-      </div>
-      <div class="nbookmark${saved?' on':''}" data-url="${a.url}" onclick="event.stopPropagation();toggleSaveCard(this,'${a.url.replace(/'/g,"\\'")}')">🔖</div>`;
-    card.onclick = ()=>{
-      document.querySelectorAll('.ncard').forEach(c=>c.classList.remove('active'));
-      card.classList.add('active');
-      map.flyTo(a._coords,6,{duration:1.5,easeLinearity:0.25});
-      openModal(a);
-    };
-    list.appendChild(card);
-  });
+        `;
+        list.appendChild(card);
+        addedCount++;
+    });
 
-  map.addLayer(clusterLayer);
-  checkAlerts(filtered);
+    articleCount += addedCount;
+    document.getElementById('scount').innerText = `${articleCount} signals acquired`;
 }
 
-function timeAgo(d){
-  if(!d) return '';
-  const diff = Date.now()-new Date(d).getTime();
-  const h=Math.floor(diff/3600000), m=Math.floor(diff/60000);
-  if(h>48) return Math.floor(h/24)+'d ago';
-  if(h>0) return h+'h ago';
-  return m>0?m+'m ago':'Now';
-}
-function isSaved(a){ return savedArts.some(s=>s.url===a.url); }
-function isRead(a){ return readSet.has(a.url); }
-function markRead(url){ readSet.add(url); localStorage.setItem('owls_read',JSON.stringify([...readSet])); }
-function updateSBadge(){ document.getElementById('sbadge').textContent=savedArts.length; }
-
-function savArt(a){
-  if(isSaved(a)) return;
-  savedArts.unshift(a);
-  localStorage.setItem('owls_saved',JSON.stringify(savedArts));
-  updateSBadge();
-  showToast('🔖','Saved',a.title.slice(0,65)+'…',null);
-}
-function unsavArt(url){
-  savedArts=savedArts.filter(s=>s.url!==url);
-  localStorage.setItem('owls_saved',JSON.stringify(savedArts));
-  updateSBadge();
-}
-
-function openModal(a){
-  curModalArt = a; markRead(a.url);
-  const img = document.getElementById('mhero');
-  if(a.thumb){img.src=a.thumb;img.style.display='block';} else img.style.display='none';
-  document.getElementById('mtitle').textContent = a.title;
-  document.getElementById('msrc').textContent   = a.source;
-  document.getElementById('mloc').textContent   = (a._loc||'Global').toUpperCase();
-  document.getElementById('mtime').textContent  = timeAgo(a.date);
-  document.getElementById('mdesc').textContent  = a.trail||'Click below to read the full story on the original source.';
-  document.getElementById('mlink').href         = a.url;
-  const sb = document.getElementById('msavebtn');
-  sb.classList.toggle('on',isSaved(a));
-  sb.textContent = isSaved(a)?'✓ Saved':'🔖 Save';
-  document.getElementById('modal').classList.add('on');
-  document.querySelectorAll('.ncard').forEach(c=>{ if(c.dataset.url===a.url) c.classList.add('read'); });
-}
-function closeModal(){ document.getElementById('modal').classList.remove('on'); }
-function toggleSaveModal(){
-  if(!curModalArt) return;
-  if(isSaved(curModalArt)){
-    unsavArt(curModalArt.url);
-    document.getElementById('msavebtn').textContent='🔖 Save';
-    document.getElementById('msavebtn').classList.remove('on');
-  } else {
-    savArt(curModalArt);
-    document.getElementById('msavebtn').textContent='✓ Saved';
-    document.getElementById('msavebtn').classList.add('on');
+// BİREYSEL KAYNAK GETİRİCİLER (KAPASİTE ARTTIRILDI)
+async function fetchGuardianLive(cat) {
+  const c = (cat==='sport'||cat==='health') ? 'world' : cat;
+  const d = await fetchWithTimeout(`https://content.guardianapis.com/${c}?api-key=0a321643-aaab-4c6a-9185-1762685abe3d&page-size=15&show-fields=thumbnail`);
+  if(d && d.response?.results) {
+      processIncomingNews(d.response.results.map(a=>({ title:a.webTitle, url:a.webUrl, source:'Guardian', thumb:a.fields?.thumbnail })), cat);
   }
-  renderSaved();
 }
 
-function toggleSaveCard(btn, url){
-  const a = allArticles.find(x=>x.url===url)||savedArts.find(x=>x.url===url);
-  if(!a) return;
-  if(isSaved(a)){ unsavArt(url); btn.classList.remove('on'); }
-  else { savArt(a); btn.classList.add('on'); }
-  renderSaved();
-}
-
-function openSaved(){ stab('saved'); }
-function renderSaved(){
-  updateSBadge();
-  const list = document.getElementById('savedList');
-  if(!savedArts.length){
-    list.innerHTML='<div class="saved-empty"><div style="font-size:40px">🔖</div><div>No saved articles yet</div><div style="font-size:11px;margin-top:4px">Tap 🔖 on any card</div></div>';
-    return;
+async function fetchRssLive(url, name, cat) {
+  const d = await fetchWithTimeout(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}&count=10`, 3000);
+  if(d && d.status === 'ok') {
+      processIncomingNews(d.items.map(i=>({ title:i.title, url:i.link, source:name, thumb:i.thumbnail })), cat);
   }
-  list.innerHTML='';
-  savedArts.forEach(a=>{
-    const card = document.createElement('div');
-    card.className='ncard';
-    const thumb = a.thumb?`<img class="nthumb" src="${a.thumb}" onerror="this.outerHTML='<div class=nthumb-ph>📰</div>'">`:`<div class="nthumb-ph">📰</div>`;
-    card.innerHTML=`
-      <div class="ncard-row">
-        ${thumb}
-        <div class="ninfo">
-          <div class="nsrc">${a.source}</div>
-          <div class="ntitle">${a.title}</div>
-          <div class="nmeta"><span>${timeAgo(a.date)}</span></div>
-        </div>
-      </div>
-      <div class="nbookmark on" onclick="event.stopPropagation();unsavArt('${a.url.replace(/'/g,"\\'")}');renderSaved()">×</div>`;
-    card.onclick=()=>openModal(a);
-    list.appendChild(card);
-  });
 }
 
-function addAlert(){
-  const inp=document.getElementById('alertIn');
-  const kw=inp.value.trim().toLowerCase();
-  if(!kw||alerts.includes(kw)){inp.value='';return;}
-  alerts.push(kw); inp.value='';
-  localStorage.setItem('owls_alerts',JSON.stringify(alerts));
-  renderAlertTags();
-}
-function removeAlert(kw){ alerts=alerts.filter(a=>a!==kw); localStorage.setItem('owls_alerts',JSON.stringify(alerts)); renderAlertTags(); }
-function renderAlertTags(){
-  const el=document.getElementById('alertTags');
-  el.innerHTML=alerts.map(kw=>`<div class="atag">🔔 ${kw} <span onclick="removeAlert('${kw}')">×</span></div>`).join('');
-}
-function checkAlerts(arts){
-  if(!alerts.length) return;
-  arts.forEach(a=>{
-    const txt=(a.title+' '+(a.trail||'')).toLowerCase();
-    alerts.forEach(kw=>{ if(txt.includes(kw)) showToast('🔔','Alert: '+kw.toUpperCase(),a.title.slice(0,65)+'…',a); });
-  });
-}
+// ANA TETİKLEYİCİ (YÜKLEME EKRANI YOK)
+function fetchNews(category) {
+  // Ekranı Sıfırla
+  document.getElementById('newsList').innerHTML = '';
+  clusterLayer.clearLayers();
+  globalSeenTitles.clear();
+  articleCount = 0;
+  document.getElementById('scount').innerText = `0 signals acquired`;
+  document.getElementById('lStatus').innerText = 'RADAR ACTIVE';
 
-const toastQ=[]; let tBusy=false;
-function showToast(icon,label,title,article){
-  toastQ.push({icon,label,title,article});
-  if(!tBusy) nextToast();
-}
-function nextToast(){
-  if(!toastQ.length){tBusy=false;return;}
-  tBusy=true;
-  const {icon,label,title,article}=toastQ.shift();
-  const stack=document.getElementById('tstack');
-  const t=document.createElement('div');
-  t.className='toast';
-  t.innerHTML=`<div class="t-icon">${icon}</div><div style="flex:1;min-width:0"><div class="t-label">${label}</div><div class="t-title">${title}</div></div><div class="t-close">×</div>`;
-  t.querySelector('.t-close').onclick=e=>{e.stopPropagation();dimiss(t);};
-  if(article) t.onclick=()=>{dimiss(t);openModal(article);};
-  stack.appendChild(t);
-  requestAnimationFrame(()=>requestAnimationFrame(()=>t.classList.add('show')));
-  setTimeout(()=>dimiss(t),6000);
-}
-function dimiss(t){ t.classList.remove('show'); setTimeout(()=>{t.remove();setTimeout(nextToast,150);},400); }
+  // HİÇ BEKLEMEDEN PARALEL İSTEK AT VE GELDİKÇE ÇİZ! (Bu sayede sistem asla donmaz)
+  fetchGuardianLive(category);
 
-function stab(name){
-  document.querySelectorAll('.stab').forEach((t,i)=>t.classList.toggle('active',['feed','saved','alerts'][i]===name));
-  document.querySelectorAll('.spanel').forEach(p=>p.classList.remove('active'));
-  document.getElementById('p-'+name).classList.add('active');
-  if(name==='saved') renderSaved();
-  if(name==='alerts') renderAlertTags();
-  
-  // FIX: Pane geçişlerinde haritayı yeniden boyutlandır ki beyaz fayans sorunu olmasın
-  setTimeout(()=>map.invalidateSize(), 50);
-}
-
-function toggleTheme(){
-  const isDark = document.body.getAttribute('data-theme')==='dark';
-  document.body.setAttribute('data-theme',isDark?'light':'dark');
-  document.getElementById('themeBtn').textContent = isDark?'🌙':'☀️';
-  localStorage.setItem('owlsTheme',isDark?'light':'dark');
-  setTile(!isDark);
-}
-
-document.getElementById('regionBar').addEventListener('click',e=>{
-  const b=e.target.closest('.rbtn'); if(!b) return;
-  document.querySelectorAll('.rbtn').forEach(x=>x.classList.remove('active'));
-  b.classList.add('active'); curR=b.dataset.r;
-  renderFeed(allArticles);
-});
-document.getElementById('catBar').addEventListener('click',e=>{
-  const b=e.target.closest('.cbtn'); if(!b) return;
-  document.querySelectorAll('.cbtn').forEach(x=>x.classList.remove('active'));
-  b.classList.add('active'); curQ=b.dataset.q;
-  fetchNews(curQ);
-});
-
-function mobSwitch(mode){
-  const layout=document.getElementById('layout');
-  ['mb-map','mb-news','mb-filter','mb-saved'].forEach(id=>document.getElementById(id)?.classList.remove('active'));
-  layout.className='layout';
-  document.getElementById('mobFilter').classList.remove('open');
-  if(mode==='map'){
-    document.getElementById('mb-map').classList.add('active');
-  } else {
-    layout.classList.add('list-m');
-    if(mode==='saved'){ document.getElementById('mb-saved').classList.add('active'); stab('saved'); }
-    else { document.getElementById('mb-news').classList.add('active'); stab('feed'); }
+  if(category === 'world') {
+      fetchRssLive('http://rss.cnn.com/rss/edition_world.rss', 'CNN', category);
+      fetchRssLive('https://www.aljazeera.com/xml/rss/all.xml', 'Al Jazeera', category);
+      fetchRssLive('https://www.ntv.com.tr/dunya.rss', 'NTV', category);
+      fetchRssLive('http://feeds.bbci.co.uk/news/world/rss.xml', 'BBC', category);
   }
-  // FIX: Mobilde sekme geçişlerinde haritayı hemen düzelt
-  setTimeout(()=>map.invalidateSize(),50);
+  else if(category === 'business') {
+      fetchRssLive('https://search.cnbc.com/rs/search/combinedcms/view.xml?profile=12000000&id=10000664', 'CNBC', category);
+      fetchRssLive('https://www.ntv.com.tr/ekonomi.rss', 'NTV', category);
+      fetchRssLive('http://feeds.bbci.co.uk/news/business/rss.xml', 'BBC', category);
+  }
+  else if(category === 'technology') {
+      fetchRssLive('https://techcrunch.com/feed/', 'TechCrunch', category);
+      fetchRssLive('https://www.theverge.com/rss/index.xml', 'The Verge', category);
+  }
+  else if(category === 'sport') {
+      fetchRssLive('https://www.espn.com/espn/rss/news', 'ESPN', category);
+      fetchRssLive('https://www.skysports.com/rss/12040', 'Sky Sports', category);
+      fetchRssLive('https://www.ntv.com.tr/sporskor.rss', 'NTV Spor', category);
+  }
+  else {
+      // Health, Science vs...
+      fetchRssLive('http://feeds.bbci.co.uk/news/health/rss.xml', 'BBC Health', category);
+  }
 }
-function toggleMobFilter(){
-  const f=document.getElementById('mobFilter');
-  f.classList.toggle('open');
-  document.getElementById('mb-filter').classList.toggle('active',f.classList.contains('open'));
-}
-function mobCat(btn,q){
-  document.querySelectorAll('#mobFilter .cbtn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active'); curQ=q;
+
+function cat(btn, q) {
+  document.querySelectorAll('.cbtn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
   fetchNews(q);
-  document.getElementById('mobFilter').classList.remove('open');
-  mobSwitch('news');
 }
 
-function loginGoogle(){ auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).catch(console.error); }
-function doLogout(){ if(confirm('Log out?')) auth.signOut(); }
-auth.onAuthStateChanged(user=>{
-  document.getElementById('loginBtn').style.display = user?'none':'';
-  const av=document.getElementById('uavatar');
-  if(user){ av.src=user.photoURL; av.style.display='block'; document.getElementById('feedLabel').textContent=user.displayName.split(' ')[0].toUpperCase()+"'S FEED"; }
-  else { av.style.display='none'; }
+// KARANLIK MOD - SİYAH EKRAN KESİN ÇÖZÜM (TİLE LAYER SIFIRDAN EKLENİR)
+function toggleTheme() {
+  const isDark = document.body.getAttribute('data-theme')==='dark';
+  document.body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  document.getElementById('themeBtn').textContent = isDark ? '🌙' : '☀️';
+  
+  // Siyah ekran/takılma hatasını engellemek için eski katmanı tamamen silip yenisini yaratıyoruz.
+  map.removeLayer(tileLayer);
+  const newUrl = isDark ? 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png' : 'https://{s}.basemaps.cartocdn.com/dark_matter/{z}/{x}/{y}{r}.png';
+  tileLayer = L.tileLayer(newUrl, {maxZoom:19}).addTo(map);
+  
+  // Tarayıcıyı zorla haritayı yeniden boyutlandırmaya (Render) zorla
+  setTimeout(() => map.invalidateSize(), 100);
+}
+
+function loginGoogle(){ auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()); }
+function doLogout(){ auth.signOut(); }
+auth.onAuthStateChanged(u=>{ 
+  document.getElementById('loginBtn').style.display=u?'none':'block'; 
+  if(u){ document.getElementById('uavatar').src=u.photoURL; document.getElementById('uavatar').style.display='block'; }
+  else document.getElementById('uavatar').style.display='none';
 });
 
-document.getElementById('modal').addEventListener('click',e=>{ if(e.target===e.currentTarget) closeModal(); });
+window.addEventListener('resize', () => map.invalidateSize());
 
-// PENCERE BOYUTU DEĞİŞTİĞİNDE HARİTAYI KORU (Beyaz ekran önlemi)
-window.addEventListener('resize', () => { map.invalidateSize(); });
-
-window.addEventListener('load',()=>{
-  const th=localStorage.getItem('owlsTheme');
-  if(th){ document.body.setAttribute('data-theme',th); document.getElementById('themeBtn').textContent=th==='dark'?'☀️':'🌙'; if(th==='light') setTile(false); }
-  updateSBadge(); renderAlertTags();
-  
-  // FIX: Sıçrama ekranı bittiğinde haritayı anında renderla
-  setTimeout(()=>{ 
-      const s=document.getElementById('splash'); 
-      s.classList.add('hide'); 
-      setTimeout(() => { s.remove(); map.invalidateSize(); }, 700); 
-  }, 2200);
-  
+window.addEventListener('load', () => {
+  sessionStorage.clear();
+  setTimeout(() => { 
+    document.getElementById('splash').classList.add('hide'); 
+    map.invalidateSize();
+  }, 800);
   fetchNews('world');
 });
 </script>
