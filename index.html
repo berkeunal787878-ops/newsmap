@@ -20,21 +20,31 @@
   <style>
     :root {
       /* SADECE AYDINLIK & TURKUAZ MOD - LÜKS VE FERAHTIR */
-      --bg: #f4fbfc;         /* Sayfa arka planı: Çok açık buz mavisi/beyaz */
-      --bg2: #e8f5f7;        /* Üst barlar vb. */
-      --bg3: #d0ebeb;        /* Hover ve buton arka planları */
-      --card: #ffffff;       /* Kartlar ve sidebar: Saf Beyaz */
-      --border: #b8e0df;     /* Çizgiler ve ayraçlar: Uçuk turkuaz */
-      --accent: #0098a0;     /* Ana vurgu rengi: Şık Turkuaz */
-      --accent2: #e55a20;    /* İkincil vurgu: Tamamlayıcı mercan/turuncu */
-      --text: #0a1b24;       /* Ana metinler: Koyu lacivert (Siyaha yakın) */
-      --text2: #3a5866;      /* Alt metinler: Soluk lacivert */
-      --text3: #6b8a99;      /* Detaylar: Gri-mavi */
-      --saved: #d4a800;      /* Kaydedilenler: Hardal/Altın */
+      --bg: #f4fbfc;
+      --bg2: #e8f5f7;
+      --bg3: #d0ebeb;
+      --card: #ffffff;
+      --border: #b8e0df;
+      --accent: #0098a0;
+      --accent2: #e55a20;
+      --text: #0a1b24;
+      --text2: #3a5866;
+      --text3: #6b8a99;
+      --saved: #d4a800;
     }
     
     *{box-sizing:border-box;margin:0;padding:0;}
     html,body{width:100%;height:100%;overflow:hidden;font-family:'Syne',sans-serif;background:var(--bg);color:var(--text);}
+
+    /* ── İSTİHBARAT RADAR ÇİZGİSİ (YENİ EKLENDİ) ── */
+    .relation-line {
+      stroke-dasharray: 8, 8; /* Kesik kesik çizgi */
+      animation: radarBeam 1s linear infinite; /* Kayan Işın Efekti */
+      filter: drop-shadow(0px 0px 4px rgba(229, 90, 32, 0.8)); /* Parlama */
+    }
+    @keyframes radarBeam {
+      to { stroke-dashoffset: -16; }
+    }
 
     /* ── SPLASH (TURKUAZ KONSEPT) ── */
     .splash{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:99999;transition:opacity .6s;}
@@ -61,7 +71,7 @@
     .bcount{background:var(--accent2);color:#fff;border-radius:10px;padding:1px 5px;font-size:9px;margin-left:2px;}
     .uavatar{width:28px;height:28px;border-radius:50%;border:2px solid var(--accent);display:none;cursor:pointer;}
 
-    /* ── TOP BARS (SABİT DÜZEN - TAŞMA YOK) ── */
+    /* ── TOP BARS ── */
     .top-bars{position:fixed;top:52px;left:0;right:0;height:70px;background:var(--bg2);border-bottom:1px solid var(--border);z-index:590;display:flex;flex-direction:column;justify-content:center;}
     .bar-row{display:flex;gap:4px;overflow-x:auto;padding:4px 14px;flex-wrap:nowrap;scrollbar-width:none;}
     .bar-row::-webkit-scrollbar{display:none;}
@@ -75,7 +85,7 @@
     /* ── KESİN VE HATA VERMEYEN HARİTA/SIDEBAR DÜZENİ ── */
     #map{
       position:fixed;
-      top:122px; /* 52px Header + 70px TopBars */
+      top:122px; 
       left:0;
       right:350px;
       bottom:0;
@@ -160,7 +170,7 @@
     .breaking-title{font-size:13px;margin-top:3px;line-height:1.4;font-weight:700;}
     .breaking-close{margin-left:auto;flex-shrink:0;font-size:20px;opacity:.7;padding:0 4px;}
 
-    /* ── MODAL (POPUP HABER EKRANI) ── */
+    /* ── MODAL ── */
     .moverlay{position:fixed;inset:0;background:rgba(10,27,36,.8);z-index:9000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;backdrop-filter:blur(4px);}
     .moverlay.on{opacity:1;pointer-events:auto;}
     .mbox{background:var(--card);border:1px solid var(--border);border-radius:16px;width:92%;max-width:560px;max-height:88vh;overflow-y:auto;position:relative;box-shadow:0 24px 60px rgba(0,0,0,.15);transform:translateY(14px);transition:transform .3s;}
@@ -199,7 +209,7 @@
 
     /* ── MOBİL DÜZEN ── */
     @media(max-width:768px){
-      .top-bars{display:none;} /* Mobilde üst menüyü gizle, aşağıda filtre var */
+      .top-bars{display:none;} 
       #map{position:fixed;top:52px;left:0;right:0;bottom:calc(45vh + 54px);z-index:1;}
       .sidebar{position:fixed;top:auto;bottom:54px;left:0;right:0;width:100%;height:45vh;border-left:none;border-top:1px solid var(--border);z-index:400;}
       .sidebar.map-only{display:none;}
@@ -222,7 +232,6 @@
     ::-webkit-scrollbar{width:4px;height:4px;}
     ::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
     
-    /* Harita Popup (Beyaz Lüks Tema Uyumlu) */
     .leaflet-popup-content-wrapper{background:var(--card)!important;color:var(--text)!important;border:1px solid var(--border)!important;border-radius:12px!important;box-shadow:0 12px 32px rgba(0,0,0,.1)!important;}
     .leaflet-popup-tip{background:var(--card)!important;border:1px solid var(--border)!important;border-top:none!important;border-left:none!important;}
     .leaflet-popup-content{margin:12px 16px!important;font-family:'Syne',sans-serif!important;}
@@ -259,7 +268,7 @@
   </div>
 </div>
 
-<!-- TOP BARS (MASAÜSTÜ İÇİN SABİT YÜKSEKLİK: 70px) -->
+<!-- TOP BARS -->
 <div class="top-bars" id="topBars">
   <div class="bar-row" id="regionBar">
     <button class="rbtn active" data-r="all">🌐 ALL REGIONS</button>
@@ -397,7 +406,9 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r
   attribution: '© CARTO'
 }).addTo(map);
 
-// Haritayı zorla kendine getir
+// İLİŞKİ RADARI (NETWORK) İÇİN ÇİZGİ KATMANI YARATILDI
+let relationLayer = L.layerGroup().addTo(map);
+
 function fixMap(){ setTimeout(()=>map.invalidateSize({animate:false}),150); }
 
 function mkIcon(color){
@@ -408,6 +419,39 @@ function mkIcon(color){
     </div>`,
     iconSize:[14,14],iconAnchor:[7,7],className:''
   });
+}
+
+// ── YENİ ÖZELLİK: İLGİLİ HABERLERİ BİRLEŞTİREN RADAR ÇİZGİLERİ ──
+function drawRelations(sourceArt) {
+  relationLayer.clearLayers(); // Eski çizgileri temizle
+  if (!sourceArt || !sourceArt._c) return;
+
+  // ÇOK KISA kelimeleri (the, and, for vb) harfi harfine eleyerek anahtar kelimeleri bul
+  const ignoreWords = ['after','under','their','there','about','which','would','could','should'];
+  const words = sourceArt.title.toLowerCase().match(/\b[a-z]{5,}\b/g) || [];
+  const validKeywords = words.filter(w => !ignoreWords.includes(w));
+
+  // Anahtar kelime içeren "ilgili" haberleri filtrele
+  let related = allArticles.filter(a => {
+      if (a.url === sourceArt.url || !a._c) return false;
+      const targetText = a.title.toLowerCase();
+      return validKeywords.some(w => targetText.includes(w));
+  });
+
+  // Harita örümcek ağına dönmesin diye sadece en iyi 4 habere çizgi çek
+  related.slice(0, 4).forEach(relArt => {
+      const line = L.polyline([sourceArt._c, relArt._c], {
+          color: 'var(--accent2)', // Turuncu (Farkedilebilir)
+          weight: 2.5,
+          opacity: 0.9,
+          className: 'relation-line' // CSS'teki animasyonu çağırır
+      });
+      relationLayer.addLayer(line);
+  });
+}
+
+function clearRelations() {
+  relationLayer.clearLayers();
 }
 
 // ── LOCATION DB ─────────────────────────────────────────
@@ -669,7 +713,7 @@ async function fetchNews(cat){
   scheduleBreaking(arts);
 }
 
-// ── RENDER ────────────────────────────────────────────────
+// ── RENDER VE İSTİHBARAT AĞI BAĞLANTILARI ────────────────────────
 function renderFeed(arts){
   const color=COLORS[curQ]||'#0098a0';
   if(clusterLayer)map.removeLayer(clusterLayer);
@@ -688,16 +732,23 @@ function renderFeed(arts){
     list.innerHTML='<div class="loader"><div class="loader-owl">🦉</div><div class="loader-txt">No stories in this region</div></div>';
     map.addLayer(clusterLayer);return;
   }
+  
   filtered.slice(0,60).forEach(a=>{
+    // Haritadaki Noktalar (Marker)
     const m=L.marker(a._c,{icon:mkIcon(color)});
     m.bindPopup(
       `<div style="font-weight:700;font-size:13px;max-width:200px;line-height:1.4;color:var(--text);margin-bottom:6px;">${a.title}</div>`+
       `<div style="font-size:10px;color:var(--text2);margin-bottom:10px;">${a.source} · ${a._loc}</div>`+
       `<button onclick="window._openModalById('${encodeURIComponent(a.url)}')" style="background:var(--accent);color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:11px;font-weight:700;cursor:pointer;width:100%">Read Story</button>`
     ,{maxWidth:220});
-    m.on('click',()=>{ map.openPopup&&null; }); 
+    
+    // YENİ EKLENTİ: Fare haritada haberin üstüne gelirse radar çiz
+    m.on('mouseover', () => drawRelations(a));
+    m.on('mouseout', () => clearRelations());
+    
     clusterLayer.addLayer(m);
 
+    // Sağ Taraftaki Haber Kartları (Card)
     const card=document.createElement('div');
     card.className='ncard'+(isRead(a)?' read':'');
     card.dataset.url=a.url;
@@ -716,12 +767,18 @@ function renderFeed(arts){
         </div>
       </div>
       <div class="nbookmark${saved?' on':''}" onclick="event.stopPropagation();toggleSaveCard(this,'${encodeURIComponent(a.url)}')">🔖</div>`;
+    
     card.onclick=()=>{
       document.querySelectorAll('.ncard').forEach(c=>c.classList.remove('active'));
       card.classList.add('active');
       map.flyTo(a._c,6,{duration:1.5,easeLinearity:.25});
       openModal(a);
     };
+
+    // YENİ EKLENTİ: Fare sağdaki listede haberin üstüne gelirse radar çiz
+    card.addEventListener('mouseenter', () => drawRelations(a));
+    card.addEventListener('mouseleave', () => clearRelations());
+
     list.appendChild(card);
   });
   map.addLayer(clusterLayer);
@@ -901,7 +958,7 @@ function mobCat(btn,q){
   mobSwitch('news');
 }
 
-// ── AUTH (REDIRECT YÖNTEMİ) ───────────────────────────────
+// ── AUTH ───────────────────────────────────────────────
 function loginGoogle() { 
   auth.signInWithRedirect(new firebase.auth.GoogleAuthProvider()).catch(console.error); 
 }
@@ -924,7 +981,6 @@ document.getElementById('modal').addEventListener('click',e=>{if(e.target===e.cu
 
 // ── INIT ──────────────────────────────────────────────────
 window.addEventListener('load',()=>{
-  localStorage.removeItem('owlsTheme'); // Eski çöpü temizle
   updateSBadge();renderAlertTags();
   
   setTimeout(()=>{
@@ -934,7 +990,6 @@ window.addEventListener('load',()=>{
 
   fetchNews('world');
 
-  // Harita render garantisi
   [500, 1000, 2000].forEach(t=>setTimeout(()=>fixMap(), t));
 });
 window.addEventListener('resize',()=>{fixMap();});
