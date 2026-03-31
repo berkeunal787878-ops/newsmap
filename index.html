@@ -211,9 +211,9 @@
     <button class="cbtn" data-q="business">📈 Business</button>
     <button class="cbtn" data-q="science">🔬 Science</button>
     <button class="cbtn" data-q="health">❤️ Health</button>
-    <button class="cbtn" data-q="sport">⚽ Sport</button>
     <button class="cbtn" data-q="climate">🌿 Climate</button>
     <button class="cbtn" data-q="politics">🏛️ Politics</button>
+    <button class="cbtn" data-q="sport">⚽ Sport</button>
   </div>
 </div>
 
@@ -313,7 +313,7 @@ let relationLayer = L.layerGroup().addTo(map);
 
 function fixMap(){ setTimeout(()=>map.invalidateSize({animate:false}),150); }
 
-// ── YENİ: DUYGU VE TEHDİT ANALİZİ (SENTIMENT ALGORITHM) ──
+// ── DUYGU VE TEHDİT ANALİZİ ──
 function getSentiment(title) {
     const t = title.toLowerCase();
     const crits = ['war','attack','strike','missile','kill','dead','crash','crisis','conflict','bomb','terror','shoot','military','death','fatal'];
@@ -371,41 +371,104 @@ function getCoords(text){
 }
 
 // ── FAST FETCH ──
-async function fastFetch(url, ms = 2500) {
+async function fastFetch(url, ms = 3000) {
   const controller = new AbortController();
   const id = setTimeout(() => controller.abort(), ms);
   try { const res = await fetch(url, { signal: controller.signal }); clearTimeout(id); return res; } 
   catch (e) { clearTimeout(id); throw e; }
 }
 
-// ── KAYNAKLAR (GERİ GETİRİLDİ) ──
-const RSS_FEEDS={
+// ── 60+ RSS KAYNAĞI VE AKILLI RULET SİSTEMİ ──
+const RSS_FEEDS = {
   world: [
     {u:'http://rss.cnn.com/rss/edition_world.rss',n:'CNN'},
-    {u:'https://feeds.bbci.co.uk/news/world/rss.xml',n:'BBC'},
+    {u:'https://rss.nytimes.com/services/xml/rss/nyt/World.xml',n:'NY Times'},
+    {u:'https://feeds.npr.org/1004/rss.xml',n:'NPR'},
+    {u:'https://feeds.a.dj.com/rss/RSSWorldNews.xml',n:'WSJ World'},
+    {u:'https://feeds.bbci.co.uk/news/world/rss.xml',n:'BBC World'},
+    {u:'https://feeds.bbci.co.uk/news/world/africa/rss.xml',n:'BBC Africa'},
+    {u:'https://feeds.bbci.co.uk/news/world/asia/rss.xml',n:'BBC Asia'},
+    {u:'https://feeds.bbci.co.uk/news/world/europe/rss.xml',n:'BBC Europe'},
+    {u:'https://feeds.bbci.co.uk/news/world/middle_east/rss.xml',n:'BBC MidEast'},
+    {u:'https://feeds.bbci.co.uk/news/world/latin_america/rss.xml',n:'BBC LatAm'},
+    {u:'https://rss.dw.com/rdf/rss-en-world',n:'DW Germany'},
+    {u:'https://www.france24.com/en/rss',n:'France24'},
+    {u:'https://www.euronews.com/rss',n:'EuroNews'},
+    {u:'https://www.rfi.fr/en/rss',n:'RFI France'},
     {u:'https://www.aljazeera.com/xml/rss/all.xml',n:'Al Jazeera'},
-    {u:'https://www.france24.com/en/rss',n:'France24'}
+    {u:'https://english.alarabiya.net/feed/world',n:'Al Arabiya'},
+    {u:'https://www.middleeasteye.net/rss',n:'Middle East Eye'},
+    {u:'https://www3.nhk.or.jp/rss/news/cat0.xml',n:'NHK Japan'},
+    {u:'https://www.straitstimes.com/news/world/rss.xml',n:'Straits Times'},
+    {u:'https://www.abc.net.au/news/feed/51120/rss.xml',n:'ABC Australia'},
+    {u:'https://timesofindia.indiatimes.com/rssfeeds/296589292.cms',n:'Times of India'},
+    {u:'https://www.dawn.com/feeds/home/',n:'Dawn Pakistan'},
+    {u:'https://www.geo.tv/rss/1/2',n:'Geo News'},
+    {u:'https://www.thehindu.com/news/international/feeder/default.rss',n:'The Hindu'},
+    {u:'https://www.swissinfo.ch/eng/rss',n:'SwissInfo'},
+    {u:'https://www.channelnewsasia.com/api/v1/rss-outbound-feed?_format=xml',n:'CNA'}
   ],
   technology: [
     {u:'https://techcrunch.com/feed/',n:'TechCrunch'},
-    {u:'https://www.theverge.com/rss/index.xml',n:'The Verge'}
+    {u:'https://www.theverge.com/rss/index.xml',n:'The Verge'},
+    {u:'https://feeds.arstechnica.com/arstechnica/index',n:'Ars Technica'},
+    {u:'https://www.wired.com/feed/rss',n:'Wired'},
+    {u:'https://feeds.bbci.co.uk/news/technology/rss.xml',n:'BBC Tech'},
+    {u:'https://rss.dw.com/rdf/rss-en-bus',n:'DW Tech'}, 
+    {u:'https://asia.nikkei.com/rss/feed/nar',n:'Nikkei Asia'}, 
+    {u:'https://www.zdnet.com/news/rss.xml',n:'ZDNet'},
+    {u:'https://venturebeat.com/feed/',n:'VentureBeat'},
+    {u:'https://hnrss.org/frontpage',n:'Hacker News'}
   ],
   business: [
-    {u:'https://feeds.bbci.co.uk/news/business/rss.xml',n:'BBC Biz'},
-    {u:'https://search.cnbc.com/rs/search/combinedcms/view.xml?profile=12000000&id=10000664',n:'CNBC'}
+    {u:'https://feeds.a.dj.com/rss/WSJcomUSBusiness.xml',n:'WSJ'},
+    {u:'https://rss.nytimes.com/services/xml/rss/nyt/Business.xml',n:'NY Times'},
+    {u:'https://feeds.bbci.co.uk/news/business/rss.xml',n:'BBC'},
+    {u:'https://search.cnbc.com/rs/search/combinedcms/view.xml?profile=12000000&id=10000664',n:'CNBC'},
+    {u:'https://feeds.a.dj.com/rss/RSSMarketsMain.xml',n:'WSJ Markets'},
+    {u:'https://asia.nikkei.com/rss/feed/nar',n:'Nikkei Asia'},
+    {u:'https://rss.dw.com/rdf/rss-en-bus',n:'DW Business'}
   ],
-  science: [ {u:'https://feeds.bbci.co.uk/news/science_and_environment/rss.xml',n:'BBC Sci'} ],
-  health: [ {u:'https://feeds.bbci.co.uk/news/health/rss.xml',n:'BBC Health'} ],
+  science: [
+    {u:'https://rss.nytimes.com/services/xml/rss/nyt/Science.xml',n:'NY Times'},
+    {u:'https://feeds.bbci.co.uk/news/science_and_environment/rss.xml',n:'BBC'},
+    {u:'https://www.sciencedaily.com/rss/top/science.xml',n:'ScienceDaily'},
+    {u:'https://www.newscientist.com/subject/science/feed/',n:'New Scientist'},
+    {u:'https://www.livescience.com/feeds/all',n:'Live Science'},
+    {u:'https://www.nature.com/nature.rss',n:'Nature'},
+    {u:'https://www.space.com/feeds/all',n:'Space.com'}
+  ],
+  climate: [
+    {u:'https://feeds.bbci.co.uk/news/science_and_environment/rss.xml',n:'BBC'},
+    {u:'https://www.theguardian.com/environment/rss',n:'Guardian'},
+    {u:'https://insideclimatenews.org/feed/',n:'Inside Climate News'},
+    {u:'https://rss.nytimes.com/services/xml/rss/nyt/Climate.xml',n:'NYT Climate'},
+    {u:'https://grist.org/feed/',n:'Grist'},
+    {u:'https://rss.dw.com/rdf/rss-en-environment',n:'DW Environment'}
+  ],
+  politics: [
+    {u:'https://rss.nytimes.com/services/xml/rss/nyt/Politics.xml',n:'NY Times'},
+    {u:'https://feeds.bbci.co.uk/news/politics/rss.xml',n:'BBC'},
+    {u:'https://feeds.a.dj.com/rss/RSSOpinion.xml',n:'WSJ Opinion'},
+    {u:'https://www.theguardian.com/politics/rss',n:'Guardian'},
+    {u:'https://www.aljazeera.com/xml/rss/all.xml',n:'Al Jazeera'},
+    {u:'https://rss.dw.com/rdf/rss-en-world',n:'DW Politics'}
+  ],
   sport: [
     {u:'https://www.espn.com/espn/rss/news',n:'ESPN'},
     {u:'https://feeds.bbci.co.uk/sport/rss.xml',n:'BBC Sport'}
-  ],
-  climate: [ {u:'https://www.theguardian.com/environment/rss',n:'Guardian Env'} ],
-  politics: [
-    {u:'https://rss.nytimes.com/services/xml/rss/nyt/Politics.xml',n:'NY Times'},
-    {u:'https://feeds.bbci.co.uk/news/politics/rss.xml',n:'BBC Politics'}
   ]
 };
+
+// Diziyi karıştırma fonksiyonu (Akıllı Rulet için)
+function shuffleArray(array) {
+    let shuffled = array.slice();
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+}
 
 async function fetchGuardian(sec){
   try{
@@ -415,29 +478,29 @@ async function fetchGuardian(sec){
   }catch{return[];}
 }
 
-// RSS GETİRİCİSİ (GÜVENLİ rss2json)
+// RSS GETİRİCİSİ (AllOrigins limitsiz)
 async function fetchRSS(feed){
   try{
-    const r=await fastFetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feed.u)}&count=12`, 2500);
+    const r=await fastFetch(`https://api.allorigins.win/get?url=${encodeURIComponent(feed.u)}`);
     const d=await r.json();
-    if(d.status==='ok'&&d.items) {
-      return d.items.map(i=>({
-        title:i.title||'', url:i.link||'#', source:feed.n, date:i.pubDate,
-        thumb:i.thumbnail||(i.enclosure?.link)||null
-      })).filter(a=>a.title);
-    }
-  }catch(e){}
-  return [];
+    const xml=new DOMParser().parseFromString(d.contents,'text/xml');
+    return[...xml.querySelectorAll('item')].slice(0,10).map(it=>({
+      title:it.querySelector('title')?.textContent||'', url:it.querySelector('link')?.textContent||'#', source:feed.n,
+      thumb:it.querySelector('enclosure')?.getAttribute('url')||null
+    })).filter(a=>a.title);
+  }catch{return[];}
 }
 
 async function fetchNews(cat){
   document.getElementById('newsList').innerHTML='<div class="loader"><div class="loader-owl">🦉</div><div class="loader-txt">SCANNING GLOBE</div></div>';
-  const rssList = RSS_FEEDS[cat] || RSS_FEEDS.world;
   
-  // THE GUARDIAN + RSS LİSTESİ BİRLEŞTİRİLDİ
+  // AKILLI RULET: O kategorideki tüm kaynakları al, karıştır, sadece 6 tanesini seç (Ban yememek için)
+  const allCatFeeds = RSS_FEEDS[cat] || RSS_FEEDS.world;
+  const selectedFeeds = shuffleArray(allCatFeeds).slice(0, 6);
+
   const feeds = [
       fetchGuardian(cat==='sport'?'world':cat),
-      ...rssList.map(f => fetchRSS(f))
+      ...selectedFeeds.map(f => fetchRSS(f))
   ];
   
   const results=await Promise.allSettled(feeds);
@@ -499,7 +562,7 @@ function renderFeed(arts){
   map.addLayer(clusterLayer);
 }
 
-// ── İSTATİSTİKSEL PANEL ──
+// ── İSTATİSTİKSEL PANEL RENDER EDİCİ ──
 function renderAnalytics(arts) {
   const dash = document.getElementById('dataDashboard');
   if(!arts.length) return;
