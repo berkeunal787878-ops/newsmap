@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1,user-scalable=no"/>
   <meta name="mobile-web-app-capable" content="yes"/>
   <meta name="apple-mobile-web-app-capable" content="yes"/>
   <meta name="apple-mobile-web-app-status-bar-style" content="default"/>
@@ -21,7 +21,6 @@
 
   <style>
     :root {
-      /* Aydınlık Turkuaz Tema */
       --bg:#f4fbfc; --bg2:#e8f5f7; --bg3:#d0ebeb; --card:#fff;
       --border:#b8e0df; --accent:#0098a0; --accent2:#e55a20;
       --text:#0a1b24; --text2:#3a5866; --text3:#6b8a99;
@@ -54,14 +53,46 @@
     .w-val { color: var(--accent); font-weight: bold; }
     @media(max-width:768px){ .owls-widget { top: 60px; left: 50%; transform: translateX(-50%); font-size:9px; padding: 6px 10px;} }
 
+    /* ─── YENİ: RADAR DALGASI ANİMASYONU ─── */
+    .radar-pulse {
+      stroke-width: 2px;
+      stroke-opacity: 1;
+      fill-opacity: 0.15;
+      animation: radarExpand 2.5s ease-out infinite;
+    }
+    @keyframes radarExpand {
+      0% { r: 0; stroke-opacity: 1; fill-opacity: 0.3; }
+      100% { r: 150; stroke-opacity: 0; fill-opacity: 0; }
+    }
+
+    /* ─── YENİ: SNIPER CROSSHAIR TASARIMI ─── */
+    .crosshair-container {
+      width: 50px; height: 50px;
+      border: 2px solid var(--crit);
+      border-radius: 50%;
+      position: relative;
+      display: flex; align-items: center; justify-content: center;
+      animation: pulseCrosshair 2s infinite;
+    }
+    .crosshair-container::before, .crosshair-container::after {
+      content: ''; position: absolute; background: var(--crit);
+    }
+    .crosshair-container::before { width: 100%; height: 2px; }
+    .crosshair-container::after { width: 2px; height: 100%; }
+    @keyframes pulseCrosshair {
+      0% { transform: scale(0.9); opacity: 0.8; }
+      50% { transform: scale(1.1); opacity: 1; }
+      100% { transform: scale(0.9); opacity: 0.8; }
+    }
+
     /* ─── TURKUAZ & ÇİZGİLİ BOMBELİ RADAR ÇİZGİSİ ─── */
     .relation-line {
       stroke: var(--accent) !important;
-      stroke-width: 3px !important;
-      stroke-dasharray: 8, 10 !important;
+      stroke-width: 2.5px !important;
+      stroke-dasharray: 6, 10 !important;
       stroke-linecap: round !important;
       animation: radarBeam 1s linear infinite;
-      filter: drop-shadow(0 0 6px rgba(0, 152, 160, 0.8)) !important;
+      filter: drop-shadow(0 0 5px rgba(0, 152, 160, 0.6)) !important;
     }
     @keyframes radarBeam{to{stroke-dashoffset:-36;}}
 
@@ -114,7 +145,6 @@
     .rbtn.active,.rbtn:hover{background:var(--bg3);color:var(--accent);border-color:var(--accent);}
     .cbtn{flex-shrink:0;font-size:11px;font-weight:700;padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:var(--card);color:var(--text2);cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent;}
     .cbtn.active{background:var(--accent);color:#fff;border-color:var(--accent);}
-    .cbtn:hover:not(.active){border-color:var(--accent);color:var(--accent);background:var(--bg);}
 
     /* ─── LAYOUT ─── */
     #map{position:fixed;top:120px;left:0;right:400px;bottom:0;z-index:1;background:var(--bg);}
@@ -141,6 +171,7 @@
       align-items: center;
       gap: 8px;
       transition: all .2s;
+      text-transform: uppercase;
       letter-spacing: 1px;
     }
     .panel-back:hover { background: var(--bg2); color: var(--accent); }
@@ -153,11 +184,11 @@
     .scount{font-size:10px;color:var(--text2);font-weight:700;}
     .news-scroll{overflow-y:auto;flex:1;contain:layout style;-webkit-overflow-scrolling:touch;display:flex;flex-direction:column;gap:12px;padding:12px;}
 
-    /* ─── NEWS CARDS (DAKTİLO & SÜTUN DÜZENİ) ─── */
+    /* ─── NEWS CARDS (DÜZELTİLMİŞ BÜYÜK FOTOĞRAF DÜZENİ) ─── */
     .ncard{background:var(--card); border:1px solid var(--border); border-radius:8px; padding:16px; cursor:pointer; position:relative; transition:all .15s;-webkit-tap-highlight-color:transparent;}
     .ncard:hover{transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,152,160,.1); background:var(--bg2);}
     .ncard.active{border-color:var(--accent); box-shadow:0 0 0 2px rgba(0,152,160,.3);}
-    .ncard.read{opacity:.7;}
+    .ncard.read{opacity:.65;}
     
     .ncard-row{display:flex;flex-direction:column;gap:12px;} 
     .nthumb{width:100%;height:180px;object-fit:cover;border-radius:6px;background:var(--bg3);border:1px solid var(--border);}
@@ -210,11 +241,11 @@
     .alert-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(0,152,160,.1);}
     .alert-add-btn{background:var(--accent);color:#fff;border:none;border-radius:6px;padding:10px 18px;font-size:18px;font-weight:800;cursor:pointer;}
     .alert-tags{display:flex;flex-wrap:wrap;gap:8px;}
-    .atag{display:flex;align-items:center;gap:6px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:6px 12px;font-size:11px;font-weight:800;color:var(--accent);}
+    .atag{display:flex;align-items:center;gap:6px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:6px 12px;font-size:11px;font-weight:800;color:var(--accent);}
     .atag span{cursor:pointer;color:var(--text3);font-size:16px;line-height:1;}
     .alerts-hint{margin-top:20px;font-size:11px;color:var(--text3);line-height:1.7;font-weight:600;}
 
-    /* ─── BREAKING POPUP (DÜZELTİLDİ) ─── */
+    /* ─── BREAKING POPUP ─── */
     .breaking {
         position: fixed;
         bottom: 28px;
@@ -242,14 +273,13 @@
     .breaking-x { font-size: 24px; padding-left: 10px; opacity: 0.8; }
     .breaking-x:hover { opacity: 1; }
 
-    /* ─── MODAL (KAPANMA VE YAZI DÜZELTİLDİ) ─── */
+    /* ─── MODAL ─── */
     .moverlay{position:fixed;inset:0;background:rgba(10,27,36,.88);z-index:9000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;backdrop-filter:blur(4px);}
     .moverlay.on{opacity:1;pointer-events:auto;}
     .mbox{background:var(--card);border:1px solid var(--border);border-radius:12px;width:92%;max-width:600px;max-height:90vh;overflow-y:auto;position:relative;box-shadow:0 30px 80px rgba(0,0,0,.6);transform:translateY(20px);transition:transform .3s;}
     .moverlay.on .mbox{transform:translateY(0);}
     .mhero{width:100%;height:240px;object-fit:cover;border-radius:12px 12px 0 0;display:block;}
     
-    /* MODAL CLOSE BUTONU */
     .mclose{position:absolute;top:16px;right:16px;width:36px;height:36px;background:rgba(0,0,0,.7);border:2px solid rgba(255,255,255,.5);color:#fff;font-size:22px;font-weight:bold;cursor:pointer;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:10;transition:all .2s;}
     .mclose:hover{background:var(--crit); border-color:var(--crit); transform:scale(1.1);}
     
@@ -266,7 +296,7 @@
     .mbtn.sec:hover{background:var(--bg3);border-color:var(--accent);}
     .mbtn.sv.on{color:var(--saved);border-color:var(--saved);background:rgba(212,168,0,.1);}
 
-    /* İLGİLİ HABERLER GRID (BBC TASARIMI) */
+    /* İLGİLİ HABERLER GRID */
     .m-related-title { font-size: 12px; font-weight: 800; color: var(--text3); letter-spacing: 1.5px; margin-bottom: 16px; border-top: 1px solid var(--border); padding-top: 24px; text-transform:uppercase;}
     .m-related-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
     .m-rel-card { display: flex; flex-direction: column; gap: 10px; padding: 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); cursor: pointer; transition: all .2s; }
@@ -288,16 +318,14 @@
     /* ─── LOADER ─── */
     .loader{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 24px;gap:16px;}
     .loader-owl{font-size:48px;animation:owlFloat 2s infinite;}
-    .loader-txt{font-size:12px;color:var(--accent);font-weight:800;letter-spacing:3px;}
+    .loader-txt{font-size:11px;color:var(--accent);font-weight:800;letter-spacing:3px;}
     .loader-txt::after{content:'';animation:dots 1.5s infinite steps(4,end);}
-    @keyframes dots{0%{content:''}25%{content:'.'}50%{content:'..'}75%{content:'...'}}
 
     /* ─── LEAFLET POPUP ─── */
     .bbc-popup-wrap .leaflet-popup-content-wrapper{padding:0!important;border-radius:8px!important;overflow:hidden;border:1px solid var(--border)!important;background:var(--card)!important;box-shadow:0 16px 40px rgba(0,0,0,.16)!important; pointer-events:auto!important;}
     .bbc-popup-wrap .leaflet-popup-content{margin:0!important;width:300px!important;}
     .bbc-popup-wrap .leaflet-popup-tip{background:var(--card)!important;border:1px solid var(--border)!important;border-top:none!important;border-left:none!important;}
     
-    /* HARİTA POPUP X TUŞU DÜZELTİLDİ */
     .leaflet-container a.leaflet-popup-close-button {
       position: absolute !important;
       top: 10px !important;
@@ -321,7 +349,6 @@
     
     .bbc-card{cursor:pointer;background:var(--card);transition:background .15s;pointer-events:auto;}
     .bbc-card:hover{background:var(--bg);}
-    .bbc-card:hover .bbc-title{color:var(--accent);}
     .bbc-hero{width:100%;height:160px;object-fit:cover;display:block;border-bottom:1px solid var(--border);}
     .bbc-hero-ph{width:100%;height:160px;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:40px;border-bottom:1px solid var(--border);}
     .bbc-body{padding:16px;}
@@ -374,7 +401,7 @@
     <div><div class="logo-name">OWLS</div><div class="logo-sub" id="feedLabel">GLOBAL FEED</div></div>
   </div>
   <div class="hdr-right">
-    <button class="hbtn" onclick="openSaved()">🔖 <span class="bcount" id="sbadge">0</span></button>
+    <button class="hbtn" onclick="stab('saved')">🔖 <span class="bcount" id="sbadge">0</span></button>
     <button class="hbtn" id="loginBtn" onclick="loginGoogle()">Sign In</button>
     <div class="user-wrap" id="userWrap" onclick="toggleUserMenu()">
       <span class="header-user-name" id="headerUserName">Name ▾</span>
@@ -466,7 +493,6 @@
             <button class="alert-add-btn" onclick="addAlert()">+</button>
           </div>
           <div class="alert-tags" id="alertTags"></div>
-          <div style="margin-top:14px;font-size:10px;color:var(--text3);line-height:1.7;">🔔 Alerts fire as toast notifications when matching news arrives. Saved to cloud.</div>
         </div>
       </div>
     </div>
@@ -571,9 +597,10 @@ let breakingArt=null;
 // ═══════════════════════════════════════════════════════
 const map=L.map('map',{zoomControl:false,preferCanvas:true}).setView([20,10],2);
 L.control.zoom({position:'bottomright'}).addTo(map);
-L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png',{maxZoom:19,attribution:'© CARTO'}).addTo(map);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png',{maxZoom:19}).addTo(map);
 L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}{r}.png',{maxZoom:19,pane:'shadowPane'}).addTo(map);
 let relationLayer=L.layerGroup().addTo(map);
+let pulseLayer=L.layerGroup().addTo(map); // YENİ: Etki Çemberi Katmanı
 
 function fixMap(){
   setTimeout(()=>{
@@ -599,7 +626,7 @@ function fixMap(){
 // ═══════════════════════════════════════════════════════
 function getSentiment(title){
   const t=(title||'').toLowerCase();
-  const crits=['war','attack','strike','missile','kill','dead','crash','crisis','conflict','bomb','terror','shoot','military','death','fatal','explosion','massacre'];
+  const crits=['war','attack','strike','missile','kill','dead','crash','crisis','conflict','bomb','terror','shoot','military','death','fatal'];
   const warns=['tension','warn','protest','sanction','threat','diplomacy','summit','economy','market','bank','rate','debt','inflation','election','court','vote'];
   if(crits.some(w=>t.includes(w))) return{color:'var(--crit)',level:'CRITICAL',cls:'th-crit'};
   if(warns.some(w=>t.includes(w))) return{color:'var(--warn)',level:'WARNING',cls:'th-warn'};
@@ -617,18 +644,15 @@ function mkIcon(color){
 }
 
 // ═══════════════════════════════════════════════════════
-// RELATION RADAR (BOMBELİ BEZIER CURVE - MATEMATİKSEL)
+// RELATION RADAR (BOMBELİ BEZIER CURVES)
 // ═══════════════════════════════════════════════════════
 function getArc(c1, c2) {
   const pts = [];
   const dist = Math.sqrt((c2[0]-c1[0])**2 + (c2[1]-c1[1])**2);
   const mLat = (c1[0]+c2[0])/2;
   const mLng = (c1[1]+c2[1])/2;
-  
-  // Eğimi/Bombeyi her zaman yukarı doğru yapacak kontrol noktası
   const cLat = mLat + dist * 0.3; 
   const cLng = mLng;
-
   for(let i=0; i<=30; i++){
     let t = i/30;
     let lat = (1-t)**2 * c1[0] + 2*(1-t)*t * cLat + t**2 * c2[0];
@@ -642,17 +666,15 @@ function drawRelations(a){
   relationLayer.clearLayers();
   if(!a||!a._c) return;
   const stop=['after','under','their','there','about','which','would','could','should','have','been','that','this','with','from'];
-  const words=(a.title.toLowerCase().match(/\b[a-z]{5,}\b/g)||[]).filter(w=>!stop.includes(w));
+  const words=(a.title.toLowerCase().match(/\b[a-z]{4,}\b/g)||[]).filter(w=>!stop.includes(w));
   allArticles.filter(x=>x.url!==a.url&&x._c&&words.some(w=>x.title.toLowerCase().includes(w))).slice(0,5).forEach(rel=>{
-    const arcPts = getArc(a._c, rel._c);
-    // Çizgi özellikleri CSS'de (.relation-line) belirlendiği için oradan çekilecek
-    L.polyline(arcPts,{className:'relation-line'}).addTo(relationLayer);
+    L.polyline(getArc(a._c, rel._c),{className:'relation-line'}).addTo(relationLayer);
   });
 }
 function clearRelations(){relationLayer.clearLayers();}
 
 // ═══════════════════════════════════════════════════════
-// LOCATION DB & SMART SPREAD (AKILLI DOĞAL DAĞILIM)
+// LOCATION DB & SMART SPREAD (Altın Oran Dağılımı)
 // ═══════════════════════════════════════════════════════
 const CITIES={
   'new york':[40.71,-74.00],'washington':[38.90,-77.03],'los angeles':[34.05,-118.24],
@@ -736,42 +758,73 @@ const CITIES={
   'suva':[-18.14,178.44],'port moresby':[-9.44,147.19]
 };
 
-const CAPS={us:[38.90,-77.03],gb:[51.50,-0.12],de:[52.52,13.40],fr:[48.85,2.35],tr:[39.92,32.85],jp:[35.68,139.69],cn:[39.90,116.40],ru:[55.75,37.61],in:[28.61,77.20],au:[-35.28,149.12],ca:[45.42,-75.69],za:[-25.74,28.18],ng:[9.07,7.39],eg:[30.04,31.23],mx:[19.43,-99.13],ar:[-34.60,-58.38],sa:[24.71,46.67],id:[-6.20,106.81],it:[41.90,12.49],es:[40.41,-3.70],kr:[37.56,126.97],ua:[50.45,30.52],il:[31.76,35.21],ae:[24.45,54.37],qa:[25.28,51.53],br:[-15.82,-47.92],pk:[33.68,73.04],bd:[23.81,90.41],th:[13.75,100.50],my:[3.14,101.68],vn:[21.02,105.84],ph:[14.59,120.98],pl:[52.23,21.01],se:[59.33,18.06],no:[59.91,10.75],dk:[55.67,12.56],fi:[60.17,24.94],nl:[52.37,4.90],be:[50.85,4.35],ch:[46.94,7.46],at:[48.20,16.37],pt:[38.71,-9.14],gr:[37.97,23.72],cz:[50.07,14.43],hu:[47.49,19.04],ro:[44.43,26.09],ke:[-1.28,36.81],gh:[5.56,-0.20],et:[9.02,38.74],ma:[33.59,-7.62],iq:[33.33,44.40],ir:[35.69,51.39],sy:[33.51,36.29],jo:[31.95,35.93],lb:[33.88,35.49],kw:[29.37,47.98],ye:[15.36,44.20],af:[34.52,69.17],nz:[-41.28,174.77],sg:[1.35,103.81],tw:[25.04,121.56],cl:[-33.45,-70.66],co:[4.71,-74.07],pe:[-12.04,-77.03]};
+const CAPS={
+  us:[38.90,-77.03],gb:[51.50,-0.12],de:[52.52,13.40],fr:[48.85,2.35],
+  tr:[39.92,32.85],jp:[35.68,139.69],cn:[39.90,116.40],ru:[55.75,37.61],
+  in:[28.61,77.20],au:[-35.28,149.12],ca:[45.42,-75.69],za:[-25.74,28.18],
+  ng:[9.07,7.39],eg:[30.04,31.23],mx:[19.43,-99.13],ar:[-34.60,-58.38],
+  sa:[24.71,46.67],id:[-6.20,106.81],it:[41.90,12.49],es:[40.41,-3.70],
+  kr:[37.56,126.97],ua:[50.45,30.52],il:[31.76,35.21],ae:[24.45,54.37],
+  qa:[25.28,51.53],br:[-15.82,-47.92],pk:[33.68,73.04],bd:[23.81,90.41],
+  th:[13.75,100.50],my:[3.14,101.68],vn:[21.02,105.84],ph:[14.59,120.98],
+  pl:[52.23,21.01],se:[59.33,18.06],no:[59.91,10.75],dk:[55.67,12.56],
+  fi:[60.17,24.94],nl:[52.37,4.90],be:[50.85,4.35],ch:[46.94,7.46],
+  at:[48.20,16.37],pt:[38.71,-9.14],gr:[37.97,23.72],cz:[50.07,14.43],
+  hu:[47.49,19.04],ro:[44.43,26.09],ke:[-1.28,36.81],gh:[5.56,-0.20],
+  et:[9.02,38.74],ma:[33.59,-7.62],iq:[33.33,44.40],ir:[35.69,51.39],
+  sy:[33.51,36.29],jo:[31.95,35.93],lb:[33.88,35.49],kw:[29.37,47.98],
+  ye:[15.36,44.20],af:[34.52,69.17],nz:[-41.28,174.77],sg:[1.35,103.81],
+  tw:[25.04,121.56],cl:[-33.45,-70.66],co:[4.71,-74.07],pe:[-12.04,-77.03],
+  az:[40.41,49.87],am:[40.18,44.51],ge:[41.69,44.83]
+};
 
-const CNAMES={us:'USA',gb:'UK',de:'Germany',fr:'France',tr:'Turkey',jp:'Japan',cn:'China',ru:'Russia',in:'India',au:'Australia',ca:'Canada',za:'South Africa',ng:'Nigeria',eg:'Egypt',mx:'Mexico',ar:'Argentina',sa:'Saudi Arabia',id:'Indonesia',it:'Italy',es:'Spain',kr:'South Korea',ua:'Ukraine',il:'Israel',ae:'UAE',qa:'Qatar',br:'Brazil',pk:'Pakistan',bd:'Bangladesh',th:'Thailand',my:'Malaysia',vn:'Vietnam',ph:'Philippines',pl:'Poland',se:'Sweden',no:'Norway',dk:'Denmark',fi:'Finland',nl:'Netherlands',be:'Belgium',ch:'Switzerland',at:'Austria',pt:'Portugal',gr:'Greece',cz:'Czech Republic',hu:'Hungary',ro:'Romania',ke:'Kenya',gh:'Ghana',et:'Ethiopia',ma:'Morocco',iq:'Iraq',ir:'Iran',sy:'Syria',jo:'Jordan',lb:'Lebanon',kw:'Kuwait',ye:'Yemen',af:'Afghanistan',nz:'New Zealand',sg:'Singapore',tw:'Taiwan',cl:'Chile',co:'Colombia',pe:'Peru'};
+const CNAMES={
+  us:'USA',gb:'UK',de:'Germany',fr:'France',tr:'Turkey',jp:'Japan',cn:'China',
+  ru:'Russia',in:'India',au:'Australia',ca:'Canada',za:'South Africa',ng:'Nigeria',
+  eg:'Egypt',mx:'Mexico',ar:'Argentina',sa:'Saudi Arabia',id:'Indonesia',
+  it:'Italy',es:'Spain',kr:'South Korea',ua:'Ukraine',il:'Israel',ae:'UAE',
+  qa:'Qatar',br:'Brazil',pk:'Pakistan',bd:'Bangladesh',th:'Thailand',
+  my:'Malaysia',vn:'Vietnam',ph:'Philippines',pl:'Poland',se:'Sweden',
+  no:'Norway',dk:'Denmark',fi:'Finland',nl:'Netherlands',be:'Belgium',
+  ch:'Switzerland',at:'Austria',pt:'Portugal',gr:'Greece',cz:'Czech Republic',
+  hu:'Hungary',ro:'Romania',ke:'Kenya',gh:'Ghana',et:'Ethiopia',
+  ma:'Morocco',iq:'Iraq',ir:'Iran',sy:'Syria',jo:'Jordan',lb:'Lebanon',
+  kw:'Kuwait',ye:'Yemen',af:'Afghanistan',nz:'New Zealand',sg:'Singapore',
+  tw:'Taiwan',cl:'Chile',co:'Colombia',pe:'Peru',az:'Azerbaijan',am:'Armenia',ge:'Georgia'
+};
 
 const KW={
   america:'us',american:'us','united states':'us',pentagon:'us','white house':'us',
-  'wall street':'us','silicon valley':'us','capitol hill':'us','oval office':'us',
-  trump:'us',biden:'us','harris':'us','congress':'us','senate':'us','federal reserve':'us',
-  england:'gb','premier league':'gb',scotland:'gb',wales:'gb','downing street':'gb',
-  'westminster':'gb','buckingham':'gb','sunak':'gb',
-  kremlin:'ru','red square':'ru',ukraine:'ua',ukrainian:'ua','donbas':'ua',
-  'zaporizhzhia':'ua','kherson':'ua','mariupol':'ua','crimea':'ua',
-  macron:'fr','elysee':'fr','bundestag':'de',meloni:'it',
-  'european union':'be','brussels':'be',nato:'be',
+  'wall street':'us','silicon valley':'us','capitol hill':'us',trump:'us',biden:'us',
+  congress:'us','federal reserve':'us',nasdaq:'us',kremlin:'ru',putin:'ru',
+  ukraine:'ua',ukrainian:'ua',zelensky:'ua',donbas:'ua',crimea:'ua',
+  macron:'fr',bundestag:'de',meloni:'it','european union':'be',nato:'be',
   netanyahu:'il',hamas:'il',hezbollah:'lb',gaza:'il','west bank':'il',
-  'tel aviv':'il','idf':'il','houthis':'ye','houthi':'ye',
-  'ayatollah':'ir','irgc':'ir','mossad':'il',
-  modi:'in','xi jinping':'cn','kim jong':'kr',erdogan:'tr',
-  taiwan:'tw','strait of taiwan':'tw','south china sea':'cn',
-  kashmir:'in','line of control':'in',taliban:'af',
-  amazon:'us',google:'us',apple:'us',microsoft:'us',tesla:'us',
-  openai:'us',meta:'us',nvidia:'us',spacex:'us',
-  samsung:'kr',huawei:'cn',toyota:'jp',sony:'jp',
-  'stock market':'us','dow jones':'us',nasdaq:'us','s&p':'us',
-  nba:'us',nfl:'us',nhl:'us',mlb:'us',
-  'la liga':'es','serie a':'it',bundesliga:'de','ligue 1':'fr',
-  'champions league':'gb','europa league':'gb',
-  'world cup':'gb',olympics:'us',wimbledon:'gb','tour de france':'fr',
-  imf:'us','world bank':'us','world health organization':'ch',who:'ch',
-  'united nations':'us','un security council':'us',
+  houthis:'ye',houthi:'ye','idf':'il',ayatollah:'ir','irgc':'ir',
+  modi:'in','xi jinping':'cn',taiwan:'tw',kashmir:'in',taliban:'af',
+  england:'gb','premier league':'gb',scotland:'gb','downing street':'gb',
+  amazon:'us',google:'us',apple:'us',microsoft:'us',tesla:'us',openai:'us',
+  meta:'us',nvidia:'us',samsung:'kr',huawei:'cn',toyota:'jp',
+  nba:'us',nfl:'us',nhl:'us','la liga':'es','serie a':'it',
+  bundesliga:'de','ligue 1':'fr','champions league':'gb','world cup':'gb',
+  olympics:'us',imf:'us','world bank':'us','united nations':'us',who:'ch'
 };
 
-const FALLBACKS=[[40.71,-74.00,'New York'],[51.50,-0.12,'London'],[35.68,139.69,'Tokyo'],[48.85,2.35,'Paris'],[28.61,77.20,'New Delhi'],[39.90,116.40,'Beijing'],[-23.54,-46.63,'São Paulo'],[55.75,37.61,'Moscow'],[25.20,55.27,'Dubai'],[-33.86,151.20,'Sydney'],[1.35,103.81,'Singapore'],[9.07,7.39,'Abuja'],[30.04,31.23,'Cairo'],[-1.28,36.81,'Nairobi'],[19.43,-99.13,'Mexico City'],[37.56,126.97,'Seoul'],[-34.60,-58.38,'Buenos Aires'],[41.01,28.97,'Istanbul'],[52.52,13.40,'Berlin'],[14.59,120.98,'Manila']];
-let fbIdx=0;
+const FALLBACKS=[
+  [40.71,-74.00,'New York'],[51.50,-0.12,'London'],[35.68,139.69,'Tokyo'],
+  [48.85,2.35,'Paris'],[28.61,77.20,'New Delhi'],[39.90,116.40,'Beijing'],
+  [-23.54,-46.63,'São Paulo'],[55.75,37.61,'Moscow'],[25.20,55.27,'Dubai'],
+  [-33.86,151.20,'Sydney'],[1.35,103.81,'Singapore'],[9.07,7.39,'Abuja'],
+  [30.04,31.23,'Cairo'],[-1.28,36.81,'Nairobi'],[19.43,-99.13,'Mexico City'],
+  [37.56,126.97,'Seoul'],[-34.60,-58.38,'Buenos Aires'],[41.01,28.97,'Istanbul'],
+  [52.52,13.40,'Berlin'],[14.59,120.98,'Manila']
+];
 
-const REGION_BB={europe:{lat:[35,72],lng:[-25,45]},americas:{lat:[-60,75],lng:[-170,-30]},asia:{lat:[-10,60],lng:[60,150]},mideast:{lat:[12,42],lng:[25,62]},africa:{lat:[-38,38],lng:[-20,55]},oceania:{lat:[-50,10],lng:[110,180]}};
+const REGION_BB={
+  europe:{lat:[35,72],lng:[-25,45]},americas:{lat:[-60,75],lng:[-170,-30]},
+  asia:{lat:[-10,60],lng:[60,150]},mideast:{lat:[12,42],lng:[25,62]},
+  africa:{lat:[-38,38],lng:[-20,55]},oceania:{lat:[-50,10],lng:[110,180]}
+};
 
 function artRegion(lat,lng){
   for(const[r,b]of Object.entries(REGION_BB)){
@@ -780,14 +833,12 @@ function artRegion(lat,lng){
   return 'other';
 }
 
-// Altın Oran Formülü İle Dağılım
 let jCount = 0;
 function getCoords(text){
   const t=(text||'').toLowerCase();
-  
   jCount++;
   const angle = jCount * 137.5; 
-  const radius = (0.05 + (jCount % 10) * 0.03); // Yaklaşık 5-10 km çapında dağılım
+  const radius = (0.05 + (jCount % 10) * 0.05); // Yaklaşık 5-15 km sapma
   const jLat = Math.cos(angle) * radius;
   const jLng = Math.sin(angle) * radius;
 
@@ -806,8 +857,7 @@ function getCoords(text){
       return{coords:[CAPS[cc][0]+(jLat*2), CAPS[cc][1]+(jLng*2)],loc:name};
     }
   }
-  const f=FALLBACKS[fbIdx%FALLBACKS.length];
-  fbIdx++;
+  const f=FALLBACKS[jCount%FALLBACKS.length];
   return{coords:[f[0]+(jLat*3), f[1]+(jLng*3)],loc:f[2]};
 }
 
@@ -817,14 +867,80 @@ function getCoords(text){
 const GKEY='0a321643-aaab-4c6a-9185-1762685abe3d';
 const GUARDIAN_SECS={world:['world','world/europe-news','world/americas','world/asia-pacific','world/middle-east','world/africa'],technology:['technology'],business:['business','money'],science:['science'],health:['society'],climate:['environment'],politics:['politics','us-news','uk-news'],sport:['sport','football']};
 const RSS={
-  world:[{u:'http://rss.cnn.com/rss/edition_world.rss',n:'CNN'},{u:'https://feeds.bbci.co.uk/news/world/rss.xml',n:'BBC World'},{u:'https://feeds.bbci.co.uk/news/world/africa/rss.xml',n:'BBC Africa'},{u:'https://feeds.bbci.co.uk/news/world/asia/rss.xml',n:'BBC Asia'},{u:'https://feeds.bbci.co.uk/news/world/europe/rss.xml',n:'BBC Europe'},{u:'https://feeds.bbci.co.uk/news/world/middle_east/rss.xml',n:'BBC MidEast'},{u:'https://feeds.bbci.co.uk/news/world/latin_america/rss.xml',n:'BBC LatAm'},{u:'https://rss.nytimes.com/services/xml/rss/nyt/World.xml',n:'NY Times'},{u:'https://feeds.dw.com/rss/rss-en-all',n:'DW'},{u:'https://www.france24.com/en/rss',n:'France24'},{u:'https://www.aljazeera.com/xml/rss/all.xml',n:'Al Jazeera'},{u:'https://english.alarabiya.net/feed/world',n:'Al Arabiya'},{u:'https://www.middleeasteye.net/rss',n:'Middle East Eye'},{u:'https://www3.nhk.or.jp/rss/news/cat0.xml',n:'NHK Japan'},{u:'https://www.abc.net.au/news/feed/51120/rss.xml',n:'ABC Australia'},{u:'https://timesofindia.indiatimes.com/rssfeeds/296589292.cms',n:'Times of India'},{u:'https://www.dawn.com/feeds/home/',n:'Dawn Pakistan'},{u:'https://www.geo.tv/rss/1/2',n:'Geo News'},{u:'https://www.thehindu.com/news/international/feeder/default.rss',n:'The Hindu'},{u:'https://www.straitstimes.com/news/world/rss.xml',n:'Straits Times'},{u:'https://www.euronews.com/rss',n:'EuroNews'},{u:'https://www.rfi.fr/en/rss',n:'RFI'},{u:'https://www.swissinfo.ch/eng/rss',n:'SwissInfo'}],
-  technology:[{u:'https://techcrunch.com/feed/',n:'TechCrunch'},{u:'https://www.theverge.com/rss/index.xml',n:'The Verge'},{u:'https://feeds.arstechnica.com/arstechnica/index',n:'Ars Technica'},{u:'https://www.wired.com/feed/rss',n:'Wired'},{u:'https://feeds.bbci.co.uk/news/technology/rss.xml',n:'BBC Tech'},{u:'https://www.zdnet.com/news/rss.xml',n:'ZDNet'},{u:'https://venturebeat.com/feed/',n:'VentureBeat'},{u:'https://hnrss.org/frontpage',n:'Hacker News'}],
-  business:[{u:'https://feeds.a.dj.com/rss/WSJcomUSBusiness.xml',n:'WSJ'},{u:'https://rss.nytimes.com/services/xml/rss/nyt/Business.xml',n:'NY Times'},{u:'https://feeds.bbci.co.uk/news/business/rss.xml',n:'BBC Biz'},{u:'https://feeds.a.dj.com/rss/RSSMarketsMain.xml',n:'WSJ Markets'},{u:'https://feeds.dw.com/rss/rss-en-bus',n:'DW Business'}],
-  science:[{u:'https://rss.nytimes.com/services/xml/rss/nyt/Science.xml',n:'NY Times'},{u:'https://feeds.bbci.co.uk/news/science_and_environment/rss.xml',n:'BBC'},{u:'https://www.sciencedaily.com/rss/top/science.xml',n:'ScienceDaily'},{u:'https://www.nature.com/nature.rss',n:'Nature'},{u:'https://www.space.com/feeds/all',n:'Space.com'},{u:'https://www.livescience.com/feeds/all',n:'Live Science'}],
-  health:[{u:'https://feeds.bbci.co.uk/news/health/rss.xml',n:'BBC Health'},{u:'https://rss.nytimes.com/services/xml/rss/nyt/Health.xml',n:'NY Times'},{u:'https://www.who.int/rss-feeds/news-english.xml',n:'WHO'}],
-  climate:[{u:'https://feeds.bbci.co.uk/news/science_and_environment/rss.xml',n:'BBC'},{u:'https://www.theguardian.com/environment/rss',n:'Guardian'},{u:'https://rss.nytimes.com/services/xml/rss/nyt/Climate.xml',n:'NYT Climate'},{u:'https://grist.org/feed/',n:'Grist'},{u:'https://insideclimatenews.org/feed/',n:'ICN'}],
-  politics:[{u:'https://rss.nytimes.com/services/xml/rss/nyt/Politics.xml',n:'NY Times'},{u:'https://feeds.bbci.co.uk/news/politics/rss.xml',n:'BBC'},{u:'https://feeds.a.dj.com/rss/RSSOpinion.xml',n:'WSJ'},{u:'https://www.aljazeera.com/xml/rss/all.xml',n:'Al Jazeera'},{u:'https://feeds.dw.com/rss/rss-en-world',n:'DW'}],
-  sport:[{u:'https://www.espn.com/espn/rss/news',n:'ESPN'},{u:'https://feeds.bbci.co.uk/sport/rss.xml',n:'BBC Sport'},{u:'https://www.skysports.com/rss/12040',n:'Sky Sports'},{u:'https://e00-marca.uecdn.es/rss/en/football.xml',n:'Marca'},{u:'https://www.goal.com/en/feeds/news',n:'Goal.com'}]
+  world:[
+    {u:'http://rss.cnn.com/rss/edition_world.rss',n:'CNN'},
+    {u:'https://feeds.bbci.co.uk/news/world/rss.xml',n:'BBC World'},
+    {u:'https://feeds.bbci.co.uk/news/world/africa/rss.xml',n:'BBC Africa'},
+    {u:'https://feeds.bbci.co.uk/news/world/asia/rss.xml',n:'BBC Asia'},
+    {u:'https://feeds.bbci.co.uk/news/world/europe/rss.xml',n:'BBC Europe'},
+    {u:'https://feeds.bbci.co.uk/news/world/middle_east/rss.xml',n:'BBC MidEast'},
+    {u:'https://feeds.bbci.co.uk/news/world/latin_america/rss.xml',n:'BBC LatAm'},
+    {u:'https://rss.nytimes.com/services/xml/rss/nyt/World.xml',n:'NY Times'},
+    {u:'https://feeds.dw.com/rss/rss-en-all',n:'DW Germany'},
+    {u:'https://www.france24.com/en/rss',n:'France24'},
+    {u:'https://www.aljazeera.com/xml/rss/all.xml',n:'Al Jazeera'},
+    {u:'https://english.alarabiya.net/feed/world',n:'Al Arabiya'},
+    {u:'https://www.middleeasteye.net/rss',n:'Middle East Eye'},
+    {u:'https://www3.nhk.or.jp/rss/news/cat0.xml',n:'NHK Japan'},
+    {u:'https://www.abc.net.au/news/feed/51120/rss.xml',n:'ABC Australia'},
+    {u:'https://timesofindia.indiatimes.com/rssfeeds/296589292.cms',n:'Times of India'},
+    {u:'https://www.dawn.com/feeds/home/',n:'Dawn Pakistan'},
+    {u:'https://www.geo.tv/rss/1/2',n:'Geo News'},
+    {u:'https://www.thehindu.com/news/international/feeder/default.rss',n:'The Hindu'},
+    {u:'https://www.euronews.com/rss',n:'EuroNews'},
+    {u:'https://www.rfi.fr/en/rss',n:'RFI France'},
+    {u:'https://www.swissinfo.ch/eng/rss',n:'SwissInfo'}
+  ],
+  technology:[
+    {u:'https://techcrunch.com/feed/',n:'TechCrunch'},
+    {u:'https://www.theverge.com/rss/index.xml',n:'The Verge'},
+    {u:'https://feeds.arstechnica.com/arstechnica/index',n:'Ars Technica'},
+    {u:'https://www.wired.com/feed/rss',n:'Wired'},
+    {u:'https://feeds.bbci.co.uk/news/technology/rss.xml',n:'BBC Tech'},
+    {u:'https://www.zdnet.com/news/rss.xml',n:'ZDNet'},
+    {u:'https://venturebeat.com/feed/',n:'VentureBeat'},
+    {u:'https://hnrss.org/frontpage',n:'Hacker News'}
+  ],
+  business:[
+    {u:'https://feeds.a.dj.com/rss/WSJcomUSBusiness.xml',n:'WSJ'},
+    {u:'https://rss.nytimes.com/services/xml/rss/nyt/Business.xml',n:'NY Times'},
+    {u:'https://feeds.bbci.co.uk/news/business/rss.xml',n:'BBC Biz'},
+    {u:'https://feeds.a.dj.com/rss/RSSMarketsMain.xml',n:'WSJ Markets'},
+    {u:'https://feeds.dw.com/rss/rss-en-bus',n:'DW Business'}
+  ],
+  science:[
+    {u:'https://rss.nytimes.com/services/xml/rss/nyt/Science.xml',n:'NY Times'},
+    {u:'https://feeds.bbci.co.uk/news/science_and_environment/rss.xml',n:'BBC'},
+    {u:'https://www.sciencedaily.com/rss/top/science.xml',n:'ScienceDaily'},
+    {u:'https://www.nature.com/nature.rss',n:'Nature'},
+    {u:'https://www.space.com/feeds/all',n:'Space.com'}
+  ],
+  health:[
+    {u:'https://feeds.bbci.co.uk/news/health/rss.xml',n:'BBC Health'},
+    {u:'https://rss.nytimes.com/services/xml/rss/nyt/Health.xml',n:'NY Times'},
+    {u:'https://www.who.int/rss-feeds/news-english.xml',n:'WHO'}
+  ],
+  climate:[
+    {u:'https://feeds.bbci.co.uk/news/science_and_environment/rss.xml',n:'BBC'},
+    {u:'https://www.theguardian.com/environment/rss',n:'Guardian'},
+    {u:'https://rss.nytimes.com/services/xml/rss/nyt/Climate.xml',n:'NYT Climate'},
+    {u:'https://grist.org/feed/',n:'Grist'},
+    {u:'https://insideclimatenews.org/feed/',n:'ICN'}
+  ],
+  politics:[
+    {u:'https://rss.nytimes.com/services/xml/rss/nyt/Politics.xml',n:'NY Times'},
+    {u:'https://feeds.bbci.co.uk/news/politics/rss.xml',n:'BBC'},
+    {u:'https://feeds.a.dj.com/rss/RSSOpinion.xml',n:'WSJ'},
+    {u:'https://www.aljazeera.com/xml/rss/all.xml',n:'Al Jazeera'},
+    {u:'https://feeds.dw.com/rss/rss-en-world',n:'DW'}
+  ],
+  sport:[
+    {u:'https://www.espn.com/espn/rss/news',n:'ESPN'},
+    {u:'https://feeds.bbci.co.uk/sport/rss.xml',n:'BBC Sport'},
+    {u:'https://www.skysports.com/rss/12040',n:'Sky Sports'},
+    {u:'https://e00-marca.uecdn.es/rss/en/football.xml',n:'Marca'},
+    {u:'https://www.goal.com/en/feeds/news',n:'Goal.com'}
+  ]
 };
 
 async function tFetch(url,ms=5000){
@@ -839,8 +955,11 @@ async function fetchGuardian(sec){
     const r=await tFetch(`https://content.guardianapis.com/${sec}?api-key=${GKEY}&page-size=15&show-fields=thumbnail,trailText`,5000);
     const d=await r.json();
     return(d.response?.results||[]).map(a=>({
-      title:a.webTitle,url:a.webUrl,source:'The Guardian',
-      date:a.webPublicationDate,thumb:a.fields?.thumbnail||null,
+      title:a.webTitle,
+      url:a.webUrl,
+      source:'The Guardian',
+      date:a.webPublicationDate,
+      thumb:a.fields?.thumbnail||null,
       trail:(a.fields?.trailText||'').replace(/<[^>]*>/gm,'')
     }));
   }catch{return[];}
@@ -850,34 +969,43 @@ async function fetchRSS(feed){
   try{
     const r=await tFetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feed.u)}&count=10`,4000);
     const d=await r.json();
-    if(d.status==='ok'&&d.items?.length)
+    if(d.status==='ok'&&d.items?.length) {
       return d.items.map(i=>({
-        title:i.title||'',url:i.link||'#',source:feed.n,date:i.pubDate,
+        title:i.title||'',
+        url:i.link||'#',
+        source:feed.n,
+        date:i.pubDate,
         thumb:i.thumbnail||(i.enclosure?.link)||null,
         trail:(i.description||'').replace(/<[^>]*>/gm,'').slice(0,450)
       })).filter(a=>a.title);
+    }
   }catch{}
+
   try{
     const r=await tFetch(`https://api.allorigins.win/get?url=${encodeURIComponent(feed.u)}`,5000);
     const d=await r.json();
-    if(!d.contents)return[];
+    if(!d.contents) return[];
     const xml=new DOMParser().parseFromString(d.contents,'text/xml');
     let items=[...xml.querySelectorAll('item')];
-    if(!items.length)items=[...xml.querySelectorAll('entry')];
+    if(!items.length) items=[...xml.querySelectorAll('entry')];
     return items.slice(0,10).map(it=>{
       const title=(it.querySelector('title')?.textContent||'').replace(/<!\[CDATA\[|\]\]>/g,'').trim();
-      if(!title)return null;
+      if(!title) return null;
       let url=it.querySelector('link')?.textContent;
-      if(!url||!url.startsWith('http')){const l=it.querySelector('link');if(l)url=l.getAttribute('href');}
-      const thumb=it.querySelector('enclosure[type^="image"]')?.getAttribute('url')||it.querySelector('thumbnail')?.getAttribute('url')||null;
+      if(!url||!url.startsWith('http')){
+        const lnk=it.querySelector('link');
+        if(lnk) url=lnk.getAttribute('href');
+      }
+      let thumb=it.querySelector('enclosure[type^="image"]')?.getAttribute('url')||it.querySelector('thumbnail')?.getAttribute('url');
       const trail=(it.querySelector('description')?.textContent||it.querySelector('summary')?.textContent||'').replace(/<[^>]*>/gm,'').slice(0,450);
       return{title,url:url||'#',source:feed.n,thumb,trail};
     }).filter(Boolean);
   }catch{return[];}
 }
 
+// ── MAIN FETCH ──
 async function fetchNews(cat){
-  const myFid=++currentFetchId; fbIdx=0; jCount=0;
+  const fid=++currentFetchId;
   document.getElementById('newsList').innerHTML='<div class="loader"><div class="loader-owl">🦉</div><div class="loader-txt">SCANNING GLOBE</div></div>';
   document.getElementById('feedLabel').textContent=cat.toUpperCase()+' FEED';
 
@@ -889,7 +1017,7 @@ async function fetchNews(cat){
     ...rssList.map(f=>fetchRSS(f))
   ]);
   
-  if(myFid!==currentFetchId) return; 
+  if(fid!==currentFetchId) return; 
 
   let arts=[];
   results.forEach(r=>{
@@ -919,7 +1047,7 @@ async function fetchNews(cat){
 }
 
 // ═══════════════════════════════════════════════════════
-// RENDER FEED
+// RENDER FEED (BBC STYLE CARDS)
 // ═══════════════════════════════════════════════════════
 function renderFeed(arts){
   if(clusterLayer) map.removeLayer(clusterLayer);
@@ -935,10 +1063,10 @@ function renderFeed(arts){
   const list=document.getElementById('newsList');
   list.innerHTML='';
   const filtered=curR==='all'?arts:arts.filter(a=>a._r===curR);
-  document.getElementById('scount').textContent=`${filtered.length} stories · ${new Set(arts.map(a=>a.source)).size} sources`;
+  document.getElementById('scount').textContent=`${filtered.length} stories`;
 
   if(!filtered.length){
-    list.innerHTML='<div class="loader"><div class="loader-owl">🦉</div><div class="loader-txt">No stories in this region</div></div>';
+    list.innerHTML='<div class="loader"><div class="loader-owl">🦉</div><div class="loader-txt">No stories found</div></div>';
     map.addLayer(clusterLayer);
     return;
   }
@@ -1113,7 +1241,7 @@ function showBreaking(arts){
   const a=src[Math.floor(Math.random()*Math.min(src.length,10))];
   const el=document.getElementById('breaking');
   document.getElementById('breaking-title').textContent=a.title.length>55?a.title.slice(0,55)+'…':a.title;
-  el.onclick=ev=>{if(!ev.target.classList.contains('breaking-close')){hideBreaking();openModal(a);}};
+  el.onclick=ev=>{if(!ev.target.classList.contains('breaking-x')){hideBreaking();openModal(a);}};
   el.classList.add('show');
   breakingTimer=setTimeout(()=>{el.classList.remove('show');breakingTimer=setTimeout(()=>showBreaking(allArticles),22000);},9000);
 }
@@ -1124,7 +1252,7 @@ function hideBreaking(){
 }
 
 // ═══════════════════════════════════════════════════════
-// MODAL (ÖZET VE İLGİLİ HABERLER)
+// MODAL (RADAR DALGASI & CROSSHAIR EKLENDİ)
 // ═══════════════════════════════════════════════════════
 window._openById=function(enc){
   const url=decodeURIComponent(enc);
@@ -1135,6 +1263,18 @@ window._openById=function(enc){
 function openModal(a){
   curModalArt=a;
   markRead(a.url);
+  
+  // RADAR PULSE & CROSSHAIR EFEKTİ
+  pulseLayer.clearLayers();
+  L.circle(a._c, { 
+    radius: 400000, 
+    color: a._sentiment.level === 'CRITICAL' ? 'var(--crit)' : 'var(--accent)', 
+    weight: 2, fillOpacity: 0.1, className: 'radar-pulse' 
+  }).addTo(pulseLayer);
+  L.marker(a._c, { 
+    icon: L.divIcon({ html: '<div class="crosshair-container"></div>', className: '', iconSize: [50, 50], iconAnchor: [25, 25] }) 
+  }).addTo(pulseLayer);
+
   const img=document.getElementById('mhero');
   if(a.thumb){img.src=a.thumb;img.style.display='block';}else img.style.display='none';
   document.getElementById('mtitle').textContent=a.title;
@@ -1156,7 +1296,6 @@ function openModal(a){
   sb.classList.toggle('on',isSaved(a));
   sb.textContent=isSaved(a)?'✓ Saved':'🔖 Save';
 
-  // ── RELATED ARTICLES (BBC ŞIK GRID TASARIMI) ──
   const stop=['after','under','their','there','about','which','would','could','should','have','been','that','this','with','from','when','were','also','into','over','more','than','then','they','some','just'];
   const words=(a.title.toLowerCase().match(/\b[a-z]{4,}\b/g)||[]).filter(w=>!stop.includes(w));
   const related = allArticles
@@ -1203,7 +1342,10 @@ function openModal(a){
   document.querySelectorAll('.ncard').forEach(c=>{if(c.dataset.url===a.url)c.classList.add('read');});
 }
 
-function closeModal(){document.getElementById('modal').classList.remove('on');}
+function closeModal(){
+  document.getElementById('modal').classList.remove('on');
+  pulseLayer.clearLayers();
+}
 
 function toggleSaveModal(){
   if(!curModalArt)return;
