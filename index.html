@@ -29,9 +29,15 @@
     *{box-sizing:border-box;margin:0;padding:0;}
     html,body{width:100%;height:100%;overflow:hidden;font-family:'Syne',sans-serif;background:var(--bg);color:var(--text);}
 
-    /* ─── RELATION LINE ─── */
-    .relation-line{stroke-dasharray:8,8;animation:radarBeam 1s linear infinite;filter:drop-shadow(0 0 4px rgba(229,90,32,.8));}
-    @keyframes radarBeam{to{stroke-dashoffset:-16;}}
+    /* ─── KESİN KIRMIZI HAREKETLİ RADAR ÇİZGİSİ ─── */
+    .relation-line {
+      stroke: var(--crit) !important;
+      stroke-width: 3px !important;
+      stroke-dasharray: 12, 12 !important;
+      animation: radarBeam 0.8s linear infinite;
+      filter: drop-shadow(0 0 6px rgba(224, 49, 49, 0.9)) !important;
+    }
+    @keyframes radarBeam{to{stroke-dashoffset:-24;}}
 
     /* ─── SPLASH ─── */
     .splash{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:99999;transition:opacity .6s;}
@@ -45,26 +51,32 @@
     @keyframes loadBar{from{width:0}to{width:100%}}
     @keyframes owlFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
 
-    /* ─── HEADER ─── */
+    /* ─── HEADER & PREMIUM LOGIN ─── */
     .header{position:fixed;top:0;left:0;right:0;height:52px;background:var(--card);border-bottom:1px solid var(--border);padding:0 16px;display:flex;align-items:center;justify-content:space-between;z-index:600;}
     .logo{display:flex;align-items:center;gap:8px;cursor:pointer;}
     .logo-name{font-size:17px;font-weight:800;letter-spacing:3px;color:var(--accent);}
     .logo-sub{font-size:9px;color:var(--text3);font-family:'Space Mono',monospace;font-weight:700;}
-    .hdr-right{display:flex;align-items:center;gap:6px;}
-    .hbtn{background:var(--bg);border:1px solid var(--border);color:var(--text2);padding:5px 11px;border-radius:8px;cursor:pointer;font-size:11px;font-weight:700;transition:all .2s;white-space:nowrap;}
+    .hdr-right{display:flex;align-items:center;gap:8px;}
+    .hbtn{background:var(--bg);border:1px solid var(--border);color:var(--text2);padding:6px 14px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:700;transition:all .2s;white-space:nowrap;}
     .hbtn:hover{border-color:var(--accent);color:var(--accent);background:var(--bg2);}
     .bcount{background:var(--accent2);color:#fff;border-radius:10px;padding:1px 5px;font-size:9px;margin-left:2px;}
-    /* User avatar + dropdown */
-    .user-wrap{position:relative;}
-    .uavatar{width:32px;height:32px;border-radius:50%;border:2px solid var(--accent);display:none;cursor:pointer;transition:box-shadow .2s;}
-    .uavatar:hover{box-shadow:0 0 0 3px var(--bg3);}
-    .user-menu{position:absolute;top:40px;right:0;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:8px;min-width:200px;box-shadow:0 8px 24px rgba(0,0,0,.12);z-index:700;display:none;animation:fadeIn .15s ease;}
+    
+    .user-wrap{position:relative; display:none; align-items:center; gap:8px; background:var(--bg); padding:4px 10px 4px 4px; border-radius:30px; border:1px solid var(--border); cursor:pointer; transition:border .2s;}
+    .user-wrap:hover { border-color:var(--accent); }
+    .uavatar{width:28px;height:28px;border-radius:50%;}
+    .user-name-display { font-size:12px; font-weight:700; color:var(--text); display:none; }
+    
+    @media(min-width:769px){ 
+        .user-name-display { display:block; } 
+    }
+
+    .user-menu{position:absolute;top:46px;right:0;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:8px;min-width:220px;box-shadow:0 12px 32px rgba(0,0,0,.1);z-index:700;display:none;animation:fadeIn .15s ease;}
     .user-menu.open{display:block;}
     @keyframes fadeIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
-    .um-head{padding:10px 10px 8px;border-bottom:1px solid var(--border);margin-bottom:6px;}
-    .um-name{font-size:13px;font-weight:800;color:var(--text);}
-    .um-email{font-size:10px;color:var(--text3);margin-top:2px;font-family:'Space Mono',monospace;}
-    .um-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:700;color:var(--text2);transition:background .15s;}
+    .um-head{padding:10px 10px 12px;border-bottom:1px solid var(--border);margin-bottom:6px;}
+    .um-name{font-size:14px;font-weight:800;color:var(--text);}
+    .um-email{font-size:10px;color:var(--text3);margin-top:4px;font-family:'Space Mono',monospace;}
+    .um-item{display:flex;align-items:center;gap:8px;padding:10px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:700;color:var(--text2);transition:background .15s;}
     .um-item:hover{background:var(--bg2);color:var(--accent);}
     .um-item.danger{color:var(--crit);}
     .um-item.danger:hover{background:rgba(224,49,49,.08);}
@@ -76,7 +88,7 @@
     .bar-row+.bar-row{border-top:1px solid var(--border);}
     .rbtn{flex-shrink:0;font-size:9px;font-weight:700;letter-spacing:1px;padding:4px 10px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--text3);cursor:pointer;font-family:'Space Mono',monospace;transition:all .2s;}
     .rbtn.active,.rbtn:hover{background:var(--bg3);color:var(--accent);border-color:var(--accent);}
-    .cbtn{flex-shrink:0;font-size:11px;font-weight:700;padding:5px 14px;border-radius:20px;border:1px solid var(--border);background:var(--card);color:var(--text2);cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
+    .cbtn{flex-shrink:0;font-size:11px;font-weight:700;padding:5px 14px;border-radius:20px;border:1px solid var(--border);background:var(--card);color:var(--text2);cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent;}
     .cbtn.active{background:var(--accent);color:#fff;border-color:var(--accent);}
     .cbtn:hover:not(.active){border-color:var(--accent);color:var(--accent);background:var(--bg);}
     .cbtn.fav-cat{border-color:var(--saved);color:var(--saved);}
@@ -94,13 +106,12 @@
     .spanel.active{display:flex;}
     .live-row{padding:8px 14px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--bg2);}
     .live-dot{display:flex;align-items:center;gap:5px;font-size:9px;color:var(--accent);font-family:'Space Mono',monospace;font-weight:700;}
-    .live-dot::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 1.5s infinite;box-shadow:0 0 5px var(--accent);}
-    @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(1.5)}}
+    .live-dot::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 1.5s infinite;}
     .scount{font-size:9px;color:var(--text2);font-family:'Space Mono',monospace;font-weight:700;}
-    .news-scroll{overflow-y:auto;flex:1;contain:layout style;-webkit-overflow-scrolling:touch;} /* perf hint */
+    .news-scroll{overflow-y:auto;flex:1;}
 
     /* ─── NEWS CARDS ─── */
-    .ncard{padding:13px 14px;border-bottom:1px solid var(--border);cursor:pointer;position:relative;transition:background .12s;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
+    .ncard{padding:13px 14px;border-bottom:1px solid var(--border);cursor:pointer;position:relative;transition:background .12s;}
     .ncard:hover{background:var(--bg);}
     .ncard.active{background:var(--bg2);border-left:4px solid var(--accent);}
     .ncard.read{opacity:.6;}
@@ -112,277 +123,133 @@
     .ntitle{font-size:13px;font-weight:700;line-height:1.35;margin:4px 0;color:var(--text);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
     .nmeta{font-size:9px;color:var(--text3);display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;font-weight:700;align-items:center;}
     .nloc{background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:2px 6px;font-family:'Space Mono',monospace;color:var(--accent);}
+    
     .th-crit{color:var(--crit);background:rgba(224,49,49,.1);padding:2px 5px;border-radius:4px;border:1px solid rgba(224,49,49,.3);}
     .th-warn{color:var(--warn);background:rgba(255,176,32,.1);padding:2px 5px;border-radius:4px;border:1px solid rgba(255,176,32,.3);}
-    .nbookmark{position:absolute;right:10px;top:12px;background:var(--bg);border:1px solid var(--border);border-radius:6px;width:28px;height:28px;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;opacity:0;transition:all .2s;color:var(--text2);-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
+    
+    .nbookmark{position:absolute;right:10px;top:12px;background:var(--bg);border:1px solid var(--border);border-radius:6px;width:28px;height:28px;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;opacity:0;transition:all .2s;color:var(--text2);}
     .ncard:hover .nbookmark{opacity:1;}
-    @media(max-width:768px){.nbookmark{opacity:1;width:32px;height:32px;font-size:15px;}}
     .nbookmark:hover{color:var(--accent);border-color:var(--accent);}
     .nbookmark.on{opacity:1;color:var(--saved);border-color:var(--saved);}
+    .unread-dot{position:absolute;left:5px;top:50%;transform:translateY(-50%);width:6px;height:6px;border-radius:50%;background:var(--accent);}
 
-    /* ─── DATA PANEL ─── */
-    .data-body{padding:16px;display:flex;flex-direction:column;gap:14px;}
+    /* ─── MODAL (HABER DETAYI VE ÖNERİLER) ─── */
+    .moverlay{position:fixed;inset:0;background:rgba(10,27,36,.8);z-index:9000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;backdrop-filter:blur(4px);}
+    .moverlay.on{opacity:1;pointer-events:auto;}
+    .mbox{background:var(--card);border:1px solid var(--border);border-radius:16px;width:92%;max-width:560px;max-height:88vh;overflow-y:auto;position:relative;box-shadow:0 24px 60px rgba(0,0,0,.15);transform:translateY(14px);transition:transform .3s;}
+    .moverlay.on .mbox{transform:translateY(0);}
+    .mhero{width:100%;height:240px;object-fit:cover;border-radius:16px 16px 0 0;display:block;}
+    
+    .mclose{position:absolute;top:12px;right:14px;width:36px;height:36px;background:rgba(255,255,255,.95);border:1px solid var(--border);color:var(--text);font-size:20px;cursor:pointer;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:10;}
+    .mbody{padding:24px;}
+    .mtags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
+    .mtag{font-size:9px;font-weight:800;letter-spacing:1px;padding:4px 10px;border-radius:20px;font-family:'Space Mono',monospace;}
+    .mtitle{font-size:22px;font-weight:800;line-height:1.3;margin-bottom:16px;}
+    .mdesc{font-size:15px;line-height:1.7;color:var(--text2);margin-bottom:24px;font-weight:500;}
+    .mfooter{display:flex;gap:10px;flex-wrap:wrap; margin-bottom: 24px;}
+    .mbtn{padding:12px 24px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;border:1px solid var(--border);font-family:'Syne',sans-serif;}
+    .mbtn.pri{background:var(--accent);color:#fff;border-color:var(--accent);text-decoration:none;display:inline-flex;align-items:center;gap:6px;}
+    .mbtn.sec{background:var(--bg);color:var(--text2);}
+    .mbtn.sv.on{color:var(--saved);border-color:var(--saved);}
+
+    /* İlgili Haberler Bölümü */
+    .m-related-title { font-size: 11px; font-weight: 800; color: var(--text3); font-family: 'Space Mono', monospace; letter-spacing: 1px; margin-bottom: 12px; border-top: 1px solid var(--border); padding-top: 24px; }
+    .m-related-grid { display: flex; flex-direction: column; gap: 10px; }
+    .m-rel-card { display: flex; gap: 10px; padding: 10px; border: 1px solid var(--border); border-radius: 10px; background: var(--bg); cursor: pointer; transition: border .2s; }
+    .m-rel-card:hover { border-color: var(--accent); }
+    .m-rel-img { width: 60px; height: 60px; object-fit: cover; border-radius: 6px; }
+    .m-rel-info { display: flex; flex-direction: column; justify-content: center; }
+    .m-rel-src { font-size: 9px; font-family: 'Space Mono', monospace; font-weight: 700; color: var(--accent2); margin-bottom: 4px; }
+    .m-rel-ttl { font-size: 12px; font-weight: 700; color: var(--text); line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+    /* ─── DATA PANEL & PROFILE ─── */
+    .data-body, .profile-body{padding:16px;display:flex;flex-direction:column;gap:14px;}
     .stat-box{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px;}
     .stat-title{font-size:9px;font-family:'Space Mono',monospace;font-weight:700;color:var(--text3);letter-spacing:1px;margin-bottom:10px;}
     .stat-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;font-size:12px;font-weight:700;}
     .stat-bar-bg{width:100%;height:6px;background:var(--bg3);border-radius:3px;overflow:hidden;}
     .stat-bar-fill{height:100%;border-radius:3px;transition:width 1s ease-out;}
-
-    /* ─── PROFILE PANEL ─── */
-    .profile-body{padding:16px;display:flex;flex-direction:column;gap:14px;}
     .profile-avatar-big{width:64px;height:64px;border-radius:50%;border:3px solid var(--accent);margin:0 auto 8px;}
     .profile-name{font-size:18px;font-weight:800;text-align:center;color:var(--text);}
     .profile-email{font-size:10px;color:var(--text3);text-align:center;font-family:'Space Mono',monospace;margin-top:2px;}
-    .pref-title{font-size:10px;font-family:'Space Mono',monospace;font-weight:700;color:var(--text3);letter-spacing:1px;margin-bottom:8px;}
     .pref-cats{display:flex;flex-wrap:wrap;gap:6px;}
     .pref-cat{font-size:11px;font-weight:700;padding:5px 12px;border-radius:20px;border:1px solid var(--border);background:var(--card);color:var(--text2);cursor:pointer;transition:all .2s;}
     .pref-cat.on{background:var(--accent);color:#fff;border-color:var(--accent);}
-    .stat-streak{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px;}
-    .streak-num{font-size:28px;font-weight:800;color:var(--accent);}
-    .streak-label{font-size:10px;color:var(--text3);font-family:'Space Mono',monospace;}
     .login-cta{display:flex;flex-direction:column;align-items:center;gap:12px;padding:40px 20px;text-align:center;}
-    .login-cta-owl{font-size:52px;animation:owlFloat 2s infinite;}
-    .login-cta-title{font-size:16px;font-weight:800;color:var(--text);}
-    .login-cta-sub{font-size:12px;color:var(--text3);line-height:1.6;}
-    .google-btn{display:flex;align-items:center;gap:10px;background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 20px;font-size:13px;font-weight:800;cursor:pointer;transition:all .2s;font-family:'Syne',sans-serif;}
-    .google-btn:hover{opacity:.88;transform:translateY(-1px);}
+    .login-cta-owl{font-size:52px;}
+    .google-btn{display:flex;align-items:center;gap:10px;background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 20px;font-size:13px;font-weight:800;cursor:pointer;font-family:'Syne',sans-serif;}
 
     /* ─── ALERTS ─── */
     .alerts-body{padding:16px;}
     .alert-input-row{display:flex;gap:8px;margin-bottom:12px;}
-    .alert-input{flex:1;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--text);font-size:12px;font-family:'Syne',sans-serif;outline:none;font-weight:600;}
-    .alert-input:focus{border-color:var(--accent);}
+    .alert-input{flex:1;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--text);font-size:12px;font-family:'Syne',sans-serif;outline:none;}
     .alert-add-btn{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:8px 14px;font-weight:800;cursor:pointer;}
     .alert-tags{display:flex;flex-wrap:wrap;gap:8px;}
     .atag{display:flex;align-items:center;gap:6px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:5px 12px;font-size:10px;font-weight:700;color:var(--accent);}
 
-    /* ─── BBC STYLE POPUP ─── */
-    /* Override Leaflet defaults */
+    /* ─── WEB POP-UP (KAPANMA HATASI ÇÖZÜLDÜ) ─── */
     .bbc-popup-wrap .leaflet-popup-content-wrapper{padding:0!important;border-radius:0!important;overflow:hidden;border:1px solid var(--border)!important;background:var(--card)!important;box-shadow:0 16px 40px rgba(0,0,0,.16)!important;}
     .bbc-popup-wrap .leaflet-popup-content{margin:0!important;width:300px!important;}
-    .bbc-popup-wrap .leaflet-popup-tip-container{margin-top:-1px;}
     .bbc-popup-wrap .leaflet-popup-tip{background:var(--card)!important;}
-    .leaflet-container a.leaflet-popup-close-button{color:#fff!important;background:rgba(10,27,36,.55)!important;border-radius:50%;width:26px!important;height:26px!important;line-height:26px!important;text-align:center;top:8px!important;right:8px!important;padding:0!important;border:1px solid rgba(255,255,255,.2)!important;transition:all .2s;font-size:16px!important;}
-    .leaflet-container a.leaflet-popup-close-button:hover{background:var(--accent2)!important;}
+    
+    /* Close Button Fix */
+    .leaflet-container a.leaflet-popup-close-button {
+      color: #fff !important; 
+      background: rgba(10,27,36,.7) !important; 
+      border-radius: 50% !important; 
+      width: 28px !important; 
+      height: 28px !important; 
+      line-height: 28px !important; 
+      text-align: center !important; 
+      top: 10px !important; 
+      right: 10px !important; 
+      padding: 0 !important; 
+      font-size: 16px !important;
+      z-index: 9999 !important; /* En üstte tutar */
+      pointer-events: auto !important; /* Tıklanabilir yapar */
+    }
+    .leaflet-container a.leaflet-popup-close-button:hover{background:var(--crit)!important;}
 
     .bbc-card{cursor:pointer;background:var(--card);transition:background .15s;}
-    .bbc-card:hover{background:var(--bg);}
-    .bbc-card:hover .bbc-title{color:var(--accent);}
     .bbc-hero{width:100%;height:170px;object-fit:cover;display:block;border-bottom:1px solid var(--border);}
-    .bbc-hero-ph{width:100%;height:170px;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:44px;border-bottom:1px solid var(--border);}
     .bbc-body{padding:14px 16px 16px;}
-    .bbc-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;}
-    .bbc-src{font-size:9px;font-weight:800;color:var(--accent2);text-transform:uppercase;letter-spacing:1.2px;font-family:'Space Mono',monospace;}
-    .bbc-badge{font-size:8px;font-weight:800;padding:2px 6px;border-radius:4px;letter-spacing:.5px;font-family:'Space Mono',monospace;}
-    .bbc-title{font-size:16px;font-weight:800;color:var(--text);line-height:1.28;margin-bottom:8px;transition:color .15s;}
-    .bbc-desc{font-size:12px;color:var(--text2);line-height:1.55;font-weight:500;}
-    .bbc-cta{display:block;margin-top:12px;background:var(--accent);color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:11px;font-weight:800;cursor:pointer;width:100%;font-family:'Syne',sans-serif;letter-spacing:.5px;transition:opacity .2s;}
-    .bbc-cta:hover{opacity:.85;}
+    .bbc-src{font-size:9px;font-weight:800;color:var(--accent2);text-transform:uppercase;font-family:'Space Mono',monospace;}
+    .bbc-title{font-size:16px;font-weight:800;color:var(--text);line-height:1.28;margin:8px 0; display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+    .bbc-desc{font-size:12px;color:var(--text2);line-height:1.55;font-weight:500; display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
 
-    /* ─── BREAKING POPUP ─── */
-    .breaking{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(120px);background:linear-gradient(135deg,#ff0f4f,#ff8c00);color:#fff;padding:14px 20px;border-radius:28px;font-weight:800;box-shadow:0 10px 32px rgba(255,15,79,.35);z-index:8500;transition:transform .55s cubic-bezier(.34,1.56,.64,1);display:flex;align-items:center;gap:14px;cursor:pointer;max-width:420px;width:90%;}
-    .breaking.show{transform:translateX(-50%) translateY(0);}
-    .breaking:hover{filter:brightness(1.06);}
-    .breaking-icon{font-size:26px;animation:owlFloat 1s infinite alternate;}
-    .breaking-lbl{font-size:9px;color:#ffd700;text-transform:uppercase;letter-spacing:1.5px;font-family:'Space Mono',monospace;}
-    .breaking-ttl{font-size:12px;margin-top:3px;line-height:1.4;font-weight:700;}
-    .breaking-x{margin-left:auto;flex-shrink:0;font-size:20px;opacity:.7;padding:0 4px;}
-
-    /* ─── MODAL ─── */
-    .moverlay{position:fixed;inset:0;background:rgba(10,27,36,.8);z-index:9000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;backdrop-filter:blur(4px);}
-    .moverlay.on{opacity:1;pointer-events:auto;}
-    .mbox{background:var(--card);border:1px solid var(--border);border-radius:16px;width:92%;max-width:560px;max-height:88vh;overflow-y:auto;position:relative;box-shadow:0 24px 60px rgba(0,0,0,.15);transform:translateY(14px);transition:transform .3s;}
-    .moverlay.on .mbox{transform:translateY(0);}
-    .mhero{width:100%;height:210px;object-fit:cover;border-radius:16px 16px 0 0;display:block;}
-    .mclose{position:absolute;top:12px;right:14px;width:36px;height:36px;background:rgba(255,255,255,.95);border:1px solid var(--border);color:var(--text);font-size:20px;cursor:pointer;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:10;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
-    .mbody{padding:20px 24px;}
-    .mtags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
-    .mtag{font-size:9px;font-weight:800;letter-spacing:1px;padding:4px 10px;border-radius:20px;font-family:'Space Mono',monospace;}
-    .mtitle{font-size:20px;font-weight:800;line-height:1.35;margin-bottom:12px;}
-    .mdesc{font-size:14px;line-height:1.65;color:var(--text2);margin-bottom:20px;font-weight:600;}
-    .mfooter{display:flex;gap:10px;flex-wrap:wrap;}
-    .mbtn{padding:10px 20px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;border:1px solid var(--border);font-family:'Syne',sans-serif;}
-    .mbtn.pri{background:var(--accent);color:#fff;border-color:var(--accent);text-decoration:none;display:inline-flex;align-items:center;gap:6px;}
-    .mbtn.sec{background:var(--bg);color:var(--text2);}
-    .mbtn.sv.on{color:var(--saved);border-color:var(--saved);}
-
-    /* ─── TOAST ─── */
+    /* ─── TOASTS, BREAKING, LOADER ─── */
     .tstack{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);z-index:8000;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none;width:90%;max-width:360px;}
-    .toast{background:var(--card);border:1px solid var(--accent);border-radius:12px;padding:12px 16px;width:100%;box-shadow:0 8px 24px rgba(0,152,160,.15);display:flex;align-items:center;gap:12px;pointer-events:auto;cursor:pointer;transform:translateY(80px);opacity:0;transition:all .4s cubic-bezier(.34,1.56,.64,1);}
+    .toast{background:var(--card);border:1px solid var(--accent);border-radius:12px;padding:12px 16px;width:100%;box-shadow:0 8px 24px rgba(0,152,160,.15);display:flex;align-items:center;gap:12px;pointer-events:auto;transform:translateY(80px);opacity:0;}
     .toast.show{transform:translateY(0);opacity:1;}
-    .t-icon{font-size:22px;flex-shrink:0;}
-    .t-lbl{font-size:9px;color:var(--accent2);font-family:'Space Mono',monospace;font-weight:700;letter-spacing:1px;}
-    .t-ttl{font-size:11px;font-weight:700;margin-top:2px;line-height:1.4;}
-    .t-x{margin-left:auto;color:var(--text3);font-size:16px;cursor:pointer;flex-shrink:0;padding:2px 4px;}
-
-    /* ─── LOADER ─── */
+    .breaking{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(120px);background:linear-gradient(135deg,#ff0f4f,#ff8c00);color:#fff;padding:14px 20px;border-radius:28px;font-weight:800;z-index:8500;display:flex;align-items:center;gap:14px;cursor:pointer;}
+    .breaking.show{transform:translateX(-50%) translateY(0);}
     .loader{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 24px;gap:12px;}
     .loader-owl{font-size:42px;animation:owlFloat 2s infinite;}
     .loader-txt{font-size:10px;font-weight:700;color:var(--accent);font-family:'Space Mono',monospace;letter-spacing:2px;}
     .loader-txt::after{content:'';animation:dots 1.5s infinite steps(4,end);}
-    @keyframes dots{0%{content:''}25%{content:'.'}50%{content:'..'}75%{content:'...'}}
-    .saved-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:10px;color:var(--text3);font-size:12px;padding:40px;text-align:center;font-weight:600;}
-
-    /* ─── CLUSTER ─── */
-    .ccluster{background:var(--bg)!important;border:2px solid var(--accent)!important;border-radius:50%!important;color:var(--accent)!important;font-weight:800!important;font-family:'Space Mono',monospace!important;display:flex!important;align-items:center!important;justify-content:center!important;box-shadow:0 4px 12px rgba(0,152,160,.2)!important;}
-    @keyframes mpulse{0%{transform:scale(.8);opacity:.8}100%{transform:scale(2.2);opacity:0}}
 
     /* ─── MOBILE ─── */
     @media(max-width:768px){
-      /* Header compact */
-      .header{padding:0 12px;height:50px;}
-      .logo-name{font-size:15px;}
-      .hbtn{padding:4px 8px;font-size:10px;}
       .top-bars{display:none;}
-
-      /* MAP: full screen minus header+bottom-nav */
-      #map{
-        position:fixed;
-        top:50px;
-        left:0;right:0;
-        bottom:56px;
-        z-index:1;
-        background:var(--bg);
-      }
-
-      /* SIDEBAR: hidden by default, shown as bottom sheet */
-      .sidebar{
-        position:fixed;
-        left:0;right:0;
-        bottom:56px;
-        width:100%;
-        height:52vh;
-        top:auto;
-        border-left:none;
-        border-top:2px solid var(--border);
-        z-index:450;
-        transform:translateY(100%);
-        transition:transform .3s cubic-bezier(.4,0,.2,1);
-        border-radius:16px 16px 0 0;
-        box-shadow:0 -8px 32px rgba(0,0,0,.1);
-      }
-      .sidebar.mob-visible{
-        transform:translateY(0);
-      }
-      /* full-list mode: sidebar takes most of screen */
-      .sidebar.list-full{
-        height:calc(100vh - 50px - 56px);
-        transform:translateY(0);
-        border-radius:0;
-      }
-      /* When list-full, hide map */
+      #map{position:fixed;top:52px;left:0;right:0;bottom:calc(45vh + 54px);z-index:1;}
+      .sidebar{position:fixed;top:auto;bottom:54px;left:0;right:0;width:100%;height:45vh;border-left:none;border-top:2px solid var(--border);z-index:450; border-radius:16px 16px 0 0;}
+      .sidebar.map-only{display:none;}
+      .sidebar.list-full{height:calc(100vh - 52px - 54px);border-radius:0;}
       #map.list-full{display:none;}
-
-      /* Drag handle on sidebar */
-      .sidebar::before{
-        content:'';
-        display:block;
-        width:36px;height:4px;
-        background:var(--border);
-        border-radius:2px;
-        margin:8px auto 4px;
-        flex-shrink:0;
-      }
-
-      /* Stabs smaller on mobile */
-      .stab{font-size:9px;padding:10px 2px;}
-
-      /* News cards slightly more compact */
-      .ncard{padding:11px 12px;}
-      .nthumb{width:62px;height:46px;}
-
-      /* Bottom nav bar */
-      .mob-bar{
-        position:fixed;bottom:0;left:0;right:0;
-        height:56px;
-        background:var(--card);
-        border-top:1px solid var(--border);
-        display:flex;
-        z-index:600;
-        safe-area-inset-bottom:env(safe-area-inset-bottom,0px);
-        padding-bottom:env(safe-area-inset-bottom,0px);
-      }
-      .mbbtn{
-        flex:1;display:flex;flex-direction:column;
-        align-items:center;justify-content:center;
-        gap:3px;cursor:pointer;border:none;
-        background:transparent;color:var(--text3);
-        font-size:9px;font-family:'Space Mono',monospace;
-        font-weight:700;transition:color .2s;
-        -webkit-tap-highlight-color:transparent;
-        touch-action:manipulation;
-      }
-      .mbbtn .mbi{font-size:22px;line-height:1;}
+      .mob-bar{position:fixed;bottom:0;left:0;right:0;height:56px;background:var(--card);border-top:1px solid var(--border);display:flex;z-index:600;}
+      .mbbtn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;border:none;background:transparent;color:var(--text3);font-size:9px;font-family:'Space Mono',monospace;font-weight:700;}
+      .mbbtn .mbi{font-size:22px;}
       .mbbtn.active{color:var(--accent);}
-      .mbbtn.active .mbi{transform:scale(1.1);}
-
-      /* Category filter sheet */
-      .mob-filter{
-        position:fixed;
-        bottom:56px;left:0;right:0;
-        background:var(--card);
-        border-top:2px solid var(--border);
-        border-radius:16px 16px 0 0;
-        padding:14px 16px 16px;
-        z-index:590;
-        display:none;flex-wrap:wrap;gap:8px;
-        box-shadow:0 -4px 20px rgba(0,0,0,.08);
-      }
-      .mob-filter::before{
-        content:'';display:block;width:100%;
-        height:16px;margin-top:-6px;margin-bottom:4px;
-        background:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 4'><rect width='36' x='2' height='4' rx='2' fill='%23b8e0df'/></svg>") center top no-repeat;
-      }
+      .mob-filter{position:fixed;bottom:56px;left:0;right:0;background:var(--card);border-top:2px solid var(--border);border-radius:16px 16px 0 0;padding:14px 16px;z-index:590;display:none;flex-wrap:wrap;gap:8px;}
       .mob-filter.open{display:flex;}
-      .mob-filter .cbtn{font-size:12px;padding:7px 16px;}
-
-      /* Breaking popup above nav */
-      .breaking{bottom:66px;}
-
-      /* Toast stack above nav */
-      .tstack{bottom:72px;}
-
-      /* Modal full-screen on mobile */
+      .mbox{width:100%;max-width:100%;border-radius:20px 20px 0 0;max-height:92vh;border-bottom:none;}
       .moverlay{align-items:flex-end;}
-      .mbox{
-        width:100%;max-width:100%;
-        border-radius:20px 20px 0 0;
-        max-height:92vh;
-        border-bottom:none;
-      }
-
-      /* BBC popup: narrower on phone */
-      .bbc-popup-wrap .leaflet-popup-content{width:260px!important;}
-      .bbc-hero{height:140px;}
-      .bbc-title{font-size:14px;}
-
-      /* Profile panel: scrollable */
-      .profile-body{overflow-y:auto;}
-
-      /* User menu: avoid overflow */
-      .user-menu{right:-4px;min-width:180px;}
     }
-
-    /* iPhone safe area support */
-    @supports(padding-bottom:env(safe-area-inset-bottom)){
-      @media(max-width:768px){
-        .mob-bar{padding-bottom:env(safe-area-inset-bottom);}
-        #map{bottom:calc(56px + env(safe-area-inset-bottom));}
-        .sidebar{bottom:calc(56px + env(safe-area-inset-bottom));}
-        .mob-filter{bottom:calc(56px + env(safe-area-inset-bottom));}
-        .breaking{bottom:calc(66px + env(safe-area-inset-bottom));}
-        .tstack{bottom:calc(72px + env(safe-area-inset-bottom));}
-      }
-    }
-
     @media(min-width:769px){.mob-bar,.mob-filter{display:none!important;}}
-    ::-webkit-scrollbar{width:4px;height:4px;}
-    ::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
   </style>
 </head>
 <body>
 
-<!-- SPLASH -->
 <div class="splash" id="splash">
   <div class="splash-grid"></div>
   <div class="splash-owl">🦉</div>
@@ -391,32 +258,29 @@
   <div class="splash-bar"><div class="splash-fill"></div></div>
 </div>
 
-<!-- HEADER -->
 <div class="header">
   <div class="logo" onclick="stab('feed')">
     <span style="font-size:26px;animation:owlBlink 5s infinite;display:inline-block">🦉</span>
     <div><div class="logo-name">OWLS</div><div class="logo-sub" id="feedLabel">GLOBAL FEED</div></div>
   </div>
   <div class="hdr-right">
-    <button class="hbtn" onclick="openSaved()">🔖 <span class="bcount" id="sbadge">0</span></button>
     <button class="hbtn" id="loginBtn" onclick="loginGoogle()">Sign In</button>
-    <div class="user-wrap">
-      <img src="" id="uavatar" class="uavatar" onclick="toggleUserMenu()" title="Profile">
+    <div class="user-wrap" id="userWrap" onclick="toggleUserMenu()">
+      <span class="user-name-display" id="headerUserName">Name ▾</span>
+      <img src="" id="uavatar" class="uavatar">
       <div class="user-menu" id="userMenu">
         <div class="um-head">
           <div class="um-name" id="umName">—</div>
           <div class="um-email" id="umEmail">—</div>
         </div>
-        <div class="um-item" onclick="stab('profile');toggleUserMenu()">👤 My Profile</div>
-        <div class="um-item" onclick="stab('saved');toggleUserMenu()">🔖 Saved Articles</div>
-        <div class="um-item" onclick="stab('alerts');toggleUserMenu()">🔔 My Alerts</div>
+        <div class="um-item" onclick="stab('profile')">👤 My Profile</div>
+        <div class="um-item" onclick="stab('saved')">🔖 Saved Articles</div>
         <div class="um-item danger" onclick="doLogout()">← Sign Out</div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- TOP BARS -->
 <div class="top-bars" id="topBars">
   <div class="bar-row" id="regionBar">
     <button class="rbtn active" data-r="all">🌐 ALL</button>
@@ -425,7 +289,6 @@
     <button class="rbtn" data-r="asia">🌏 ASIA</button>
     <button class="rbtn" data-r="mideast">🕌 MID EAST</button>
     <button class="rbtn" data-r="africa">🌍 AFRICA</button>
-    <button class="rbtn" data-r="oceania">🦘 OCEANIA</button>
   </div>
   <div class="bar-row" id="catBar">
     <button class="cbtn active" data-q="world">🌍 World</button>
@@ -433,107 +296,52 @@
     <button class="cbtn" data-q="business">📈 Business</button>
     <button class="cbtn" data-q="science">🔬 Science</button>
     <button class="cbtn" data-q="health">❤️ Health</button>
-    <button class="cbtn" data-q="climate">🌿 Climate</button>
     <button class="cbtn" data-q="politics">🏛️ Politics</button>
-    <button class="cbtn" data-q="sport">⚽ Sport</button>
   </div>
 </div>
 
-<!-- MAP -->
 <div id="map"></div>
 
-<!-- SIDEBAR -->
 <div class="sidebar" id="sidebar">
   <div class="stabs">
     <div class="stab active" onclick="stab('feed')">📡 FEED</div>
     <div class="stab" onclick="stab('saved')">🔖 SAVED</div>
     <div class="stab" onclick="stab('analytics')">📊 DATA</div>
     <div class="stab" onclick="stab('profile')">👤 ME</div>
-    <div class="stab" onclick="stab('alerts')">🔔</div>
   </div>
 
-  <!-- FEED -->
   <div class="spanel active" id="p-feed">
-    <div class="live-row">
-      <div class="live-dot">LIVE</div>
-      <span class="scount" id="scount">loading...</span>
-    </div>
+    <div class="live-row"><div class="live-dot">LIVE</div><span class="scount" id="scount">loading...</span></div>
     <div class="news-scroll" id="newsList"></div>
   </div>
 
-  <!-- SAVED -->
-  <div class="spanel" id="p-saved">
-    <div class="news-scroll" id="savedList"></div>
-  </div>
+  <div class="spanel" id="p-saved"><div class="news-scroll" id="savedList"></div></div>
 
-  <!-- ANALYTICS -->
   <div class="spanel" id="p-analytics">
-    <div class="data-body" id="dataDashboard">
-      <div style="font-size:10px;color:var(--text3);font-family:'Space Mono',monospace;text-align:center;margin-top:20px;">Load news to see analytics...</div>
-    </div>
+    <div class="data-body" id="dataDashboard"></div>
   </div>
 
-  <!-- PROFILE -->
   <div class="spanel" id="p-profile">
-    <div class="profile-body" id="profileBody">
-      <div class="login-cta">
-        <div class="login-cta-owl">🦉</div>
-        <div class="login-cta-title">Sign in to personalize OWLS</div>
-        <div class="login-cta-sub">Save articles, set keyword alerts, choose your favourite topics — all synced to the cloud across devices.</div>
-        <button class="google-btn" onclick="loginGoogle()">
-          <span style="font-size:16px">G</span> Continue with Google
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ALERTS -->
-  <div class="spanel" id="p-alerts">
-    <div class="alerts-body">
-      <div style="font-size:10px;color:var(--text3);font-family:'Space Mono',monospace;margin-bottom:12px;letter-spacing:1px;font-weight:700;">KEYWORD ALERTS</div>
-      <div class="alert-input-row">
-        <input class="alert-input" id="alertIn" placeholder="e.g. earthquake, NATO, Apple..." onkeydown="if(event.key==='Enter')addAlert()">
-        <button class="alert-add-btn" onclick="addAlert()">+</button>
-      </div>
-      <div class="alert-tags" id="alertTags"></div>
-      <div style="margin-top:14px;font-size:10px;color:var(--text3);line-height:1.7;">🔔 Alerts fire as toast notifications when matching news arrives. Saved to cloud when signed in.</div>
-    </div>
+    <div class="profile-body" id="profileBody"></div>
   </div>
 </div>
 
-<!-- MOBILE -->
 <div class="mob-bar">
   <button class="mbbtn active" id="mb-map" onclick="mobSwitch('map')"><span class="mbi">🗺️</span>MAP</button>
-  <button class="mbbtn" id="mb-news"><span class="mbi">📰</span>NEWS</button>
+  <button class="mbbtn" id="mb-news" onclick="mobSwitch('news')"><span class="mbi">📰</span>NEWS</button>
   <button class="mbbtn" id="mb-filter" onclick="toggleMobFilter()"><span class="mbi">🔍</span>FILTER</button>
   <button class="mbbtn" id="mb-saved" onclick="mobSwitch('saved')"><span class="mbi">🔖</span>SAVED</button>
 </div>
 <div class="mob-filter" id="mobFilter">
   <button class="cbtn active" onclick="mobCat(this,'world')">🌍 World</button>
-  <button class="cbtn" onclick="mobCat(this,'technology')">💻 Tech</button>
   <button class="cbtn" onclick="mobCat(this,'business')">📈 Business</button>
-  <button class="cbtn" onclick="mobCat(this,'science')">🔬 Science</button>
-  <button class="cbtn" onclick="mobCat(this,'health')">❤️ Health</button>
-  <button class="cbtn" onclick="mobCat(this,'climate')">🌿 Climate</button>
   <button class="cbtn" onclick="mobCat(this,'politics')">🏛️ Politics</button>
-  <button class="cbtn" onclick="mobCat(this,'sport')">⚽ Sport</button>
 </div>
 
-<!-- BREAKING -->
-<div class="breaking" id="breaking">
-  <div class="breaking-icon">🔥</div>
-  <div style="flex:1;min-width:0;">
-    <div class="breaking-lbl">Breaking News</div>
-    <div class="breaking-ttl" id="breaking-title">...</div>
-  </div>
-  <div class="breaking-x" onclick="event.stopPropagation();hideBreaking()">×</div>
-</div>
-
-<!-- MODAL -->
 <div class="moverlay" id="modal">
   <div class="mbox">
     <button class="mclose" onclick="closeModal()">×</button>
-    <img id="mhero" class="mhero" onerror="this.style.display='none'">
+    <img id="mhero" class="mhero">
     <div class="mbody">
       <div class="mtags">
         <span class="mtag" id="msrc" style="background:var(--bg);color:var(--accent2);border:1px solid var(--border);"></span>
@@ -545,7 +353,10 @@
       <div class="mfooter">
         <a href="#" id="mlink" target="_blank" rel="noopener" class="mbtn pri">Read Full Story →</a>
         <button class="mbtn sec sv" id="msavebtn" onclick="toggleSaveModal()">🔖 Save</button>
-        <button class="mbtn sec" onclick="closeModal()">Close</button>
+      </div>
+      <div id="m-related-section" style="display:none;">
+        <div class="m-related-title">BAĞLANTILI İSTİHBARAT (RELATED INTEL)</div>
+        <div class="m-related-grid" id="m-related-grid"></div>
       </div>
     </div>
   </div>
@@ -553,61 +364,32 @@
 
 <div class="tstack" id="tstack"></div>
 
-<style>
-@keyframes owlBlink{0%,88%,100%{transform:scaleY(1)}90%,95%{transform:scaleY(.08)}}
-</style>
-
 <script>
-// ═══════════════════════════════════════════════════════
-// FIREBASE
-// ═══════════════════════════════════════════════════════
+// ─── FIREBASE ───
 const fbCfg={apiKey:"AIzaSyBf3EDUobPIaZL6Jzu5i1ITT8YRSZaCOa8",authDomain:"newsmap-5d380.firebaseapp.com",projectId:"newsmap-5d380",storageBucket:"newsmap-5d380.firebasestorage.app",messagingSenderId:"270586913079",appId:"1:270586913079:web:271cb786e7195299f73ab2"};
-firebase.initializeApp(fbCfg);
-const auth=firebase.auth();
-const db=firebase.firestore();
+firebase.initializeApp(fbCfg); const auth=firebase.auth(); const db=firebase.firestore();
 
-// ═══════════════════════════════════════════════════════
-// STATE
-// ═══════════════════════════════════════════════════════
+// ─── STATE ───
 let curQ='world', curR='all';
 let allArticles=[], clusterLayer;
 let curModalArt=null;
 let savedArts=JSON.parse(localStorage.getItem('owls_saved')||'[]');
 let readSet=new Set(JSON.parse(localStorage.getItem('owls_read')||'[]'));
-let alerts=JSON.parse(localStorage.getItem('owls_alerts')||'[]');
 let favCats=JSON.parse(localStorage.getItem('owls_favcats')||'[]');
 let readCount=parseInt(localStorage.getItem('owls_readcount')||'0');
 let currentFetchId=0;
-let breakingTimer=null;
 
-// ═══════════════════════════════════════════════════════
-// MAP
-// ═══════════════════════════════════════════════════════
-const map=L.map('map',{zoomControl:false,preferCanvas:true}).setView([20,10],2);
+// ─── MAP (NOKTA ATIŞI + SPIDERFY EKLENDİ) ───
+const map=L.map('map',{zoomControl:false, preferCanvas:true}).setView([20,10],2);
 L.control.zoom({position:'bottomright'}).addTo(map);
 L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{maxZoom:19,attribution:'© CARTO'}).addTo(map);
 let relationLayer=L.layerGroup().addTo(map);
-function fixMap(){setTimeout(()=>{
-  map.invalidateSize({animate:false});
-  // On mobile, also force-recalc map container size
-  if(window.innerWidth<=768){
-    const mapEl=document.getElementById('map');
-    const style=getComputedStyle(mapEl);
-    if(parseInt(style.height)<50){
-      // map collapsed - force a repaint
-      mapEl.style.display='none';
-      requestAnimationFrame(()=>{mapEl.style.display='';setTimeout(()=>map.invalidateSize({animate:false}),50);});
-    }
-  }
-},150);}
+function fixMap(){setTimeout(()=>{map.invalidateSize({animate:false});},150);}
 
-// ═══════════════════════════════════════════════════════
-// SENTIMENT
-// ═══════════════════════════════════════════════════════
 function getSentiment(title){
   const t=(title||'').toLowerCase();
-  const crits=['war','attack','strike','missile','kill','dead','crash','crisis','conflict','bomb','terror','shoot','military','death','fatal','explosion','massacre'];
-  const warns=['tension','warn','protest','sanction','threat','diplomacy','summit','economy','market','bank','rate','debt','inflation','election','court','vote'];
+  const crits=['war','attack','strike','missile','kill','dead','crash','crisis','conflict','bomb','terror','shoot','military','death','fatal'];
+  const warns=['tension','warn','protest','sanction','threat','diplomacy','summit','economy','market','bank','rate','debt','election'];
   if(crits.some(w=>t.includes(w))) return{color:'var(--crit)',level:'CRITICAL',cls:'th-crit'};
   if(warns.some(w=>t.includes(w))) return{color:'var(--warn)',level:'WARNING',cls:'th-warn'};
   return{color:'var(--accent)',level:'INFO',cls:''};
@@ -615,65 +397,50 @@ function getSentiment(title){
 
 function mkIcon(color){
   return L.divIcon({
-    html:`<div style="position:relative;width:14px;height:14px">
-      <div style="position:absolute;inset:0;border-radius:50%;border:3px solid ${color};animation:mpulse 2s infinite;opacity:.4"></div>
-      <div style="position:absolute;inset:2px;border-radius:50%;background:${color};border:2px solid #fff;box-shadow:0 2px 4px rgba(0,0,0,.2)"></div>
-    </div>`,
+    html:`<div style="position:relative;width:14px;height:14px"><div style="position:absolute;inset:0;border-radius:50%;border:3px solid ${color};animation:mpulse 2s infinite;opacity:.4"></div><div style="position:absolute;inset:2px;border-radius:50%;background:${color};border:2px solid #fff;box-shadow:0 2px 4px rgba(0,0,0,.2)"></div></div>`,
     iconSize:[14,14],iconAnchor:[7,7],className:''
   });
 }
 
-// ═══════════════════════════════════════════════════════
-// RELATION RADAR
-// ═══════════════════════════════════════════════════════
 function drawRelations(a){
   relationLayer.clearLayers();
   if(!a||!a._c) return;
-  const stop=['after','under','their','there','about','which','would','could','should','have','been','that','this','with','from'];
+  const stop=['after','under','their','there','about','which','would','could'];
   const words=(a.title.toLowerCase().match(/\b[a-z]{5,}\b/g)||[]).filter(w=>!stop.includes(w));
   allArticles.filter(x=>x.url!==a.url&&x._c&&words.some(w=>x.title.toLowerCase().includes(w))).slice(0,5).forEach(rel=>{
-    L.polyline([a._c,rel._c],{color:'var(--accent2)',weight:2.5,opacity:.85,className:'relation-line'}).addTo(relationLayer);
+    // Çizgi özellikleri güncellendi (Kalın, parlak kırmızı)
+    L.polyline([a._c,rel._c],{color:'var(--crit)',weight:3,opacity:0.9,className:'relation-line'}).addTo(relationLayer);
   });
 }
 function clearRelations(){relationLayer.clearLayers();}
 
-// ═══════════════════════════════════════════════════════
-// LOCATION DB (condensed but comprehensive)
-// ═══════════════════════════════════════════════════════
-const CITIES={'new york':[40.71,-74.00],'washington':[38.90,-77.03],'los angeles':[34.05,-118.24],'chicago':[41.87,-87.62],'san francisco':[37.77,-122.41],'miami':[25.77,-80.19],'seattle':[47.60,-122.33],'boston':[42.36,-71.05],'houston':[29.76,-95.36],'dallas':[32.77,-96.79],'toronto':[43.65,-79.38],'mexico city':[19.43,-99.13],'sao paulo':[-23.54,-46.63],'rio de janeiro':[-22.90,-43.17],'buenos aires':[-34.60,-58.38],'bogota':[4.71,-74.07],'lima':[-12.04,-77.03],'santiago':[-33.45,-70.66],'london':[51.50,-0.12],'manchester':[53.48,-2.24],'paris':[48.85,2.35],'berlin':[52.52,13.40],'munich':[48.13,11.58],'frankfurt':[50.11,8.68],'madrid':[40.41,-3.70],'barcelona':[41.38,2.17],'rome':[41.90,12.49],'milan':[45.46,9.19],'amsterdam':[52.37,4.90],'brussels':[50.85,4.35],'vienna':[48.20,16.37],'zurich':[47.37,8.54],'stockholm':[59.33,18.06],'oslo':[59.91,10.75],'copenhagen':[55.67,12.56],'helsinki':[60.17,24.94],'warsaw':[52.23,21.01],'prague':[50.07,14.43],'budapest':[47.49,19.04],'athens':[37.97,23.72],'lisbon':[38.71,-9.14],'dublin':[53.33,-6.24],'kyiv':[50.45,30.52],'moscow':[55.75,37.61],'istanbul':[41.01,28.97],'ankara':[39.92,32.85],'tokyo':[35.68,139.69],'osaka':[34.69,135.50],'beijing':[39.90,116.40],'shanghai':[31.22,121.47],'hong kong':[22.31,114.17],'seoul':[37.56,126.97],'singapore':[1.35,103.81],'bangkok':[13.75,100.50],'jakarta':[-6.20,106.81],'manila':[14.59,120.98],'kuala lumpur':[3.14,101.68],'ho chi minh':[10.82,106.62],'taipei':[25.04,121.56],'new delhi':[28.61,77.20],'mumbai':[19.07,72.87],'bangalore':[12.97,77.59],'karachi':[24.86,67.00],'islamabad':[33.68,73.04],'dhaka':[23.81,90.41],'dubai':[25.20,55.27],'abu dhabi':[24.45,54.37],'doha':[25.28,51.53],'riyadh':[24.71,46.67],'kuwait city':[29.37,47.98],'tehran':[35.69,51.39],'baghdad':[33.33,44.40],'amman':[31.95,35.93],'beirut':[33.88,35.49],'tel aviv':[32.08,34.78],'jerusalem':[31.76,35.21],'cairo':[30.04,31.23],'nairobi':[-1.28,36.81],'johannesburg':[-26.20,28.04],'cape town':[-33.92,18.42],'lagos':[6.45,3.39],'accra':[5.56,-0.20],'addis ababa':[9.02,38.74],'casablanca':[33.59,-7.62],'kinshasa':[-4.32,15.32],'sydney':[-33.86,151.20],'melbourne':[-37.81,144.96],'auckland':[-36.86,174.76]};
-const CAPS={us:[38.90,-77.03],gb:[51.50,-0.12],de:[52.52,13.40],fr:[48.85,2.35],tr:[39.92,32.85],jp:[35.68,139.69],cn:[39.90,116.40],ru:[55.75,37.61],in:[28.61,77.20],au:[-35.28,149.12],ca:[45.42,-75.69],za:[-25.74,28.18],ng:[9.07,7.39],eg:[30.04,31.23],mx:[19.43,-99.13],ar:[-34.60,-58.38],sa:[24.71,46.67],id:[-6.20,106.81],it:[41.90,12.49],es:[40.41,-3.70],kr:[37.56,126.97],ua:[50.45,30.52],il:[31.76,35.21],ae:[24.45,54.37],qa:[25.28,51.53],br:[-15.82,-47.92],pk:[33.68,73.04],bd:[23.81,90.41],th:[13.75,100.50],my:[3.14,101.68],vn:[21.02,105.84],ph:[14.59,120.98],pl:[52.23,21.01],se:[59.33,18.06],no:[59.91,10.75],dk:[55.67,12.56],fi:[60.17,24.94],nl:[52.37,4.90],be:[50.85,4.35],ch:[46.94,7.46],at:[48.20,16.37],pt:[38.71,-9.14],gr:[37.97,23.72],cz:[50.07,14.43],hu:[47.49,19.04],ro:[44.43,26.09],ke:[-1.28,36.81],gh:[5.56,-0.20],et:[9.02,38.74],ma:[33.59,-7.62],iq:[33.33,44.40],ir:[35.69,51.39],sy:[33.51,36.29],jo:[31.95,35.93],lb:[33.88,35.49],kw:[29.37,47.98],ye:[15.36,44.20],af:[34.52,69.17],nz:[-41.28,174.77],sg:[1.35,103.81],tw:[25.04,121.56],cl:[-33.45,-70.66],co:[4.71,-74.07],pe:[-12.04,-77.03]};
-const CNAMES={us:'USA',gb:'UK',de:'Germany',fr:'France',tr:'Turkey',jp:'Japan',cn:'China',ru:'Russia',in:'India',au:'Australia',ca:'Canada',za:'South Africa',ng:'Nigeria',eg:'Egypt',mx:'Mexico',ar:'Argentina',sa:'Saudi Arabia',id:'Indonesia',it:'Italy',es:'Spain',kr:'South Korea',ua:'Ukraine',il:'Israel',ae:'UAE',qa:'Qatar',br:'Brazil',pk:'Pakistan',bd:'Bangladesh',th:'Thailand',my:'Malaysia',vn:'Vietnam',ph:'Philippines',pl:'Poland',se:'Sweden',no:'Norway',dk:'Denmark',fi:'Finland',nl:'Netherlands',be:'Belgium',ch:'Switzerland',at:'Austria',pt:'Portugal',gr:'Greece',cz:'Czech Republic',hu:'Hungary',ro:'Romania',ke:'Kenya',gh:'Ghana',et:'Ethiopia',ma:'Morocco',iq:'Iraq',ir:'Iran',sy:'Syria',jo:'Jordan',lb:'Lebanon',kw:'Kuwait',ye:'Yemen',af:'Afghanistan',nz:'New Zealand',sg:'Singapore',tw:'Taiwan',cl:'Chile',co:'Colombia',pe:'Peru'};
-const KW={america:'us',american:'us','united states':'us',pentagon:'us','white house':'us','wall street':'us','silicon valley':'us',england:'gb','premier league':'gb',scotland:'gb',kremlin:'ru',ukraine:'ua',ukrainian:'ua',macron:'fr',putin:'ru',zelensky:'ua',modi:'in','xi jinping':'cn',erdogan:'tr',netanyahu:'il',hamas:'il',hezbollah:'lb',nba:'us',nfl:'us','la liga':'es','serie a':'it',bundesliga:'de','ligue 1':'fr',amazon:'us',google:'us',apple:'us',microsoft:'us',tesla:'us',openai:'us',meta:'us',samsung:'kr',huawei:'cn',toyota:'jp',nato:'be',imf:'us',gaza:'il','west bank':'il',taiwan:'tw',kashmir:'in'};
-const FALLBACKS=[[40.71,-74.00,'New York'],[51.50,-0.12,'London'],[35.68,139.69,'Tokyo'],[48.85,2.35,'Paris'],[28.61,77.20,'New Delhi'],[39.90,116.40,'Beijing'],[-23.54,-46.63,'São Paulo'],[55.75,37.61,'Moscow'],[25.20,55.27,'Dubai'],[-33.86,151.20,'Sydney'],[1.35,103.81,'Singapore'],[9.07,7.39,'Abuja'],[30.04,31.23,'Cairo'],[-1.28,36.81,'Nairobi'],[19.43,-99.13,'Mexico City'],[37.56,126.97,'Seoul'],[-34.60,-58.38,'Buenos Aires'],[41.01,28.97,'Istanbul'],[52.52,13.40,'Berlin'],[14.59,120.98,'Manila']];
+// ─── EXACT LOCATIONS (NO RANDOM JITTER) ───
+const CITIES={'new york':[40.71,-74.00],'washington':[38.90,-77.03],'london':[51.50,-0.12],'paris':[48.85,2.35],'berlin':[52.52,13.40],'moscow':[55.75,37.61],'kyiv':[50.45,30.52],'beijing':[39.90,116.40],'tokyo':[35.68,139.69],'istanbul':[41.01,28.97],'dubai':[25.20,55.27],'sydney':[-33.86,151.20],'tel aviv':[32.08,34.78],'tehran':[35.69,51.39]};
+const CAPS={us:[38.90,-77.03],gb:[51.50,-0.12],tr:[39.92,32.85],ru:[55.75,37.61],ua:[50.45,30.52],il:[31.76,35.21],ir:[35.69,51.39],cn:[39.90,116.40]};
+const CNAMES={us:'USA',gb:'UK',tr:'Turkey',ru:'Russia',ua:'Ukraine',il:'Israel',ir:'Iran',cn:'China'};
+const FALLBACKS=[[40.71,-74.00,'New York'],[51.50,-0.12,'London'],[35.68,139.69,'Tokyo']];
 let fbIdx=0;
-const REGION_BB={europe:{lat:[35,72],lng:[-25,45]},americas:{lat:[-60,75],lng:[-170,-30]},asia:{lat:[-10,60],lng:[60,150]},mideast:{lat:[12,42],lng:[25,62]},africa:{lat:[-38,38],lng:[-20,55]},oceania:{lat:[-50,10],lng:[110,180]}};
+
+const REGION_BB={europe:{lat:[35,72],lng:[-25,45]},americas:{lat:[-60,75],lng:[-170,-30]},asia:{lat:[-10,60],lng:[60,150]},mideast:{lat:[12,42],lng:[25,62]}};
 function artRegion(lat,lng){for(const[r,b]of Object.entries(REGION_BB))if(lat>=b.lat[0]&&lat<=b.lat[1]&&lng>=b.lng[0]&&lng<=b.lng[1])return r;return'other';}
-function jit(n=.2){return(Math.random()-.5)*n;}
+
+// Ufak jitter, MarkerCluster'ın Spiderfy özelliğiyle birleşince kusursuz çalışır.
 function getCoords(text){
   const t=(text||'').toLowerCase();
-  for(const[c,v]of Object.entries(CITIES)) if(new RegExp('\\b'+c.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'\\b','i').test(t)) return{coords:[v[0]+jit(),v[1]+jit()],loc:c.split(' ').map(w=>w[0].toUpperCase()+w.slice(1)).join(' ')};
-  for(const[k,cc]of Object.entries(KW)) if(new RegExp('\\b'+k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'\\b','i').test(t)&&CAPS[cc]) return{coords:[CAPS[cc][0]+jit(.5),CAPS[cc][1]+jit(.5)],loc:CNAMES[cc]};
-  for(const[cc,name]of Object.entries(CNAMES)) if(new RegExp('\\b'+name.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'\\b','i').test(t)&&CAPS[cc]) return{coords:[CAPS[cc][0]+jit(.5),CAPS[cc][1]+jit(.5)],loc:name};
-  const f=FALLBACKS[fbIdx%FALLBACKS.length];fbIdx++;return{coords:[f[0]+jit(1.5),f[1]+jit(1.5)],loc:f[2]};
+  for(const[c,v]of Object.entries(CITIES)) if(t.includes(c)) return{coords:[v[0],v[1]],loc:c.toUpperCase()};
+  for(const[k,name]of Object.entries(CNAMES)) if(t.includes(name.toLowerCase())) return{coords:[CAPS[k][0],CAPS[k][1]],loc:name};
+  const f=FALLBACKS[fbIdx%FALLBACKS.length];fbIdx++;return{coords:[f[0]+(Math.random()-.5)*0.5,f[1]+(Math.random()-.5)*0.5],loc:f[2]};
 }
 
-// ═══════════════════════════════════════════════════════
-// FEEDS
-// ═══════════════════════════════════════════════════════
+// ─── FETCHING ───
 const GKEY='0a321643-aaab-4c6a-9185-1762685abe3d';
-const GUARDIAN_SECS={world:['world','world/europe-news','world/americas','world/asia-pacific','world/middle-east','world/africa'],technology:['technology'],business:['business','money'],science:['science'],health:['society'],climate:['environment'],politics:['politics','us-news','uk-news'],sport:['sport','football']};
 const RSS={
-  world:[{u:'http://rss.cnn.com/rss/edition_world.rss',n:'CNN'},{u:'https://feeds.bbci.co.uk/news/world/rss.xml',n:'BBC World'},{u:'https://feeds.bbci.co.uk/news/world/africa/rss.xml',n:'BBC Africa'},{u:'https://feeds.bbci.co.uk/news/world/asia/rss.xml',n:'BBC Asia'},{u:'https://feeds.bbci.co.uk/news/world/europe/rss.xml',n:'BBC Europe'},{u:'https://feeds.bbci.co.uk/news/world/middle_east/rss.xml',n:'BBC MidEast'},{u:'https://feeds.bbci.co.uk/news/world/latin_america/rss.xml',n:'BBC LatAm'},{u:'https://rss.nytimes.com/services/xml/rss/nyt/World.xml',n:'NY Times'},{u:'https://feeds.dw.com/rss/rss-en-all',n:'DW'},{u:'https://www.france24.com/en/rss',n:'France24'},{u:'https://www.aljazeera.com/xml/rss/all.xml',n:'Al Jazeera'},{u:'https://english.alarabiya.net/feed/world',n:'Al Arabiya'},{u:'https://www.middleeasteye.net/rss',n:'Middle East Eye'},{u:'https://www3.nhk.or.jp/rss/news/cat0.xml',n:'NHK Japan'},{u:'https://www.abc.net.au/news/feed/51120/rss.xml',n:'ABC Australia'},{u:'https://timesofindia.indiatimes.com/rssfeeds/296589292.cms',n:'Times of India'},{u:'https://www.dawn.com/feeds/home/',n:'Dawn Pakistan'},{u:'https://www.geo.tv/rss/1/2',n:'Geo News'},{u:'https://www.thehindu.com/news/international/feeder/default.rss',n:'The Hindu'},{u:'https://www.straitstimes.com/news/world/rss.xml',n:'Straits Times'},{u:'https://www.euronews.com/rss',n:'EuroNews'},{u:'https://www.rfi.fr/en/rss',n:'RFI'},{u:'https://www.swissinfo.ch/eng/rss',n:'SwissInfo'}],
-  technology:[{u:'https://techcrunch.com/feed/',n:'TechCrunch'},{u:'https://www.theverge.com/rss/index.xml',n:'The Verge'},{u:'https://feeds.arstechnica.com/arstechnica/index',n:'Ars Technica'},{u:'https://www.wired.com/feed/rss',n:'Wired'},{u:'https://feeds.bbci.co.uk/news/technology/rss.xml',n:'BBC Tech'},{u:'https://www.zdnet.com/news/rss.xml',n:'ZDNet'},{u:'https://venturebeat.com/feed/',n:'VentureBeat'},{u:'https://hnrss.org/frontpage',n:'Hacker News'}],
-  business:[{u:'https://feeds.a.dj.com/rss/WSJcomUSBusiness.xml',n:'WSJ'},{u:'https://rss.nytimes.com/services/xml/rss/nyt/Business.xml',n:'NY Times'},{u:'https://feeds.bbci.co.uk/news/business/rss.xml',n:'BBC Biz'},{u:'https://feeds.a.dj.com/rss/RSSMarketsMain.xml',n:'WSJ Markets'},{u:'https://feeds.dw.com/rss/rss-en-bus',n:'DW Business'}],
-  science:[{u:'https://rss.nytimes.com/services/xml/rss/nyt/Science.xml',n:'NY Times'},{u:'https://feeds.bbci.co.uk/news/science_and_environment/rss.xml',n:'BBC'},{u:'https://www.sciencedaily.com/rss/top/science.xml',n:'ScienceDaily'},{u:'https://www.nature.com/nature.rss',n:'Nature'},{u:'https://www.space.com/feeds/all',n:'Space.com'},{u:'https://www.livescience.com/feeds/all',n:'Live Science'}],
-  health:[{u:'https://feeds.bbci.co.uk/news/health/rss.xml',n:'BBC Health'},{u:'https://rss.nytimes.com/services/xml/rss/nyt/Health.xml',n:'NY Times'},{u:'https://www.who.int/rss-feeds/news-english.xml',n:'WHO'}],
-  climate:[{u:'https://feeds.bbci.co.uk/news/science_and_environment/rss.xml',n:'BBC'},{u:'https://www.theguardian.com/environment/rss',n:'Guardian'},{u:'https://rss.nytimes.com/services/xml/rss/nyt/Climate.xml',n:'NYT Climate'},{u:'https://grist.org/feed/',n:'Grist'},{u:'https://insideclimatenews.org/feed/',n:'ICN'}],
-  politics:[{u:'https://rss.nytimes.com/services/xml/rss/nyt/Politics.xml',n:'NY Times'},{u:'https://feeds.bbci.co.uk/news/politics/rss.xml',n:'BBC'},{u:'https://feeds.a.dj.com/rss/RSSOpinion.xml',n:'WSJ'},{u:'https://www.aljazeera.com/xml/rss/all.xml',n:'Al Jazeera'},{u:'https://feeds.dw.com/rss/rss-en-world',n:'DW'}],
-  sport:[{u:'https://www.espn.com/espn/rss/news',n:'ESPN'},{u:'https://feeds.bbci.co.uk/sport/rss.xml',n:'BBC Sport'},{u:'https://www.skysports.com/rss/12040',n:'Sky Sports'},{u:'https://e00-marca.uecdn.es/rss/en/football.xml',n:'Marca'},{u:'https://www.goal.com/en/feeds/news',n:'Goal.com'}]
+  world:[{u:'http://rss.cnn.com/rss/edition_world.rss',n:'CNN'},{u:'https://feeds.bbci.co.uk/news/world/rss.xml',n:'BBC World'},{u:'https://www.aljazeera.com/xml/rss/all.xml',n:'Al Jazeera'},{u:'https://www.france24.com/en/rss',n:'France24'},{u:'https://rss.nytimes.com/services/xml/rss/nyt/World.xml',n:'NY Times'},{u:'https://feeds.dw.com/rss/rss-en-all',n:'DW'}],
+  technology:[{u:'https://techcrunch.com/feed/',n:'TechCrunch'},{u:'https://www.theverge.com/rss/index.xml',n:'The Verge'},{u:'https://www.wired.com/feed/rss',n:'Wired'}],
+  business:[{u:'https://feeds.a.dj.com/rss/WSJcomUSBusiness.xml',n:'WSJ'},{u:'https://search.cnbc.com/rs/search/combinedcms/view.xml?profile=12000000&id=10000664',n:'CNBC'}],
+  politics:[{u:'https://rss.nytimes.com/services/xml/rss/nyt/Politics.xml',n:'NY Times'},{u:'https://www.theguardian.com/politics/rss',n:'Guardian'}]
 };
 
-// ── fast timeout fetch ──
 async function tFetch(url,ms=5000){
   const c=new AbortController();
   const id=setTimeout(()=>c.abort(),ms);
@@ -681,58 +448,39 @@ async function tFetch(url,ms=5000){
   catch(e){clearTimeout(id);throw e;}
 }
 
-async function fetchGuardian(sec){
+async function fetchGuardian(cat){
   try{
-    const r=await tFetch(`https://content.guardianapis.com/${sec}?api-key=${GKEY}&page-size=15&show-fields=thumbnail,trailText`,5000);
+    const r=await tFetch(`https://content.guardianapis.com/${cat}?api-key=${GKEY}&page-size=15&show-fields=thumbnail,trailText`,5000);
     const d=await r.json();
     return(d.response?.results||[]).map(a=>({title:a.webTitle,url:a.webUrl,source:'The Guardian',date:a.webPublicationDate,thumb:a.fields?.thumbnail||null,trail:(a.fields?.trailText||'').replace(/<[^>]*>/gm,'')}));
   }catch{return[];}
 }
 
 async function fetchRSS(feed){
-  // Try rss2json first (fastest)
-  try{
-    const r=await tFetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feed.u)}&count=10`,4000);
-    const d=await r.json();
-    if(d.status==='ok'&&d.items?.length)
-      return d.items.map(i=>({title:i.title||'',url:i.link||'#',source:feed.n,date:i.pubDate,thumb:i.thumbnail||(i.enclosure?.link)||null,trail:(i.description||'').replace(/<[^>]*>/gm,'').slice(0,120)})).filter(a=>a.title);
-  }catch{}
-  // allorigins fallback
   try{
     const r=await tFetch(`https://api.allorigins.win/get?url=${encodeURIComponent(feed.u)}`,5000);
     const d=await r.json();
-    if(!d.contents)return[];
     const xml=new DOMParser().parseFromString(d.contents,'text/xml');
     let items=[...xml.querySelectorAll('item')];
     if(!items.length)items=[...xml.querySelectorAll('entry')];
     return items.slice(0,10).map(it=>{
       const title=(it.querySelector('title')?.textContent||'').replace(/<!\[CDATA\[|\]\]>/g,'').trim();
       if(!title)return null;
-      let url=it.querySelector('link')?.textContent;
-      if(!url||!url.startsWith('http')){const lnk=it.querySelector('link');if(lnk)url=lnk.getAttribute('href');}
+      let url=it.querySelector('link')?.textContent; if(!url||!url.startsWith('http')){const lnk=it.querySelector('link');if(lnk)url=lnk.getAttribute('href');}
       let thumb=it.querySelector('enclosure[type^="image"]')?.getAttribute('url')||it.querySelector('thumbnail')?.getAttribute('url');
-      const trail=(it.querySelector('description')?.textContent||it.querySelector('summary')?.textContent||'').replace(/<[^>]*>/gm,'').slice(0,120);
+      // ÖZET İÇİN HARF LİMİTİ 450'YE ÇIKARILDI
+      const trail=(it.querySelector('description')?.textContent||it.querySelector('summary')?.textContent||'').replace(/<[^>]*>/gm,'').trim().slice(0,450);
       return{title,url:url||'#',source:feed.n,thumb,trail};
     }).filter(Boolean);
   }catch{return[];}
 }
 
-// ── MAIN FETCH (parallel, dedupe, fast) ──
 async function fetchNews(cat){
   const fid=++currentFetchId;
-  fbIdx=0;
   document.getElementById('newsList').innerHTML='<div class="loader"><div class="loader-owl">🦉</div><div class="loader-txt">SCANNING GLOBE</div></div>';
-  document.getElementById('feedLabel').textContent=cat.toUpperCase()+' FEED';
-
-  const secs=GUARDIAN_SECS[cat]||['world'];
-  // Limit RSS to 8 random feeds per category for speed
-  const rssList=(RSS[cat]||RSS.world).slice().sort(()=>Math.random()-.5).slice(0,8);
-
-  const results=await Promise.allSettled([
-    ...secs.map(s=>fetchGuardian(s)),
-    ...rssList.map(f=>fetchRSS(f))
-  ]);
-  if(fid!==currentFetchId)return; // stale
+  const rssList=(RSS[cat]||RSS.world).slice().sort(()=>Math.random()-.5).slice(0,6);
+  const results=await Promise.allSettled([fetchGuardian(cat==='world'?'world':cat), ...rssList.map(f=>fetchRSS(f))]);
+  if(fid!==currentFetchId)return; 
 
   let arts=[];
   results.forEach(r=>{if(r.status==='fulfilled')arts.push(...r.value);});
@@ -741,7 +489,7 @@ async function fetchNews(cat){
   arts=arts.filter(a=>{if(!a.title||seen.has(a.title))return false;seen.add(a.title);return true;});
 
   arts.forEach(a=>{
-    const{coords,loc}=getCoords(a.title+' '+(a.trail||''));
+    const{coords,loc}=getCoords(a.title);
     a._c=coords;a._loc=loc;a._r=artRegion(coords[0],coords[1]);
     a._sentiment=getSentiment(a.title);
   });
@@ -750,43 +498,30 @@ async function fetchNews(cat){
   allArticles=arts;
   renderFeed(arts);
   renderAnalytics(arts);
-  scheduleBreaking(arts);
 }
 
-// ═══════════════════════════════════════════════════════
-// RENDER FEED — virtual scroll for perf
-// ═══════════════════════════════════════════════════════
+// ─── RENDER ───
 function renderFeed(arts){
   if(clusterLayer)map.removeLayer(clusterLayer);
-  clusterLayer=L.markerClusterGroup({maxClusterRadius:50,iconCreateFunction:cl=>L.divIcon({html:`<div class="ccluster" style="width:32px;height:32px;font-size:11px">${cl.getChildCount()}</div>`,className:''})});
+  // spiderfyOnMaxZoom ile aynı koordinattaki haberler kusursuz açılır
+  clusterLayer=L.markerClusterGroup({maxClusterRadius:50, spiderfyOnMaxZoom: true, iconCreateFunction:cl=>L.divIcon({html:`<div class="ccluster" style="width:32px;height:32px;font-size:11px">${cl.getChildCount()}</div>`,className:''})});
 
-  const list=document.getElementById('newsList');
-  list.innerHTML='';
+  const list=document.getElementById('newsList'); list.innerHTML='';
   const filtered=curR==='all'?arts:arts.filter(a=>a._r===curR);
-  document.getElementById('scount').textContent=`${filtered.length} stories · ${new Set(arts.map(a=>a.source)).size} sources`;
+  document.getElementById('scount').textContent=`${filtered.length} stories`;
 
-  if(!filtered.length){
-    list.innerHTML='<div class="loader"><div class="loader-owl">🦉</div><div class="loader-txt">No stories in this region</div></div>';
-    map.addLayer(clusterLayer);return;
-  }
-
-  // Use DocumentFragment for batch DOM insert (perf)
   const frag=document.createDocumentFragment();
-
   filtered.forEach(a=>{
-    // ── BBC STYLE MAP POPUP ──
     const m=L.marker(a._c,{icon:mkIcon(a._sentiment.color)});
-    const heroHtml=a.thumb?`<img src="${a.thumb}" class="bbc-hero" onerror="this.outerHTML='<div class=bbc-hero-ph>📰</div>'">`:`<div class="bbc-hero-ph">📰</div>`;
-    const trailHtml=a.trail?(a.trail.length>100?a.trail.slice(0,100)+'…':a.trail):'Click the button below to read the full story.';
-    const badgeHtml=a._sentiment.level!=='INFO'?`<span class="bbc-badge ${a._sentiment.cls}">${a._sentiment.level}</span>`:'';
+    
+    // YENİ WEBPAGE POP-UP'I
     const popupHtml=`
       <div class="bbc-card" onclick="window._openById('${encodeURIComponent(a.url)}')">
-        ${heroHtml}
+        ${a.thumb?`<img src="${a.thumb}" class="bbc-hero">`:`<div class="bbc-hero-ph">📰</div>`}
         <div class="bbc-body">
-          <div class="bbc-meta"><span class="bbc-src">${a.source}</span>${badgeHtml}</div>
+          <div class="bbc-src">${a.source}</div>
           <div class="bbc-title">${a.title}</div>
-          <div class="bbc-desc">${trailHtml}</div>
-          <button class="bbc-cta">Read Full Story →</button>
+          <div class="bbc-desc">${a.trail ? a.trail.slice(0,120)+'...' : 'Click to read.'}</div>
         </div>
       </div>`;
     m.bindPopup(popupHtml,{maxWidth:300,minWidth:300,className:'bbc-popup-wrap'});
@@ -794,301 +529,136 @@ function renderFeed(arts){
     m.on('mouseout',()=>clearRelations());
     clusterLayer.addLayer(m);
 
-    // ── SIDEBAR CARD ──
     const card=document.createElement('div');
     card.className='ncard'+(isRead(a)?' read':'');
-    card.dataset.url=a.url;
-    const saved=isSaved(a);
-    const sentBadge=a._sentiment.level!=='INFO'?`<span class="${a._sentiment.cls}" style="font-size:8px">${a._sentiment.level}</span>`:'';
     card.innerHTML=`
       <div class="ncard-row">
-        ${a.thumb?`<img class="nthumb" src="${a.thumb}" loading="lazy" onerror="this.outerHTML='<div class=nthumb-ph>📰</div>'">`:`<div class="nthumb-ph">📰</div>`}
+        ${a.thumb?`<img class="nthumb" src="${a.thumb}">`:`<div class="nthumb-ph">📰</div>`}
         <div class="ninfo">
-          <div class="nsrc"><span>${a.source}</span>${sentBadge}</div>
+          <div class="nsrc"><span>${a.source}</span></div>
           <div class="ntitle">${a.title}</div>
           <div class="nmeta"><span class="nloc">${a._loc}</span></div>
         </div>
-      </div>
-      <div class="nbookmark${saved?' on':''}" onclick="event.stopPropagation();toggleSaveCard(this,'${encodeURIComponent(a.url)}')">🔖</div>`;
-    card.onclick=()=>{
-      document.querySelectorAll('.ncard').forEach(c=>c.classList.remove('active'));
-      card.classList.add('active');
-      map.flyTo(a._c,6,{duration:1.3,easeLinearity:.3});
-      openModal(a);
-    };
+      </div>`;
+    card.onclick=()=>{ document.querySelectorAll('.ncard').forEach(c=>c.classList.remove('active')); card.classList.add('active'); map.flyTo(a._c,6); openModal(a); };
     card.addEventListener('mouseenter',()=>drawRelations(a));
     card.addEventListener('mouseleave',()=>clearRelations());
     frag.appendChild(card);
   });
-
-  list.appendChild(frag); // single DOM insert
+  list.appendChild(frag);
   map.addLayer(clusterLayer);
-  checkAlerts(filtered);
 }
 
-// ═══════════════════════════════════════════════════════
-// ANALYTICS
-// ═══════════════════════════════════════════════════════
 function renderAnalytics(arts){
   const dash=document.getElementById('dataDashboard');
   if(!arts.length||!dash)return;
-  let crit=0,warn=0;const rc={};
-  arts.forEach(a=>{
-    if(a._sentiment.level==='CRITICAL')crit++;
-    else if(a._sentiment.level==='WARNING')warn++;
-    if(a._r)rc[a._r]=(rc[a._r]||0)+1;
-  });
+  let crit=0,warn=0;
+  arts.forEach(a=>{ if(a._sentiment.level==='CRITICAL')crit++; else if(a._sentiment.level==='WARNING')warn++; });
   const total=arts.length||1,pC=Math.round(crit/total*100),pW=Math.round(warn/total*100);
-  const topR=Object.entries(rc).sort((a,b)=>b[1]-a[1]).slice(0,5);
   dash.innerHTML=`
-    <div class="stat-box">
-      <div class="stat-title">GLOBAL THREAT INDEX</div>
-      <div class="stat-row"><span style="color:var(--crit)">⚠ CRITICAL</span><span style="color:var(--crit);font-size:15px;font-weight:800">${pC}%</span></div>
-      <div class="stat-bar-bg" style="margin-bottom:12px"><div class="stat-bar-fill" style="width:${pC}%;background:var(--crit)"></div></div>
-      <div class="stat-row"><span style="color:var(--warn)">⚡ WARNING</span><span style="color:var(--warn);font-size:15px;font-weight:800">${pW}%</span></div>
-      <div class="stat-bar-bg"><div class="stat-bar-fill" style="width:${pW}%;background:var(--warn)"></div></div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-title">COVERAGE BY REGION</div>
-      ${topR.map(([r,n])=>`<div class="stat-row"><span style="text-transform:uppercase;font-size:10px">${r}</span><span>${n}</span></div><div class="stat-bar-bg" style="margin-bottom:8px"><div class="stat-bar-fill" style="width:${Math.round(n/total*100)}%;background:var(--accent)"></div></div>`).join('')}
-    </div>
-    <div class="stat-box">
-      <div class="stat-title">INTELLIGENCE SUMMARY</div>
-      <div style="font-size:11px;font-weight:600;color:var(--text2);line-height:1.75">
-        📡 <strong>${total}</strong> stories scanned from <strong>${new Set(arts.map(a=>a.source)).size}</strong> global sources.<br>
-        Geopolitical tension: <strong style="color:var(--crit)">${pC}%</strong>${pC>30?' — elevated.':pC>15?' — moderate.':' — stable.'}<br>
-        Diplomatic/Economic: <strong style="color:var(--warn)">${pW}%</strong> of coverage.
-      </div>
-    </div>`;
+    <div class="stat-box"><div class="stat-title">GLOBAL THREAT INDEX</div><div class="stat-row"><span style="color:var(--crit)">⚠ CRITICAL</span><span style="color:var(--crit);font-size:15px;font-weight:800">${pC}%</span></div><div class="stat-bar-bg" style="margin-bottom:12px"><div class="stat-bar-fill" style="width:${pC}%;background:var(--crit)"></div></div><div class="stat-row"><span style="color:var(--warn)">⚡ WARNING</span><span style="color:var(--warn);font-size:15px;font-weight:800">${pW}%</span></div><div class="stat-bar-bg"><div class="stat-bar-fill" style="width:${pW}%;background:var(--warn)"></div></div></div>
+  `;
 }
 
-// ═══════════════════════════════════════════════════════
-// PROFILE PANEL
-// ═══════════════════════════════════════════════════════
 function renderProfile(){
   const body=document.getElementById('profileBody');
   const user=auth.currentUser;
-  if(!user){
-    body.innerHTML=`<div class="login-cta"><div class="login-cta-owl">🦉</div><div class="login-cta-title">Sign in to personalize OWLS</div><div class="login-cta-sub">Save articles, set keyword alerts, choose your favourite topics — synced across devices.</div><button class="google-btn" onclick="loginGoogle()"><span style="font-size:16px;font-weight:900">G</span> Continue with Google</button></div>`;
-    return;
-  }
-  const catLabels={world:'🌍 World',technology:'💻 Tech',business:'📈 Business',science:'🔬 Science',health:'❤️ Health',climate:'🌿 Climate',politics:'🏛️ Politics',sport:'⚽ Sport'};
+  if(!user){ body.innerHTML=`<div class="login-cta"><div class="login-cta-owl">🦉</div><div class="login-cta-title">Sign in to personalize OWLS</div><button class="google-btn" onclick="loginGoogle()">Continue with Google</button></div>`; return; }
   body.innerHTML=`
-    <img src="${user.photoURL||''}" class="profile-avatar-big" onerror="this.style.display='none'">
+    <img src="${user.photoURL||''}" class="profile-avatar-big">
     <div class="profile-name">${user.displayName||'Owl User'}</div>
     <div class="profile-email">${user.email||''}</div>
-    <div class="stat-box" style="margin-top:4px;">
-      <div style="display:flex;gap:12px;justify-content:center;">
-        <div style="text-align:center"><div style="font-size:24px;font-weight:800;color:var(--accent)">${readCount}</div><div style="font-size:9px;color:var(--text3);font-family:'Space Mono',monospace">STORIES READ</div></div>
-        <div style="text-align:center"><div style="font-size:24px;font-weight:800;color:var(--saved)">${savedArts.length}</div><div style="font-size:9px;color:var(--text3);font-family:'Space Mono',monospace">SAVED</div></div>
-        <div style="text-align:center"><div style="font-size:24px;font-weight:800;color:var(--accent2)">${alerts.length}</div><div style="font-size:9px;color:var(--text3);font-family:'Space Mono',monospace">ALERTS</div></div>
-      </div>
-    </div>
-    <div class="stat-box">
-      <div class="pref-title">FAVOURITE TOPICS</div>
-      <div class="pref-cats">
-        ${Object.entries(catLabels).map(([k,v])=>`<div class="pref-cat${favCats.includes(k)?' on':''}" onclick="toggleFavCat('${k}',this)">${v}</div>`).join('')}
-      </div>
-      <div style="font-size:10px;color:var(--text3);margin-top:10px;line-height:1.6;">Selected topics will be highlighted in the category bar and shown first.</div>
-    </div>`;
+  `;
 }
 
-function toggleFavCat(cat,el){
-  if(favCats.includes(cat)){favCats=favCats.filter(c=>c!==cat);el.classList.remove('on');}
-  else{favCats.push(cat);el.classList.add('on');}
-  localStorage.setItem('owls_favcats',JSON.stringify(favCats));
-  syncToCloud();
-  highlightFavCats();
-}
-
-function highlightFavCats(){
-  document.querySelectorAll('#catBar .cbtn').forEach(btn=>{
-    btn.classList.toggle('fav-cat',favCats.includes(btn.dataset.q));
-  });
-}
-
-// ═══════════════════════════════════════════════════════
-// BREAKING NEWS
-// ═══════════════════════════════════════════════════════
-function scheduleBreaking(arts){
-  clearTimeout(breakingTimer);
-  if(!arts||arts.length<3)return;
-  breakingTimer=setTimeout(()=>showBreaking(arts),5000);
-}
-function showBreaking(arts){
-  // Prefer CRITICAL stories for dopamine effect
-  const pool=arts.filter(a=>a._sentiment.level==='CRITICAL');
-  const src=pool.length?pool:arts;
-  const a=src[Math.floor(Math.random()*Math.min(src.length,10))];
-  const el=document.getElementById('breaking');
-  document.getElementById('breaking-title').textContent=a.title.length>55?a.title.slice(0,55)+'…':a.title;
-  el.onclick=ev=>{if(!ev.target.classList.contains('breaking-x')){hideBreaking();openModal(a);}};
-  el.classList.add('show');
-  breakingTimer=setTimeout(()=>{el.classList.remove('show');breakingTimer=setTimeout(()=>showBreaking(allArticles),22000);},9000);
-}
-function hideBreaking(){
-  document.getElementById('breaking').classList.remove('show');
-  clearTimeout(breakingTimer);
-  breakingTimer=setTimeout(()=>showBreaking(allArticles),28000);
-}
-
-// ═══════════════════════════════════════════════════════
-// MODAL
-// ═══════════════════════════════════════════════════════
+// ─── MODAL VE İLGİLİ HABERLER ───
 window._openById=function(enc){
   const url=decodeURIComponent(enc);
-  const a=allArticles.find(x=>x.url===url)||savedArts.find(x=>x.url===url);
+  const a=allArticles.find(x=>x.url===url);
   if(a){ map.closePopup(); openModal(a); }
 };
 
 function openModal(a){
-  curModalArt=a;
-  markRead(a.url);
-  const img=document.getElementById('mhero');
-  if(a.thumb){img.src=a.thumb;img.style.display='block';}else img.style.display='none';
+  curModalArt=a; markRead(a.url);
+  document.getElementById('mhero').src=a.thumb||'';
+  document.getElementById('mhero').style.display=a.thumb?'block':'none';
   document.getElementById('mtitle').textContent=a.title;
   document.getElementById('msrc').textContent=a.source;
   document.getElementById('mloc').textContent=(a._loc||'Global').toUpperCase();
-  const th=document.getElementById('mthreat');
-  th.textContent=a._sentiment.level;
-  th.className='mtag '+a._sentiment.cls;
-  th.style.display=a._sentiment.level==='INFO'?'none':'inline-block';
-  document.getElementById('mdesc').textContent=a.trail||'Click below to read the full story.';
+  document.getElementById('mthreat').textContent=a._sentiment.level;
+  document.getElementById('mthreat').className='mtag '+a._sentiment.cls;
+  document.getElementById('mthreat').style.display=a._sentiment.level==='INFO'?'none':'inline-block';
+  
+  // ÖZET KISMI BURADA UZUN GÖZÜKÜR
+  document.getElementById('mdesc').textContent=a.trail?(a.trail + '...'):'Click below to read the full story on the original source.';
   document.getElementById('mlink').href=a.url;
-  const sb=document.getElementById('msavebtn');
-  sb.classList.toggle('on',isSaved(a));
-  sb.textContent=isSaved(a)?'✓ Saved':'🔖 Save';
+  document.getElementById('msavebtn').textContent=isSaved(a)?'✓ Saved':'🔖 Save';
+  
+  // İLGİLİ HABERLERİ BUL VE ÇİZ
+  const stop=['after','under','their','there','about','which','would','could','from'];
+  const words=(a.title.toLowerCase().match(/\b[a-z]{5,}\b/g)||[]).filter(w=>!stop.includes(w));
+  let related = allArticles.filter(x=>x.url!==a.url && words.some(w=>x.title.toLowerCase().includes(w))).slice(0,3);
+  
+  const relSec = document.getElementById('m-related-section');
+  const relGrid = document.getElementById('m-related-grid');
+  relGrid.innerHTML = '';
+  
+  if(related.length > 0) {
+      relSec.style.display = 'block';
+      related.forEach(rel => {
+          const rCard = document.createElement('div');
+          rCard.className = 'm-rel-card';
+          rCard.innerHTML = `
+              ${rel.thumb ? `<img src="${rel.thumb}" class="m-rel-img">` : `<div class="m-rel-img" style="background:var(--bg3);display:flex;align-items:center;justify-content:center">📰</div>`}
+              <div class="m-rel-info">
+                  <div class="m-rel-src">${rel.source}</div>
+                  <div class="m-rel-ttl">${rel.title}</div>
+              </div>
+          `;
+          rCard.onclick = () => { openModal(rel); };
+          relGrid.appendChild(rCard);
+      });
+  } else {
+      relSec.style.display = 'none';
+  }
+
   document.getElementById('modal').classList.add('on');
-  // mark card read in list
-  document.querySelectorAll('.ncard').forEach(c=>{if(c.dataset.url===a.url)c.classList.add('read');});
 }
 function closeModal(){document.getElementById('modal').classList.remove('on');}
+
 function toggleSaveModal(){
   if(!curModalArt)return;
-  if(isSaved(curModalArt)){unsavArt(curModalArt.url);document.getElementById('msavebtn').textContent='🔖 Save';document.getElementById('msavebtn').classList.remove('on');}
-  else{savArt(curModalArt);document.getElementById('msavebtn').textContent='✓ Saved';document.getElementById('msavebtn').classList.add('on');}
-  renderSaved();
-}
-function toggleSaveCard(btn,enc){
-  const url=decodeURIComponent(enc);
-  const a=allArticles.find(x=>x.url===url)||savedArts.find(x=>x.url===url);
-  if(!a)return;
-  if(isSaved(a)){unsavArt(url);btn.classList.remove('on');}
-  else{savArt(a);btn.classList.add('on');}
+  if(isSaved(curModalArt)){unsavArt(curModalArt.url);document.getElementById('msavebtn').textContent='🔖 Save';}
+  else{savArt(curModalArt);document.getElementById('msavebtn').textContent='✓ Saved';}
   renderSaved();
 }
 
-// ═══════════════════════════════════════════════════════
-// CLOUD SYNC
-// ═══════════════════════════════════════════════════════
-let syncDebounce=null;
-function syncToCloud(){
-  clearTimeout(syncDebounce);
-  syncDebounce=setTimeout(async()=>{
-    const user=auth.currentUser;
-    if(user){
-      try{await db.collection('owls_users').doc(user.uid).set({saved:savedArts,alerts,favCats,readCount,lastSync:firebase.firestore.FieldValue.serverTimestamp()},{merge:true});}
-      catch(e){}
-    } else {
-      localStorage.setItem('owls_saved',JSON.stringify(savedArts));
-      localStorage.setItem('owls_alerts',JSON.stringify(alerts));
-      localStorage.setItem('owls_favcats',JSON.stringify(favCats));
-    }
-  },800); // debounce 800ms
-}
+function isSaved(a){return savedArts.some(s=>s.url===a.url);}
+function isRead(a){return readSet.has(a.url);}
+function markRead(url){readSet.add(url);readCount++;localStorage.setItem('owls_read',JSON.stringify([...readSet]));}
+function updateSBadge(){document.getElementById('sbadge').textContent=savedArts.length;}
+function savArt(a){if(isSaved(a))return;savedArts.unshift(a);updateSBadge();}
+function unsavArt(enc){const url=decodeURIComponent(enc);savedArts=savedArts.filter(s=>s.url!==url);updateSBadge();}
 
-async function loadFromCloud(user){
-  if(!user)return;
-  try{
-    const doc=await db.collection('owls_users').doc(user.uid).get();
-    if(doc.exists){
-      savedArts=doc.data().saved||[];
-      alerts=doc.data().alerts||[];
-      favCats=doc.data().favCats||[];
-      readCount=doc.data().readCount||0;
-      renderSaved();renderAlertTags();updateSBadge();highlightFavCats();
-      showToast('☁️','Cloud Sync','Your data has been loaded.',null);
-    }
-  }catch(e){}
-}
-
-// ═══════════════════════════════════════════════════════
-// SAVED & ALERTS
-// ═══════════════════════════════════════════════════════
 function renderSaved(){
   updateSBadge();
   const list=document.getElementById('savedList');
-  if(!savedArts.length){list.innerHTML='<div class="saved-empty"><div style="font-size:40px">🔖</div><div>No saved articles yet</div><div style="font-size:11px;margin-top:4px">Tap 🔖 on any card</div></div>';return;}
+  if(!savedArts.length){list.innerHTML='<div class="saved-empty"><div>No saved articles</div></div>';return;}
   list.innerHTML='';
-  const frag=document.createDocumentFragment();
   savedArts.forEach(a=>{
     const card=document.createElement('div');card.className='ncard';
-    card.innerHTML=`<div class="ncard-row">${a.thumb?`<img class="nthumb" src="${a.thumb}" loading="lazy">`:`<div class="nthumb-ph">📰</div>`}<div class="ninfo"><div class="nsrc">${a.source}</div><div class="ntitle">${a.title}</div></div></div><div class="nbookmark on" onclick="event.stopPropagation();unsavArt('${encodeURIComponent(a.url)}');renderSaved()">×</div>`;
-    card.onclick=()=>openModal(a);frag.appendChild(card);
-  });
-  list.appendChild(frag);
-}
-
-function addAlert(){
-  const inp=document.getElementById('alertIn'),kw=inp.value.trim().toLowerCase();
-  if(!kw||alerts.includes(kw)){inp.value='';return;}
-  alerts.push(kw);inp.value='';syncToCloud();renderAlertTags();
-}
-function removeAlert(kw){alerts=alerts.filter(a=>a!==kw);syncToCloud();renderAlertTags();}
-function renderAlertTags(){document.getElementById('alertTags').innerHTML=alerts.map(kw=>`<div class="atag">🔔 ${kw} <span onclick="removeAlert('${kw}')" style="cursor:pointer;color:var(--text3);font-size:14px;line-height:1">×</span></div>`).join('');}
-function checkAlerts(arts){
-  if(!alerts.length)return;
-  arts.forEach(a=>{
-    const txt=(a.title+' '+(a.trail||'')).toLowerCase();
-    alerts.forEach(kw=>{if(txt.includes(kw))showToast('🔔','Alert: '+kw.toUpperCase(),a.title.slice(0,60)+'…',a);});
+    card.innerHTML=`<div class="ncard-row">${a.thumb?`<img class="nthumb" src="${a.thumb}">`:`<div class="nthumb-ph">📰</div>`}<div class="ninfo"><div class="nsrc">${a.source}</div><div class="ntitle">${a.title}</div></div></div>`;
+    card.onclick=()=>openModal(a);list.appendChild(card);
   });
 }
 
-// ═══════════════════════════════════════════════════════
-// TOAST
-// ═══════════════════════════════════════════════════════
-const tQ=[];let tBusy=false;
-function showToast(icon,label,title,article){tQ.push({icon,label,title,article});if(!tBusy)nextToast();}
-function nextToast(){
-  if(!tQ.length){tBusy=false;return;}tBusy=true;
-  const{icon,label,title,article}=tQ.shift();
-  const stack=document.getElementById('tstack');
-  const t=document.createElement('div');t.className='toast';
-  t.innerHTML=`<div class="t-icon">${icon}</div><div style="flex:1;min-width:0"><div class="t-lbl">${label}</div><div class="t-ttl">${title}</div></div><div class="t-x">×</div>`;
-  t.querySelector('.t-x').onclick=e=>{e.stopPropagation();dismiss(t);};
-  if(article)t.onclick=()=>{dismiss(t);openModal(article);};
-  stack.appendChild(t);
-  requestAnimationFrame(()=>requestAnimationFrame(()=>t.classList.add('show')));
-  setTimeout(()=>dismiss(t),6000);
-}
-function dismiss(t){t.classList.remove('show');setTimeout(()=>{t.remove();setTimeout(nextToast,150);},400);}
-
-// ═══════════════════════════════════════════════════════
-// HELPERS
-// ═══════════════════════════════════════════════════════
-function isSaved(a){return savedArts.some(s=>s.url===a.url);}
-function isRead(a){return readSet.has(a.url);}
-function markRead(url){readSet.add(url);readCount++;localStorage.setItem('owls_read',JSON.stringify([...readSet]));localStorage.setItem('owls_readcount',String(readCount));syncToCloud();}
-function updateSBadge(){document.getElementById('sbadge').textContent=savedArts.length;}
-function savArt(a){if(isSaved(a))return;savedArts.unshift(a);syncToCloud();updateSBadge();showToast('🔖','Saved',a.title.slice(0,60)+'…',null);}
-function unsavArt(enc){const url=enc.startsWith('http')?enc:decodeURIComponent(enc);savedArts=savedArts.filter(s=>s.url!==url);syncToCloud();updateSBadge();}
-
-// ═══════════════════════════════════════════════════════
-// TABS & MENUS
-// ═══════════════════════════════════════════════════════
-function openSaved(){stab('saved');}
 function stab(name){
-  const names=['feed','saved','analytics','profile','alerts'];
-  document.querySelectorAll('.stab').forEach((t,i)=>t.classList.toggle('active',names[i]===name));
+  document.querySelectorAll('.stab').forEach((t,i)=>t.classList.toggle('active',['feed','saved','analytics','profile','alerts'][i]===name));
   document.querySelectorAll('.spanel').forEach(p=>p.classList.remove('active'));
   document.getElementById('p-'+name).classList.add('active');
   if(name==='saved')renderSaved();
   if(name==='profile')renderProfile();
-  if(name==='alerts')renderAlertTags();
 }
-
-function toggleUserMenu(){document.getElementById('userMenu').classList.toggle('open');}
-document.addEventListener('click',e=>{if(!e.target.closest('.user-wrap'))document.getElementById('userMenu').classList.remove('open');});
 
 document.getElementById('regionBar').addEventListener('click',e=>{
   const b=e.target.closest('.rbtn');if(!b)return;
@@ -1101,81 +671,17 @@ document.getElementById('catBar').addEventListener('click',e=>{
   b.classList.add('active');curQ=b.dataset.q;fetchNews(curQ);
 });
 
-// ═══════════════════════════════════════════════════════
-// MOBILE
-// ═══════════════════════════════════════════════════════
-// ── MOBILE NAVIGATION ────────────────────────────────────
-let mobCurrentMode = 'map'; // track current mode
-
 function mobSwitch(mode){
-  if(mobCurrentMode === mode && mode !== 'map') {
-    // Tapping same tab again → toggle sidebar visibility
-    const sb = document.getElementById('sidebar');
-    if(sb.classList.contains('mob-visible') && !sb.classList.contains('list-full')) {
-      sb.classList.remove('mob-visible');
-      document.getElementById('map').classList.remove('list-full');
-      mobCurrentMode = 'map';
-      ['mb-map','mb-news','mb-filter','mb-saved'].forEach(id=>document.getElementById(id)?.classList.remove('active'));
-      document.getElementById('mb-map').classList.add('active');
-      fixMap(); return;
-    }
-  }
-  mobCurrentMode = mode;
-
-  const mapEl = document.getElementById('map');
-  const sb    = document.getElementById('sidebar');
-  const filt  = document.getElementById('mobFilter');
-
-  // Reset all state
+  const mapEl=document.getElementById('map'),sb=document.getElementById('sidebar');
   ['mb-map','mb-news','mb-filter','mb-saved'].forEach(id=>document.getElementById(id)?.classList.remove('active'));
-  filt.classList.remove('open');
-  mapEl.classList.remove('list-full');
-  sb.classList.remove('mob-visible','list-full');
-
-  if(mode === 'map'){
-    // Pure map: sidebar hidden
-    document.getElementById('mb-map').classList.add('active');
-    // no sidebar classes needed
-
-  } else if(mode === 'news'){
-    // Split view: map on top, sidebar as bottom sheet
-    document.getElementById('mb-news').classList.add('active');
-    sb.classList.add('mob-visible');
-    stab('feed');
-
-  } else if(mode === 'list'){
-    // Full list: map hidden, sidebar full height
-    document.getElementById('mb-news').classList.add('active');
-    mapEl.classList.add('list-full');
-    sb.classList.add('list-full','mob-visible');
-    stab('feed');
-
-  } else if(mode === 'saved'){
-    document.getElementById('mb-saved').classList.add('active');
-    mapEl.classList.add('list-full');
-    sb.classList.add('list-full','mob-visible');
-    stab('saved');
-
-  } else if(mode === 'filter'){
-    document.getElementById('mb-map').classList.add('active');
-    filt.classList.add('open');
-  }
-
+  document.getElementById('mobFilter').classList.remove('open');
+  mapEl.className='';sb.className='sidebar';
+  if(mode==='map'){ document.getElementById('mb-map').classList.add('active'); sb.classList.add('map-only'); }
+  else { mapEl.classList.add('list-full');sb.classList.add('list-full'); document.getElementById('mb-news').classList.add('active');stab('feed'); }
   fixMap();
 }
-
-// Double-tap news → full list mode
-let lastNewsTap = 0;
-document.getElementById('mb-news').addEventListener('click', function(){
-  const now = Date.now();
-  if(now - lastNewsTap < 400) { mobSwitch('list'); }
-  else { if(mobCurrentMode !== 'news') mobSwitch('news'); }
-  lastNewsTap = now;
-});
-
 function toggleMobFilter(){
-  const f=document.getElementById('mobFilter');
-  f.classList.toggle('open');
+  const f=document.getElementById('mobFilter');f.classList.toggle('open');
   document.getElementById('mb-filter').classList.toggle('active',f.classList.contains('open'));
 }
 function mobCat(btn,q){
@@ -1185,63 +691,34 @@ function mobCat(btn,q){
   mobSwitch('news');
 }
 
-// Swipe down on sidebar to dismiss
-(function setupSwipe(){
-  let startY=0,startTime=0;
-  document.getElementById('sidebar').addEventListener('touchstart',e=>{
-    startY=e.touches[0].clientY;startTime=Date.now();
-  },{passive:true});
-  document.getElementById('sidebar').addEventListener('touchend',e=>{
-    const dy=e.changedTouches[0].clientY-startY;
-    const dt=Date.now()-startTime;
-    const sb=document.getElementById('sidebar');
-    if(dy>60&&dt<350&&!sb.classList.contains('list-full')){
-      // swipe down → dismiss sidebar to map
-      mobSwitch('map');
-    }
-  },{passive:true});
-})();
+// ─── AUTH (DESKTOP LOGIN UI FIX) ───
+function loginGoogle(){auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).catch(console.error);}
+function doLogout(){if(confirm('Sign out?'))auth.signOut();}
+function toggleUserMenu(){document.getElementById('userMenu').classList.toggle('open');}
 
-// ═══════════════════════════════════════════════════════
-// AUTH
-// ═══════════════════════════════════════════════════════
-function loginGoogle(){auth.signInWithRedirect(new firebase.auth.GoogleAuthProvider()).catch(console.error);}
-function doLogout(){if(confirm('Sign out from OWLS?'))auth.signOut();}
 auth.onAuthStateChanged(user=>{
-  document.getElementById('loginBtn').style.display=user?'none':'';
-  const av=document.getElementById('uavatar');
+  document.getElementById('loginBtn').style.display=user?'none':'block';
+  const uWrap = document.getElementById('userWrap');
+  
   if(user){
-    av.src=user.photoURL;av.style.display='block';
-    document.getElementById('feedLabel').textContent=user.displayName.split(' ')[0].toUpperCase()+"'S FEED";
+    uWrap.style.display = 'flex';
+    document.getElementById('uavatar').src = user.photoURL;
+    document.getElementById('uavatar').style.display = 'block';
+    document.getElementById('headerUserName').textContent = user.displayName.split(' ')[0] + ' ▾';
+    
     document.getElementById('umName').textContent=user.displayName;
     document.getElementById('umEmail').textContent=user.email;
-    loadFromCloud(user);
   } else {
-    av.style.display='none';
-    document.getElementById('feedLabel').textContent='GLOBAL FEED';
+    uWrap.style.display = 'none';
   }
 });
 
-document.getElementById('modal').addEventListener('click',e=>{if(e.target===e.currentTarget)closeModal();});
+document.addEventListener('click',e=>{if(!e.target.closest('.user-wrap'))document.getElementById('userMenu').classList.remove('open');});
 
-// ═══════════════════════════════════════════════════════
-// INIT
-// ═══════════════════════════════════════════════════════
 window.addEventListener('load',()=>{
-  updateSBadge();renderAlertTags();highlightFavCats();
   setTimeout(()=>{const s=document.getElementById('splash');if(s){s.classList.add('hide');setTimeout(()=>s.remove(),700);}},1600);
   fetchNews('world');
-  // Mobile: start in split view (map + news strip visible)
-  if(window.innerWidth<=768){
-    setTimeout(()=>{
-      const sb=document.getElementById('sidebar');
-      sb.classList.add('mob-visible');
-      document.getElementById('mb-news').classList.add('active');
-      document.getElementById('mb-map').classList.remove('active');
-      mobCurrentMode='news';
-    },2400); // after splash
-  }
-  [400,900,1800,2500].forEach(t=>setTimeout(()=>fixMap(),t));
+  [400,900,1800].forEach(t=>setTimeout(()=>fixMap(),t));
 });
 window.addEventListener('resize',()=>fixMap());
 </script>
