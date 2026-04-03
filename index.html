@@ -8,6 +8,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="theme-color" content="#0d1b2a"/>
 <title>OWLS — Global Intelligence</title>
+  <!-- Google AdSense: Uncomment and replace ca-pub-XXXXXXXX with your Publisher ID -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
 
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
@@ -40,7 +42,7 @@
   --warn:   #e08000;
   --green:  #008060;
   --hdr:    52px;
-  --topbar: 60px;
+  --topbar: 36px;
   --side:   310px;
   --mobbarnav: 56px;
 }
@@ -112,7 +114,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Syne',sans-serif;b
 #map{position:fixed;top:calc(var(--hdr) + var(--topbar));left:0;right:var(--side);bottom:0;z-index:1;}
 
 /* ── SIDEBAR ── */
-.sidebar{position:fixed;top:var(--hdr);right:0;width:var(--side);bottom:0;background:var(--card);border-left:1px solid var(--border);z-index:400;display:flex;flex-direction:column;overflow:hidden;}
+.sidebar{position:fixed;top:52px;right:0;width:var(--side);bottom:0;background:var(--card);border-left:1px solid var(--border);z-index:400;display:flex;flex-direction:column;overflow:hidden;}
 
 /* tabs */
 .stabs{display:flex;border-bottom:1px solid var(--border);flex-shrink:0;}
@@ -377,7 +379,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Syne',sans-serif;b
 .ci-likes:hover{color:var(--crit);}
 
 /* TV MODE */
-.tv-overlay{position:fixed;inset:0;z-index:99998;background:rgba(5,15,25,.94);display:none;flex-direction:column;align-items:center;justify-content:center;gap:16px;}
+.tv-overlay{position:fixed;inset:0;z-index:100000;background:rgba(5,15,25,.94);display:none;flex-direction:column;align-items:center;justify-content:center;gap:16px;}
 .tv-overlay.active{display:flex;}
 .tv-header{width:100%;max-width:720px;display:flex;align-items:center;justify-content:space-between;padding:0 10px;}
 .tv-card{background:rgba(20,34,52,.97);border:1px solid rgba(0,200,180,.25);border-radius:16px;max-width:720px;width:90%;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,.8);animation:tvIn .5s ease;position:relative;}
@@ -508,6 +510,132 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Syne',sans-serif;b
 .pro-cancel:hover{color:var(--text);}
 @media(max-width:768px){.compare-bar{bottom:calc(var(--mobbarnav) + 44px);right:0;}}
 
+
+/* ── WORLD CLOCK / WEATHER / CURRENCY WIDGET ── */
+.info-strip{position:fixed;top:52px;left:0;right:var(--side);height:32px;background:var(--bg2);border-bottom:1px solid var(--border);z-index:580;display:flex;align-items:center;gap:0;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;font-family:'Space Mono',monospace;}
+.info-seg{display:flex;align-items:center;gap:5px;padding:0 10px;border-right:1px solid var(--border);height:100%;font-size:10px;font-weight:700;color:var(--text2);white-space:nowrap;flex-shrink:0;}
+.info-seg:last-child{border-right:none;}
+.info-seg .lbl{font-size:8px;color:var(--text3);letter-spacing:.5px;}
+.info-strip::-webkit-scrollbar{display:none;}
+.info-seg .val{color:var(--text);font-size:10px;}
+.info-seg .val.up{color:#00b050;}
+.info-seg .val.down{color:var(--crit);}
+.info-live{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;flex-shrink:0;}
+/* shift map down by info strip height */
+@media(min-width:769px){
+  #map{top:120px;}
+  .topbar{top:84px;}
+}
+
+/* ── ADS ── */
+.ad-slot{background:var(--bg3);border:1px dashed var(--border2);border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--text3);font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.5px;cursor:pointer;transition:background .2s;flex-shrink:0;}
+.ad-slot:hover{background:var(--bg2);}
+.ad-slot-icon{font-size:18px;margin-bottom:4px;opacity:.4;}
+.ad-sidebar{height:90px;width:100%;margin:0;border-radius:0;border-left:none;border-right:none;}
+.ad-feed{height:80px;margin:8px 12px;border-radius:8px;}
+.ad-modal{height:80px;width:100%;margin:14px 0;border-radius:8px;}
+/* Real AdSense slot would replace .ad-slot */
+ins.adsbygoogle{display:block;}
+
+/* ── FEED → BACK BUTTON ── */
+.back-to-feed{position:sticky;top:0;z-index:10;background:var(--accent);color:#000;font-size:10px;font-weight:800;font-family:'Space Mono',monospace;letter-spacing:.5px;padding:8px 14px;cursor:pointer;display:flex;align-items:center;gap:6px;border-bottom:1px solid rgba(0,0,0,.1);transition:background .15s;flex-shrink:0;}
+.back-to-feed:hover{background:var(--accentg);}
+
+/* ── DOPAMINE POPUPS (multiple styles) ── */
+.dp-popup{position:fixed;z-index:8800;pointer-events:auto;}
+@keyframes dpIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes dpOut{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(12px)}}
+/* Single bottom-center popup — sequential, never overlapping */
+.dp-card{bottom:54px;left:50%;transform:translateX(-50%);width:min(420px,92vw);background:var(--card);border:1px solid var(--border2);border-radius:14px;padding:14px 16px;box-shadow:0 12px 36px rgba(0,0,0,.18);cursor:pointer;display:flex;align-items:center;gap:12px;animation:dpIn .4s ease;}
+.dp-card.breaking{background:linear-gradient(135deg,#a50008,#d93000);border-color:transparent;}
+.dp-card.breaking .dp-title,.dp-card.breaking .dp-sub{color:#fff!important;}
+.dp-card.breaking .dp-label{color:rgba(255,255,255,.8)!important;}
+.dp-label{font-size:8px;font-weight:800;letter-spacing:1.5px;font-family:'Space Mono',monospace;color:var(--accent2);margin-bottom:3px;}
+.dp-title{font-size:12px;font-weight:700;line-height:1.35;color:var(--text);}
+.dp-sub{font-size:10px;color:var(--text3);margin-top:2px;}
+.dp-icon{font-size:24px;flex-shrink:0;}
+.dp-body{flex:1;min-width:0;}
+.dp-x{width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,.12);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;color:inherit;opacity:.7;cursor:pointer;}
+.dp-x:hover{opacity:1;background:rgba(0,0,0,.2);}
+.dp-progress{position:absolute;bottom:0;left:0;height:2px;background:var(--accent);border-radius:0 0 14px 14px;}
+@media(max-width:768px){.dp-card{bottom:calc(var(--mobbarnav) + 8px);}}
+
+
+/* ── AFFILIATE ── */
+.affiliate-strip{margin-top:14px;padding-top:12px;border-top:1px dashed var(--border2);}
+.affiliate-title{font-size:8px;font-family:'Space Mono',monospace;font-weight:700;color:var(--text3);letter-spacing:1px;margin-bottom:8px;text-transform:uppercase;}
+.affiliate-btns{display:flex;flex-wrap:wrap;gap:6px;}
+.aff-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;border:1px solid var(--border2);background:var(--bg3);color:var(--text2);text-decoration:none;transition:all .2s;font-family:'Syne',sans-serif;}
+.aff-btn:hover{border-color:var(--accent);color:var(--accent);background:var(--bg2);}
+.aff-btn .aff-badge{font-size:8px;background:rgba(0,176,80,.15);color:#00b050;border-radius:4px;padding:1px 5px;font-family:'Space Mono',monospace;}
+
+
+/* ── BUY ME A COFFEE ── */
+.bmc-float{position:fixed;bottom:90px;right:calc(var(--side) + 14px);z-index:500;display:flex;flex-direction:column;align-items:flex-end;gap:8px;}
+.bmc-btn{display:flex;align-items:center;gap:8px;background:#FFDD00;color:#000;border:none;border-radius:24px;padding:10px 18px;font-size:12px;font-weight:800;cursor:pointer;font-family:'Syne',sans-serif;box-shadow:0 4px 16px rgba(255,221,0,.4);transition:all .2s;text-decoration:none;white-space:nowrap;}
+.bmc-btn:hover{transform:translateY(-2px);box-shadow:0 6px 22px rgba(255,221,0,.5);}
+.bmc-btn-small{padding:7px 14px;font-size:11px;border-radius:20px;}
+.bmc-supporters{background:var(--card);border:1px solid var(--border2);border-radius:10px;padding:10px 14px;font-size:10px;color:var(--text3);font-family:'Space Mono',monospace;text-align:center;display:none;}
+.bmc-supporters.show{display:block;}
+@media(max-width:768px){.bmc-float{bottom:calc(var(--mobbarnav) + 70px);right:10px;}}
+
+
+/* ── B2B SAAS ── */
+.b2b-body{padding:14px;display:flex;flex-direction:column;gap:12px;}
+.b2b-hero{background:linear-gradient(135deg,#003d42,#006970);border-radius:12px;padding:18px;text-align:center;position:relative;overflow:hidden;}
+.b2b-hero::before{content:'🦉';position:absolute;right:-10px;bottom:-14px;font-size:80px;opacity:.08;}
+.b2b-hero-title{font-size:16px;font-weight:800;color:#fff;margin-bottom:4px;}
+.b2b-hero-sub{font-size:10px;color:rgba(255,255,255,.65);font-family:'Space Mono',monospace;}
+.b2b-plans{display:flex;flex-direction:column;gap:8px;}
+.b2b-plan{background:var(--bg3);border:1px solid var(--border2);border-radius:10px;padding:12px 14px;cursor:pointer;transition:all .2s;}
+.b2b-plan:hover,.b2b-plan.selected{border-color:var(--accent);background:var(--bg2);}
+.b2b-plan-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+.b2b-plan-name{font-size:13px;font-weight:800;color:var(--text);}
+.b2b-plan-price{font-size:14px;font-weight:800;color:var(--accent);}
+.b2b-plan-price span{font-size:10px;color:var(--text3);font-weight:400;}
+.b2b-plan-features{display:flex;flex-direction:column;gap:3px;}
+.b2b-plan-feat{font-size:10px;color:var(--text2);display:flex;align-items:center;gap:5px;}
+.b2b-plan-feat::before{content:'✓';color:var(--green);font-weight:800;flex-shrink:0;}
+.b2b-contact{background:var(--bg);border:1px solid var(--border2);border-radius:10px;padding:12px;}
+.b2b-contact-title{font-size:9px;font-family:'Space Mono',monospace;font-weight:700;color:var(--text3);letter-spacing:1px;margin-bottom:10px;text-transform:uppercase;}
+.b2b-inp{width:100%;background:var(--card);border:1px solid var(--border2);border-radius:7px;padding:8px 10px;color:var(--text);font-size:11px;font-family:'Syne',sans-serif;outline:none;margin-bottom:7px;}
+.b2b-inp:focus{border-color:var(--accent);}
+.b2b-send{width:100%;background:var(--accent);color:#fff;border:none;border-radius:8px;padding:10px;font-size:12px;font-weight:800;cursor:pointer;font-family:'Syne',sans-serif;transition:background .2s;}
+.b2b-send:hover{background:var(--accentg);}
+.b2b-logos{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;}
+.b2b-use-tag{font-size:9px;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;padding:3px 8px;color:var(--text3);font-family:'Space Mono',monospace;}
+
+
+/* ── SUPPORT MODAL ── */
+.support-modal{position:fixed;inset:0;background:rgba(10,27,36,.85);z-index:9700;display:none;align-items:center;justify-content:center;backdrop-filter:blur(5px);}
+.support-modal.active{display:flex;}
+.support-box{background:var(--card);border:1px solid var(--border2);border-radius:18px;width:92%;max-width:400px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.5);}
+.support-hero{background:linear-gradient(135deg,#007b82,#00c8b4);padding:22px 20px;text-align:center;}
+.support-hero-icon{font-size:44px;display:block;margin-bottom:6px;}
+.support-hero-title{font-size:18px;font-weight:800;color:#fff;}
+.support-hero-sub{font-size:11px;color:rgba(255,255,255,.75);margin-top:4px;}
+.support-body{padding:18px 20px;display:flex;flex-direction:column;gap:10px;}
+.support-opt{display:flex;align-items:center;gap:12px;padding:13px 14px;border-radius:11px;background:var(--bg3);border:1px solid var(--border2);cursor:pointer;transition:all .2s;}
+.support-opt:hover{border-color:var(--accent);background:var(--bg2);}
+.support-opt-icon{font-size:26px;flex-shrink:0;}
+.support-opt-label{font-size:13px;font-weight:800;color:var(--text);}
+.support-opt-sub{font-size:10px;color:var(--text3);margin-top:1px;}
+.support-opt-badge{margin-left:auto;font-size:9px;background:rgba(0,176,80,.15);color:#00b050;border-radius:4px;padding:2px 7px;font-family:'Space Mono',monospace;font-weight:700;flex-shrink:0;}
+.support-cancel{text-align:center;font-size:11px;color:var(--text3);cursor:pointer;margin-top:4px;}
+.support-cancel:hover{color:var(--text);}
+/* wallet display */
+.wallet-display{background:var(--bg);border:1px solid var(--border2);border-radius:10px;padding:12px 14px;margin-top:8px;display:none;}
+.wallet-display.show{display:block;}
+.wallet-network{font-size:9px;font-family:'Space Mono',monospace;font-weight:700;color:var(--accent2);letter-spacing:1px;margin-bottom:6px;}
+.wallet-addr{font-size:10px;font-family:'Space Mono',monospace;color:var(--text);word-break:break-all;line-height:1.5;background:var(--bg3);padding:8px 10px;border-radius:7px;cursor:pointer;border:1px solid var(--border);}
+.wallet-addr:hover{border-color:var(--accent);}
+.wallet-copy-hint{font-size:9px;color:var(--text3);margin-top:5px;text-align:center;}
+/* float button */
+.support-float{position:fixed;bottom:90px;right:calc(var(--side) + 14px);z-index:500;}
+.support-float-btn{display:flex;align-items:center;gap:8px;background:var(--accent);color:#fff;border:none;border-radius:24px;padding:10px 18px;font-size:12px;font-weight:800;cursor:pointer;font-family:'Syne',sans-serif;box-shadow:0 4px 16px rgba(0,152,160,.35);transition:all .2s;}
+.support-float-btn:hover{transform:translateY(-2px);box-shadow:0 6px 22px rgba(0,152,160,.45);}
+@media(max-width:768px){.support-float{bottom:calc(var(--mobbarnav) + 70px);right:10px;}}
+
 </style>
 </head>
 <body>
@@ -532,6 +660,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Syne',sans-serif;b
       </div>
     </div>
   </div>
+  <button onclick="tvStart()" style="background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:5px 12px;font-size:10px;font-weight:800;cursor:pointer;color:var(--accent);font-family:'Space Mono',monospace;display:flex;align-items:center;gap:5px;white-space:nowrap;flex-shrink:0;transition:all .2s;" onmouseover="this.style.borderColor='var(--accent)'" title="TV Mode">📺 <span style="font-size:9px">TV</span></button>
   <div class="search-wrap" id="searchWrap">
     <span class="search-icon">🔍</span>
     <input class="search-inp" id="searchInp" placeholder="Search stories..." autocomplete="off"
@@ -553,6 +682,21 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Syne',sans-serif;b
       </div>
     </div>
   </div>
+</div>
+
+<!-- INFO STRIP: Clock / Weather / Currency -->
+<div class="info-strip" id="infoStrip">
+  <div class="info-seg"><span class="info-live"></span><span class="lbl">UTC</span>&nbsp;<span class="val" id="clockUTC">--:--</span></div>
+  <div class="info-seg"><span class="lbl">NY</span>&nbsp;<span class="val" id="clockNY">--:--</span></div>
+  <div class="info-seg"><span class="lbl">LON</span>&nbsp;<span class="val" id="clockLON">--:--</span></div>
+  <div class="info-seg"><span class="lbl">TKY</span>&nbsp;<span class="val" id="clockTKY">--:--</span></div>
+  <div class="info-seg"><span class="lbl">DXB</span>&nbsp;<span class="val" id="clockDXB">--:--</span></div>
+  <div class="info-seg" style="background:rgba(0,152,160,.08);"><span class="lbl">📍LOCAL</span>&nbsp;<span class="val" id="clockLOCAL">--:--</span>&nbsp;<span id="localCity" style="color:var(--accent);font-size:8px;font-weight:700;font-family:'Space Mono',monospace;"></span></div>
+  <div class="info-seg"><span class="lbl">EUR</span>&nbsp;<span class="val" id="fxEUR">--</span></div>
+  <div class="info-seg"><span class="lbl">GBP</span>&nbsp;<span class="val" id="fxGBP">--</span></div>
+  <div class="info-seg"><span class="lbl">JPY</span>&nbsp;<span class="val" id="fxJPY">--</span></div>
+  <div class="info-seg"><span class="lbl">₿BTC</span>&nbsp;<span class="val" id="fxBTC">--</span></div>
+  <div class="info-seg" style="background:rgba(0,152,160,.06);"><span class="lbl">🌡️</span>&nbsp;<span class="val" id="wxVal">--</span></div>
 </div>
 
 <!-- TOP BAR (desktop category filter) -->
@@ -578,6 +722,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Syne',sans-serif;b
     <div class="stab" onclick="doStab('analytics')">📊</div>
     <div class="stab" onclick="doStab('profile')">👤</div>
     <div class="stab" onclick="doStab('portfolio')">💼</div>
+    <div class="stab" onclick="doStab('b2b')">🏢</div>
     <div class="stab" onclick="doStab('alerts')">🔔</div>
   </div>
 
@@ -586,7 +731,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Syne',sans-serif;b
     <div class="live-bar">
       <div class="live-dot">LIVE</div>
       <span class="lcount" id="lcount">loading...</span>
-      <button onclick="tvStart()" style="background:var(--bg3);border:1px solid var(--border2);border-radius:6px;padding:3px 8px;font-size:9px;font-weight:700;cursor:pointer;color:var(--accent);font-family:'Space Mono',monospace;margin-left:auto;flex-shrink:0;">📺 TV</button>
+
     </div>
     <div style="padding:9px 12px;border-bottom:1px solid var(--border);flex-shrink:0;">
       <div class="whisper-box">
@@ -599,11 +744,13 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Syne',sans-serif;b
 
   <!-- SAVED -->
   <div class="spanel" id="p-saved">
+    <div class="back-to-feed" onclick="doStab('feed')">← Back to Feed</div>
     <div class="nscroll" id="savedList"></div>
   </div>
 
   <!-- ANALYTICS -->
   <div class="spanel" id="p-analytics">
+    <div class="back-to-feed" onclick="doStab('feed')">← Back to Feed</div>
     <div class="nscroll">
       <div class="adata" id="adata">
         <div class="ldr"><div class="ldr-owl">🦉</div><div class="ldr-txt">Load news to see analytics</div></div>
@@ -634,6 +781,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Syne',sans-serif;b
 
   <!-- PORTFOLIO -->
   <div class="spanel" id="p-portfolio">
+    <div class="back-to-feed" onclick="doStab('feed')">← Back to Feed</div>
     <div class="nscroll">
       <div class="portfolio-section">
         <div style="font-size:9px;color:var(--text3);font-family:'Space Mono',monospace;margin-bottom:10px;letter-spacing:1px;font-weight:700;">YOUR PORTFOLIO & WATCHLIST</div>
@@ -650,6 +798,78 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Syne',sans-serif;b
           <div class="paywall-title">🦉 Deep Analysis — $5/mo</div>
           <div class="paywall-sub">Full economic impact reports, risk scores, Sunday Night Briefing.</div>
           <button class="paywall-btn" onclick="window.open('https://substack.com','_blank')">Subscribe →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- B2B SAAS -->
+  <div class="spanel" id="p-b2b">
+    <div class="back-to-feed" onclick="doStab('feed')">← Back to Feed</div>
+    <div class="nscroll">
+      <div class="b2b-body">
+        <div class="b2b-hero">
+          <div class="b2b-hero-title">OWLS for Business</div>
+          <div class="b2b-hero-sub">GLOBAL INTELLIGENCE PLATFORM</div>
+        </div>
+        <div style="font-size:9px;color:var(--text3);font-family:'Space Mono',monospace;margin-bottom:4px;letter-spacing:1px;">WHO USES OWLS PRO?</div>
+        <div class="b2b-logos">
+          <span class="b2b-use-tag">🏛️ Law Firms</span>
+          <span class="b2b-use-tag">💹 Hedge Funds</span>
+          <span class="b2b-use-tag">📰 PR Agencies</span>
+          <span class="b2b-use-tag">🏦 Banks</span>
+          <span class="b2b-use-tag">🎓 Universities</span>
+          <span class="b2b-use-tag">🌐 NGOs</span>
+        </div>
+        <div class="b2b-plans" id="b2bPlans">
+          <div class="b2b-plan" onclick="b2bSelect(this,'starter')">
+            <div class="b2b-plan-header">
+              <span class="b2b-plan-name">🌱 Starter</span>
+              <span class="b2b-plan-price">$49<span>/mo</span></span>
+            </div>
+            <div class="b2b-plan-features">
+              <div class="b2b-plan-feat">Up to 5 team members</div>
+              <div class="b2b-plan-feat">50 keyword alerts</div>
+              <div class="b2b-plan-feat">Weekly brief + PDF export</div>
+              <div class="b2b-plan-feat">Portfolio risk monitoring</div>
+            </div>
+          </div>
+          <div class="b2b-plan" onclick="b2bSelect(this,'pro')">
+            <div class="b2b-plan-header">
+              <span class="b2b-plan-name">🚀 Professional</span>
+              <span class="b2b-plan-price">$199<span>/mo</span></span>
+            </div>
+            <div class="b2b-plan-features">
+              <div class="b2b-plan-feat">Unlimited team members</div>
+              <div class="b2b-plan-feat">Unlimited alerts + email push</div>
+              <div class="b2b-plan-feat">Custom domain embed (iframe)</div>
+              <div class="b2b-plan-feat">Daily intelligence briefing</div>
+              <div class="b2b-plan-feat">API access (1000 req/day)</div>
+            </div>
+          </div>
+          <div class="b2b-plan" onclick="b2bSelect(this,'enterprise')">
+            <div class="b2b-plan-header">
+              <span class="b2b-plan-name">🏢 Enterprise</span>
+              <span class="b2b-plan-price">Custom<span> pricing</span></span>
+            </div>
+            <div class="b2b-plan-features">
+              <div class="b2b-plan-feat">White-label (your brand)</div>
+              <div class="b2b-plan-feat">Dedicated account manager</div>
+              <div class="b2b-plan-feat">SLA + priority support</div>
+              <div class="b2b-plan-feat">Custom data integrations</div>
+            </div>
+          </div>
+        </div>
+        <div class="b2b-contact">
+          <div class="b2b-contact-title">Get a Demo / Request Quote</div>
+          <input class="b2b-inp" id="b2bName" placeholder="Your name & company">
+          <input class="b2b-inp" id="b2bEmail" placeholder="Work email" type="email">
+          <input class="b2b-inp" id="b2bMsg" placeholder="Tell us your use case...">
+          <button class="b2b-send" onclick="b2bSubmit()">Request Demo →</button>
+          <div id="b2bConfirm" style="display:none;text-align:center;padding:10px;font-size:11px;color:var(--green);font-weight:700;">✓ Sent! We'll contact you within 24h.</div>
+        </div>
+        <div style="font-size:9px;color:var(--text3);text-align:center;line-height:1.7;font-family:'Space Mono',monospace;">
+          All plans include 14-day free trial.<br>No credit card required to start.
         </div>
       </div>
     </div>
@@ -722,6 +942,17 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Syne',sans-serif;b
       </div>
       <button class="mbtn sec" onclick="addToCompare()">⚖️ Compare</button>
       <button class="mbtn sec" onclick="closeModal()">Close</button>
+      </div>
+      <div id="modalAffiliates"></div>
+      <!-- Google AdSense: In-Article Ad -->
+      <div style="margin:14px 0;">
+        <div class="ad-slot ad-modal" id="adModal1">
+          <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+          <ins class="adsbygoogle" style="display:block;" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX" data-ad-format="auto" data-full-width-responsive="true"></ins>
+          <script>(adsbygoogle = window.adsbygoogle || []).push({});</script> -->
+          <div class="ad-slot-icon">⭐</div>
+          <div style="font-size:9px;font-family:'Space Mono',monospace;">ADVERTISEMENT · <span onclick="openProModal()" style="color:var(--accent);cursor:pointer;font-weight:800;">Go Pro to remove</span></div>
+        </div>
       </div>
       <div id="modalRelated"></div>
       <div id="modalComments"></div>
@@ -1130,6 +1361,7 @@ async function fetchNews(cat){
     generateBrief();
     const sl=document.getElementById('tsRange');
     if(sl){sl.value=47;tsUpdate(47);}
+    scheduleDpPopups(allArts);
   },150);
 }
 
@@ -1294,7 +1526,7 @@ function openModal(a){
   document.querySelectorAll('.ncard').forEach(c=>{if(c.dataset.url===a.url)c.classList.add('read');});
   // New features
   trackCatRead(curQ||'world');
-  setTimeout(()=>renderComments(a.url),80);
+  setTimeout(()=>{ renderComments(a.url); renderAffiliates(a); },80);
 }
 function closeModal(){document.getElementById('modal').classList.remove('on');}
 function toggleSaveModal(){
@@ -1747,7 +1979,7 @@ function getAgentData(){
 // OVERRIDE doStab — add portfolio
 // ════════════════════════════════════════
 function doStab(name){
-  const names=['feed','saved','analytics','profile','portfolio','alerts'];
+  const names=['feed','saved','analytics','profile','portfolio','b2b','alerts'];
   document.querySelectorAll('.stab').forEach((t,i)=>t.classList.toggle('active',names[i]===name));
   document.querySelectorAll('.spanel').forEach(p=>p.classList.remove('active'));
   const panel=document.getElementById('p-'+name);if(panel)panel.classList.add('active');
@@ -2073,6 +2305,324 @@ if (isPro) {
   setTimeout(() => showToast('⭐', 'OWLS Pro', 'Pro features active.', null), 3000);
 }
 
+
+// ════════════════════════════════════════════════
+// WORLD CLOCKS
+// ════════════════════════════════════════════════
+function updateClocks() {
+  const now = new Date();
+  const fmt = (tz) => new Date().toLocaleTimeString('en-GB', {timeZone: tz, hour: '2-digit', minute: '2-digit'});
+  const safe = (id, val) => { const el = document.getElementById(id); if(el) el.textContent = val; };
+  safe('clockUTC',  fmt('UTC'));
+  safe('clockNY',   fmt('America/New_York'));
+  safe('clockLON',  fmt('Europe/London'));
+  safe('clockTKY',  fmt('Asia/Tokyo'));
+  safe('clockDXB',  fmt('Asia/Dubai'));
+  // Local time
+  safe('clockLOCAL', now.toLocaleTimeString('en-GB', {hour:'2-digit', minute:'2-digit'}));
+}
+setInterval(updateClocks, 1000);
+updateClocks();
+
+// ════════════════════════════════════════════════
+// CURRENCY RATES (free API)
+// ════════════════════════════════════════════════
+async function fetchRates() {
+  try {
+    const r = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+    const d = await r.json();
+    if (!d.rates) return;
+    const fmt = (n, dec=4) => n ? n.toFixed(dec) : '--';
+    const safe = (id, val, prev) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.textContent = val;
+      el.className = 'val'; // reset
+    };
+    document.getElementById('fxEUR').textContent = fmt(d.rates.EUR);
+    document.getElementById('fxGBP').textContent = fmt(d.rates.GBP);
+    document.getElementById('fxJPY').textContent = fmt(d.rates.JPY, 2);
+  } catch(e) {}
+}
+
+fetchRates();
+setInterval(fetchRates, 90000);
+
+async function fetchCrypto() {
+  try {
+    const r = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd');
+    const d = await r.json();
+    const p = d?.bitcoin?.usd;
+    const el = document.getElementById('fxBTC');
+    if(el && p) el.textContent = '$' + Number(p).toLocaleString('en-US',{maximumFractionDigits:0});
+  } catch(e) {}
+}
+fetchCrypto();
+setInterval(fetchCrypto, 60000);
+
+// ════════════════════════════════════════════════
+// WEATHER (geolocation)
+// ════════════════════════════════════════════════
+function fetchWeather() {
+  if (!navigator.geolocation) return;
+  navigator.geolocation.getCurrentPosition(async pos => {
+    try {
+      const {latitude: lat, longitude: lon} = pos.coords;
+      const r = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
+      const d = await r.json();
+      const temp = d?.current_weather?.temperature;
+      const code = d?.current_weather?.weathercode;
+      const icons = {0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',48:'🌫️',51:'🌦️',61:'🌧️',71:'🌨️',80:'🌦️',95:'⛈️'};
+      const icon = icons[code] || '🌡️';
+      const el = document.getElementById('wxVal');
+      if (el && temp !== undefined) el.textContent = `${icon} ${Math.round(temp)}°C`;
+      // Set local city via reverse geocode
+      const rg = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`);
+      const dg = await rg.json();
+      const city = dg?.address?.city || dg?.address?.town || dg?.address?.county || '';
+      const cityEl = document.getElementById('localCity');
+      if (cityEl && city) cityEl.textContent = city.slice(0,10);
+    } catch(e) {}
+  }, () => {
+    const el = document.getElementById('wxVal');
+    if (el) el.textContent = 'N/A';
+  }, {timeout: 5000});
+}
+setTimeout(fetchWeather, 1500);
+
+// ════════════════════════════════════════════════
+// DOPAMINE POPUPS — single queue, no overlap
+// ════════════════════════════════════════════════
+let dpQueue = [];
+let dpShowing = false;
+let dpCycleTimer = null;
+
+const DP_CONFIGS = [
+  { type:'breaking', icon:'🔥', label:'⚡ BREAKING',  dur:9000, filter: arts => arts.filter(a=>a._s&&a._s.level==='CRITICAL') },
+  { type:'alert',    icon:'⚠️', label:'🚨 CRITICAL',   dur:7000, filter: arts => arts.filter(a=>a._s&&a._s.level==='CRITICAL') },
+  { type:'trending', icon:'📈', label:'📈 TRENDING',   dur:7000, filter: arts => arts.filter(a=>a._s&&a._s.level==='WARNING') },
+  { type:'info',     icon:'📡', label:'📰 NEW STORY',  dur:6000, filter: arts => arts },
+];
+
+function dpEnqueue(arts) {
+  dpQueue = [];
+  const crits = arts.filter(a=>a._s&&a._s.level==='CRITICAL');
+  const warns = arts.filter(a=>a._s&&a._s.level==='WARNING');
+  const all   = arts;
+  if (crits.length) dpQueue.push({cfg:DP_CONFIGS[0], art: crits[Math.floor(Math.random()*Math.min(crits.length,6))]});
+  if (warns.length) dpQueue.push({cfg:DP_CONFIGS[2], art: warns[Math.floor(Math.random()*Math.min(warns.length,6))]});
+  if (crits.length>1) dpQueue.push({cfg:DP_CONFIGS[1], art: crits[Math.floor(Math.random()*crits.length)]});
+  if (all.length)   dpQueue.push({cfg:DP_CONFIGS[3], art: all[Math.floor(Math.random()*Math.min(all.length,20))]});
+}
+
+function dpNext() {
+  if (dpShowing || !dpQueue.length) return;
+  dpShowing = true;
+  const {cfg, art} = dpQueue.shift();
+  showDpCard(cfg, art);
+}
+
+function showDpCard(cfg, art) {
+  const container = document.getElementById('dpContainer');
+  if (!container) { dpShowing=false; return; }
+  // Remove any existing
+  container.querySelectorAll('.dp-popup').forEach(e=>e.remove());
+
+  const el = document.createElement('div');
+  el.className = `dp-popup dp-card${cfg.type==='breaking'?' breaking':''}`;
+  el.style.position = 'fixed'; // ensure
+  el.innerHTML = `
+    <div class="dp-icon">${cfg.icon}</div>
+    <div class="dp-body">
+      <div class="dp-label">${cfg.label}</div>
+      <div class="dp-title">${art.title.slice(0,68)}${art.title.length>68?'…':''}</div>
+      <div class="dp-sub">${art.source}${art._loc?' · '+art._loc:''}</div>
+    </div>
+    <div class="dp-x" onclick="dpDismiss(event)">×</div>
+    <div class="dp-progress" id="dpProg" style="width:0%"></div>`;
+
+  el.onclick = (e) => {
+    if (e.target.classList.contains('dp-x')) return;
+    openModal(art);
+    dpDismissEl(el);
+  };
+  container.appendChild(el);
+
+  // Progress bar animation
+  const prog = el.querySelector('#dpProg');
+  if (prog) { setTimeout(()=>{ prog.style.transition=`width ${cfg.dur}ms linear`; prog.style.width='100%'; }, 50); }
+
+  // Auto remove
+  setTimeout(() => dpDismissEl(el), cfg.dur);
+}
+
+function dpDismiss(e) {
+  e.stopPropagation();
+  const el = e.target.closest('.dp-popup');
+  if (el) dpDismissEl(el);
+}
+
+function dpDismissEl(el) {
+  el.style.animation = 'dpOut .3s ease forwards';
+  setTimeout(() => {
+    el.remove();
+    dpShowing = false;
+    // Show next after 2s gap
+    setTimeout(dpNext, 2000);
+  }, 300);
+}
+
+function scheduleDpPopups(arts) {
+  clearTimeout(dpCycleTimer);
+  if (!arts || arts.length < 3) return;
+  dpEnqueue(arts);
+  // Start sequence: first popup at 5s
+  setTimeout(dpNext, 5000);
+  // Recurring cycle every 50s
+  dpCycleTimer = setInterval(() => {
+    dpEnqueue(allArts);
+    dpNext();
+  }, 50000);
+}
+
+// ════════════════════════════════════════════════
+// HOOK: Call new features from fetchNews
+// ════════════════════════════════════════════════
+// Patch the end of fetchNews to also call dp popups
+// Find the existing setTimeout hook and extend it
+
+
+// ════════════════════════════════════════════════
+// AFFILIATE LINKS
+// ════════════════════════════════════════════════
+// Source → affiliate program mapping
+// Replace URLs with your actual affiliate tracking links
+const AFFILIATE_MAP = {
+  'Financial Times':    { label:'FT Free Trial', badge:'+$20/ref', url:'https://www.ft.com/products?segmentId=1c1e6a4f-6664-11e7-9283-e80d621bc0e2' },
+  'WSJ':                { label:'WSJ Free Trial', badge:'+$10/ref', url:'https://subscribe.wsj.com/affiliate' },
+  'NY Times':           { label:'NYT Subscribe',  badge:'+$10/ref', url:'https://www.nytimes.com/subscription?campaignId=affiliate' },
+  'The Guardian':       { label:'Guardian Support',badge:'+$5/ref',  url:'https://support.theguardian.com/contribute' },
+  'The Economist':      { label:'Economist Trial', badge:'+$15/ref', url:'https://subscriptions.economist.com/affiliate' },
+  'Bloomberg':          { label:'Bloomberg Access',badge:'+$20/ref', url:'https://www.bloomberg.com/subscription/affiliate' },
+};
+
+// Generic premium media affiliate
+const GENERIC_AFFILIATES = [
+  { label:'📰 Read on CNBC Pro — Free 30 days', badge:'+$15/ref', url:'https://www.cnbc.com/digital-products/pro/?referral=owls' },
+  { label:'📊 Wall Street Journal — Free Trial', badge:'+$10/ref', url:'https://store.wsj.com/shop/us/us/wsjsubscription/?affiliateCode=owls' },
+];
+
+function getAffiliateLinks(article) {
+  const links = [];
+  // Source-specific link
+  const srcKey = Object.keys(AFFILIATE_MAP).find(k => article.source && article.source.includes(k));
+  if (srcKey) links.push(AFFILIATE_MAP[srcKey]);
+  // Always show 1-2 generic affiliates based on category
+  const q = window.curQ || 'world';
+  if (q === 'business' || q === 'politics') {
+    links.push(GENERIC_AFFILIATES[0]); // CNBC Pro
+    links.push(GENERIC_AFFILIATES[1]); // WSJ
+  } else {
+    links.push(GENERIC_AFFILIATES[0]);
+  }
+  // Dedupe
+  const seen = new Set();
+  return links.filter(l => { if(seen.has(l.url)) return false; seen.add(l.url); return true; }).slice(0,3);
+}
+
+function renderAffiliates(article) {
+  const el = document.getElementById('modalAffiliates');
+  if (!el || !article) return;
+  const links = getAffiliateLinks(article);
+  if (!links.length) { el.innerHTML=''; return; }
+  el.innerHTML = `
+    <div class="affiliate-strip">
+      <div class="affiliate-title">📖 Read More — Premium Sources</div>
+      <div class="affiliate-btns">
+        ${links.map(l=>`
+          <a href="${l.url}" target="_blank" rel="noopener sponsored" class="aff-btn">
+            ${l.label} <span class="aff-badge">${l.badge}</span>
+          </a>`).join('')}
+      </div>
+    </div>`;
+}
+
+
+// ════════════════════════════════════════════════
+// B2B SAAS
+// ════════════════════════════════════════════════
+let b2bSelectedPlan = 'starter';
+
+function b2bSelect(el, plan) {
+  b2bSelectedPlan = plan;
+  document.querySelectorAll('.b2b-plan').forEach(p => p.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function b2bSubmit() {
+  const name  = document.getElementById('b2bName')?.value.trim();
+  const email = document.getElementById('b2bEmail')?.value.trim();
+  const msg   = document.getElementById('b2bMsg')?.value.trim();
+  if (!name || !email) { showToast('⚠️','B2B','Please fill in name and email.',null); return; }
+
+  // Send via Formspree (free, no backend needed)
+  // SETUP: Go to formspree.io → create form → replace XXXXXXXX with your form ID
+  const FORMSPREE_ID = 'YOUR_FORMSPREE_ID';
+  const body = { name, email, plan: b2bSelectedPlan, message: msg, source: 'OWLS B2B Panel' };
+
+  // Show confirm immediately (optimistic UI)
+  document.getElementById('b2bConfirm').style.display = 'block';
+  document.getElementById('b2bName').value = '';
+  document.getElementById('b2bEmail').value = '';
+  document.getElementById('b2bMsg').value = '';
+  showToast('🏢','B2B Demo','Request sent! We\'ll contact you within 24h.',null);
+
+  // Actual submit (background)
+  fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify(body)
+  }).catch(() => {}); // silent fail — email still shows confirm
+}
+
+
+// ════════════════════════════════════════════════
+// SUPPORT MODAL
+// ════════════════════════════════════════════════
+function openSupportModal() {
+  document.getElementById('supportModal').classList.add('active');
+}
+function closeSupportModal() {
+  document.getElementById('supportModal').classList.remove('active');
+  // Hide all wallet displays
+  document.querySelectorAll('.wallet-display').forEach(w => w.classList.remove('show'));
+}
+function showWallet(type) {
+  // Toggle
+  const el = document.getElementById('wallet-' + type);
+  if (!el) return;
+  const isOpen = el.classList.contains('show');
+  document.querySelectorAll('.wallet-display').forEach(w => w.classList.remove('show'));
+  if (!isOpen) el.classList.add('show');
+}
+function copyWallet(el) {
+  const text = el.textContent.trim();
+  navigator.clipboard.writeText(text).then(() => {
+    const orig = el.textContent;
+    el.textContent = '✓ Kopyalandı!';
+    el.style.color = 'var(--green)';
+    setTimeout(() => { el.textContent = orig; el.style.color = ''; }, 2000);
+  }).catch(() => {
+    // Fallback
+    const ta = document.createElement('textarea');
+    ta.value = text; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+    el.style.color = 'var(--green)';
+    setTimeout(() => el.style.color = '', 2000);
+  });
+}
+
 </script>
 
 <!-- TIME SLIDER -->
@@ -2154,6 +2704,90 @@ if (isPro) {
         <button class="pro-pay-btn pro-pay-crypto" onclick="proPayCrypto()">🔐 Pay with Crypto (USDT)</button>
       </div>
       <div class="pro-cancel" onclick="closeProModal()">Maybe later — stay on free plan</div>
+    </div>
+  </div>
+</div>
+
+<!-- DOPAMINE POPUP CONTAINER -->
+<div id="dpContainer"></div>
+
+<!-- SUPPORT FLOAT -->
+<div class="support-float">
+  <button class="support-float-btn" onclick="openSupportModal()">☕ Destek Ol</button>
+</div>
+
+<!-- SUPPORT MODAL -->
+<div class="support-modal" id="supportModal" onclick="if(event.target===this)closeSupportModal()">
+  <div class="support-box">
+    <div class="support-hero">
+      <span class="support-hero-icon">🦉</span>
+      <div class="support-hero-title">OWLS'u Destekle</div>
+      <div class="support-hero-sub">Bağımsız bir proje · Her destek büyük fark yaratır</div>
+    </div>
+    <div class="support-body">
+
+      <!-- USDT Binance -->
+      <div class="support-opt" onclick="showWallet('usdt')">
+        <div class="support-opt-icon">💛</div>
+        <div>
+          <div class="support-opt-label">USDT (Binance Pay)</div>
+          <div class="support-opt-sub">TRC20 · En düşük komisyon · Anında</div>
+        </div>
+        <div class="support-opt-badge">ÖNERİLEN</div>
+      </div>
+      <div class="wallet-display" id="wallet-usdt">
+        <div class="wallet-network">⚡ USDT — TRC20 AĞINDAN GÖNDER</div>
+        <div class="wallet-addr" onclick="copyWallet(this)" id="addr-usdt">
+          YOUR_TRC20_USDT_ADDRESS_HERE
+        </div>
+        <div class="wallet-copy-hint">👆 Adrese tıkla → kopyala → Binance'ten gönder</div>
+      </div>
+
+      <!-- BTC -->
+      <div class="support-opt" onclick="showWallet('btc')">
+        <div class="support-opt-icon">₿</div>
+        <div>
+          <div class="support-opt-label">Bitcoin (BTC)</div>
+          <div class="support-opt-sub">Native SegWit (bc1) · Güvenli</div>
+        </div>
+      </div>
+      <div class="wallet-display" id="wallet-btc">
+        <div class="wallet-network">₿ BITCOIN — NATIVE SEGWIT (bc1)</div>
+        <div class="wallet-addr" onclick="copyWallet(this)" id="addr-btc">
+          YOUR_BTC_ADDRESS_HERE
+        </div>
+        <div class="wallet-copy-hint">👆 Adrese tıkla → kopyala → gönder</div>
+      </div>
+
+      <!-- Wise / IBAN -->
+      <div class="support-opt" onclick="showWallet('wise')">
+        <div class="support-opt-icon">🏦</div>
+        <div>
+          <div class="support-opt-label">Wise / IBAN (Banka Transferi)</div>
+          <div class="support-opt-sub">USD · EUR · GBP kabul edilir</div>
+        </div>
+      </div>
+      <div class="wallet-display" id="wallet-wise">
+        <div class="wallet-network">🏦 WISE — BANKA BİLGİLERİ</div>
+        <div class="wallet-addr" onclick="copyWallet(this)" id="addr-wise">
+          Ad: YOUR NAME
+IBAN: YOUR WISE IBAN
+BIC: TRWIBEB1XXX
+Banka: Wise (TransferWise)
+        </div>
+        <div class="wallet-copy-hint">👆 Bilgilere tıkla → kopyala → bankan üzerinden gönder</div>
+      </div>
+
+      <!-- Patreon -->
+      <div class="support-opt" onclick="window.open('https://patreon.com/YOUR_PATREON','_blank');closeSupportModal()">
+        <div class="support-opt-icon">🎖️</div>
+        <div>
+          <div class="support-opt-label">Patreon — Aylık Üyelik</div>
+          <div class="support-opt-sub">Kart ile · Aylık iptal edilebilir</div>
+        </div>
+      </div>
+
+      <div class="support-cancel" onclick="closeSupportModal()">Şimdi değil</div>
     </div>
   </div>
 </div>
