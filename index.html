@@ -47,28 +47,9 @@
 *{box-sizing:border-box;margin:0;padding:0;}
 html,body{width:100%;height:100%;overflow:hidden;font-family:'Syne',sans-serif;background:var(--bg);color:var(--text);}
 
-/* ── RELATION LINE (Turkuaz ve Çizgili) ── */
+/* ── RELATION LINE ── */
 @keyframes dashMove{to{stroke-dashoffset:-24px;}}
-.rel-line{stroke-dasharray:7 5;stroke-linecap:round;animation:dashMove .6s linear infinite;filter:drop-shadow(0 0 4px rgba(0, 152, 160, 0.6));}
-
-/* ── GERİ DÖN TUŞU (Back to Feed) ── */
-.panel-back {
-  padding: 12px 14px;
-  background: var(--bg3);
-  border-bottom: 1px solid var(--border);
-  font-size: 10px;
-  font-weight: 800;
-  color: var(--text2);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  transition: all .2s;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  flex-shrink: 0;
-}
-.panel-back:hover { background: var(--bg2); color: var(--accent); }
+.rel-line{stroke-dasharray:7 5;stroke-linecap:round;animation:dashMove .6s linear infinite;filter:drop-shadow(0 0 4px #ff444488);}
 
 /* ── SPLASH ── */
 .splash{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:99999;transition:opacity .5s;}
@@ -187,7 +168,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Syne',sans-serif;b
 
 /* ── PROFILE PANEL ── */
 .pscroll{overflow-y:auto;flex:1;-webkit-overflow-scrolling:touch;}
-.phero{background:linear-gradient(135deg,#0a6e72,#0d1b2a);padding:22px 18px 18px;display:flex;flex-direction:column;align-items:center;gap:6px;position:relative;overflow:hidden;border-bottom:1px solid var(--border);}
+.phero{background:linear-gradient(135deg,#007b82,#004d55);padding:22px 18px 18px;display:flex;flex-direction:column;align-items:center;gap:6px;position:relative;overflow:hidden;border-bottom:1px solid var(--border);}
 .phero::before{content:'🦉';position:absolute;right:-12px;bottom:-14px;font-size:80px;opacity:.08;}
 .pav{width:68px;height:68px;border-radius:50%;border:3px solid rgba(0,200,180,.5);box-shadow:0 4px 14px rgba(0,0,0,.4);}
 .pname{font-size:16px;font-weight:800;color:#fff;}
@@ -211,7 +192,6 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Syne',sans-serif;b
 .rec-src{font-size:8px;color:var(--text3);font-family:'Space Mono',monospace;margin-top:2px;}
 .p-signout{padding:12px 14px;cursor:pointer;font-size:11px;font-weight:700;color:var(--crit);display:flex;align-items:center;gap:7px;transition:background .15s;}
 .p-signout:hover{background:rgba(255,68,68,.06);}
-
 /* login cta */
 .lcta{display:flex;flex-direction:column;align-items:center;gap:12px;padding:36px 18px;text-align:center;}
 .lcta-owl{font-size:48px;animation:owlFloat 2s infinite;}
@@ -235,7 +215,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Syne',sans-serif;b
 .atag span{cursor:pointer;color:var(--text3);font-size:14px;line-height:1;}
 
 /* ── BBC POPUP ── */
-.leaflet-popup-content-wrapper{padding:0!important;border-radius:0!important;overflow:hidden;border:1px solid var(--border2)!important;background:var(--card)!important;box-shadow:0 16px 40px rgba(0,0,0,.6)!important;}
+.leaflet-popup-content-wrapper{padding:0!important;border-radius:0!important;overflow:hidden;border:1px solid var(--border2)!important;background:var(--card)!important;box-shadow:0 16px 40px rgba(0,0,0,.15)!important;}
 .leaflet-popup-content{margin:0!important;width:290px!important;}
 .leaflet-popup-tip{background:var(--card)!important;}
 .leaflet-container a.leaflet-popup-close-button{position:absolute!important;top:8px!important;right:8px!important;z-index:99!important;width:28px!important;height:28px!important;background:rgba(0,0,0,.65)!important;border:1px solid rgba(255,255,255,.25)!important;border-radius:50%!important;color:#fff!important;font-size:16px!important;display:flex!important;align-items:center!important;justify-content:center!important;cursor:pointer!important;line-height:1!important;padding:0!important;}
@@ -254,7 +234,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Syne',sans-serif;b
 .bcta:hover{opacity:.85;}
 
 /* ── CLUSTER ── */
-.owls-cluster{background:rgba(0,200,180,.15)!important;border:2px solid var(--accent)!important;border-radius:50%!important;color:var(--accent)!important;font-weight:800!important;font-family:'Space Mono',monospace!important;display:flex!important;align-items:center!important;justify-content:center!important;box-shadow:0 0 10px rgba(0,200,180,.2)!important;}
+.owls-cluster{background:rgba(0,152,160,.12)!important;border:2px solid var(--accent)!important;border-radius:50%!important;color:var(--accent)!important;font-weight:800!important;font-family:'Space Mono',monospace!important;display:flex!important;align-items:center!important;justify-content:center!important;box-shadow:0 0 10px rgba(0,200,180,.2)!important;}
 @keyframes mpulse{0%{transform:scale(.8);opacity:.8}100%{transform:scale(2.2);opacity:0}}
 
 /* ── MODAL ── */
@@ -290,7 +270,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Syne',sans-serif;b
 .rcard-loc{font-size:8px;color:var(--text3);margin-top:2px;}
 
 /* ── BREAKING BAR ── */
-.breaking{position:fixed;bottom:0;left:0;right:var(--side);height:40px;background:linear-gradient(90deg,#c0000a,#ff3300);display:flex;align-items:center;gap:0;z-index:500;transform:translateY(100%);transition:transform .4s cubic-bezier(.34,1.56,.64,1);cursor:pointer;}
+.breaking{position:fixed;bottom:0;left:0;right:var(--side);height:40px;background:linear-gradient(90deg,#a50008,#d93000);display:flex;align-items:center;gap:0;z-index:500;transform:translateY(100%);transition:transform .4s cubic-bezier(.34,1.56,.64,1);cursor:pointer;}
 .breaking.show{transform:translateY(0);}
 .breaking:hover{filter:brightness(1.08);}
 .breaking-lbl{background:rgba(0,0,0,.3);padding:0 14px;height:100%;display:flex;align-items:center;font-size:9px;font-weight:800;letter-spacing:1.5px;font-family:'Space Mono',monospace;flex-shrink:0;border-right:1px solid rgba(255,255,255,.2);}
@@ -343,10 +323,196 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Syne',sans-serif;b
   }
 }
 @media(min-width:769px){.mob-nav,.mob-filter{display:none!important;}}
+
+/* TIME SLIDER */
+.time-slider-wrap{position:fixed;bottom:0;left:0;right:var(--side);height:44px;background:rgba(240,249,249,.96);border-top:1px solid var(--border);z-index:200;display:flex;align-items:center;gap:10px;padding:0 14px;backdrop-filter:blur(4px);}
+.ts-label{font-size:9px;font-family:'Space Mono',monospace;font-weight:700;color:var(--accent);white-space:nowrap;flex-shrink:0;}
+.ts-slider{flex:1;-webkit-appearance:none;appearance:none;height:3px;border-radius:2px;background:var(--bg3);outline:none;cursor:pointer;}
+.ts-slider::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--accent);border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.2);cursor:pointer;}
+.ts-time{font-size:10px;font-family:'Space Mono',monospace;color:var(--text2);white-space:nowrap;flex-shrink:0;min-width:70px;text-align:right;}
+.ts-play{width:28px;height:28px;border-radius:50%;background:var(--accent);border:none;color:#fff;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.ts-play:hover{background:var(--accentg);}
+@media(min-width:769px){#map{bottom:44px;}.breaking{bottom:44px;}}
+@media(max-width:768px){.time-slider-wrap{display:none;}}
+
+/* WHISPER */
+.whisper-box{background:var(--bg3);border:1px solid var(--border2);border-radius:10px;padding:11px;}
+.whisper-title{font-size:8px;font-family:'Space Mono',monospace;font-weight:700;color:var(--text3);letter-spacing:1px;margin-bottom:9px;display:flex;align-items:center;gap:5px;}
+.whisper-title::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--green);animation:pulse 1.5s infinite;}
+.whisper-stream{display:flex;flex-direction:column;gap:5px;}
+.whisper-kw{display:flex;align-items:center;gap:6px;}
+.wkw-tag{font-size:10px;font-weight:700;color:var(--accent);font-family:'Space Mono',monospace;min-width:90px;}
+.wkw-bar{flex:1;height:3px;background:var(--bg2);border-radius:2px;overflow:hidden;}
+.wkw-fill{height:100%;background:var(--accent);border-radius:2px;transition:width .8s ease;}
+.wkw-count{font-size:8px;color:var(--text3);min-width:20px;text-align:right;}
+
+/* AGENT PROFILE */
+.agent-rank{display:flex;align-items:center;gap:12px;background:linear-gradient(135deg,var(--accent),var(--accentg));border-radius:10px;padding:12px 14px;margin-bottom:10px;}
+.agent-rank-icon{font-size:28px;}
+.agent-rank-name{font-size:12px;font-weight:800;color:#fff;}
+.agent-rank-title{font-size:9px;color:rgba(255,255,255,.8);font-family:'Space Mono',monospace;margin-top:1px;}
+.expertise-bar{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.expertise-label{font-size:9px;font-family:'Space Mono',monospace;color:var(--text3);width:65px;flex-shrink:0;}
+.expertise-bg{flex:1;height:4px;background:var(--bg3);border-radius:2px;overflow:hidden;}
+.expertise-fill{height:100%;border-radius:2px;background:var(--accent);transition:width 1s ease-out;}
+
+/* COMMENTS */
+.comments-section{margin-top:18px;border-top:1px solid var(--border);padding-top:14px;}
+.comments-title{font-size:9px;font-family:'Space Mono',monospace;font-weight:700;color:var(--text3);letter-spacing:1px;margin-bottom:12px;text-transform:uppercase;}
+.comment-input-wrap{display:flex;gap:8px;margin-bottom:12px;}
+.comment-avatar{width:28px;height:28px;border-radius:50%;background:var(--bg3);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.comment-inp{flex:1;background:var(--bg);border:1px solid var(--border2);border-radius:8px;padding:7px 10px;color:var(--text);font-size:12px;font-family:'Syne',sans-serif;outline:none;resize:none;height:34px;transition:height .2s;}
+.comment-inp:focus{border-color:var(--accent);height:70px;}
+.comment-send{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:0 13px;font-weight:800;cursor:pointer;font-size:13px;flex-shrink:0;}
+.comment-send:hover{background:var(--accentg);}
+.comment-item{display:flex;gap:9px;margin-bottom:11px;}
+.ci-av{width:28px;height:28px;border-radius:50%;background:var(--bg3);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;overflow:hidden;}
+.ci-av img{width:100%;height:100%;object-fit:cover;}
+.ci-body{flex:1;min-width:0;}
+.ci-header{display:flex;align-items:center;gap:7px;margin-bottom:3px;}
+.ci-name{font-size:11px;font-weight:800;color:var(--text);}
+.ci-time{font-size:9px;color:var(--text3);font-family:'Space Mono',monospace;}
+.ci-text{font-size:12px;color:var(--text2);line-height:1.5;}
+.ci-likes{font-size:10px;color:var(--text3);margin-top:4px;cursor:pointer;display:inline-flex;align-items:center;gap:4px;}
+.ci-likes:hover{color:var(--crit);}
+
+/* TV MODE */
+.tv-overlay{position:fixed;inset:0;z-index:99998;background:rgba(5,15,25,.94);display:none;flex-direction:column;align-items:center;justify-content:center;gap:16px;}
+.tv-overlay.active{display:flex;}
+.tv-header{width:100%;max-width:720px;display:flex;align-items:center;justify-content:space-between;padding:0 10px;}
+.tv-card{background:rgba(20,34,52,.97);border:1px solid rgba(0,200,180,.25);border-radius:16px;max-width:720px;width:90%;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,.8);animation:tvIn .5s ease;position:relative;}
+.tv-controls{display:flex;gap:10px;}
+.tv-ticker{width:100%;max-width:720px;height:34px;background:rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.08);border-radius:8px;display:flex;align-items:center;overflow:hidden;}
+.tv-header{position:absolute;top:20px;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:0 24px;}
+.tv-logo{font-size:20px;font-weight:800;letter-spacing:4px;color:var(--accent);}
+.tv-date{font-size:10px;color:rgba(255,255,255,.4);font-family:'Space Mono',monospace;}
+.tv-exit{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;border-radius:8px;padding:5px 14px;cursor:pointer;font-size:11px;font-weight:700;}
+.tv-card{background:rgba(20,34,52,.97);border:1px solid rgba(0,200,180,.2);border-radius:16px;max-width:680px;width:90%;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,.8);animation:tvIn .5s ease;}
+@keyframes tvIn{from{opacity:0;transform:scale(.97) translateY(16px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.tv-card-img{width:100%;height:220px;object-fit:cover;display:block;}
+.tv-card-body{padding:22px 26px;}
+.tv-card-src{font-size:10px;font-weight:700;color:var(--accent2);font-family:'Space Mono',monospace;letter-spacing:1px;margin-bottom:8px;}
+.tv-card-title{font-size:21px;font-weight:800;line-height:1.3;color:#fff;margin-bottom:10px;}
+.tv-card-desc{font-size:13px;color:rgba(255,255,255,.6);line-height:1.6;}
+.tv-progress{position:absolute;bottom:0;left:0;height:3px;background:var(--accent);}
+.tv-controls{position:absolute;bottom:22px;display:flex;gap:10px;}
+.tv-ctrl{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;border-radius:20px;padding:8px 18px;cursor:pointer;font-size:12px;font-weight:700;font-family:'Syne',sans-serif;}
+.tv-ctrl:hover{background:var(--accent);color:#000;}
+.tv-ticker{position:absolute;bottom:0;left:0;right:0;height:34px;background:rgba(0,0,0,.7);border-top:1px solid rgba(255,255,255,.08);display:flex;align-items:center;overflow:hidden;}
+.tv-ticker-lbl{background:var(--accent);color:#000;padding:0 12px;height:100%;display:flex;align-items:center;font-size:9px;font-weight:800;font-family:'Space Mono',monospace;flex-shrink:0;}
+.tv-ticker-scroll{white-space:nowrap;animation:tickScroll 35s linear infinite;font-size:12px;color:rgba(255,255,255,.8);padding-left:20px;}
+@keyframes tickScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* PORTFOLIO */
+.portfolio-section{padding:14px;}
+.port-add-row{display:flex;gap:7px;margin-bottom:10px;}
+.port-inp{flex:1;background:var(--bg);border:1px solid var(--border2);border-radius:7px;padding:7px 10px;color:var(--text);font-size:11px;font-family:'Syne',sans-serif;outline:none;}
+.port-inp:focus{border-color:var(--accent);}
+.port-add-btn{background:var(--accent);color:#fff;border:none;border-radius:7px;padding:7px 12px;font-weight:800;cursor:pointer;}
+.port-item{display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:var(--bg3);border:1px solid var(--border2);border-radius:7px;margin-bottom:6px;}
+.port-item-name{font-size:11px;font-weight:700;color:var(--text);}
+.port-item-alert{font-size:9px;color:var(--crit);font-family:'Space Mono',monospace;}
+.port-item-ok{font-size:9px;color:var(--green);font-family:'Space Mono',monospace;}
+.port-remove{color:var(--text3);cursor:pointer;font-size:16px;line-height:1;}
+.port-remove:hover{color:var(--crit);}
+.brief-box{background:var(--bg3);border:1px solid var(--border2);border-radius:10px;padding:13px;margin-top:12px;}
+.brief-title{font-size:9px;font-family:'Space Mono',monospace;font-weight:700;color:var(--accent);letter-spacing:1px;margin-bottom:8px;}
+.brief-content{font-size:11px;color:var(--text2);line-height:1.7;}
+.paywall-box{margin-top:10px;background:var(--card);border:1px solid var(--accent);border-radius:9px;padding:13px;text-align:center;}
+.paywall-title{font-size:12px;font-weight:800;color:var(--accent);margin-bottom:3px;}
+.paywall-sub{font-size:10px;color:var(--text3);margin-bottom:10px;}
+.paywall-btn{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:8px 20px;font-size:11px;font-weight:800;cursor:pointer;font-family:'Syne',sans-serif;}
+.paywall-btn:hover{background:var(--accentg);}
+
+
+/* ── SEARCH ── */
+.search-wrap{position:relative;flex:1;max-width:320px;}
+.search-inp{width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:20px;padding:6px 14px 6px 34px;font-size:11px;font-family:'Syne',sans-serif;color:var(--text);outline:none;transition:border-color .2s;}
+.search-inp:focus{border-color:var(--accent);}
+.search-icon{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:13px;pointer-events:none;}
+.search-results{position:absolute;top:calc(100% + 6px);left:0;right:0;background:var(--card);border:1px solid var(--border2);border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.15);z-index:800;max-height:320px;overflow-y:auto;display:none;}
+.search-results.open{display:block;}
+.search-item{padding:10px 14px;cursor:pointer;border-bottom:1px solid var(--border);transition:background .12s;}
+.search-item:last-child{border-bottom:none;}
+.search-item:hover{background:var(--bg3);}
+.search-item-src{font-size:8px;font-weight:700;color:var(--accent2);font-family:'Space Mono',monospace;letter-spacing:1px;margin-bottom:3px;}
+.search-item-title{font-size:12px;font-weight:700;color:var(--text);line-height:1.3;}
+.search-item-loc{font-size:9px;color:var(--text3);margin-top:3px;}
+.search-highlight{background:rgba(0,152,160,.2);color:var(--accent);border-radius:2px;padding:0 1px;}
+.search-empty{padding:16px;text-align:center;font-size:11px;color:var(--text3);}
+
+/* ── SHARE ── */
+.share-menu{position:absolute;background:var(--card);border:1px solid var(--border2);border-radius:12px;padding:6px;box-shadow:0 8px 24px rgba(0,0,0,.15);z-index:9100;display:none;min-width:180px;}
+.share-menu.open{display:block;}
+.share-item{display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:700;color:var(--text2);transition:background .12s;}
+.share-item:hover{background:var(--bg3);color:var(--accent);}
+.share-item-icon{font-size:16px;width:20px;text-align:center;}
+.share-copied{background:var(--bg3);color:var(--green)!important;}
+
+/* ── COMPARE ── */
+.compare-bar{position:fixed;bottom:44px;left:0;right:var(--side);height:48px;background:var(--accent);z-index:300;display:none;align-items:center;justify-content:space-between;padding:0 16px;box-shadow:0 -4px 20px rgba(0,152,160,.3);}
+.compare-bar.active{display:flex;}
+.compare-bar-txt{font-size:11px;font-weight:800;color:#fff;}
+.compare-bar-btn{background:rgba(255,255,255,.25);border:1px solid rgba(255,255,255,.4);color:#fff;border-radius:8px;padding:5px 14px;font-size:11px;font-weight:800;cursor:pointer;transition:background .2s;}
+.compare-bar-btn:hover{background:rgba(255,255,255,.4);}
+.compare-modal{position:fixed;inset:0;background:rgba(10,27,36,.85);z-index:9500;display:none;align-items:center;justify-content:center;backdrop-filter:blur(5px);}
+.compare-modal.active{display:flex;}
+.compare-box{background:var(--card);border:1px solid var(--border2);border-radius:16px;width:95%;max-width:900px;max-height:90vh;overflow-y:auto;padding:24px;box-shadow:0 24px 60px rgba(0,0,0,.5);}
+.compare-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+.compare-title{font-size:16px;font-weight:800;color:var(--text);}
+.compare-close{background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:5px 12px;cursor:pointer;font-size:12px;font-weight:700;color:var(--text2);}
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+@media(max-width:600px){.compare-grid{grid-template-columns:1fr;}}
+.compare-card{background:var(--bg3);border:1px solid var(--border2);border-radius:12px;overflow:hidden;}
+.compare-card-img{width:100%;height:140px;object-fit:cover;}
+.compare-card-body{padding:14px;}
+.compare-card-src{font-size:9px;font-weight:700;color:var(--accent2);font-family:'Space Mono',monospace;letter-spacing:1px;margin-bottom:6px;}
+.compare-card-title{font-size:14px;font-weight:800;color:var(--text);line-height:1.32;margin-bottom:8px;}
+.compare-card-desc{font-size:12px;color:var(--text2);line-height:1.6;}
+.compare-card-link{display:inline-flex;align-items:center;gap:5px;margin-top:10px;color:var(--accent);font-size:11px;font-weight:700;text-decoration:none;}
+.compare-card-link:hover{text-decoration:underline;}
+.compare-diff{grid-column:1/-1;background:var(--bg);border:1px solid var(--border2);border-radius:10px;padding:14px;margin-top:4px;}
+.compare-diff-title{font-size:9px;font-family:'Space Mono',monospace;font-weight:700;color:var(--text3);letter-spacing:1px;margin-bottom:10px;text-transform:uppercase;}
+.compare-diff-row{display:flex;gap:8px;align-items:flex-start;margin-bottom:8px;font-size:11px;}
+.diff-label{width:80px;font-weight:700;color:var(--text3);flex-shrink:0;font-family:'Space Mono',monospace;font-size:9px;}
+.diff-val{flex:1;color:var(--text2);}
+.ncard-compare-btn{position:absolute;right:36px;top:10px;width:22px;height:22px;background:var(--bg3);border:1px solid var(--border2);border-radius:5px;cursor:pointer;font-size:10px;display:flex;align-items:center;justify-content:center;opacity:0;transition:all .15s;color:var(--text3);}
+.ncard:hover .ncard-compare-btn{opacity:1;}
+.ncard-compare-btn:hover{color:var(--accent);border-color:var(--accent);}
+.ncard-compare-btn.selected{opacity:1;background:var(--accent);color:#fff;border-color:var(--accent);}
+
+/* ── PRO ── */
+.pro-badge{background:linear-gradient(135deg,var(--saved),#e08000);color:#000;font-size:8px;font-weight:800;padding:2px 7px;border-radius:10px;font-family:'Space Mono',monospace;letter-spacing:.5px;margin-left:4px;vertical-align:middle;}
+.pro-modal{position:fixed;inset:0;background:rgba(10,27,36,.85);z-index:9600;display:none;align-items:center;justify-content:center;backdrop-filter:blur(5px);}
+.pro-modal.active{display:flex;}
+.pro-box{background:var(--card);border:1px solid var(--border2);border-radius:20px;width:92%;max-width:480px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.5);}
+.pro-hero{background:linear-gradient(135deg,#007b82,#00c8b4);padding:28px 24px;text-align:center;}
+.pro-hero-icon{font-size:52px;display:block;margin-bottom:8px;}
+.pro-hero-title{font-size:24px;font-weight:800;color:#fff;margin-bottom:4px;}
+.pro-hero-sub{font-size:13px;color:rgba(255,255,255,.8);}
+.pro-price{font-size:36px;font-weight:800;color:#fff;margin-top:12px;}
+.pro-price span{font-size:14px;font-weight:400;opacity:.8;}
+.pro-body{padding:22px 24px;}
+.pro-features{display:flex;flex-direction:column;gap:10px;margin-bottom:20px;}
+.pro-feat{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:600;color:var(--text);}
+.pro-feat-check{width:22px;height:22px;border-radius:50%;background:rgba(0,152,160,.15);border:1px solid var(--accent);display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--accent);flex-shrink:0;}
+.pro-payment-opts{display:flex;flex-direction:column;gap:8px;margin-bottom:16px;}
+.pro-pay-btn{display:flex;align-items:center;justify-content:center;gap:10px;padding:13px;border-radius:11px;font-size:13px;font-weight:800;cursor:pointer;border:none;transition:all .2s;font-family:'Syne',sans-serif;}
+.pro-pay-stripe{background:var(--accent);color:#fff;}
+.pro-pay-stripe:hover{background:var(--accentg);}
+.pro-pay-crypto{background:var(--bg3);color:var(--text);border:1px solid var(--border2);}
+.pro-pay-crypto:hover{border-color:var(--accent);color:var(--accent);}
+.pro-pay-sub{background:var(--bg3);color:var(--text);border:1px solid var(--border2);}
+.pro-pay-sub:hover{border-color:var(--accent);color:var(--accent);}
+.pro-cancel{text-align:center;font-size:10px;color:var(--text3);cursor:pointer;margin-top:8px;}
+.pro-cancel:hover{color:var(--text);}
+@media(max-width:768px){.compare-bar{bottom:calc(var(--mobbarnav) + 44px);right:0;}}
+
 </style>
 </head>
 <body>
 
+<!-- SPLASH -->
 <div class="splash" id="splash">
   <div class="splash-grid"></div>
   <div class="splash-owl">🦉</div>
@@ -355,6 +521,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Syne',sans-serif;b
   <div class="splash-bar"><div class="splash-prog"></div></div>
 </div>
 
+<!-- HEADER -->
 <div class="hdr">
   <div class="hdr-left">
     <div class="hdr-logo" onclick="doStab('feed')">
@@ -364,6 +531,13 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Syne',sans-serif;b
         <div class="hdr-sub" id="feedLabel">GLOBAL FEED</div>
       </div>
     </div>
+  </div>
+  <div class="search-wrap" id="searchWrap">
+    <span class="search-icon">🔍</span>
+    <input class="search-inp" id="searchInp" placeholder="Search stories..." autocomplete="off"
+      oninput="doSearch(this.value)" onfocus="if(this.value)showSearchResults()" 
+      onblur="setTimeout(hideSearch,200)">
+    <div class="search-results" id="searchResults"></div>
   </div>
   <div class="hdr-right">
     <button class="hbtn" onclick="doStab('saved')">🔖 <span class="bcount" id="sbadge">0</span></button>
@@ -381,6 +555,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Syne',sans-serif;b
   </div>
 </div>
 
+<!-- TOP BAR (desktop category filter) -->
 <div class="topbar" id="topbar">
   <button class="tbtn active" data-q="world">🌍 World</button>
   <button class="tbtn" data-q="technology">💻 Tech</button>
@@ -392,32 +567,43 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Syne',sans-serif;b
   <button class="tbtn" data-q="sport">⚽ Sport</button>
 </div>
 
+<!-- MAP -->
 <div id="map"></div>
 
+<!-- SIDEBAR -->
 <div class="sidebar" id="sidebar">
   <div class="stabs">
-    <div class="stab active" onclick="doStab('feed')">📡 FEED</div>
-    <div class="stab" onclick="doStab('saved')">🔖 SAVED</div>
-    <div class="stab" onclick="doStab('analytics')">📊 DATA</div>
-    <div class="stab" onclick="doStab('profile')">👤 ME</div>
+    <div class="stab active" onclick="doStab('feed')">📡</div>
+    <div class="stab" onclick="doStab('saved')">🔖</div>
+    <div class="stab" onclick="doStab('analytics')">📊</div>
+    <div class="stab" onclick="doStab('profile')">👤</div>
+    <div class="stab" onclick="doStab('portfolio')">💼</div>
     <div class="stab" onclick="doStab('alerts')">🔔</div>
   </div>
 
+  <!-- FEED -->
   <div class="spanel active" id="p-feed">
     <div class="live-bar">
       <div class="live-dot">LIVE</div>
       <span class="lcount" id="lcount">loading...</span>
+      <button onclick="tvStart()" style="background:var(--bg3);border:1px solid var(--border2);border-radius:6px;padding:3px 8px;font-size:9px;font-weight:700;cursor:pointer;color:var(--accent);font-family:'Space Mono',monospace;margin-left:auto;flex-shrink:0;">📺 TV</button>
+    </div>
+    <div style="padding:9px 12px;border-bottom:1px solid var(--border);flex-shrink:0;">
+      <div class="whisper-box">
+        <div class="whisper-title">INTERCEPTED KEYWORDS</div>
+        <div class="whisper-stream" id="whisperStream"><div style="font-size:9px;color:var(--text3);font-family:'Space Mono',monospace;">Scanning...</div></div>
+      </div>
     </div>
     <div class="nscroll" id="newsList"></div>
   </div>
 
+  <!-- SAVED -->
   <div class="spanel" id="p-saved">
-    <div class="panel-back" onclick="doStab('feed')">← BACK TO FEED</div>
     <div class="nscroll" id="savedList"></div>
   </div>
 
+  <!-- ANALYTICS -->
   <div class="spanel" id="p-analytics">
-    <div class="panel-back" onclick="doStab('feed')">← BACK TO FEED</div>
     <div class="nscroll">
       <div class="adata" id="adata">
         <div class="ldr"><div class="ldr-owl">🦉</div><div class="ldr-txt">Load news to see analytics</div></div>
@@ -425,8 +611,8 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Syne',sans-serif;b
     </div>
   </div>
 
+  <!-- PROFILE -->
   <div class="spanel" id="p-profile">
-    <div class="panel-back" onclick="doStab('feed')">← BACK TO FEED</div>
     <div class="pscroll" id="profileBody">
       <div class="lcta">
         <div class="lcta-owl">🦉</div>
@@ -446,8 +632,31 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Syne',sans-serif;b
     </div>
   </div>
 
+  <!-- PORTFOLIO -->
+  <div class="spanel" id="p-portfolio">
+    <div class="nscroll">
+      <div class="portfolio-section">
+        <div style="font-size:9px;color:var(--text3);font-family:'Space Mono',monospace;margin-bottom:10px;letter-spacing:1px;font-weight:700;">YOUR PORTFOLIO & WATCHLIST</div>
+        <div class="port-add-row">
+          <input class="port-inp" id="portInp" placeholder="AAPL, Istanbul, Saudi Arabia..." onkeydown="if(event.key==='Enter')addPortItem()">
+          <button class="port-add-btn" onclick="addPortItem()">+</button>
+        </div>
+        <div id="portList"></div>
+        <div class="brief-box" id="weeklyBrief">
+          <div class="brief-title">📋 WEEKLY INTELLIGENCE BRIEF</div>
+          <div class="brief-content" id="briefContent">Load news to generate your brief.</div>
+        </div>
+        <div class="paywall-box">
+          <div class="paywall-title">🦉 Deep Analysis — $5/mo</div>
+          <div class="paywall-sub">Full economic impact reports, risk scores, Sunday Night Briefing.</div>
+          <button class="paywall-btn" onclick="window.open('https://substack.com','_blank')">Subscribe →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ALERTS -->
   <div class="spanel" id="p-alerts">
-    <div class="panel-back" onclick="doStab('feed')">← BACK TO FEED</div>
     <div class="nscroll">
       <div class="alerts-body">
         <div style="font-size:9px;color:var(--text3);font-family:'Space Mono',monospace;margin-bottom:10px;letter-spacing:1px;font-weight:700;">KEYWORD ALERTS</div>
@@ -462,6 +671,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Syne',sans-serif;b
   </div>
 </div>
 
+<!-- MOBILE NAV -->
 <div class="mob-nav">
   <button class="mnbtn active" id="mn-map" onclick="mobSwitch('map')"><span class="mi">🗺️</span>MAP</button>
   <button class="mnbtn" id="mn-news" onclick="mobSwitch('news')"><span class="mi">📰</span>NEWS</button>
@@ -479,12 +689,14 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Syne',sans-serif;b
   <button class="tbtn" onclick="mobCat(this,'sport')">⚽ Sport</button>
 </div>
 
+<!-- BREAKING BAR -->
 <div class="breaking" id="breaking" onclick="breakingClick()">
   <div class="breaking-lbl">⚡ BREAKING</div>
   <div class="breaking-txt" id="breaking-txt">...</div>
   <div class="breaking-x" onclick="event.stopPropagation();hideBreaking()">×</div>
 </div>
 
+<!-- MODAL -->
 <div class="moverlay" id="modal" onclick="if(event.target===this)closeModal()">
   <div class="mbox">
     <button class="mclose" onclick="closeModal()">×</button>
@@ -500,13 +712,24 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Syne',sans-serif;b
       <div class="mfooter">
         <a href="#" id="mlink" target="_blank" rel="noopener" class="mbtn pri">Read Full Story →</a>
         <button class="mbtn sec sv" id="msavebtn" onclick="toggleSaveModal()">🔖 Save</button>
-        <button class="mbtn sec" onclick="closeModal()">Close</button>
+        <div style="position:relative;">
+        <button class="mbtn sec" onclick="toggleShare(event)">🔗 Share</button>
+        <div class="share-menu" id="shareMenu">
+          <div class="share-item" onclick="shareTwitter()"><span class="share-item-icon">𝕏</span>Post on X</div>
+          <div class="share-item" onclick="shareWhatsapp()"><span class="share-item-icon">💬</span>WhatsApp</div>
+          <div class="share-item" onclick="shareCopy()" id="shareCopyBtn"><span class="share-item-icon">🔗</span>Copy Link</div>
+        </div>
+      </div>
+      <button class="mbtn sec" onclick="addToCompare()">⚖️ Compare</button>
+      <button class="mbtn sec" onclick="closeModal()">Close</button>
       </div>
       <div id="modalRelated"></div>
+      <div id="modalComments"></div>
     </div>
   </div>
 </div>
 
+<!-- TOASTS -->
 <div class="tstack" id="tstack"></div>
 
 <script>
@@ -534,12 +757,11 @@ let breakingArt=null;
 let breakingTimer=null;
 
 // ══════════════════════════════════════════
-// MAP
+// MAP — dark CartoDB tiles
 // ══════════════════════════════════════════
 const map=L.map('map',{zoomControl:false,preferCanvas:true}).setView([20,10],2);
 L.control.zoom({position:'bottomright'}).addTo(map);
-L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png',{maxZoom:19,attribution:'©CARTO'}).addTo(map);
-L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}{r}.png',{maxZoom:19,pane:'shadowPane'}).addTo(map);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{maxZoom:19,attribution:'©CARTO ©OpenStreetMap'}).addTo(map);
 const relLayer=L.layerGroup().addTo(map);
 function fixMap(){setTimeout(()=>map.invalidateSize({animate:false}),100);}
 
@@ -563,24 +785,8 @@ function mkIcon(color){
 }
 
 // ══════════════════════════════════════════
-// RELATION RADAR (BOMBELİ)
+// RELATION RADAR — red dashed animated
 // ══════════════════════════════════════════
-function getArc(c1, c2) {
-  const pts = [];
-  const dist = Math.sqrt((c2[0]-c1[0])**2 + (c2[1]-c1[1])**2);
-  const mLat = (c1[0]+c2[0])/2;
-  const mLng = (c1[1]+c2[1])/2;
-  const cLat = mLat + dist * 0.3; 
-  const cLng = mLng;
-  for(let i=0; i<=30; i++){
-    let t = i/30;
-    let lat = (1-t)**2 * c1[0] + 2*(1-t)*t * cLat + t**2 * c2[0];
-    let lng = (1-t)**2 * c1[1] + 2*(1-t)*t * cLng + t**2 * c2[1];
-    pts.push([lat, lng]);
-  }
-  return pts;
-}
-
 function drawRelations(a){
   relLayer.clearLayers();
   if(!a||!a._c) return;
@@ -588,7 +794,7 @@ function drawRelations(a){
   const words=(a.title.toLowerCase().match(/\b[a-z]{4,}\b/g)||[]).filter(w=>!stop.has(w));
   if(!words.length) return;
   allArts.filter(x=>x.url!==a.url&&x._c&&words.some(w=>x.title.toLowerCase().includes(w))).slice(0,6).forEach(rel=>{
-    L.polyline(getArc(a._c, rel._c),{className:'rel-line'}).addTo(relLayer);
+    L.polyline([a._c,rel._c],{color:'#cc0000',weight:2.5,opacity:.9,className:'rel-line',dashArray:'7 5'}).addTo(relLayer);
   });
 }
 function clearRelations(){relLayer.clearLayers();}
@@ -916,6 +1122,15 @@ async function fetchNews(cat){
   renderFeed(arts);
   renderAnalytics(arts);
   scheduleBreaking(arts);
+  // New features
+  setTimeout(()=>{
+    updateWhisper(allArts);
+    updateHeatmap(allArts);
+    renderPortfolio();
+    generateBrief();
+    const sl=document.getElementById('tsRange');
+    if(sl){sl.value=47;tsUpdate(47);}
+  },150);
 }
 
 // ══════════════════════════════════════════
@@ -966,6 +1181,7 @@ function renderFeed(arts){
           <div class="nmeta"><span class="nloc">${a._loc}</span></div>
         </div>
       </div>
+      <div class="ncard-compare-btn" data-url="${a.url}" title="Compare" onclick="event.stopPropagation();toggleCompareFromCard('${enc}')">⚖</div>
       <div class="nbm${saved?' on':''}" onclick="event.stopPropagation();toggleSaveCard(this,'${enc}')">🔖</div>`;
     card.onclick=()=>{
       document.querySelectorAll('.ncard').forEach(c=>c.classList.remove('active'));
@@ -1021,42 +1237,7 @@ function renderAnalytics(arts){
 // ══════════════════════════════════════════
 // PROFILE
 // ══════════════════════════════════════════
-function renderProfile(){
-  const body=document.getElementById('profileBody');
-  const user=auth.currentUser;
-  if(!user){
-    body.innerHTML=`<div class="lcta"><div class="lcta-owl">🦉</div><div class="lcta-title">Sign in to OWLS</div><div class="lcta-sub">Your personal global intelligence feed. Save stories, set alerts, pick your topics — synced everywhere.</div><div class="lcta-feats"><div class="lcta-feat"><div class="lcta-fi">🔖</div><div class="lcta-ft">Save Articles</div></div><div class="lcta-feat"><div class="lcta-fi">🔔</div><div class="lcta-ft">Keyword Alerts</div></div><div class="lcta-feat"><div class="lcta-fi">🌍</div><div class="lcta-ft">Topic Picks</div></div><div class="lcta-feat"><div class="lcta-fi">☁️</div><div class="lcta-ft">Cloud Sync</div></div></div><button class="gbtn" onclick="loginGoogle()"><svg width="16" height="16" viewBox="0 0 48 48"><path fill="#fff" d="M44.5 20H24v8.5h11.8C34.7 33.9 30.1 37 24 37c-7.2 0-13-5.8-13-13s5.8-13 13-13c3.1 0 5.9 1.1 8.1 2.9l6.4-6.4C34.6 4.1 29.6 2 24 2 11.8 2 2 11.8 2 24s9.8 22 22 22c11 0 21-8 21-22 0-1.3-.2-2.7-.5-4z"/></svg>Continue with Google</button></div>`;
-    return;
-  }
-  const lvl=readCount>200?'🦅 Eagle':readCount>50?'🦉 Senior Owl':readCount>10?'🐦 Scout':'🥚 Hatchling';
-  const cats={world:'🌍 World',technology:'💻 Tech',business:'📈 Business',science:'🔬 Science',health:'❤️ Health',climate:'🌿 Climate',politics:'🏛️ Politics',sport:'⚽ Sport'};
-  const recent=allArts.filter(a=>readSet.has(a.url)).slice(0,4);
-  const recentHtml=recent.length?`<div class="psec"><div class="psec-title">Recently Read</div>${recent.map(a=>`<div class="recitem" data-rurl="${a.url}"><div class="rec-dot" style="background:${a._s.color}"></div><div><div class="rec-tit">${a.title}</div><div class="rec-src">${a.source} · ${a._loc||''}</div></div></div>`).join('')}</div>`:'';
-  body.innerHTML=`
-    <div class="phero">
-      <img src="${user.photoURL||''}" class="pav" onerror="this.outerHTML='<div style=\\'width:68px;height:68px;border-radius:50%;background:rgba(0,152,160,.2);display:flex;align-items:center;justify-content:center;font-size:28px\\'>🦉</div>'">
-      <div class="pname">${user.displayName||'Owl User'}</div>
-      <div class="pemail">${user.email||''}</div>
-      <div class="pbadge">${lvl}</div>
-    </div>
-    <div class="pstats">
-      <div class="pstat"><div class="pstat-n" style="color:var(--accent)">${readCount}</div><div class="pstat-l">READ</div></div>
-      <div class="pstat"><div class="pstat-n" style="color:var(--saved)">${savedArts.length}</div><div class="pstat-l">SAVED</div></div>
-      <div class="pstat"><div class="pstat-n" style="color:var(--accent2)">${alerts.length}</div><div class="pstat-l">ALERTS</div></div>
-    </div>
-    <div class="psec">
-      <div class="psec-title">Favourite Topics</div>
-      <div class="pfc">${Object.entries(cats).map(([k,v])=>`<div class="pfc-btn${favCats.includes(k)?' on':''}" onclick="toggleFavCat('${k}',this)">${v}</div>`).join('')}</div>
-      <div style="font-size:9px;color:var(--text3);margin-top:8px;line-height:1.5;">Tap to highlight in the category bar.</div>
-    </div>
-    ${recentHtml}
-    <div class="p-signout" onclick="doLogout()">← Sign Out</div>`;
-  // Bind recent item clicks
-  body.querySelectorAll('.recitem').forEach(el=>{
-    const url=el.dataset.rurl;
-    el.onclick=()=>{ const a=allArts.find(x=>x.url===url); if(a)openModal(a); };
-  });
-}
+
 
 function toggleFavCat(cat,el){
   if(favCats.includes(cat)){favCats=favCats.filter(c=>c!==cat);el.classList.remove('on');}
@@ -1069,7 +1250,7 @@ function highlightFavCats(){
 }
 
 // ══════════════════════════════════════════
-// MODAL (YENİ BBC GRID DÜZENLİ ÖNERİLER)
+// MODAL
 // ══════════════════════════════════════════
 window._ob=function(enc){
   const url=decodeURIComponent(enc);
@@ -1094,26 +1275,26 @@ function openModal(a){
   const sb=document.getElementById('msavebtn');
   sb.classList.toggle('on',savedArts.some(s=>s.url===a.url));
   sb.textContent=savedArts.some(s=>s.url===a.url)?'✓ Saved':'🔖 Save';
-  
-  // Related articles (BBC ŞIK GRID TASARIMI)
+  // Related articles
   const relEl=document.getElementById('modalRelated');
   const stop=new Set(['after','under','their','there','about','which','would','could','should','have','been','that','this','with','from','when','were','also','into','over','more','than','then','they','some','just','says','said','will']);
   const words=(a.title.toLowerCase().match(/\b[a-z]{4,}\b/g)||[]).filter(w=>!stop.has(w));
   const related=allArts.filter(x=>x.url!==a.url&&words.filter(w=>x.title.toLowerCase().includes(w)).length>=1)
     .map(x=>({x,sc:words.filter(w=>x.title.toLowerCase().includes(w)).length+(x._loc===a._loc?2:0)+(x._r===a._r?1:0)}))
     .sort((a,b)=>b.sc-a.sc).slice(0,4).map(r=>r.x);
-  
   if(related.length){
-    relEl.innerHTML=`<div class="rel-sec"><div class="rel-sec-title">🔗 BAĞLANTILI İSTİHBARAT (RELATED INTEL)</div><div class="m-related-grid">${related.map(r=>`<div class="rcard" data-rurl="${r.url}">${r.thumb?`<img class="rth" src="${r.thumb}" onerror="this.outerHTML='<div class=rth-ph>📰</div>'">`:`<div class="rth-ph">📰</div>`}<div class="rcard-info"><div class="rcard-src">${r.source}</div><div class="rcard-tit">${r.title}</div><div class="rcard-loc">${r._loc||''}</div></div></div>`).join('')}</div></div>`;
+    relEl.innerHTML=`<div class="rel-sec"><div class="rel-sec-title">🔗 Related Stories (${related.length})</div>${related.map(r=>`<div class="rcard" data-rurl="${r.url}">${r.thumb?`<img class="rth" src="${r.thumb}" onerror="this.outerHTML='<div class=rth-ph>📰</div>'">`:`<div class="rth-ph">📰</div>`}<div><div class="rcard-src">${r.source}</div><div class="rcard-tit">${r.title}</div><div class="rcard-loc">${r._loc||''}</div></div></div>`).join('')}</div>`;
     relEl.querySelectorAll('.rcard').forEach(el=>{
       const url=el.dataset.rurl;
       el.onclick=()=>{ const x=allArts.find(a=>a.url===url); if(x)openModal(x); };
     });
   } else { relEl.innerHTML=''; }
-  
   document.getElementById('modal').classList.add('on');
   document.querySelector('.mbox').scrollTop=0;
   document.querySelectorAll('.ncard').forEach(c=>{if(c.dataset.url===a.url)c.classList.add('read');});
+  // New features
+  trackCatRead(curQ||'world');
+  setTimeout(()=>renderComments(a.url),80);
 }
 function closeModal(){document.getElementById('modal').classList.remove('on');}
 function toggleSaveModal(){
@@ -1252,15 +1433,7 @@ function unsavArt(enc){const url=enc.startsWith('http')?enc:decodeURIComponent(e
 // ══════════════════════════════════════════
 // TABS
 // ══════════════════════════════════════════
-function doStab(name){
-  const names=['feed','saved','analytics','profile','alerts'];
-  document.querySelectorAll('.stab').forEach((t,i)=>t.classList.toggle('active',names[i]===name));
-  document.querySelectorAll('.spanel').forEach(p=>p.classList.remove('active'));
-  document.getElementById('p-'+name).classList.add('active');
-  if(name==='saved')renderSaved();
-  if(name==='profile')renderProfile();
-  if(name==='alerts')renderAlertTags();
-}
+
 
 // ══════════════════════════════════════════
 // CATEGORY BAR
@@ -1336,49 +1509,653 @@ function loginGoogle(){auth.signInWithRedirect(new firebase.auth.GoogleAuthProvi
 function doLogout(){if(confirm('Sign out from OWLS?'))auth.signOut();}
 auth.onAuthStateChanged(user=>{
   document.getElementById('loginBtn').style.display=user?'none':'';
-  const uWrap=document.querySelector('.uwrap');
   const av=document.getElementById('uav');
   if(user){
-    if(uWrap) uWrap.style.display='flex';
     av.src=user.photoURL; av.style.display='block';
-    const fname = user.displayName ? user.displayName.split(' ')[0] : 'User';
-    const hName = document.getElementById('headerUserName');
-    if(hName) hName.textContent = fname + ' ▾';
-    document.getElementById('feedLabel').textContent=fname.toUpperCase()+"'S FEED";
+    document.getElementById('feedLabel').textContent=user.displayName.split(' ')[0].toUpperCase()+"'S FEED";
     document.getElementById('umName').textContent=user.displayName;
     document.getElementById('umEmail').textContent=user.email;
     loadFromCloud(user);
-  } else { 
-    if(uWrap) uWrap.style.display='none'; 
-    av.style.display='none'; 
-    document.getElementById('feedLabel').textContent='GLOBAL FEED'; 
-  }
+  } else { av.style.display='none'; document.getElementById('feedLabel').textContent='GLOBAL FEED'; }
 });
-
-// Failsafe Splash Screen Killer
-function forceKillSplash() {
-  const s = document.getElementById('splash');
-  if (s && !s.classList.contains('hide')) {
-    s.classList.add('hide');
-    setTimeout(() => s.remove(), 600);
-    fixMap();
-  }
-}
 
 // ══════════════════════════════════════════
 // INIT
 // ══════════════════════════════════════════
 window.addEventListener('load',()=>{
   updateSBadge(); renderAlertTags(); highlightFavCats();
-  
-  // Yükleme ekranı kesinlikle 2.5 saniye sonra yok edilir.
-  setTimeout(forceKillSplash, 2500);
-  
+  setTimeout(()=>{
+    const s=document.getElementById('splash');
+    if(s){s.classList.add('hide');setTimeout(()=>s.remove(),600);}
+  },1800);
   fetchNews('world');
-  [300,800,1900].forEach(t=>setTimeout(()=>fixMap(),t));
+  [200,500,1000,2000,2500].forEach(t=>setTimeout(()=>fixMap(),t));
+});
+window.addEventListener('resize',()=>fixMap());
+
+// ════════════════════════════════════════
+// TIME SLIDER
+// ════════════════════════════════════════
+let tsPlaying=false,tsPlayInterval=null,tsCurrentVal=47;
+function tsUpdate(val){
+  tsCurrentVal=parseInt(val);
+  const el=document.getElementById('tsTime');
+  if(el)el.textContent=tsCurrentVal===47?'Now':(47-tsCurrentVal)+'h ago';
+  const pct=(tsCurrentVal/47)*100;
+  const sl=document.getElementById('tsRange');
+  if(sl)sl.style.background=`linear-gradient(to right,var(--accent) ${pct}%,var(--bg3) ${pct}%)`;
+  const cutoff=Date.now()-(47-tsCurrentVal)*3600000;
+  const filtered=tsCurrentVal===47?allArts:allArts.filter(a=>!a.date||new Date(a.date).getTime()>=cutoff);
+  tsRenderMarkers(filtered);
+}
+function tsRenderMarkers(arts){
+  if(!clusterLayer)return;
+  try{map.removeLayer(clusterLayer);}catch(e){}
+  clusterLayer=L.markerClusterGroup({maxClusterRadius:45,iconCreateFunction:cl=>L.divIcon({html:`<div class="owls-cluster" style="width:30px;height:30px;font-size:10px">${cl.getChildCount()}</div>`,className:''})});
+  (arts||[]).forEach(a=>{
+    if(!a._c)return;
+    const m=L.marker(a._c,{icon:mkIcon(a._s?a._s.color:'var(--accent)')});
+    const enc=encodeURIComponent(a.url);
+    const hero=a.thumb?`<img class="bhero" src="${a.thumb}" onerror="this.outerHTML='<div class=bhero-ph>📰</div>'">`:'<div class="bhero-ph">📰</div>';
+    const badge=a._s&&a._s.level!=='INFO'?`<span class="bbadge ${a._s.cls}">${a._s.level}</span>`:'';
+    const desc=a.trail?(a.trail.length>200?a.trail.slice(0,200)+'…':a.trail):'Click below to read.';
+    m.bindPopup(`<div class="bcard">${hero}<div class="bbody"><div class="bmeta"><span class="bsrc">${a.source}</span>${badge}</div><div class="btit" onclick="window._ob('${enc}')">${a.title}</div><div class="bdesc">${desc}</div><button class="bcta" onclick="window._ob('${enc}')">Read Full Story →</button></div></div>`);
+    m.on('mouseover',()=>drawRelations(a));
+    m.on('mouseout',()=>clearRelations());
+    clusterLayer.addLayer(m);
+  });
+  map.addLayer(clusterLayer);
+  updateHeatmap(arts);
+}
+function tsTogglePlay(){
+  tsPlaying=!tsPlaying;
+  const btn=document.getElementById('tsPlay');
+  if(btn)btn.textContent=tsPlaying?'⏸':'▶';
+  if(tsPlaying){
+    if(tsCurrentVal>=47){tsCurrentVal=0;const sl=document.getElementById('tsRange');if(sl)sl.value=0;}
+    tsPlayInterval=setInterval(()=>{
+      tsCurrentVal=Math.min(47,tsCurrentVal+1);
+      const sl=document.getElementById('tsRange');if(sl)sl.value=tsCurrentVal;
+      tsUpdate(tsCurrentVal);
+      if(tsCurrentVal>=47){tsPlaying=false;if(btn)btn.textContent='▶';clearInterval(tsPlayInterval);}
+    },400);
+  }else{clearInterval(tsPlayInterval);}
+}
+
+// ════════════════════════════════════════
+// THREAT HEATMAP
+// ════════════════════════════════════════
+let heatLayer=null;
+function updateHeatmap(arts){
+  if(heatLayer){try{map.removeLayer(heatLayer);}catch(e){}heatLayer=null;}
+  const crits=(arts||allArts||[]).filter(a=>a._s&&a._s.level==='CRITICAL');
+  if(!crits.length)return;
+  heatLayer=L.layerGroup();
+  crits.forEach(a=>{
+    L.circleMarker(a._c,{radius:26,fillColor:'#ff0000',fillOpacity:.07,color:'transparent',weight:0}).addTo(heatLayer);
+    L.circleMarker(a._c,{radius:14,fillColor:'#ff2200',fillOpacity:.12,color:'transparent',weight:0}).addTo(heatLayer);
+  });
+  heatLayer.addTo(map);
+}
+
+// ════════════════════════════════════════
+// WHISPER NETWORK
+// ════════════════════════════════════════
+function updateWhisper(arts){
+  const stream=document.getElementById('whisperStream');
+  if(!stream||!arts||!arts.length)return;
+  const stop=new Set(['that','this','with','from','have','been','will','were','they','their','there','about','which','would','could','should','into','over','more','than','then','some','just','says','said','also','after','when','what','where','news','year','time','made','people','world','state','report','week','amid','before','later','against']);
+  const freq={};
+  arts.forEach(a=>{
+    const words=(a.title+' '+(a.trail||'')).toLowerCase().match(/\b[a-z]{5,}\b/g)||[];
+    words.forEach(w=>{if(!stop.has(w))freq[w]=(freq[w]||0)+1;});
+  });
+  const top=Object.entries(freq).sort((a,b)=>b[1]-a[1]).slice(0,6);
+  if(!top.length)return;
+  const mx=top[0][1]||1;
+  stream.innerHTML=top.map(([w,n])=>`<div class="whisper-kw"><span class="wkw-tag">#${w}</span><div class="wkw-bar"><div class="wkw-fill" style="width:${Math.round(n/mx*100)}%"></div></div><span class="wkw-count">${n}</span></div>`).join('');
+}
+setInterval(()=>{if(allArts&&allArts.length)updateWhisper(allArts);},30000);
+
+// ════════════════════════════════════════
+// TV MODE
+// ════════════════════════════════════════
+let tvIdx=0,tvTimer=null,tvPaused=false;
+const TV_MS=8000;
+function tvStart(){
+  if(!allArts||!allArts.length){showToast('📺','TV Mode','Load news first.',null);return;}
+  tvIdx=0;tvPaused=false;
+  const ov=document.getElementById('tvOverlay');if(!ov)return;
+  ov.classList.add('active');
+  const tk=document.getElementById('tvTicker');
+  if(tk){const t=allArts.slice(0,20).map(a=>a.title).join(' ⬥ ');tk.textContent=t+' ⬥ '+t;}
+  const dt=document.getElementById('tvDate');if(dt)dt.textContent=new Date().toUTCString().slice(0,25);
+  tvShowCard(0);tvSchedule();
+}
+function tvStop(){clearTimeout(tvTimer);const ov=document.getElementById('tvOverlay');if(ov)ov.classList.remove('active');}
+function tvShowCard(i){
+  const pool=allArts.filter(a=>a._s&&a._s.level==='CRITICAL').concat(allArts).slice(0,30);
+  if(!pool.length)return;
+  const a=pool[i%pool.length];
+  const img=document.getElementById('tvImg');if(img){if(a.thumb){img.src=a.thumb;img.style.display='block';}else img.style.display='none';}
+  const src=document.getElementById('tvSrc');if(src)src.textContent=a.source+' · '+(a._loc||'');
+  const tit=document.getElementById('tvTitle');if(tit)tit.textContent=a.title;
+  const desc=document.getElementById('tvDesc');if(desc)desc.textContent=a.trail||'Breaking story.';
+  if(a._c)try{map.flyTo(a._c,5,{duration:2.5,easeLinearity:.25});}catch(e){}
+  const prog=document.getElementById('tvProgress');
+  if(prog){prog.style.transition='none';prog.style.width='0%';setTimeout(()=>{prog.style.transition=`width ${TV_MS}ms linear`;prog.style.width='100%';},50);}
+}
+function tvSchedule(){clearTimeout(tvTimer);if(!tvPaused)tvTimer=setTimeout(()=>{tvIdx++;tvShowCard(tvIdx);tvSchedule();},TV_MS);}
+function tvNext(){clearTimeout(tvTimer);tvIdx++;tvShowCard(tvIdx);tvSchedule();}
+function tvPrev(){clearTimeout(tvTimer);tvIdx=Math.max(0,tvIdx-1);tvShowCard(tvIdx);tvSchedule();}
+function tvPauseToggle(){tvPaused=!tvPaused;const b=document.getElementById('tvPauseBtn');if(b)b.textContent=tvPaused?'▶ Resume':'⏸ Pause';if(!tvPaused)tvSchedule();}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){tvStop();closeModal();}});
+
+// ════════════════════════════════════════
+// COMMENTS
+// ════════════════════════════════════════
+function getComments(url){try{return JSON.parse(localStorage.getItem('owls_comments')||'{}')[url]||[];}catch{return[];}}
+function saveComment(url,text){
+  const user=auth.currentUser;
+  const c={id:Date.now(),name:user?(user.displayName||'Anon'):'Anonymous',avatar:user?(user.photoURL||''):'',text,time:new Date().toISOString(),likes:0};
+  try{const all=JSON.parse(localStorage.getItem('owls_comments')||'{}');if(!all[url])all[url]=[];all[url].unshift(c);all[url]=all[url].slice(0,50);localStorage.setItem('owls_comments',JSON.stringify(all));}catch(e){}
+  return c;
+}
+function likeComment(url,id){
+  try{const all=JSON.parse(localStorage.getItem('owls_comments')||'{}');const c=(all[url]||[]).find(x=>x.id===id);if(c){c.likes=(c.likes||0)+1;localStorage.setItem('owls_comments',JSON.stringify(all));return c.likes;}}catch(e){}return 0;
+}
+function renderComments(articleUrl){
+  const el=document.getElementById('modalComments');if(!el)return;
+  const comments=getComments(articleUrl);
+  const user=auth.currentUser;
+  const avHtml=user&&user.photoURL?`<img src="${user.photoURL}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:'🦉';
+  const encUrl=encodeURIComponent(articleUrl);
+  el.innerHTML=`<div class="comments-section">
+    <div class="comments-title">💬 Discussion (${comments.length})</div>
+    <div class="comment-input-wrap">
+      <div class="comment-avatar">${avHtml}</div>
+      <textarea class="comment-inp" id="cmt-inp" placeholder="${user?'Share your analysis...':'Sign in to comment'}"></textarea>
+      <button class="comment-send" onclick="submitComment('${encUrl}')" ${user?'':'disabled'}>→</button>
+    </div>
+    ${comments.map(c=>`<div class="comment-item"><div class="ci-av">${c.avatar?`<img src="${c.avatar}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:'🦉'}</div><div class="ci-body"><div class="ci-header"><span class="ci-name">${c.name}</span><span class="ci-time">${timeAgo(c.time)}</span></div><div class="ci-text">${c.text}</div><div class="ci-likes" onclick="handleLike('${encUrl}',${c.id},this)">♥ ${c.likes||0}</div></div></div>`).join('')}
+    ${!comments.length?'<div style="font-size:11px;color:var(--text3);text-align:center;padding:10px">Be the first to comment.</div>':''}
+  </div>`;
+}
+function submitComment(encUrl){
+  const url=decodeURIComponent(encUrl);
+  const inp=document.getElementById('cmt-inp');
+  if(!inp||!inp.value.trim())return;
+  saveComment(url,inp.value.trim());
+  renderComments(url);
+}
+function handleLike(encUrl,id,el){
+  const n=likeComment(decodeURIComponent(encUrl),id);
+  if(el){el.textContent='♥ '+n;el.style.color='var(--crit)';}
+}
+
+// ════════════════════════════════════════
+// PORTFOLIO & BRIEF
+// ════════════════════════════════════════
+let portfolio=[];
+try{portfolio=JSON.parse(localStorage.getItem('owls_portfolio')||'[]');}catch(e){}
+function addPortItem(){
+  const inp=document.getElementById('portInp');if(!inp)return;
+  const val=inp.value.trim();if(!val||portfolio.includes(val)){inp.value='';return;}
+  portfolio.push(val);try{localStorage.setItem('owls_portfolio',JSON.stringify(portfolio));}catch(e){}
+  inp.value='';renderPortfolio();generateBrief();
+}
+function removePortItem(val){
+  portfolio=portfolio.filter(p=>p!==val);
+  try{localStorage.setItem('owls_portfolio',JSON.stringify(portfolio));}catch(e){}
+  renderPortfolio();generateBrief();
+}
+function renderPortfolio(){
+  const list=document.getElementById('portList');if(!list)return;
+  if(!portfolio.length){list.innerHTML='<div style="font-size:10px;color:var(--text3);text-align:center;padding:10px">Add stocks, cities, or companies.</div>';return;}
+  list.innerHTML=portfolio.map(p=>{
+    const matches=(allArts||[]).filter(a=>(a.title+' '+(a.trail||'')).toLowerCase().includes(p.toLowerCase()));
+    const crits=matches.filter(a=>a._s&&a._s.level==='CRITICAL');
+    const info=crits.length?`<span class="port-item-alert">⚠ ${crits.length} CRITICAL</span>`:matches.length?`<span class="port-item-ok">✓ ${matches.length} mentions</span>`:`<span style="font-size:9px;color:var(--text3)">No news</span>`;
+    return`<div class="port-item"><span class="port-item-name">${p}</span>${info}<span class="port-remove" onclick="removePortItem(this.dataset.v)" data-v="${p}">×</span></div>`;
+  }).join('');
+}
+function generateBrief(){
+  const el=document.getElementById('briefContent');if(!el||!allArts||!allArts.length)return;
+  const crits=allArts.filter(a=>a._s&&a._s.level==='CRITICAL');
+  const warns=allArts.filter(a=>a._s&&a._s.level==='WARNING');
+  const rc={};allArts.forEach(a=>{if(a._r)rc[a._r]=(rc[a._r]||0)+1;});
+  const hotR=Object.entries(rc).sort((a,b)=>b[1]-a[1])[0]?.[0]||'Global';
+  const pa=portfolio.filter(p=>allArts.some(a=>(a.title+' '+(a.trail||'')).toLowerCase().includes(p.toLowerCase())&&a._s&&a._s.level==='CRITICAL'));
+  el.innerHTML=`<div style="line-height:1.8;font-size:11px">📡 <strong>${allArts.length}</strong> stories · <strong>${new Set(allArts.map(a=>a.source)).size}</strong> sources.<br>🔴 <strong>${crits.length}</strong> CRITICAL (${Math.round(crits.length/allArts.length*100)}%). Hot zone: <strong>${hotR}</strong>.<br>⚡ <strong>${warns.length}</strong> diplomatic/economic signals.${pa.length?`<br>🎯 <strong>Portfolio flag:</strong> ${pa.join(', ')}.`:''}</div>`;
+}
+
+// ════════════════════════════════════════
+// AGENT RANK
+// ════════════════════════════════════════
+function trackCatRead(cat){try{const c=JSON.parse(localStorage.getItem('owls_cat_reads')||'{}');c[cat]=(c[cat]||0)+1;localStorage.setItem('owls_cat_reads',JSON.stringify(c));}catch(e){}}
+function getTopCat(){try{const c=JSON.parse(localStorage.getItem('owls_cat_reads')||'{}');let t='world',n=0;Object.entries(c).forEach(([k,v])=>{if(v>n){t=k;n=v;}});return t;}catch{return'world';}}
+function getExpertise(){try{const c=JSON.parse(localStorage.getItem('owls_cat_reads')||'{}');const tot=Object.values(c).reduce((a,b)=>a+b,0)||1;return Object.entries(c).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([k,n])=>({cat:k,pct:Math.round(n/tot*100)}));}catch{return[];}}
+function getAgentData(){
+  const tc=getTopCat();
+  const titles={world:{icon:'🌐',name:'Global Analyst'},politics:{icon:'🏛️',name:'Political Strategist'},business:{icon:'📈',name:'Financial Analyst'},technology:{icon:'💻',name:'Tech Intelligence'},science:{icon:'🔬',name:'Research Officer'},health:{icon:'❤️',name:'Bio-Intel Analyst'},climate:{icon:'🌿',name:'Climate Strategist'},sport:{icon:'⚽',name:'Field Correspondent'}};
+  const t=titles[tc]||titles.world;
+  const lvl=readCount>500?'Director':readCount>200?'Senior Agent':readCount>50?'Field Agent':readCount>10?'Analyst':'Recruit';
+  return{...t,level:lvl};
+}
+
+// ════════════════════════════════════════
+// OVERRIDE doStab — add portfolio
+// ════════════════════════════════════════
+function doStab(name){
+  const names=['feed','saved','analytics','profile','portfolio','alerts'];
+  document.querySelectorAll('.stab').forEach((t,i)=>t.classList.toggle('active',names[i]===name));
+  document.querySelectorAll('.spanel').forEach(p=>p.classList.remove('active'));
+  const panel=document.getElementById('p-'+name);if(panel)panel.classList.add('active');
+  if(name==='saved')renderSaved();
+  if(name==='profile')renderProfile();
+  if(name==='alerts')renderAlertTags();
+  if(name==='portfolio'){renderPortfolio();generateBrief();}
+}
+
+// ════════════════════════════════════════
+// OVERRIDE renderProfile — agent rank
+// ════════════════════════════════════════
+function renderProfile(){
+  const body=document.getElementById('profileBody');if(!body)return;
+  const user=auth.currentUser;
+  if(!user){
+    body.innerHTML=`<div class="lcta"><div class="lcta-owl">🦉</div><div class="lcta-title">Sign in to OWLS</div><div class="lcta-sub">Save stories, set alerts, build your intelligence profile.</div><div class="lcta-feats"><div class="lcta-feat"><div class="lcta-fi">🔖</div><div class="lcta-ft">Save Articles</div></div><div class="lcta-feat"><div class="lcta-fi">🔔</div><div class="lcta-ft">Keyword Alerts</div></div><div class="lcta-feat"><div class="lcta-fi">🌍</div><div class="lcta-ft">Topic Picks</div></div><div class="lcta-feat"><div class="lcta-fi">☁️</div><div class="lcta-ft">Cloud Sync</div></div></div><button class="gbtn" onclick="loginGoogle()">Continue with Google</button></div>`;
+    return;
+  }
+  const rank=getAgentData();
+  const exp=getExpertise();
+  const cats={world:'🌍 World',technology:'💻 Tech',business:'📈 Business',science:'🔬 Science',health:'❤️ Health',climate:'🌿 Climate',politics:'🏛️ Politics',sport:'⚽ Sport'};
+  const recent=(allArts||[]).filter(a=>readSet.has(a.url)).slice(0,3);
+  body.innerHTML=`
+    <div class="phero">
+      <img src="${user.photoURL||''}" class="pav" onerror="this.style.display='none'">
+      <div class="pname">${user.displayName||'Owl User'}</div>
+      <div class="pemail">${user.email||''}</div>
+    </div>
+    <div class="pstats">
+      <div class="pstat"><div class="pstat-n" style="color:var(--accent)">${readCount}</div><div class="pstat-l">READ</div></div>
+      <div class="pstat"><div class="pstat-n" style="color:var(--saved)">${savedArts.length}</div><div class="pstat-l">SAVED</div></div>
+      <div class="pstat"><div class="pstat-n" style="color:var(--accent2)">${alerts.length}</div><div class="pstat-l">ALERTS</div></div>
+    </div>
+    <div class="psec">
+      <div class="agent-rank"><div class="agent-rank-icon">${rank.icon}</div><div><div class="agent-rank-name">${rank.level}</div><div class="agent-rank-title">${rank.name}</div></div></div>
+      ${exp.length?`<div class="psec-title" style="margin-bottom:8px">Expertise</div>${exp.map(e=>`<div class="expertise-bar"><span class="expertise-label">${cats[e.cat]||e.cat}</span><div class="expertise-bg"><div class="expertise-fill" style="width:${e.pct}%"></div></div><span style="font-size:9px;color:var(--text3);width:30px;text-align:right;font-family:'Space Mono',monospace">${e.pct}%</span></div>`).join('')}`:'<div style="font-size:10px;color:var(--text3)">Read more to build expertise.</div>'}
+    </div>
+    <div class="psec"><div class="psec-title">Favourite Topics</div><div class="pfc">${Object.entries(cats).map(([k,v])=>`<div class="pfc-btn${favCats.includes(k)?' on':''}" onclick="toggleFavCat('${k}',this)">${v}</div>`).join('')}</div></div>
+    ${recent.length?`<div class="psec"><div class="psec-title">Recently Read</div>${recent.map(a=>`<div class="recitem" data-rurl="${a.url}"><div class="rec-dot" style="background:${a._s?a._s.color:'var(--accent)'}"></div><div><div class="rec-tit">${a.title}</div><div class="rec-src">${a.source}</div></div></div>`).join('')}</div>`:''}
+    <div class="p-signout" onclick="doLogout()">← Sign Out</div>`;
+  body.querySelectorAll('.recitem').forEach(el=>{
+    const url=el.dataset.rurl;
+    el.onclick=()=>{const a=allArts.find(x=>x.url===url);if(a)openModal(a);};
+  });
+}
+
+
+
+// ════════════════════════════════════════
+// SEARCH
+// ════════════════════════════════════════
+let searchDebounce = null;
+
+function doSearch(q) {
+  clearTimeout(searchDebounce);
+  if (!q || q.length < 2) { hideSearch(); return; }
+  searchDebounce = setTimeout(() => {
+    const term = q.toLowerCase();
+    const results = allArts
+      .filter(a => a.title.toLowerCase().includes(term) || (a._loc||'').toLowerCase().includes(term) || a.source.toLowerCase().includes(term))
+      .slice(0, 8);
+    showSearchResults(results, term);
+  }, 150);
+}
+
+function highlight(text, term) {
+  if (!term) return text;
+  const safe = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return text.replace(new RegExp(`(${safe})`, 'gi'), '<span class="search-highlight">$1</span>');
+}
+
+function showSearchResults(results, term) {
+  const box = document.getElementById('searchResults');
+  if (!box) return;
+  if (!results || !results.length) {
+    box.innerHTML = '<div class="search-empty">No stories found</div>';
+    box.classList.add('open');
+    return;
+  }
+  box.innerHTML = results.map(a => `
+    <div class="search-item" data-url="${a.url}">
+      <div class="search-item-src">${a.source}</div>
+      <div class="search-item-title">${highlight(a.title, term)}</div>
+      <div class="search-item-loc">${a._loc||''} · ${a._r||''}</div>
+    </div>`).join('');
+  box.classList.add('open');
+  box.querySelectorAll('.search-item').forEach(el => {
+    el.onclick = () => {
+      const a = allArts.find(x => x.url === el.dataset.url);
+      if (a) {
+        hideSearch();
+        document.getElementById('searchInp').value = '';
+        map.flyTo(a._c, 7, {duration:1.2});
+        openModal(a);
+      }
+    };
+  });
+}
+
+function hideSearch() {
+  const box = document.getElementById('searchResults');
+  if (box) box.classList.remove('open');
+}
+
+// Close search when clicking outside
+document.addEventListener('click', e => {
+  if (!e.target.closest('#searchWrap')) hideSearch();
 });
 
-window.addEventListener('resize',()=>fixMap());
+// ════════════════════════════════════════
+// SHARE
+// ════════════════════════════════════════
+function toggleShare(e) {
+  e.stopPropagation();
+  const menu = document.getElementById('shareMenu');
+  if (menu) menu.classList.toggle('open');
+}
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('.share-menu') && !e.target.closest('[onclick*="toggleShare"]'))
+    document.querySelectorAll('.share-menu').forEach(m => m.classList.remove('open'));
+});
+
+function shareTwitter() {
+  if (!curModalArt) return;
+  const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent('📡 ' + curModalArt.title + ' — via OWLS Global Intelligence')}&url=${encodeURIComponent(curModalArt.url)}`;
+  window.open(url, '_blank', 'width=550,height=420');
+  document.getElementById('shareMenu')?.classList.remove('open');
+}
+
+function shareWhatsapp() {
+  if (!curModalArt) return;
+  const url = `https://wa.me/?text=${encodeURIComponent('📡 *' + curModalArt.title + '*\n\n' + (curModalArt.trail||'').slice(0,150) + '...\n\n' + curModalArt.url)}`;
+  window.open(url, '_blank');
+  document.getElementById('shareMenu')?.classList.remove('open');
+}
+
+function shareCopy() {
+  if (!curModalArt) return;
+  const text = `📡 ${curModalArt.title}\n\n${curModalArt.url}`;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('shareCopyBtn');
+    if (btn) { btn.classList.add('share-copied'); btn.querySelector('.share-item-icon').textContent = '✓'; setTimeout(() => { btn.classList.remove('share-copied'); btn.querySelector('.share-item-icon').textContent = '🔗'; }, 2000); }
+  }).catch(() => {
+    prompt('Copy this link:', curModalArt.url);
+  });
+  document.getElementById('shareMenu')?.classList.remove('open');
+}
+
+// ════════════════════════════════════════
+// COMPARE
+// ════════════════════════════════════════
+let compareList = []; // max 2 articles
+
+function addToCompare() {
+  if (!curModalArt) return;
+  closeModal();
+  const exists = compareList.findIndex(a => a.url === curModalArt.url);
+  if (exists >= 0) {
+    compareList.splice(exists, 1);
+  } else {
+    if (compareList.length >= 2) {
+      compareList.shift(); // remove oldest
+    }
+    compareList.push(curModalArt);
+  }
+  updateCompareBar();
+}
+
+function toggleCompareFromCard(enc) {
+  const url = decodeURIComponent(enc);
+  const a = allArts.find(x => x.url === url);
+  if (!a) return;
+  const exists = compareList.findIndex(x => x.url === url);
+  if (exists >= 0) { compareList.splice(exists, 1); }
+  else { if (compareList.length >= 2) compareList.shift(); compareList.push(a); }
+  updateCompareBar();
+  // Update card button
+  document.querySelectorAll('.ncard-compare-btn').forEach(btn => {
+    if (btn.dataset.url === url) btn.classList.toggle('selected', compareList.some(x=>x.url===url));
+  });
+}
+
+function updateCompareBar() {
+  const bar = document.getElementById('compareBar');
+  const txt = document.getElementById('compareBarTxt');
+  const btn = document.getElementById('compareOpenBtn');
+  if (!bar) return;
+  if (compareList.length === 0) {
+    bar.classList.remove('active');
+  } else {
+    bar.classList.add('active');
+    txt.textContent = compareList.length === 1
+      ? `1 story selected — pick one more`
+      : `${compareList[0].source} vs ${compareList[1].source} — ready!`;
+    btn.disabled = compareList.length < 2;
+  }
+  // Sync card buttons
+  document.querySelectorAll('.ncard-compare-btn').forEach(btn => {
+    btn.classList.toggle('selected', compareList.some(x => x.url === btn.dataset.url));
+  });
+}
+
+function clearCompare() {
+  compareList = [];
+  updateCompareBar();
+}
+
+function openCompare() {
+  if (compareList.length < 2) return;
+  const [a, b] = compareList;
+  const modal = document.getElementById('compareModal');
+  const grid = document.getElementById('compareGrid');
+  if (!modal || !grid) return;
+
+  // Analyze differences
+  const sentA = a._s?.level || 'INFO';
+  const sentB = b._s?.level || 'INFO';
+  const locA = a._loc || 'Unknown';
+  const locB = b._loc || 'Unknown';
+  const timeA = a.date ? timeAgo(a.date) : 'Unknown';
+  const timeB = b.date ? timeAgo(b.date) : 'Unknown';
+
+  // Keyword overlap
+  const wordsA = new Set((a.title.toLowerCase().match(/\b[a-z]{4,}\b/g)||[]));
+  const wordsB = new Set((b.title.toLowerCase().match(/\b[a-z]{4,}\b/g)||[]));
+  const overlap = [...wordsA].filter(w => wordsB.has(w));
+  const sharedTopic = overlap.length > 0 ? overlap.slice(0,3).join(', ') : 'Different topics';
+
+  grid.innerHTML = `
+    <div class="compare-card">
+      ${a.thumb ? `<img class="compare-card-img" src="${a.thumb}" onerror="this.style.display='none'">` : ''}
+      <div class="compare-card-body">
+        <div class="compare-card-src">${a.source} · ${locA}</div>
+        <div class="compare-card-title">${a.title}</div>
+        <div class="compare-card-desc">${a.trail || 'No summary available.'}</div>
+        <a href="${a.url}" target="_blank" rel="noopener" class="compare-card-link">Read full story →</a>
+      </div>
+    </div>
+    <div class="compare-card">
+      ${b.thumb ? `<img class="compare-card-img" src="${b.thumb}" onerror="this.style.display='none'">` : ''}
+      <div class="compare-card-body">
+        <div class="compare-card-src">${b.source} · ${locB}</div>
+        <div class="compare-card-title">${b.title}</div>
+        <div class="compare-card-desc">${b.trail || 'No summary available.'}</div>
+        <a href="${b.url}" target="_blank" rel="noopener" class="compare-card-link">Read full story →</a>
+      </div>
+    </div>
+    <div class="compare-diff">
+      <div class="compare-diff-title">Analysis</div>
+      <div class="compare-diff-row"><span class="diff-label">SOURCE</span><span class="diff-val">${a.source} <strong>vs</strong> ${b.source}</span></div>
+      <div class="compare-diff-row"><span class="diff-label">REGION</span><span class="diff-val">${locA} <strong>vs</strong> ${locB}</span></div>
+      <div class="compare-diff-row"><span class="diff-label">THREAT</span><span class="diff-val" style="color:${sentA!==sentB?'var(--warn)':'var(--green)'}"><strong>${sentA}</strong> vs <strong>${sentB}</strong> — ${sentA===sentB?'Same threat level':'Different assessments'}</span></div>
+      <div class="compare-diff-row"><span class="diff-label">TIMING</span><span class="diff-val">${timeA} vs ${timeB}</span></div>
+      <div class="compare-diff-row"><span class="diff-label">SHARED</span><span class="diff-val">${sharedTopic}</span></div>
+      <div class="compare-diff-row"><span class="diff-label">COVERAGE</span><span class="diff-val">${locA===locB?'Same region — different perspective':'Different regions — cross-regional event'}</span></div>
+    </div>`;
+
+  modal.classList.add('active');
+}
+
+function closeCompare() {
+  document.getElementById('compareModal')?.classList.remove('active');
+}
+
+document.getElementById('compareModal')?.addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeCompare();
+});
+
+// ════════════════════════════════════════
+// PRO MEMBERSHIP
+// ════════════════════════════════════════
+let isPro = localStorage.getItem('owls_pro') === 'true';
+
+function openProModal() {
+  document.getElementById('proModal')?.classList.add('active');
+}
+
+function closeProModal() {
+  document.getElementById('proModal')?.classList.remove('active');
+}
+
+document.getElementById('proModal')?.addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeProModal();
+});
+
+function proPayStripe() {
+  // Replace with your actual Stripe Payment Link
+  // Create at: dashboard.stripe.com → Payment Links → Create
+  // You get paid directly to your bank account
+  const STRIPE_LINK = 'https://buy.stripe.com/your_link_here';
+  showToast('💳', 'Stripe', 'Redirecting to secure payment...', null);
+  setTimeout(() => window.open(STRIPE_LINK, '_blank'), 800);
+  closeProModal();
+}
+
+function proPaySubstack() {
+  // Replace with your Substack publication URL
+  // You get paid via Stripe through Substack (Substack takes 10%)
+  const SUBSTACK_LINK = 'https://your-publication.substack.com/subscribe';
+  window.open(SUBSTACK_LINK, '_blank');
+  closeProModal();
+}
+
+function proPayCrypto() {
+  // Your USDT wallet address (TRC20 - Tron network, cheapest fees)
+  const WALLET = 'YOUR_USDT_TRC20_WALLET_ADDRESS';
+  const msg = `Send $5 USDT (TRC20) to:\n\n${WALLET}\n\nThen email your transaction ID to owls@yourdomain.com to activate Pro.`;
+  alert(msg);
+  closeProModal();
+}
+
+function activatePro() {
+  isPro = true;
+  localStorage.setItem('owls_pro', 'true');
+  document.querySelectorAll('.pro-badge').forEach(b => b.style.display = 'inline-block');
+  showToast('⭐', 'OWLS Pro', 'Welcome to Pro! All features unlocked.', null);
+}
+
+// Check pro status on load
+if (isPro) {
+  setTimeout(() => showToast('⭐', 'OWLS Pro', 'Pro features active.', null), 3000);
+}
+
 </script>
+
+<!-- TIME SLIDER -->
+<div class="time-slider-wrap">
+  <button class="ts-play" id="tsPlay" onclick="tsTogglePlay()">▶</button>
+  <span class="ts-label">🕐</span>
+  <input type="range" class="ts-slider" id="tsRange" min="0" max="47" value="47" oninput="tsUpdate(this.value)">
+  <span class="ts-time" id="tsTime">Now</span>
+</div>
+
+<!-- TV OVERLAY -->
+<div class="tv-overlay" id="tvOverlay">
+  <div class="tv-header">
+    <div class="tv-logo">🦉 OWLS</div>
+    <div class="tv-date" id="tvDate"></div>
+    <button class="tv-exit" onclick="tvStop()">✕ Exit</button>
+  </div>
+  <div class="tv-card" id="tvCard" style="position:relative">
+    <img class="tv-card-img" id="tvImg" src="" onerror="this.style.display='none'"/>
+    <div class="tv-card-body">
+      <div class="tv-card-src" id="tvSrc"></div>
+      <div class="tv-card-title" id="tvTitle"></div>
+      <div class="tv-card-desc" id="tvDesc"></div>
+    </div>
+    <div class="tv-progress" id="tvProgress" style="position:absolute;bottom:0;left:0;width:0%;height:3px;background:var(--accent);transition:none;"></div>
+  </div>
+  <div class="tv-controls">
+    <button class="tv-ctrl" onclick="tvPrev()">← Prev</button>
+    <button class="tv-ctrl" id="tvPauseBtn" onclick="tvPauseToggle()">⏸ Pause</button>
+    <button class="tv-ctrl" onclick="tvNext()">Next →</button>
+  </div>
+  <div class="tv-ticker">
+    <div class="tv-ticker-lbl">LIVE</div>
+    <div class="tv-ticker-scroll" id="tvTicker"></div>
+  </div>
+</div>
+
+<!-- COMPARE BAR -->
+<div class="compare-bar" id="compareBar">
+  <div class="compare-bar-txt" id="compareBarTxt">Select 2 stories to compare</div>
+  <div style="display:flex;gap:8px;">
+    <button class="compare-bar-btn" onclick="openCompare()" id="compareOpenBtn" disabled>Compare →</button>
+    <button class="compare-bar-btn" onclick="clearCompare()">✕ Clear</button>
+  </div>
+</div>
+
+<!-- COMPARE MODAL -->
+<div class="compare-modal" id="compareModal">
+  <div class="compare-box">
+    <div class="compare-header">
+      <div class="compare-title">⚖️ Story Comparison</div>
+      <button class="compare-close" onclick="closeCompare()">✕ Close</button>
+    </div>
+    <div class="compare-grid" id="compareGrid"></div>
+  </div>
+</div>
+
+<!-- PRO MODAL -->
+<div class="pro-modal" id="proModal">
+  <div class="pro-box">
+    <div class="pro-hero">
+      <span class="pro-hero-icon">🦉</span>
+      <div class="pro-hero-title">OWLS Pro</div>
+      <div class="pro-hero-sub">True Global Intelligence — Unlimited</div>
+      <div class="pro-price">$5<span>/month</span></div>
+    </div>
+    <div class="pro-body">
+      <div class="pro-features">
+        <div class="pro-feat"><div class="pro-feat-check">✓</div>Unlimited keyword alerts (free: 3)</div>
+        <div class="pro-feat"><div class="pro-feat-check">✓</div>Weekly Intelligence Briefing — deep analysis</div>
+        <div class="pro-feat"><div class="pro-feat-check">✓</div>Portfolio risk scoring per region</div>
+        <div class="pro-feat"><div class="pro-feat-check">✓</div>Story comparison — unlimited</div>
+        <div class="pro-feat"><div class="pro-feat-check">✓</div>Ad-free, no data collection</div>
+        <div class="pro-feat"><div class="pro-feat-check">✓</div>Priority breaking alerts via email</div>
+      </div>
+      <div class="pro-payment-opts">
+        <button class="pro-pay-btn pro-pay-stripe" onclick="proPayStripe()">💳 Pay with Card (Stripe)</button>
+        <button class="pro-pay-btn pro-pay-sub" onclick="proPaySubstack()">📬 Subscribe via Substack</button>
+        <button class="pro-pay-btn pro-pay-crypto" onclick="proPayCrypto()">🔐 Pay with Crypto (USDT)</button>
+      </div>
+      <div class="pro-cancel" onclick="closeProModal()">Maybe later — stay on free plan</div>
+    </div>
+  </div>
+</div>
 </body>
 </html>
