@@ -8,8 +8,14 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="theme-color" content="#0d1b2a"/>
 <title>OWLS — Global Intelligence</title>
-  <!-- Google AdSense: Uncomment and replace ca-pub-XXXXXXXX with your Publisher ID -->
-  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+  <!-- === AD SETUP ===
+     OPTION 1 - Google AdSense: adsense.google.com → Apply → get Publisher ID
+     Replace ca-pub-XXXXXXXX and uncomment the script below when approved:
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+     
+     OPTION 2 - Ezoic (higher earnings, pays via Payoneer to any bank):
+     ezoic.com → Sign up → Cloudflare integration → they provide the script
+  -->
 
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
@@ -500,8 +506,8 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Syne',sans-serif;b
 .pro-feat-check{width:22px;height:22px;border-radius:50%;background:rgba(0,152,160,.15);border:1px solid var(--accent);display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--accent);flex-shrink:0;}
 .pro-payment-opts{display:flex;flex-direction:column;gap:8px;margin-bottom:16px;}
 .pro-pay-btn{display:flex;align-items:center;justify-content:center;gap:10px;padding:13px;border-radius:11px;font-size:13px;font-weight:800;cursor:pointer;border:none;transition:all .2s;font-family:'Syne',sans-serif;}
-.pro-pay-stripe{background:var(--accent);color:#fff;}
-.pro-pay-stripe:hover{background:var(--accentg);}
+.pro-pay-usdt{background:var(--accent);color:#fff;}
+.pro-pay-usdt:hover{background:var(--accentg);}
 .pro-pay-crypto{background:var(--bg3);color:var(--text);border:1px solid var(--border2);}
 .pro-pay-crypto:hover{border-color:var(--accent);color:var(--accent);}
 .pro-pay-sub{background:var(--bg3);color:var(--text);border:1px solid var(--border2);}
@@ -570,16 +576,6 @@ ins.adsbygoogle{display:block;}
 .aff-btn .aff-badge{font-size:8px;background:rgba(0,176,80,.15);color:#00b050;border-radius:4px;padding:1px 5px;font-family:'Space Mono',monospace;}
 
 
-/* ── BUY ME A COFFEE ── */
-.bmc-float{position:fixed;bottom:90px;right:calc(var(--side) + 14px);z-index:500;display:flex;flex-direction:column;align-items:flex-end;gap:8px;}
-.bmc-btn{display:flex;align-items:center;gap:8px;background:#FFDD00;color:#000;border:none;border-radius:24px;padding:10px 18px;font-size:12px;font-weight:800;cursor:pointer;font-family:'Syne',sans-serif;box-shadow:0 4px 16px rgba(255,221,0,.4);transition:all .2s;text-decoration:none;white-space:nowrap;}
-.bmc-btn:hover{transform:translateY(-2px);box-shadow:0 6px 22px rgba(255,221,0,.5);}
-.bmc-btn-small{padding:7px 14px;font-size:11px;border-radius:20px;}
-.bmc-supporters{background:var(--card);border:1px solid var(--border2);border-radius:10px;padding:10px 14px;font-size:10px;color:var(--text3);font-family:'Space Mono',monospace;text-align:center;display:none;}
-.bmc-supporters.show{display:block;}
-@media(max-width:768px){.bmc-float{bottom:calc(var(--mobbarnav) + 70px);right:10px;}}
-
-
 /* ── B2B SAAS ── */
 .b2b-body{padding:14px;display:flex;flex-direction:column;gap:12px;}
 .b2b-hero{background:linear-gradient(135deg,#003d42,#006970);border-radius:12px;padding:18px;text-align:center;position:relative;overflow:hidden;}
@@ -606,23 +602,6 @@ ins.adsbygoogle{display:block;}
 .b2b-use-tag{font-size:9px;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;padding:3px 8px;color:var(--text3);font-family:'Space Mono',monospace;}
 
 
-/* ── SUPPORT MODAL ── */
-.support-modal{position:fixed;inset:0;background:rgba(10,27,36,.85);z-index:9700;display:none;align-items:center;justify-content:center;backdrop-filter:blur(5px);}
-.support-modal.active{display:flex;}
-.support-box{background:var(--card);border:1px solid var(--border2);border-radius:18px;width:92%;max-width:400px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.5);}
-.support-hero{background:linear-gradient(135deg,#007b82,#00c8b4);padding:22px 20px;text-align:center;}
-.support-hero-icon{font-size:44px;display:block;margin-bottom:6px;}
-.support-hero-title{font-size:18px;font-weight:800;color:#fff;}
-.support-hero-sub{font-size:11px;color:rgba(255,255,255,.75);margin-top:4px;}
-.support-body{padding:18px 20px;display:flex;flex-direction:column;gap:10px;}
-.support-opt{display:flex;align-items:center;gap:12px;padding:13px 14px;border-radius:11px;background:var(--bg3);border:1px solid var(--border2);cursor:pointer;transition:all .2s;}
-.support-opt:hover{border-color:var(--accent);background:var(--bg2);}
-.support-opt-icon{font-size:26px;flex-shrink:0;}
-.support-opt-label{font-size:13px;font-weight:800;color:var(--text);}
-.support-opt-sub{font-size:10px;color:var(--text3);margin-top:1px;}
-.support-opt-badge{margin-left:auto;font-size:9px;background:rgba(0,176,80,.15);color:#00b050;border-radius:4px;padding:2px 7px;font-family:'Space Mono',monospace;font-weight:700;flex-shrink:0;}
-.support-cancel{text-align:center;font-size:11px;color:var(--text3);cursor:pointer;margin-top:4px;}
-.support-cancel:hover{color:var(--text);}
 /* wallet display */
 .wallet-display{background:var(--bg);border:1px solid var(--border2);border-radius:10px;padding:12px 14px;margin-top:8px;display:none;}
 .wallet-display.show{display:block;}
@@ -635,6 +614,38 @@ ins.adsbygoogle{display:block;}
 .support-float-btn{display:flex;align-items:center;gap:8px;background:var(--accent);color:#fff;border:none;border-radius:24px;padding:10px 18px;font-size:12px;font-weight:800;cursor:pointer;font-family:'Syne',sans-serif;box-shadow:0 4px 16px rgba(0,152,160,.35);transition:all .2s;}
 .support-float-btn:hover{transform:translateY(-2px);box-shadow:0 6px 22px rgba(0,152,160,.45);}
 @media(max-width:768px){.support-float{bottom:calc(var(--mobbarnav) + 70px);right:10px;}}
+
+
+/* ── INTELLIGENCE PANEL ── */
+.intel-section{padding:14px;border-bottom:1px solid var(--border);}
+.intel-section-title{font-size:9px;font-family:'Space Mono',monospace;font-weight:700;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:7px;}
+.intel-section-title::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--accent);flex-shrink:0;animation:pulse 2s infinite;}
+.intel-card{background:var(--bg3);border:1px solid var(--border2);border-radius:10px;padding:12px 14px;margin-bottom:8px;cursor:pointer;transition:all .2s;}
+.intel-card:last-child{margin-bottom:0;}
+.intel-card:hover{border-color:var(--accent);background:var(--bg2);}
+.intel-card-cat{font-size:8px;font-weight:800;color:var(--accent2);font-family:'Space Mono',monospace;letter-spacing:1px;margin-bottom:5px;}
+.intel-card-body{font-size:11px;color:var(--text2);line-height:1.6;}
+.intel-scenario{display:flex;gap:9px;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--border);}
+.intel-scenario:last-child{border-bottom:none;padding-bottom:0;}
+.intel-prob{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:800;font-family:'Space Mono',monospace;flex-shrink:0;border:2px solid;}
+.intel-prob.high{color:var(--crit);border-color:var(--crit);background:rgba(214,40,40,.08);}
+.intel-prob.med{color:var(--warn);border-color:var(--warn);background:rgba(224,128,0,.08);}
+.intel-prob.low{color:var(--green);border-color:var(--green);background:rgba(0,128,96,.08);}
+.intel-scenario-body{flex:1;}
+.intel-scenario-label{font-size:8px;font-weight:800;color:var(--text3);font-family:'Space Mono',monospace;margin-bottom:2px;letter-spacing:.5px;}
+.intel-scenario-text{font-size:11px;color:var(--text2);line-height:1.5;}
+.intel-metric{display:inline-flex;align-items:center;gap:4px;background:var(--bg2);border:1px solid var(--border);border-radius:5px;padding:3px 8px;font-size:9px;font-family:'Space Mono',monospace;margin:3px 3px 0 0;}
+.intel-metric-label{color:var(--text3);}
+.intel-metric-val{color:var(--accent);font-weight:700;}
+.intel-news-item{padding:9px 0;border-bottom:1px solid var(--border);cursor:pointer;}
+.intel-news-item:last-child{border-bottom:none;}
+.intel-news-item:hover .intel-news-title{color:var(--accent);}
+.intel-news-src{font-size:8px;color:var(--accent2);font-family:'Space Mono',monospace;font-weight:700;margin-bottom:3px;}
+.intel-news-title{font-size:12px;font-weight:700;color:var(--text);line-height:1.35;transition:color .15s;}
+.intel-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px;text-align:center;gap:10px;}
+.intel-empty-icon{font-size:40px;}
+.intel-empty-text{font-size:12px;font-weight:700;color:var(--text);}
+.intel-empty-sub{font-size:11px;color:var(--text3);line-height:1.6;}
 
 </style>
 </head>
@@ -716,14 +727,15 @@ ins.adsbygoogle{display:block;}
 
 <!-- SIDEBAR -->
 <div class="sidebar" id="sidebar">
-  <div class="stabs">
-    <div class="stab active" onclick="doStab('feed')">📡</div>
-    <div class="stab" onclick="doStab('saved')">🔖</div>
-    <div class="stab" onclick="doStab('analytics')">📊</div>
-    <div class="stab" onclick="doStab('profile')">👤</div>
-    <div class="stab" onclick="doStab('portfolio')">💼</div>
-    <div class="stab" onclick="doStab('b2b')">🏢</div>
-    <div class="stab" onclick="doStab('alerts')">🔔</div>
+  <div class="stabs" style="overflow-x:auto;scrollbar-width:none;">
+    <div class="stab active" onclick="doStab('feed')" title="Feed">📡</div>
+    <div class="stab" onclick="doStab('intel')" title="Intelligence">🧠</div>
+    <div class="stab" onclick="doStab('saved')" title="Saved">🔖</div>
+    <div class="stab" onclick="doStab('analytics')" title="Analytics">📊</div>
+    <div class="stab" onclick="doStab('profile')" title="Profile">👤</div>
+    <div class="stab" onclick="doStab('portfolio')" title="Portfolio">💼</div>
+    <div class="stab" onclick="doStab('b2b')" title="Business">🏢</div>
+    <div class="stab" onclick="doStab('alerts')" title="Alerts">🔔</div>
   </div>
 
   <!-- FEED -->
@@ -740,6 +752,12 @@ ins.adsbygoogle{display:block;}
       </div>
     </div>
     <div class="nscroll" id="newsList"></div>
+  </div>
+
+  <!-- INTELLIGENCE -->
+  <div class="spanel" id="p-intel">
+    <div class="back-to-feed" onclick="doStab('feed')">← Back to Feed</div>
+    <div class="nscroll"><div id="intelContent"><div class="intel-empty"><div class="intel-empty-icon">🧠</div><div class="intel-empty-text">Intelligence Feed</div><div class="intel-empty-sub">Load news and read articles across categories — OWLS will generate personalized scenario analyses for your areas of interest.</div></div></div></div>
   </div>
 
   <!-- SAVED -->
@@ -795,9 +813,9 @@ ins.adsbygoogle{display:block;}
           <div class="brief-content" id="briefContent">Load news to generate your brief.</div>
         </div>
         <div class="paywall-box">
-          <div class="paywall-title">🦉 Deep Analysis — $5/mo</div>
-          <div class="paywall-sub">Full economic impact reports, risk scores, Sunday Night Briefing.</div>
-          <button class="paywall-btn" onclick="window.open('https://substack.com','_blank')">Subscribe →</button>
+          <div class="paywall-title">🦉 Derin Analiz — $5/mo</div>
+          <div class="paywall-sub">Full economic impact reports, regional risk scores, Sunday Night Briefing.</div>
+          <button class="paywall-btn" onclick="openProModal()">Go Pro →</button>
         </div>
       </div>
     </div>
@@ -951,7 +969,7 @@ ins.adsbygoogle{display:block;}
           <ins class="adsbygoogle" style="display:block;" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX" data-ad-format="auto" data-full-width-responsive="true"></ins>
           <script>(adsbygoogle = window.adsbygoogle || []).push({});</script> -->
           <div class="ad-slot-icon">⭐</div>
-          <div style="font-size:9px;font-family:'Space Mono',monospace;">ADVERTISEMENT · <span onclick="openProModal()" style="color:var(--accent);cursor:pointer;font-weight:800;">Go Pro to remove</span></div>
+          <div style="font-size:9px;font-family:'Space Mono',monospace;">AD · <span onclick="openProModal()" style="color:var(--accent);cursor:pointer;font-weight:800;">Remove ads → Pro</span></div>
         </div>
       </div>
       <div id="modalRelated"></div>
@@ -976,7 +994,7 @@ const db=firebase.firestore();
 // STATE
 // ══════════════════════════════════════════
 let curQ='world';
-let allArts=[],clusterLayer;
+let allArts=[], clusterLayer=null;
 let curModalArt=null;
 let savedArts=JSON.parse(localStorage.getItem('owls_saved')||'[]');
 let readSet=new Set(JSON.parse(localStorage.getItem('owls_read')||'[]'));
@@ -990,11 +1008,8 @@ let breakingTimer=null;
 // ══════════════════════════════════════════
 // MAP — dark CartoDB tiles
 // ══════════════════════════════════════════
-const map=L.map('map',{zoomControl:false,preferCanvas:true}).setView([20,10],2);
-L.control.zoom({position:'bottomright'}).addTo(map);
-L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{maxZoom:19,attribution:'©CARTO ©OpenStreetMap'}).addTo(map);
-const relLayer=L.layerGroup().addTo(map);
-function fixMap(){setTimeout(()=>map.invalidateSize({animate:false}),100);}
+let map=null, relLayer=null;
+function fixMap(){if(map)setTimeout(()=>map.invalidateSize({animate:false}),100);}
 
 // ══════════════════════════════════════════
 // SENTIMENT
@@ -1137,19 +1152,35 @@ const CNAMES={
 
 const KW={
   america:'us',american:'us','united states':'us',pentagon:'us','white house':'us',
-  'wall street':'us','silicon valley':'us','capitol hill':'us',trump:'us',biden:'us',
-  congress:'us','federal reserve':'us',nasdaq:'us',kremlin:'ru',putin:'ru',
+  'wall street':'us','silicon valley':'us','capitol hill':'us','capitol':'us',
+  trump:'us',biden:'us',harris:'us','federal reserve':'us',nasdaq:'us',
+  kremlin:'ru',putin:'ru','red square':'ru','saint petersburg':'ru',
   ukraine:'ua',ukrainian:'ua',zelensky:'ua',donbas:'ua',crimea:'ua',
-  macron:'fr',bundestag:'de',meloni:'it','european union':'be',nato:'be',
+  'kharkiv':'ua','zaporizhzhia':'ua','kherson':'ua','mariupol':'ua','bakhmut':'ua',
+  macron:'fr',bundestag:'de',meloni:'it',scholz:'de',
+  'european union':'be','european commission':'be',nato:'be',
   netanyahu:'il',hamas:'il',hezbollah:'lb',gaza:'il','west bank':'il',
-  houthis:'ye',houthi:'ye','idf':'il',ayatollah:'ir','irgc':'ir',
-  modi:'in','xi jinping':'cn',taiwan:'tw',kashmir:'in',taliban:'af',
-  england:'gb','premier league':'gb',scotland:'gb','downing street':'gb',
+  'tel aviv':'il',idf:'il',mossad:'il',
+  houthis:'ye',houthi:'ye',ayatollah:'ir',irgc:'ir',
+  modi:'in','xi jinping':'cn',xi:'cn',taiwan:'tw',kashmir:'in',taliban:'af',
+  england:'gb','premier league':'gb',scotland:'gb','downing street':'gb',sunak:'gb',
   amazon:'us',google:'us',apple:'us',microsoft:'us',tesla:'us',openai:'us',
-  meta:'us',nvidia:'us',samsung:'kr',huawei:'cn',toyota:'jp',
+  meta:'us',nvidia:'us',spacex:'us',samsung:'kr',huawei:'cn',toyota:'jp',
   nba:'us',nfl:'us',nhl:'us','la liga':'es','serie a':'it',
   bundesliga:'de','ligue 1':'fr','champions league':'gb','world cup':'gb',
-  olympics:'us',imf:'us','world bank':'us','united nations':'us',who:'ch'
+  olympics:'us',wimbledon:'gb','tour de france':'fr','formula 1':'gb',
+  imf:'us','world bank':'us','united nations':'us','un security council':'us',
+  'south china sea':'cn','strait of taiwan':'tw','east china sea':'cn',
+  'strait of hormuz':'ir','red sea':'ye','gulf of aden':'ye',
+  'persian gulf':'ae','arabian sea':'pk',
+  sahel:'ml','burkina faso':'bf','mali':'ml','niger':'ne','chad':'td',
+  'democratic republic':'cd',myanmar:'mm',bangladesh:'bd',
+  'north korea':'kp','south korea':'kr',kim:'kp',
+  'hong kong':'hk',macau:'mo','silk road':'cn',
+  'black sea':'ua','baltic':'ee','arctic':'no',
+  'silicon valley':'us','wall street':'us','city of london':'gb',
+  'davos':'ch','g7':'gb','g20':'br','brics':'br','opec':'sa',
+  'world economic forum':'ch','imf':'us','world trade organization':'ch',
 };
 
 const FALLBACKS=[
@@ -1176,7 +1207,8 @@ function artRegion(lat,lng){
 function jit(n=0.2){return(Math.random()-0.5)*n;}
 
 function getCoords(text){
-  const t=(text||'').toLowerCase();
+  // Use full text including trail for better location matching
+  const t=(text||'').toLowerCase().slice(0,400);
   for(const[c,v]of Object.entries(CITIES)){
     if(new RegExp('\\b'+c.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'\\b','i').test(t))
       return{coords:[v[0]+jit(),v[1]+jit()],loc:c.split(' ').map(w=>w[0].toUpperCase()+w.slice(1)).join(' ')};
@@ -1212,6 +1244,9 @@ const RSS={
     {u:'https://feeds.bbci.co.uk/news/world/middle_east/rss.xml',n:'BBC MidEast'},
     {u:'https://feeds.bbci.co.uk/news/world/latin_america/rss.xml',n:'BBC LatAm'},
     {u:'https://rss.nytimes.com/services/xml/rss/nyt/World.xml',n:'NY Times'},
+    {u:'https://rss.nytimes.com/services/xml/rss/nyt/MiddleEast.xml',n:'NYT MidEast'},
+    {u:'https://rss.nytimes.com/services/xml/rss/nyt/Europe.xml',n:'NYT Europe'},
+    {u:'https://rss.nytimes.com/services/xml/rss/nyt/AsiaPacific.xml',n:'NYT Asia'},
     {u:'https://feeds.dw.com/rss/rss-en-all',n:'DW Germany'},
     {u:'https://www.france24.com/en/rss',n:'France24'},
     {u:'https://www.aljazeera.com/xml/rss/all.xml',n:'Al Jazeera'},
@@ -1221,11 +1256,19 @@ const RSS={
     {u:'https://www.abc.net.au/news/feed/51120/rss.xml',n:'ABC Australia'},
     {u:'https://timesofindia.indiatimes.com/rssfeeds/296589292.cms',n:'Times of India'},
     {u:'https://www.dawn.com/feeds/home/',n:'Dawn Pakistan'},
-    {u:'https://www.geo.tv/rss/1/2',n:'Geo News'},
     {u:'https://www.thehindu.com/news/international/feeder/default.rss',n:'The Hindu'},
     {u:'https://www.euronews.com/rss',n:'EuroNews'},
     {u:'https://www.rfi.fr/en/rss',n:'RFI France'},
-    {u:'https://www.swissinfo.ch/eng/rss',n:'SwissInfo'}
+    {u:'https://www.theguardian.com/world/rss',n:'Guardian World'},
+    {u:'https://www.independent.co.uk/news/world/rss',n:'The Independent'},
+    {u:'https://www.straitstimes.com/news/world/rss.xml',n:'Straits Times'},
+    {u:'https://www.scmp.com/rss/91/feed',n:'SCMP'},
+    {u:'https://japantoday.com/feed',n:'Japan Today'},
+    {u:'https://www.haaretz.com/cmlink/1.628765',n:'Haaretz'},
+    {u:'https://www.jpost.com/Rss/RssFeedsHeadlines.aspx',n:'Jerusalem Post'},
+    {u:'https://www.politico.eu/feed/',n:'Politico EU'},
+    {u:'https://theconversation.com/global/articles.atom',n:'The Conversation'},
+    {u:'https://foreignpolicy.com/feed/',n:'Foreign Policy'}
   ],
   technology:[
     {u:'https://techcrunch.com/feed/',n:'TechCrunch'},
@@ -1235,47 +1278,99 @@ const RSS={
     {u:'https://feeds.bbci.co.uk/news/technology/rss.xml',n:'BBC Tech'},
     {u:'https://www.zdnet.com/news/rss.xml',n:'ZDNet'},
     {u:'https://venturebeat.com/feed/',n:'VentureBeat'},
-    {u:'https://hnrss.org/frontpage',n:'Hacker News'}
+    {u:'https://hnrss.org/frontpage',n:'Hacker News'},
+    {u:'https://www.technologyreview.com/feed/',n:'MIT Tech Review'},
+    {u:'https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml',n:'NYT Tech'},
+    {u:'https://www.engadget.com/rss.xml',n:'Engadget'},
+    {u:'https://www.artificialintelligence-news.com/feed/',n:'AI News'},
+    {u:'https://syncedreview.com/feed/',n:'Synced AI'},
+    {u:'https://feeds.feedburner.com/TechCrunch/',n:'TC Alt'}
   ],
   business:[
-    {u:'https://feeds.a.dj.com/rss/WSJcomUSBusiness.xml',n:'WSJ'},
-    {u:'https://rss.nytimes.com/services/xml/rss/nyt/Business.xml',n:'NY Times'},
-    {u:'https://feeds.bbci.co.uk/news/business/rss.xml',n:'BBC Biz'},
+    {u:'https://feeds.a.dj.com/rss/WSJcomUSBusiness.xml',n:'WSJ Business'},
+    {u:'https://rss.nytimes.com/services/xml/rss/nyt/Business.xml',n:'NYT Business'},
+    {u:'https://feeds.bbci.co.uk/news/business/rss.xml',n:'BBC Business'},
     {u:'https://feeds.a.dj.com/rss/RSSMarketsMain.xml',n:'WSJ Markets'},
-    {u:'https://feeds.dw.com/rss/rss-en-bus',n:'DW Business'}
+    {u:'https://feeds.dw.com/rss/rss-en-bus',n:'DW Business'},
+    {u:'https://feeds.reuters.com/reuters/businessNews',n:'Reuters Business'},
+    {u:'https://feeds.marketwatch.com/marketwatch/topstories/',n:'MarketWatch'},
+    {u:'https://www.economist.com/business/rss.xml',n:'The Economist'},
+    {u:'https://rss.nytimes.com/services/xml/rss/nyt/Economy.xml',n:'NYT Economy'},
+    {u:'https://www.cnbc.com/id/10001147/device/rss/rss.html',n:'CNBC Economy'},
+    {u:'https://feeds.reuters.com/news/wealth',n:'Reuters Wealth'},
+    {u:'https://fortune.com/feed/',n:'Fortune'}
   ],
   science:[
-    {u:'https://rss.nytimes.com/services/xml/rss/nyt/Science.xml',n:'NY Times'},
-    {u:'https://feeds.bbci.co.uk/news/science_and_environment/rss.xml',n:'BBC'},
+    {u:'https://rss.nytimes.com/services/xml/rss/nyt/Science.xml',n:'NYT Science'},
+    {u:'https://feeds.bbci.co.uk/news/science_and_environment/rss.xml',n:'BBC Science'},
     {u:'https://www.sciencedaily.com/rss/top/science.xml',n:'ScienceDaily'},
     {u:'https://www.nature.com/nature.rss',n:'Nature'},
-    {u:'https://www.space.com/feeds/all',n:'Space.com'}
+    {u:'https://www.space.com/feeds/all',n:'Space.com'},
+    {u:'https://www.sciencealert.com/feed',n:'Science Alert'},
+    {u:'https://phys.org/rss-feed/breaking/',n:'Phys.org'},
+    {u:'https://feeds.newscientist.com/science-news',n:'New Scientist'},
+    {u:'https://www.livescience.com/feeds/all',n:'Live Science'},
+    {u:'https://feeds.reuters.com/reuters/scienceNews',n:'Reuters Science'},
+    {u:'https://www.nasa.gov/rss/dyn/breaking_news.rss',n:'NASA'},
+    {u:'https://rss.nytimes.com/services/xml/rss/nyt/Space.xml',n:'NYT Space'},
+    {u:'https://www.eurekalert.org/rss.xml',n:'EurekAlert'}
   ],
   health:[
     {u:'https://feeds.bbci.co.uk/news/health/rss.xml',n:'BBC Health'},
-    {u:'https://rss.nytimes.com/services/xml/rss/nyt/Health.xml',n:'NY Times'},
-    {u:'https://www.who.int/rss-feeds/news-english.xml',n:'WHO'}
+    {u:'https://rss.nytimes.com/services/xml/rss/nyt/Health.xml',n:'NYT Health'},
+    {u:'https://www.who.int/rss-feeds/news-english.xml',n:'WHO'},
+    {u:'https://feeds.reuters.com/reuters/healthNews',n:'Reuters Health'},
+    {u:'https://rss.cnn.com/rss/cnn_health.rss',n:'CNN Health'},
+    {u:'https://www.medicalnewstoday.com/rss/news',n:'Medical News Today'},
+    {u:'https://www.statnews.com/feed/',n:'STAT News'},
+    {u:'https://www.cidrap.umn.edu/news-perspective/rss.xml',n:'CIDRAP'},
+    {u:'https://outbreaksnewstoday.com/feed/',n:'Outbreak News'},
+    {u:'https://www.healio.com/rss/all',n:'Healio'},
+    {u:'https://www.nejm.org/action/showFeed?jc=nejm&type=etoc&feed=rss',n:'NEJM'}
   ],
   climate:[
-    {u:'https://feeds.bbci.co.uk/news/science_and_environment/rss.xml',n:'BBC'},
-    {u:'https://www.theguardian.com/environment/rss',n:'Guardian'},
+    {u:'https://feeds.bbci.co.uk/news/science_and_environment/rss.xml',n:'BBC Climate'},
+    {u:'https://www.theguardian.com/environment/rss',n:'Guardian Env'},
     {u:'https://rss.nytimes.com/services/xml/rss/nyt/Climate.xml',n:'NYT Climate'},
     {u:'https://grist.org/feed/',n:'Grist'},
-    {u:'https://insideclimatenews.org/feed/',n:'ICN'}
+    {u:'https://insideclimatenews.org/feed/',n:'ICN'},
+    {u:'https://www.carbonbrief.org/feed',n:'Carbon Brief'},
+    {u:'https://www.climatecentral.org/feed',n:'Climate Central'},
+    {u:'https://e360.yale.edu/feed',n:'Yale E360'},
+    {u:'https://www.reuters.com/sustainability/rss',n:'Reuters Climate'},
+    {u:'https://electrek.co/feed/',n:'Electrek'},
+    {u:'https://energymonitor.ai/feed/',n:'Energy Monitor'},
+    {u:'https://www.renewableenergyworld.com/feed/',n:'Renewable Energy'}
   ],
   politics:[
-    {u:'https://rss.nytimes.com/services/xml/rss/nyt/Politics.xml',n:'NY Times'},
-    {u:'https://feeds.bbci.co.uk/news/politics/rss.xml',n:'BBC'},
-    {u:'https://feeds.a.dj.com/rss/RSSOpinion.xml',n:'WSJ'},
+    {u:'https://rss.nytimes.com/services/xml/rss/nyt/Politics.xml',n:'NYT Politics'},
+    {u:'https://feeds.bbci.co.uk/news/politics/rss.xml',n:'BBC Politics'},
+    {u:'https://feeds.a.dj.com/rss/RSSOpinion.xml',n:'WSJ Opinion'},
     {u:'https://www.aljazeera.com/xml/rss/all.xml',n:'Al Jazeera'},
-    {u:'https://feeds.dw.com/rss/rss-en-world',n:'DW'}
+    {u:'https://feeds.dw.com/rss/rss-en-world',n:'DW World'},
+    {u:'https://feeds.reuters.com/Reuters/PoliticsNews',n:'Reuters Politics'},
+    {u:'https://www.washingtonpost.com/rss/politics',n:'WashPost Politics'},
+    {u:'https://www.politico.com/rss/politics08.xml',n:'Politico US'},
+    {u:'https://thehill.com/rss/syndicator/19110',n:'The Hill'},
+    {u:'https://www.axios.com/feeds/feed.rss',n:'Axios'},
+    {u:'https://foreignpolicy.com/feed/',n:'Foreign Policy'},
+    {u:'https://www.foreignaffairs.com/rss.xml',n:'Foreign Affairs'},
+    {u:'https://feeds.bbci.co.uk/news/uk/rss.xml',n:'BBC UK'},
+    {u:'https://www.politico.eu/feed/',n:'Politico EU'}
   ],
   sport:[
     {u:'https://www.espn.com/espn/rss/news',n:'ESPN'},
     {u:'https://feeds.bbci.co.uk/sport/rss.xml',n:'BBC Sport'},
     {u:'https://www.skysports.com/rss/12040',n:'Sky Sports'},
     {u:'https://e00-marca.uecdn.es/rss/en/football.xml',n:'Marca'},
-    {u:'https://www.goal.com/en/feeds/news',n:'Goal.com'}
+    {u:'https://www.goal.com/en/feeds/news',n:'Goal.com'},
+    {u:'https://feeds.reuters.com/reuters/sportsNews',n:'Reuters Sport'},
+    {u:'https://rss.nytimes.com/services/xml/rss/nyt/Sports.xml',n:'NYT Sports'},
+    {u:'https://www.cbssports.com/rss/headlines/',n:'CBS Sports'},
+    {u:'https://feeds.feedburner.com/sportsillustrated/topheadlines',n:'Sports Illustrated'},
+    {u:'https://www.formula1.com/content/fom-website/en/latest/all.xml',n:'Formula 1'},
+    {u:'https://www.atptour.com/en/media/rss-feed/xml-feed',n:'ATP Tennis'},
+    {u:'https://www.skysports.com/rss/0,20514,12040,00.xml',n:'Sky Football'}
   ]
 };
 
@@ -1333,7 +1428,7 @@ async function fetchNews(cat){
   document.getElementById('newsList').innerHTML='<div class="ldr"><div class="ldr-owl">🦉</div><div class="ldr-txt">SCANNING GLOBE</div></div>';
   document.getElementById('feedLabel').textContent=cat.toUpperCase()+' FEED';
   const secs=GSECS[cat]||['world'];
-  const rssList=(RSS[cat]||RSS.world).slice().sort(()=>Math.random()-0.5).slice(0,8);
+  const rssList=(RSS[cat]||RSS.world).slice().sort(()=>Math.random()-0.5).slice(0,12);
   const results=await Promise.allSettled([
     ...secs.map(s=>fetchGuardian(s)),
     ...rssList.map(f=>fetchRSS(f))
@@ -1362,6 +1457,7 @@ async function fetchNews(cat){
     const sl=document.getElementById('tsRange');
     if(sl){sl.value=47;tsUpdate(47);}
     scheduleDpPopups(allArts);
+    var ip=document.getElementById('p-intel'); if(ip&&ip.classList.contains('active')) buildIntelligence();
   },150);
 }
 
@@ -1521,6 +1617,7 @@ function openModal(a){
       el.onclick=()=>{ const x=allArts.find(a=>a.url===url); if(x)openModal(x); };
     });
   } else { relEl.innerHTML=''; }
+  try{trackCatRead(curQ||'world');}catch(e){}
   document.getElementById('modal').classList.add('on');
   document.querySelector('.mbox').scrollTop=0;
   document.querySelectorAll('.ncard').forEach(c=>{if(c.dataset.url===a.url)c.classList.add('read');});
@@ -1754,13 +1851,23 @@ auth.onAuthStateChanged(user=>{
 // ══════════════════════════════════════════
 // INIT
 // ══════════════════════════════════════════
+function initMap(){
+  try{
+    map=L.map('map',{zoomControl:false,preferCanvas:true}).setView([20,10],2);
+    L.control.zoom({position:'bottomright'}).addTo(map);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{maxZoom:19,attribution:'©CARTO'}).addTo(map);
+    relLayer=L.layerGroup().addTo(map);
+  }catch(e){console.warn('Map init:',e);}
+}
 window.addEventListener('load',()=>{
+  initMap();
   updateSBadge(); renderAlertTags(); highlightFavCats();
+  // Guaranteed splash close regardless of errors
   setTimeout(()=>{
     const s=document.getElementById('splash');
-    if(s){s.classList.add('hide');setTimeout(()=>s.remove(),600);}
+    if(s){s.classList.add('hide');setTimeout(()=>{try{s.remove();}catch(e){}},600);}
   },1800);
-  fetchNews('world');
+  try{fetchNews('world');}catch(e){console.error('fetchNews:',e);}
   [200,500,1000,2000,2500].forEach(t=>setTimeout(()=>fixMap(),t));
 });
 window.addEventListener('resize',()=>fixMap());
@@ -1964,7 +2071,7 @@ function generateBrief(){
 // ════════════════════════════════════════
 // AGENT RANK
 // ════════════════════════════════════════
-function trackCatRead(cat){try{const c=JSON.parse(localStorage.getItem('owls_cat_reads')||'{}');c[cat]=(c[cat]||0)+1;localStorage.setItem('owls_cat_reads',JSON.stringify(c));}catch(e){}}
+
 function getTopCat(){try{const c=JSON.parse(localStorage.getItem('owls_cat_reads')||'{}');let t='world',n=0;Object.entries(c).forEach(([k,v])=>{if(v>n){t=k;n=v;}});return t;}catch{return'world';}}
 function getExpertise(){try{const c=JSON.parse(localStorage.getItem('owls_cat_reads')||'{}');const tot=Object.values(c).reduce((a,b)=>a+b,0)||1;return Object.entries(c).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([k,n])=>({cat:k,pct:Math.round(n/tot*100)}));}catch{return[];}}
 function getAgentData(){
@@ -1979,7 +2086,7 @@ function getAgentData(){
 // OVERRIDE doStab — add portfolio
 // ════════════════════════════════════════
 function doStab(name){
-  const names=['feed','saved','analytics','profile','portfolio','b2b','alerts'];
+  const names=['feed','intel','saved','analytics','profile','portfolio','b2b','alerts'];
   document.querySelectorAll('.stab').forEach((t,i)=>t.classList.toggle('active',names[i]===name));
   document.querySelectorAll('.spanel').forEach(p=>p.classList.remove('active'));
   const panel=document.getElementById('p-'+name);if(panel)panel.classList.add('active');
@@ -1987,6 +2094,7 @@ function doStab(name){
   if(name==='profile')renderProfile();
   if(name==='alerts')renderAlertTags();
   if(name==='portfolio'){renderPortfolio();generateBrief();}
+  if(name==='intel') buildIntelligence();
 }
 
 // ════════════════════════════════════════
@@ -2267,31 +2375,11 @@ document.getElementById('proModal')?.addEventListener('click', e => {
   if (e.target === e.currentTarget) closeProModal();
 });
 
-function proPayStripe() {
-  // Replace with your actual Stripe Payment Link
-  // Create at: dashboard.stripe.com → Payment Links → Create
-  // You get paid directly to your bank account
-  const STRIPE_LINK = 'https://buy.stripe.com/your_link_here';
-  showToast('💳', 'Stripe', 'Redirecting to secure payment...', null);
-  setTimeout(() => window.open(STRIPE_LINK, '_blank'), 800);
-  closeProModal();
-}
 
-function proPaySubstack() {
-  // Replace with your Substack publication URL
-  // You get paid via Stripe through Substack (Substack takes 10%)
-  const SUBSTACK_LINK = 'https://your-publication.substack.com/subscribe';
-  window.open(SUBSTACK_LINK, '_blank');
-  closeProModal();
-}
 
-function proPayCrypto() {
-  // Your USDT wallet address (TRC20 - Tron network, cheapest fees)
-  const WALLET = 'YOUR_USDT_TRC20_WALLET_ADDRESS';
-  const msg = `Send $5 USDT (TRC20) to:\n\n${WALLET}\n\nThen email your transaction ID to owls@yourdomain.com to activate Pro.`;
-  alert(msg);
-  closeProModal();
-}
+
+
+
 
 function activatePro() {
   isPro = true;
@@ -2589,38 +2677,309 @@ function b2bSubmit() {
 // ════════════════════════════════════════════════
 // SUPPORT MODAL
 // ════════════════════════════════════════════════
-function openSupportModal() {
-  document.getElementById('supportModal').classList.add('active');
-}
-function closeSupportModal() {
-  document.getElementById('supportModal').classList.remove('active');
-  // Hide all wallet displays
-  document.querySelectorAll('.wallet-display').forEach(w => w.classList.remove('show'));
-}
-function showWallet(type) {
-  // Toggle
-  const el = document.getElementById('wallet-' + type);
+
+
+
+
+// ═══════════════════════════════════════════════════════════════
+// PERSONALIZED INTELLIGENCE ENGINE
+// ═══════════════════════════════════════════════════════════════
+
+const INTEL_CATS = {
+  business: {
+    icon:'📈', label:'FINANCIAL INTELLIGENCE',
+    keywords:['market','bank','economy','trade','stock','gdp','inflation','fed','ecb','rate','dollar','euro','yuan','debt','bond','recession','earnings','revenue','profit','loss','merger','acquisition','ipo','startup','venture'],
+    analysis(arts, crits, locs) {
+      const pct = crits.length ? Math.min(92, Math.round(crits.length/arts.length*100)+40) : 20;
+      const risk = pct > 60 ? 'ELEVATED' : pct > 35 ? 'MODERATE' : 'NORMAL';
+      const hotLoc = locs[0] || 'Global';
+      return {
+        summary: arts.length + ' financial stories tracked. ' + crits.length + ' critical events. Primary pressure: ' + hotLoc + '.',
+        metrics: [
+          {l:'Market Risk', v: risk},
+          {l:'Critical Events', v: crits.length + ' active'},
+          {l:'Safe Havens', v:'USD · Gold · CHF'},
+          {l:'Regions', v: locs.slice(0,2).join(' · ') || 'Global'},
+        ],
+        scenarios:[
+          {p:'HIGH', cls:'high', label:'Base Case', text:'Continued volatility in affected markets. Defensive positioning recommended in exposed sectors. Watch central bank commentary.'},
+          {p:'MED',  cls:'med',  label:'Escalation', text:'If tensions persist beyond 72h, expect 3-8% correction in regional equities and capital flight to safe-haven assets.'},
+          {p:'LOW',  cls:'low',  label:'Resolution', text:'Diplomatic resolution could trigger sharp recovery rally. Monitor for coordinated policy response signals.'},
+        ]
+      };
+    }
+  },
+  politics: {
+    icon:'🏛️', label:'POLITICAL INTELLIGENCE',
+    keywords:['government','minister','election','vote','party','congress','parliament','president','prime minister','senate','diplomacy','treaty','sanctions','nato','un','g7','g20','bilateral','foreign policy','administration','opposition','coalition'],
+    analysis(arts, crits, locs) {
+      const instability = crits.length > 6 ? 'CRITICAL' : crits.length > 3 ? 'ELEVATED' : 'STABLE';
+      return {
+        summary: arts.length + ' political developments tracked across ' + locs.length + ' regions.',
+        metrics:[
+          {l:'Instability Index', v: instability},
+          {l:'Hot Zones', v: locs.slice(0,2).join(' · ') || 'Global'},
+          {l:'Election Watch', v: arts.filter(a=>a.title.toLowerCase().includes('election')).length + ' stories'},
+          {l:'Sanctions', v: arts.filter(a=>a.title.toLowerCase().includes('sanction')).length + ' active'},
+        ],
+        scenarios:[
+          {p:'HIGH', cls:'high', label:'Status Quo', text:'Existing political dynamics hold. Incremental policy shifts expected within current legislative session.'},
+          {p:'MED',  cls:'med',  label:'Realignment', text:'Coalition pressure may force significant policy pivots or early elections in affected regions.'},
+          {p:'LOW',  cls:'low',  label:'Crisis', text:'Escalation to constitutional crisis or snap elections if current trajectory continues unchecked.'},
+        ]
+      };
+    }
+  },
+  technology: {
+    icon:'💻', label:'TECHNOLOGY INTELLIGENCE',
+    keywords:['ai','artificial intelligence','tech','software','cyber','data','digital','apple','google','microsoft','meta','openai','nvidia','chip','semiconductor','quantum','startup','algorithm','privacy','regulation','hack','breach','cloud','robot'],
+    analysis(arts, crits, locs) {
+      const aiCount = arts.filter(a=>(a.title+' '+(a.trail||'')).toLowerCase().match(/\bai\b|artificial intelligence|machine learning|large language/)).length;
+      const cyberCount = arts.filter(a=>(a.title+' '+(a.trail||'')).toLowerCase().match(/hack|breach|cyber|malware|ransomware/)).length;
+      return {
+        summary: arts.length + ' tech stories. AI: ' + aiCount + ' stories. Cyber incidents: ' + cyberCount + '.',
+        metrics:[
+          {l:'AI Signal', v: aiCount + ' stories'},
+          {l:'Cyber Risk', v: cyberCount > 2 ? 'ACTIVE' : 'LATENT'},
+          {l:'Regulatory', v: arts.filter(a=>a.title.toLowerCase().includes('regulat')||a.title.toLowerCase().includes('law')).length + ' stories'},
+          {l:'Heat', v: crits.length > 3 ? 'HIGH' : 'MODERATE'},
+        ],
+        scenarios:[
+          {p:'HIGH', cls:'high', label:'Regulatory Wave', text:'Expect increased AI/platform regulation from EU and US. Compliance costs will reshape competitive landscape.'},
+          {p:'MED',  cls:'med',  label:'Sector Disruption', text:'AI commoditization accelerates. Smaller players face existential pressure from hyperscaler competition.'},
+          {p:'LOW',  cls:'low',  label:'Cyber Event', text:'State-sponsored cyber operations may escalate targeting critical infrastructure and financial systems.'},
+        ]
+      };
+    }
+  },
+  health: {
+    icon:'❤️', label:'HEALTH INTELLIGENCE',
+    keywords:['health','virus','disease','hospital','who','vaccine','covid','pandemic','outbreak','drug','medicine','clinical','trial','cancer','diabetes','mental health','epidemic','pathogen','cdc','fda','ema','pharmaceutical','biotech'],
+    analysis(arts, crits, locs) {
+      const outbreakRisk = crits.length > 4 ? 'ELEVATED' : crits.length > 1 ? 'WATCH' : 'NORMAL';
+      return {
+        summary: arts.length + ' health events monitored. ' + crits.length + ' require immediate attention across ' + locs.length + ' regions.',
+        metrics:[
+          {l:'Outbreak Risk', v: outbreakRisk},
+          {l:'Regions Affected', v: locs.length + ' areas'},
+          {l:'WHO Alert', v: crits.length > 5 ? 'WATCH' : 'NORMAL'},
+          {l:'Vaccine News', v: arts.filter(a=>a.title.toLowerCase().includes('vaccine')).length + ' stories'},
+        ],
+        scenarios:[
+          {p:'HIGH', cls:'high', label:'Containment', text:'Current events appear regionally contained. Standard surveillance and monitoring protocols sufficient.'},
+          {p:'MED',  cls:'med',  label:'Spread Risk', text:'Cross-border transmission possible if reported in 3+ countries simultaneously. Enhanced monitoring warranted.'},
+          {p:'LOW',  cls:'low',  label:'Outbreak', text:'Pandemic-level event unlikely but supply chain contingency planning for medical equipment advised.'},
+        ]
+      };
+    }
+  },
+  climate: {
+    icon:'🌿', label:'CLIMATE INTELLIGENCE',
+    keywords:['climate','weather','carbon','emission','flood','drought','wildfire','fire','hurricane','tornado','temperature','global warming','renewable','solar','wind','energy','fossil fuel','oil','gas','cop','net zero','deforestation','biodiversity'],
+    analysis(arts, crits, locs) {
+      const extremeEvents = crits.filter(a=>(a.title+' '+(a.trail||'')).toLowerCase().match(/flood|fire|hurricane|drought|storm|tornado/)).length;
+      return {
+        summary: arts.length + ' climate/environment stories. ' + extremeEvents + ' extreme weather events detected.',
+        metrics:[
+          {l:'Extreme Events', v: extremeEvents + ' critical'},
+          {l:'Primary Risk', v: 'Food & Energy'},
+          {l:'Impact Zones', v: locs.slice(0,2).join(' · ') || 'Multiple'},
+          {l:'Policy Watch', v: arts.filter(a=>a.title.toLowerCase().includes('cop')||a.title.toLowerCase().includes('emission')).length + ' stories'},
+        ],
+        scenarios:[
+          {p:'HIGH', cls:'high', label:'Policy Response', text:'COP commitments under renewed pressure. Expect unilateral carbon border measures from EU within next quarter.'},
+          {p:'MED',  cls:'med',  label:'Supply Chain Impact', text:'Extreme weather in key agricultural regions threatens food price stability and energy supply continuity.'},
+          {p:'LOW',  cls:'low',  label:'Compound Crisis', text:'Simultaneous multi-region climate events could overwhelm international disaster response capacity.'},
+        ]
+      };
+    }
+  },
+  science: {
+    icon:'🔬', label:'SCIENCE INTELLIGENCE',
+    keywords:['research','scientist','discovery','study','nasa','space','quantum','gene','dna','genome','physics','biology','chemistry','astronomy','telescope','particle','cern','breakthrough','publication','journal','nature','science','experiment'],
+    analysis(arts, crits, locs) {
+      const spaceCount = arts.filter(a=>(a.title+' '+(a.trail||'')).toLowerCase().match(/space|nasa|moon|mars|satellite|rocket|orbit/)).length;
+      const bioCount = arts.filter(a=>(a.title+' '+(a.trail||'')).toLowerCase().match(/gene|genome|dna|crispr|protein|biology/)).length;
+      return {
+        summary: arts.length + ' scientific developments tracked. Space: ' + spaceCount + '. Biotech: ' + bioCount + '.',
+        metrics:[
+          {l:'Space Missions', v: spaceCount + ' stories'},
+          {l:'Biotech', v: bioCount + ' stories'},
+          {l:'Research Heat', v: crits.length > 2 ? 'HIGH' : 'NORMAL'},
+          {l:'Sectors', v:'Bio · Space · Physics'},
+        ],
+        scenarios:[
+          {p:'HIGH', cls:'high', label:'Breakthrough Adoption', text:'Published findings likely to enter clinical or commercial pipeline within 18-24 months.'},
+          {p:'MED',  cls:'med',  label:'Funding Realignment', text:'Government science budgets shifting toward strategic technologies — AI, quantum computing, biodefense.'},
+          {p:'LOW',  cls:'low',  label:'Paradigm Shift', text:'Major paradigm-shifting discovery possible given current research intensity in convergence areas.'},
+        ]
+      };
+    }
+  },
+  sport: {
+    icon:'⚽', label:'SPORTS INTELLIGENCE',
+    keywords:['football','soccer','basketball','tennis','golf','olympic','nba','nfl','premier league','champions league','transfer','world cup','formula','formula 1','cricket','rugby','athletics','swimming','cycling','boxing'],
+    analysis(arts, crits, locs) {
+      return {
+        summary: arts.length + ' sports stories globally. Major competitions and transfers dominate coverage.',
+        metrics:[
+          {l:'Top Coverage', v: locs.slice(0,2).join(' · ') || 'Global'},
+          {l:'Transfer News', v: arts.filter(a=>a.title.toLowerCase().includes('transfer')||a.title.toLowerCase().includes('sign')).length + ' stories'},
+          {l:'Heat', v: crits.length > 2 ? 'HIGH' : 'NORMAL'},
+          {l:'Sources', v: new Set(arts.map(a=>a.source)).size + ' outlets'},
+        ],
+        scenarios:[
+          {p:'HIGH', cls:'high', label:'Transfer Window', text:'Summer/winter window activity intensifies. Expect major signings to dominate sports news cycle.'},
+          {p:'MED',  cls:'med',  label:'Upset Results', text:'High-stakes fixtures approaching. Form guide suggests potential for significant upsets in top competitions.'},
+          {p:'LOW',  cls:'low',  label:'Governance Issue', text:'Ongoing federation investigations could disrupt competition calendars and player eligibility.'},
+        ]
+      };
+    }
+  },
+  world: {
+    icon:'🌍', label:'GLOBAL INTELLIGENCE',
+    keywords:['war','conflict','peace','attack','military','troops','border','refugee','crisis','nato','un','ceasefire','drone','missile','sanction','diplomacy','terrorist','hostage','protest','coup'],
+    analysis(arts, crits, locs) {
+      const warCount = crits.filter(a=>(a.title+' '+(a.trail||'')).toLowerCase().match(/war|attack|strike|missile|troops|military|conflict/)).length;
+      const crisisIdx = Math.min(100, crits.length * 8);
+      return {
+        summary: arts.length + ' world events analyzed. ' + crits.length + ' critical situations. War/conflict: ' + warCount + ' active.',
+        metrics:[
+          {l:'Crisis Index', v: crisisIdx + '/100'},
+          {l:'Hot Zones', v: locs.slice(0,3).join(' · ') || 'Multiple'},
+          {l:'Alert Level', v: crits.length > 8 ? 'CRITICAL' : crits.length > 4 ? 'HIGH' : 'MODERATE'},
+          {l:'Conflict Events', v: warCount + ' active'},
+        ],
+        scenarios:[
+          {p:'HIGH', cls:'high', label:'Diplomatic Pressure', text:'Multilateral negotiations ongoing. Expect statements from major powers within 48-72 hours.'},
+          {p:'MED',  cls:'med',  label:'Proxy Escalation', text:'Regional conflicts may draw in external actors. Monitor shifts in arms supply and logistical support.'},
+          {p:'LOW',  cls:'low',  label:'Global Crisis', text:'Simultaneous multi-region crises could overwhelm international response and coordination mechanisms.'},
+        ]
+      };
+    }
+  }
+};
+
+function buildIntelligence() {
+  var el = document.getElementById('intelContent');
   if (!el) return;
-  const isOpen = el.classList.contains('show');
-  document.querySelectorAll('.wallet-display').forEach(w => w.classList.remove('show'));
-  if (!isOpen) el.classList.add('show');
-}
-function copyWallet(el) {
-  const text = el.textContent.trim();
-  navigator.clipboard.writeText(text).then(() => {
-    const orig = el.textContent;
-    el.textContent = '✓ Kopyalandı!';
-    el.style.color = 'var(--green)';
-    setTimeout(() => { el.textContent = orig; el.style.color = ''; }, 2000);
-  }).catch(() => {
-    // Fallback
-    const ta = document.createElement('textarea');
-    ta.value = text; document.body.appendChild(ta);
-    ta.select(); document.execCommand('copy');
-    document.body.removeChild(ta);
-    el.style.color = 'var(--green)';
-    setTimeout(() => el.style.color = '', 2000);
+  if (!allArts || !allArts.length) {
+    el.innerHTML = '<div class="intel-empty"><div class="intel-empty-icon">🧠</div><div class="intel-empty-text">Load news first</div><div class="intel-empty-sub">Switch to Feed tab and wait for news to load.</div></div>';
+    return;
+  }
+
+  // Get top read categories
+  var catReads = {};
+  try { catReads = JSON.parse(localStorage.getItem('owls_cat_reads') || '{}'); } catch(e) {}
+  var topCats = Object.entries(catReads).sort(function(a,b){return b[1]-a[1];}).slice(0,3).map(function(x){return x[0];});
+  if (topCats.indexOf(curQ) < 0) topCats.unshift(curQ);
+  // Always show current + top 3 user categories, deduplicated
+  var showCats = [];
+  topCats.forEach(function(c){ if(showCats.indexOf(c)<0) showCats.push(c); });
+  if (showCats.length < 2) {
+    // Add defaults
+    ['world','business','technology'].forEach(function(c){ if(showCats.indexOf(c)<0 && showCats.length<4) showCats.push(c); });
+  }
+
+  var html = '';
+  showCats.forEach(function(cat) {
+    var tmpl = INTEL_CATS[cat] || INTEL_CATS.world;
+    // Filter articles by category keywords (lenient - always show something)
+    var catArts = allArts.filter(function(a) {
+      var t = (a.title + ' ' + (a.trail||'')).toLowerCase();
+      return tmpl.keywords.some(function(kw){ return t.indexOf(kw) >= 0; });
+    });
+    // Always show analysis - use matched arts or fall back to all arts
+    var srcArts = catArts.length >= 2 ? catArts : allArts;
+    var crits = srcArts.filter(function(a){ return a._s && a._s.level === 'CRITICAL'; });
+    var locs = [];
+    srcArts.forEach(function(a){ if(a._loc && locs.indexOf(a._loc)<0) locs.push(a._loc); });
+    locs = locs.slice(0,5);
+
+    var data = tmpl.analysis(srcArts, crits, locs);
+
+    // Metrics HTML
+    var metricsHtml = data.metrics ? '<div style="display:flex;flex-wrap:wrap;margin-top:9px;">' +
+      data.metrics.map(function(m) {
+        return '<span class="intel-metric"><span class="intel-metric-label">' + m.l + '</span>&nbsp;<span class="intel-metric-val">' + m.v + '</span></span>';
+      }).join('') + '</div>' : '';
+
+    // Scenarios HTML
+    var scenariosHtml = data.scenarios.map(function(s) {
+      return '<div class="intel-scenario">' +
+        '<div class="intel-prob ' + s.cls + '">' + s.p + '</div>' +
+        '<div class="intel-scenario-body"><div class="intel-scenario-label">' + s.label + '</div>' +
+        '<div class="intel-scenario-text">' + s.text + '</div></div></div>';
+    }).join('');
+
+    // Top 3 news items
+    var newsHtml = srcArts.slice(0,3).map(function(a) {
+      var safeUrl = encodeURIComponent(a.url);
+      return '<div class="intel-news-item" data-iurl="' + safeUrl + '">' +
+        '<div class="intel-news-src">' + a.source + ' · ' + (a._loc||'') + ' · <span style="color:' + (a._s?a._s.color:'var(--accent)') + '">' + (a._s?a._s.level:'') + '</span></div>' +
+        '<div class="intel-news-title">' + a.title + '</div></div>';
+    }).join('');
+
+    html += '<div class="intel-section">' +
+      '<div class="intel-section-title">' + tmpl.icon + ' ' + tmpl.label + '</div>' +
+      // Assessment card
+      '<div class="intel-card">' +
+        '<div class="intel-card-cat">SITUATION ASSESSMENT</div>' +
+        '<div class="intel-card-body">' + data.summary + '</div>' +
+        metricsHtml +
+      '</div>' +
+      // Scenarios card
+      '<div class="intel-card">' +
+        '<div class="intel-card-cat">SCENARIO ANALYSIS</div>' +
+        scenariosHtml +
+      '</div>' +
+      // Related news
+      (newsHtml ? '<div class="intel-card"><div class="intel-card-cat">RELATED STORIES</div>' + newsHtml + '</div>' : '') +
+    '</div>';
   });
+
+  el.innerHTML = html || '<div class="intel-empty"><div class="intel-empty-icon">📖</div><div class="intel-empty-sub">Read articles across different categories to build your intelligence profile.</div></div>';
+
+  // Bind news item clicks using data attributes (no inline onclick)
+  el.querySelectorAll('.intel-news-item[data-iurl]').forEach(function(item) {
+    item.addEventListener('click', function() {
+      var url = decodeURIComponent(this.dataset.iurl);
+      var art = allArts.find(function(x){ return x.url === url; });
+      if (art) openModal(art);
+    });
+  });
+}
+
+// Track category reads
+function trackCatRead(cat) {
+  try {
+    var c = JSON.parse(localStorage.getItem('owls_cat_reads') || '{}');
+    c[cat] = (c[cat] || 0) + 1;
+    localStorage.setItem('owls_cat_reads', JSON.stringify(c));
+  } catch(e) {}
+}
+
+// BTC payment (only payment option)
+function proPayBTC() {
+  var WALLET = 'YOUR_BTC_ADDRESS_HERE';
+  var EMAIL = 'your@email.com';
+  var d = document.createElement('div');
+  d.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:99999;display:flex;align-items:center;justify-content:center;';
+  d.innerHTML = '<div style="background:var(--card);border:1px solid #f7931a;border-radius:16px;padding:24px;max-width:380px;width:90%;text-align:center;">' +
+    '<div style="font-size:36px;margin-bottom:8px">&#8383;</div>' +
+    '<div style="font-size:16px;font-weight:800;color:var(--text);margin-bottom:4px">Bitcoin Payment</div>' +
+    '<div style="font-size:11px;color:var(--text3);margin-bottom:16px">Send $5 worth of BTC to activate OWLS Pro</div>' +
+    '<div id="btcAddr" style="background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:10px;font-family:\'Space Mono\',monospace;font-size:10px;color:var(--text);word-break:break-all;cursor:pointer;margin-bottom:12px;">' + WALLET + '</div>' +
+    '<div style="font-size:10px;color:var(--text3);margin-bottom:16px">Click address to copy &middot; Email transaction ID to: <strong>' + EMAIL + '</strong></div>' +
+    '<button id="btcClose" style="background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:9px 20px;cursor:pointer;font-weight:700;color:var(--text2);">Close</button>' +
+    '</div>';
+  document.body.appendChild(d);
+  d.querySelector('#btcAddr').addEventListener('click', function() {
+    navigator.clipboard.writeText(WALLET).then(function(){ d.querySelector('#btcAddr').style.color='var(--green)'; }).catch(function(){});
+  });
+  d.querySelector('#btcClose').addEventListener('click', function(){ d.remove(); });
+  d.addEventListener('click', function(e){ if(e.target===d) d.remove(); });
+  closeProModal();
 }
 
 </script>
@@ -2699,9 +3058,8 @@ function copyWallet(el) {
         <div class="pro-feat"><div class="pro-feat-check">✓</div>Priority breaking alerts via email</div>
       </div>
       <div class="pro-payment-opts">
-        <button class="pro-pay-btn pro-pay-stripe" onclick="proPayStripe()">💳 Pay with Card (Stripe)</button>
-        <button class="pro-pay-btn pro-pay-sub" onclick="proPaySubstack()">📬 Subscribe via Substack</button>
-        <button class="pro-pay-btn pro-pay-crypto" onclick="proPayCrypto()">🔐 Pay with Crypto (USDT)</button>
+        <button style="background:#f7931a;color:#fff;border:none;border-radius:10px;padding:13px;font-size:13px;font-weight:800;cursor:pointer;font-family:'Syne',sans-serif;width:100%;display:flex;align-items:center;justify-content:center;gap:8px;" onclick="proPayBTC()">₿ Pay with Bitcoin</button>
+        <button style="background:var(--bg3);color:var(--text2);border:1px solid var(--border2);border-radius:10px;padding:10px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Syne',sans-serif;width:100%;" onclick="closeProModal()">Maybe later</button>
       </div>
       <div class="pro-cancel" onclick="closeProModal()">Maybe later — stay on free plan</div>
     </div>
@@ -2711,85 +3069,6 @@ function copyWallet(el) {
 <!-- DOPAMINE POPUP CONTAINER -->
 <div id="dpContainer"></div>
 
-<!-- SUPPORT FLOAT -->
-<div class="support-float">
-  <button class="support-float-btn" onclick="openSupportModal()">☕ Destek Ol</button>
-</div>
 
-<!-- SUPPORT MODAL -->
-<div class="support-modal" id="supportModal" onclick="if(event.target===this)closeSupportModal()">
-  <div class="support-box">
-    <div class="support-hero">
-      <span class="support-hero-icon">🦉</span>
-      <div class="support-hero-title">OWLS'u Destekle</div>
-      <div class="support-hero-sub">Bağımsız bir proje · Her destek büyük fark yaratır</div>
-    </div>
-    <div class="support-body">
-
-      <!-- USDT Binance -->
-      <div class="support-opt" onclick="showWallet('usdt')">
-        <div class="support-opt-icon">💛</div>
-        <div>
-          <div class="support-opt-label">USDT (Binance Pay)</div>
-          <div class="support-opt-sub">TRC20 · En düşük komisyon · Anında</div>
-        </div>
-        <div class="support-opt-badge">ÖNERİLEN</div>
-      </div>
-      <div class="wallet-display" id="wallet-usdt">
-        <div class="wallet-network">⚡ USDT — TRC20 AĞINDAN GÖNDER</div>
-        <div class="wallet-addr" onclick="copyWallet(this)" id="addr-usdt">
-          YOUR_TRC20_USDT_ADDRESS_HERE
-        </div>
-        <div class="wallet-copy-hint">👆 Adrese tıkla → kopyala → Binance'ten gönder</div>
-      </div>
-
-      <!-- BTC -->
-      <div class="support-opt" onclick="showWallet('btc')">
-        <div class="support-opt-icon">₿</div>
-        <div>
-          <div class="support-opt-label">Bitcoin (BTC)</div>
-          <div class="support-opt-sub">Native SegWit (bc1) · Güvenli</div>
-        </div>
-      </div>
-      <div class="wallet-display" id="wallet-btc">
-        <div class="wallet-network">₿ BITCOIN — NATIVE SEGWIT (bc1)</div>
-        <div class="wallet-addr" onclick="copyWallet(this)" id="addr-btc">
-          YOUR_BTC_ADDRESS_HERE
-        </div>
-        <div class="wallet-copy-hint">👆 Adrese tıkla → kopyala → gönder</div>
-      </div>
-
-      <!-- Wise / IBAN -->
-      <div class="support-opt" onclick="showWallet('wise')">
-        <div class="support-opt-icon">🏦</div>
-        <div>
-          <div class="support-opt-label">Wise / IBAN (Banka Transferi)</div>
-          <div class="support-opt-sub">USD · EUR · GBP kabul edilir</div>
-        </div>
-      </div>
-      <div class="wallet-display" id="wallet-wise">
-        <div class="wallet-network">🏦 WISE — BANKA BİLGİLERİ</div>
-        <div class="wallet-addr" onclick="copyWallet(this)" id="addr-wise">
-          Ad: YOUR NAME
-IBAN: YOUR WISE IBAN
-BIC: TRWIBEB1XXX
-Banka: Wise (TransferWise)
-        </div>
-        <div class="wallet-copy-hint">👆 Bilgilere tıkla → kopyala → bankan üzerinden gönder</div>
-      </div>
-
-      <!-- Patreon -->
-      <div class="support-opt" onclick="window.open('https://patreon.com/YOUR_PATREON','_blank');closeSupportModal()">
-        <div class="support-opt-icon">🎖️</div>
-        <div>
-          <div class="support-opt-label">Patreon — Aylık Üyelik</div>
-          <div class="support-opt-sub">Kart ile · Aylık iptal edilebilir</div>
-        </div>
-      </div>
-
-      <div class="support-cancel" onclick="closeSupportModal()">Şimdi değil</div>
-    </div>
-  </div>
-</div>
 </body>
 </html>
