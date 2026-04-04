@@ -1230,9 +1230,39 @@ function getCoords(text){
 // ══════════════════════════════════════════
 const GKEY='0a321643-aaab-4c6a-9185-1762685abe3d';
 const GSECS={
-  world:['world','world/europe-news','world/americas','world/asia-pacific','world/middle-east','world/africa'],
-  technology:['technology'],business:['business','money'],science:['science'],
-  health:['society'],climate:['environment'],politics:['politics','us-news','uk-news'],sport:['sport','football']
+  world:[
+    'world','world/europe-news','world/americas','world/asia-pacific',
+    'world/middle-east','world/africa','world/australia-news',
+    'us-news','uk-news','global-development'
+  ],
+  technology:[
+    'technology','science/computing','media/social-media',
+    'business/technology','business/artificialintelligenceai'
+  ],
+  business:[
+    'business','money','business/economics','business/stock-markets',
+    'business/financial-sector','business/banking','business/retail'
+  ],
+  science:[
+    'science','science/space','science/medical-research',
+    'science/chemistry','science/biology','science/physics'
+  ],
+  health:[
+    'society/health','science/medical-research',
+    'society','science/neuroscience','lifeandstyle/health-and-wellbeing'
+  ],
+  climate:[
+    'environment','environment/climate-change','environment/energy',
+    'environment/wildlife','environment/forests','environment/food'
+  ],
+  politics:[
+    'politics','us-news/us-politics','uk-news',
+    'world/europe-news','world/middleeast','global-development/global-development'
+  ],
+  sport:[
+    'sport','football','sport/tennis','sport/formula1',
+    'sport/cricket','sport/basketball','sport/golf'
+  ]
 };
 const RSS={
   world:[
@@ -1383,44 +1413,104 @@ async function tFetch(url,ms=5000){
 
 async function fetchGuardian(sec){
   try{
-    const r=await tFetch(`https://content.guardianapis.com/${sec}?api-key=${GKEY}&page-size=15&show-fields=thumbnail,trailText`,5000);
+    const r=await tFetch(`https://content.guardianapis.com/${sec}?api-key=${GKEY}&page-size=50&show-fields=thumbnail,trailText,publication,starRating`,6000);
     const d=await r.json();
     return(d.response?.results||[]).map(a=>({
-      title:a.webTitle,url:a.webUrl,source:'The Guardian',
+      title:a.webTitle,url:a.webUrl,
+      source:a.fields?.publication||'The Guardian',
       date:a.webPublicationDate,thumb:a.fields?.thumbnail||null,
       trail:(a.fields?.trailText||'').replace(/<[^>]*>/gm,'')
     }));
   }catch{return[];}
 }
 
-async function fetchRSS(feed){
+// GNews API - free tier, CORS-friendly, 100 req/day
+// Get your free key at: gnews.io → Sign up → Copy API key
+// Replace 'GNEWS_KEY_HERE' with your key
+const GNEWS_KEY='GNEWS_KEY_HERE';
+async function fetchNewsData(cat){
+  if(GNEWS_KEY==='GNEWS_KEY_HERE')return[]; // skip if no key
+  const topicMap={world:'breaking-news',business:'business',technology:'technology',
+    science:'science',health:'health',sport:'sports',climate:'nation',politics:'politics'};
+  const topic=topicMap[cat]||'breaking-news';
   try{
-    const r=await tFetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feed.u)}&count=10`,4000);
+    const r=await tFetch(
+      `https://gnews.io/api/v4/top-headlines?topic=${topic}&lang=en&max=10&apikey=${GNEWS_KEY}`,
+      6000
+    );
     const d=await r.json();
-    if(d.status==='ok'&&d.items?.length)
-      return d.items.map(i=>({
-        title:i.title||'',url:i.link||'#',source:feed.n,date:i.pubDate,
-        thumb:i.thumbnail||(i.enclosure?.link)||null,
-        trail:(i.description||'').replace(/<[^>]*>/gm,'').slice(0,250)
-      })).filter(a=>a.title);
-  }catch{}
-  try{
-    const r=await tFetch(`https://api.allorigins.win/get?url=${encodeURIComponent(feed.u)}`,5000);
-    const d=await r.json();
-    if(!d.contents)return[];
-    const xml=new DOMParser().parseFromString(d.contents,'text/xml');
-    let items=[...xml.querySelectorAll('item')];
-    if(!items.length)items=[...xml.querySelectorAll('entry')];
-    return items.slice(0,10).map(it=>{
-      const title=(it.querySelector('title')?.textContent||'').replace(/<!\[CDATA\[|\]\]>/g,'').trim();
-      if(!title)return null;
-      let url=it.querySelector('link')?.textContent;
-      if(!url||!url.startsWith('http')){const l=it.querySelector('link');if(l)url=l.getAttribute('href');}
-      const thumb=it.querySelector('enclosure[type^="image"]')?.getAttribute('url')||it.querySelector('thumbnail')?.getAttribute('url')||null;
-      const trail=(it.querySelector('description')?.textContent||it.querySelector('summary')?.textContent||'').replace(/<[^>]*>/gm,'').slice(0,250);
-      return{title,url:url||'#',source:feed.n,thumb,trail};
-    }).filter(Boolean);
+    return(d.articles||[]).map(a=>({
+      title:a.title||'',url:a.url||'#',
+      source:a.source?.name||'GNews',
+      date:a.publishedAt||'',
+      thumb:a.image||null,
+      trail:(a.description||'').slice(0,300)
+    })).filter(a=>a.title&&a.url.startsWith('http'));
   }catch{return[];}
+}
+
+async function fetchRSS(feed){
+  function parseXML(txt){
+    try{
+      if(!txt||txt.length<100)return[];
+      const xml=new DOMParser().parseFromString(txt,'text/xml');
+      const items=[...xml.querySelectorAll('item,entry')].slice(0,15);
+      return items.map(it=>{
+        const raw=it.querySelector('title')?.textContent||'';
+        const title=raw.replace(/<!\[CDATA\[|\]\]>/g,'').replace(/<[^>]*>/g,'').trim();
+        if(!title||title.length<5)return null;
+        let url=it.querySelector('link')?.textContent||'';
+        if(!url.startsWith('http')){const l=it.querySelector('link');if(l)url=l.getAttribute('href')||'';}
+        if(!url.startsWith('http'))return null;
+        const desc=it.querySelector('description,summary');
+        const trail=(desc?.textContent||'').replace(/<!\[CDATA\[|\]\]>/g,'').replace(/<[^>]*>/g,'').replace(/\s+/g,' ').slice(0,300).trim();
+        const enc=it.querySelector('enclosure[type^="image"]');
+        const thumb=enc?.getAttribute('url')||null;
+        const date=it.querySelector('pubDate,published,updated')?.textContent||'';
+        return{title,url,source:feed.n,date,thumb,trail};
+      }).filter(Boolean);
+    }catch(e){return[];}
+  }
+
+  const enc=encodeURIComponent(feed.u);
+  const TO=8000;
+  const attempt=async(url,transform)=>{
+    try{
+      const r=await Promise.race([
+        fetch(url),
+        new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),TO))
+      ]);
+      if(!r.ok)return[];
+      const result=await transform(r);
+      return Array.isArray(result)&&result.length?result:[];
+    }catch{return[];}
+  };
+
+  // Run 3 proxies in parallel, merge results (take first non-empty)
+  const [a,b,c]=await Promise.all([
+    attempt(
+      'https://api.allorigins.win/raw?url='+enc,
+      r=>r.text().then(t=>parseXML(t))
+    ),
+    attempt(
+      'https://api.rss2json.com/v1/api.json?rss_url='+enc+'&count=15',
+      r=>r.json().then(d=>{
+        if(d.status!=='ok'||!d.items?.length)return[];
+        return d.items.map(i=>({
+          title:(i.title||'').trim(),url:i.link||'',source:feed.n,
+          date:i.pubDate,thumb:i.thumbnail||(i.enclosure?.link)||null,
+          trail:(i.description||'').replace(/<[^>]*>/g,'').slice(0,300)
+        })).filter(x=>x.title&&x.url.startsWith('http'));
+      })
+    ),
+    attempt(
+      'https://corsproxy.io/?'+enc,
+      r=>r.text().then(t=>parseXML(t))
+    )
+  ]);
+
+  // Return first non-empty result
+  return a.length?a:b.length?b:c.length?c:[];
 }
 
 async function fetchNews(cat){
@@ -1428,37 +1518,67 @@ async function fetchNews(cat){
   document.getElementById('newsList').innerHTML='<div class="ldr"><div class="ldr-owl">🦉</div><div class="ldr-txt">SCANNING GLOBE</div></div>';
   document.getElementById('feedLabel').textContent=cat.toUpperCase()+' FEED';
   const secs=GSECS[cat]||['world'];
-  const rssList=(RSS[cat]||RSS.world).slice().sort(()=>Math.random()-0.5).slice(0,12);
-  const results=await Promise.allSettled([
+  const rssList=(RSS[cat]||RSS.world).slice().sort(()=>Math.random()-0.5);
+
+  // Fetch Guardian + RSS ALL at once
+  const allRequests=[
     ...secs.map(s=>fetchGuardian(s)),
-    ...rssList.map(f=>fetchRSS(f))
-  ]);
-  if(myFid!==fid)return;
+    fetchNewsData(cat),
+    ...rssList.slice(0,20).map(f=>fetchRSS(f))
+  ];
+
   let arts=[];
-  results.forEach(r=>{if(r.status==='fulfilled')arts.push(...r.value);});
   const seen=new Set();
-  arts=arts.filter(a=>{if(!a.title||seen.has(a.title))return false;seen.add(a.title);return true;});
-  arts.forEach(a=>{
-    const{coords,loc}=getCoords(a.title+' '+(a.trail||''));
-    a._c=coords; a._loc=loc; a._r=artRegion(coords[0],coords[1]);
-    a._s=getSentiment(a.title);
-  });
-  arts.sort(()=>Math.random()-0.5);
-  allArts=arts;
-  renderFeed(arts);
-  renderAnalytics(arts);
-  scheduleBreaking(arts);
-  // New features
-  setTimeout(()=>{
-    updateWhisper(allArts);
-    updateHeatmap(allArts);
-    renderPortfolio();
-    generateBrief();
-    const sl=document.getElementById('tsRange');
-    if(sl){sl.value=47;tsUpdate(47);}
-    scheduleDpPopups(allArts);
-    var ip=document.getElementById('p-intel'); if(ip&&ip.classList.contains('active')) buildIntelligence();
-  },150);
+
+  function addAndRender(newArts){
+    if(!Array.isArray(newArts)||!newArts.length)return;
+    let added=0;
+    newArts.forEach(a=>{
+      if(a&&a.title&&a.url&&!seen.has(a.url)){
+        seen.add(a.url);
+        const{coords,loc}=getCoords(a.title+' '+(a.trail||''));
+        a._c=coords;a._loc=loc;a._r=artRegion(coords[0],coords[1]);a._s=getSentiment(a.title);
+        arts.push(a);added++;
+      }
+    });
+    if(added>0){
+      arts.sort(()=>Math.random()-0.5);
+      allArts=arts;
+      renderFeed(arts);
+    }
+  }
+
+  // Stream results: render as each source completes
+  const promises=allRequests.map(p=>
+    p.then(result=>{
+      if(myFid!==fid)return;
+      addAndRender(result);
+    }).catch(()=>{})
+  );
+
+  // Wait for all to finish
+  await Promise.allSettled(promises);
+  if(myFid!==fid)return;
+
+  // Final render with everything
+  if(arts.length){
+    arts.sort(()=>Math.random()-0.5);
+    allArts=arts;
+    renderFeed(arts);
+    renderAnalytics(arts);
+    scheduleBreaking(arts);
+    setTimeout(()=>{
+      updateWhisper(allArts);
+      updateHeatmap(allArts);
+      renderPortfolio();
+      generateBrief();
+      const sl=document.getElementById('tsRange');
+      if(sl){sl.value=47;tsUpdate(47);}
+      scheduleDpPopups(allArts);
+      var ip=document.getElementById('p-intel');
+      if(ip&&ip.classList.contains('active'))buildIntelligence();
+    },150);
+  }
 }
 
 // ══════════════════════════════════════════
@@ -1623,7 +1743,7 @@ function openModal(a){
   document.querySelectorAll('.ncard').forEach(c=>{if(c.dataset.url===a.url)c.classList.add('read');});
   // New features
   trackCatRead(curQ||'world');
-  setTimeout(()=>{ renderComments(a.url); renderAffiliates(a); },80);
+  setTimeout(()=>{ renderComments(a.url); },80);
 }
 function closeModal(){document.getElementById('modal').classList.remove('on');}
 function toggleSaveModal(){
@@ -2094,7 +2214,8 @@ function doStab(name){
   if(name==='profile')renderProfile();
   if(name==='alerts')renderAlertTags();
   if(name==='portfolio'){renderPortfolio();generateBrief();}
-  if(name==='intel') buildIntelligence();
+  if(name==='intel')buildIntelligence();
+  if(name==='analytics')renderAnalytics(allArts);
 }
 
 // ════════════════════════════════════════
@@ -2581,62 +2702,6 @@ function scheduleDpPopups(arts) {
 
 
 // ════════════════════════════════════════════════
-// AFFILIATE LINKS
-// ════════════════════════════════════════════════
-// Source → affiliate program mapping
-// Replace URLs with your actual affiliate tracking links
-const AFFILIATE_MAP = {
-  'Financial Times':    { label:'FT Free Trial', badge:'+$20/ref', url:'https://www.ft.com/products?segmentId=1c1e6a4f-6664-11e7-9283-e80d621bc0e2' },
-  'WSJ':                { label:'WSJ Free Trial', badge:'+$10/ref', url:'https://subscribe.wsj.com/affiliate' },
-  'NY Times':           { label:'NYT Subscribe',  badge:'+$10/ref', url:'https://www.nytimes.com/subscription?campaignId=affiliate' },
-  'The Guardian':       { label:'Guardian Support',badge:'+$5/ref',  url:'https://support.theguardian.com/contribute' },
-  'The Economist':      { label:'Economist Trial', badge:'+$15/ref', url:'https://subscriptions.economist.com/affiliate' },
-  'Bloomberg':          { label:'Bloomberg Access',badge:'+$20/ref', url:'https://www.bloomberg.com/subscription/affiliate' },
-};
-
-// Generic premium media affiliate
-const GENERIC_AFFILIATES = [
-  { label:'📰 Read on CNBC Pro — Free 30 days', badge:'+$15/ref', url:'https://www.cnbc.com/digital-products/pro/?referral=owls' },
-  { label:'📊 Wall Street Journal — Free Trial', badge:'+$10/ref', url:'https://store.wsj.com/shop/us/us/wsjsubscription/?affiliateCode=owls' },
-];
-
-function getAffiliateLinks(article) {
-  const links = [];
-  // Source-specific link
-  const srcKey = Object.keys(AFFILIATE_MAP).find(k => article.source && article.source.includes(k));
-  if (srcKey) links.push(AFFILIATE_MAP[srcKey]);
-  // Always show 1-2 generic affiliates based on category
-  const q = window.curQ || 'world';
-  if (q === 'business' || q === 'politics') {
-    links.push(GENERIC_AFFILIATES[0]); // CNBC Pro
-    links.push(GENERIC_AFFILIATES[1]); // WSJ
-  } else {
-    links.push(GENERIC_AFFILIATES[0]);
-  }
-  // Dedupe
-  const seen = new Set();
-  return links.filter(l => { if(seen.has(l.url)) return false; seen.add(l.url); return true; }).slice(0,3);
-}
-
-function renderAffiliates(article) {
-  const el = document.getElementById('modalAffiliates');
-  if (!el || !article) return;
-  const links = getAffiliateLinks(article);
-  if (!links.length) { el.innerHTML=''; return; }
-  el.innerHTML = `
-    <div class="affiliate-strip">
-      <div class="affiliate-title">📖 Read More — Premium Sources</div>
-      <div class="affiliate-btns">
-        ${links.map(l=>`
-          <a href="${l.url}" target="_blank" rel="noopener sponsored" class="aff-btn">
-            ${l.label} <span class="aff-badge">${l.badge}</span>
-          </a>`).join('')}
-      </div>
-    </div>`;
-}
-
-
-// ════════════════════════════════════════════════
 // B2B SAAS
 // ════════════════════════════════════════════════
 let b2bSelectedPlan = 'starter';
@@ -2871,15 +2936,11 @@ function buildIntelligence() {
   // Get top read categories
   var catReads = {};
   try { catReads = JSON.parse(localStorage.getItem('owls_cat_reads') || '{}'); } catch(e) {}
-  var topCats = Object.entries(catReads).sort(function(a,b){return b[1]-a[1];}).slice(0,3).map(function(x){return x[0];});
-  if (topCats.indexOf(curQ) < 0) topCats.unshift(curQ);
-  // Always show current + top 3 user categories, deduplicated
-  var showCats = [];
-  topCats.forEach(function(c){ if(showCats.indexOf(c)<0) showCats.push(c); });
-  if (showCats.length < 2) {
-    // Add defaults
-    ['world','business','technology'].forEach(function(c){ if(showCats.indexOf(c)<0 && showCats.length<4) showCats.push(c); });
-  }
+  var allCatKeys=['world','business','politics','technology','health','climate','science','sport'];
+  var byReads=Object.entries(catReads).sort(function(a,b){return b[1]-a[1];}).map(function(x){return x[0];});
+  var showCats=[curQ];
+  byReads.forEach(function(c){if(showCats.indexOf(c)<0&&allCatKeys.indexOf(c)>=0)showCats.push(c);});
+  allCatKeys.forEach(function(c){if(showCats.indexOf(c)<0)showCats.push(c);});
 
   var html = '';
   showCats.forEach(function(cat) {
