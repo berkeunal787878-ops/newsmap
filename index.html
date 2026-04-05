@@ -1954,19 +1954,66 @@ function mobCat(btn,q){
 // ══════════════════════════════════════════
 // AUTH
 // ══════════════════════════════════════════
-function loginGoogle(){auth.signInWithRedirect(new firebase.auth.GoogleAuthProvider()).catch(console.error);}
+function loginGoogle(){
+  auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())
+    .then(result=>{
+      const user=result.user;
+      document.getElementById('loginBtn').style.display='none';
+      const av=document.getElementById('uav');
+      av.src=user.photoURL; av.style.display='block';
+      document.getElementById('feedLabel').textContent=user.displayName.split(' ')[0].toUpperCase()+"'S FEED";
+      document.getElementById('umName').textContent=user.displayName;
+      document.getElementById('umEmail').textContent=user.email;
+      loadFromCloud(user);
+      showToast('👤','Signed In','Welcome back, '+user.displayName.split(' ')[0]+'!',null);
+    })
+    .catch(e=>{
+      if(e.code!=='auth/popup-closed-by-user')
+        showToast('⚠️','Sign In Failed',e.message,null);
+    });
+}
 function doLogout(){if(confirm('Sign out from OWLS?'))auth.signOut();}
 auth.onAuthStateChanged(user=>{
-  document.getElementById('loginBtn').style.display=user?'none':'';
+  const loginBtn=document.getElementById('loginBtn');
   const av=document.getElementById('uav');
   if(user){
-    av.src=user.photoURL; av.style.display='block';
-    document.getElementById('feedLabel').textContent=user.displayName.split(' ')[0].toUpperCase()+"'S FEED";
-    document.getElementById('umName').textContent=user.displayName;
-    document.getElementById('umEmail').textContent=user.email;
+    if(loginBtn)loginBtn.style.display='none';
+    if(av){
+      av.style.display='block';
+      if(user.photoURL){
+        av.src=user.photoURL;
+        av.onerror=()=>{av.style.display='none'; showInitialAvatar(user);};
+      } else {
+        av.style.display='none';
+        showInitialAvatar(user);
+      }
+    }
+    const fl=document.getElementById('feedLabel');
+    if(fl&&user.displayName)fl.textContent=user.displayName.split(' ')[0].toUpperCase()+"'S FEED";
+    const nm=document.getElementById('umName');if(nm)nm.textContent=user.displayName||'User';
+    const em=document.getElementById('umEmail');if(em)em.textContent=user.email||'';
     loadFromCloud(user);
-  } else { av.style.display='none'; document.getElementById('feedLabel').textContent='GLOBAL FEED'; }
+    showToast('👤','Signed In','Welcome, '+(user.displayName||'Agent').split(' ')[0]+'!',null);
+  } else {
+    if(loginBtn)loginBtn.style.display='';
+    if(av)av.style.display='none';
+    const ia=document.getElementById('initAvatar');if(ia)ia.remove();
+    const fl=document.getElementById('feedLabel');if(fl)fl.textContent='GLOBAL FEED';
+  }
 });
+
+function showInitialAvatar(user){
+  const existing=document.getElementById('initAvatar');if(existing)existing.remove();
+  const name=user.displayName||user.email||'U';
+  const initial=name[0].toUpperCase();
+  const div=document.createElement('div');
+  div.id='initAvatar';
+  div.style.cssText='width:30px;height:30px;border-radius:50%;background:var(--accent);color:#000;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;cursor:pointer;border:2px solid var(--accentg);flex-shrink:0;';
+  div.textContent=initial;
+  div.onclick=()=>toggleUMenu();
+  const uav=document.getElementById('uav');
+  if(uav&&uav.parentNode)uav.parentNode.insertBefore(div,uav.nextSibling);
+}
 
 // ══════════════════════════════════════════
 // INIT
