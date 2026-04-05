@@ -1955,21 +1955,22 @@ function mobCat(btn,q){
 // AUTH
 // ══════════════════════════════════════════
 function loginGoogle(){
-  auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())
+  const provider=new firebase.auth.GoogleAuthProvider();
+  provider.addScope('profile');
+  provider.addScope('email');
+  auth.signInWithPopup(provider)
     .then(result=>{
-      const user=result.user;
-      document.getElementById('loginBtn').style.display='none';
-      const av=document.getElementById('uav');
-      av.src=user.photoURL; av.style.display='block';
-      document.getElementById('feedLabel').textContent=user.displayName.split(' ')[0].toUpperCase()+"'S FEED";
-      document.getElementById('umName').textContent=user.displayName;
-      document.getElementById('umEmail').textContent=user.email;
-      loadFromCloud(user);
-      showToast('👤','Signed In','Welcome back, '+user.displayName.split(' ')[0]+'!',null);
+      // Force page reload to ensure clean state
+      setTimeout(()=>window.location.reload(),500);
     })
     .catch(e=>{
-      if(e.code!=='auth/popup-closed-by-user')
-        showToast('⚠️','Sign In Failed',e.message,null);
+      console.error('Auth error:',e);
+      if(e.code==='auth/popup-blocked'){
+        // Fallback to redirect
+        auth.signInWithRedirect(provider);
+      } else if(e.code!=='auth/popup-closed-by-user'){
+        showToast('⚠️','Sign In Failed',e.message||'Try again',null);
+      }
     });
 }
 function doLogout(){if(confirm('Sign out from OWLS?'))auth.signOut();}
